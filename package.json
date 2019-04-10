@@ -47,5 +47,5 @@
   },
   "dependencies": {
     "angular-cookies": "^1.6.9"
-    }
+  }
 }
