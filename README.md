@@ -39,7 +39,7 @@ El cliente corre ejecutando la siguiente linea:
     grunt serve
 ```
 
-***Se recomienda ejecutar el cliente antes de abrir el proyecto de visual coda ya que a veces genera problemas.***
+***Se recomienda ejecutar el cliente antes de abrir el proyecto de visual code ya que a veces genera problemas.***
 
 Para crear el build de la aplicación:
 ```
