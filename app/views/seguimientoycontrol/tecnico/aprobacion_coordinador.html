@@ -42,6 +42,14 @@
               </div>
 
               <div class="col-md-3">
+                <label>{{'SEL_PERIODO' | translate }}</label>
+                <select ng-model="aprobacionCoordinador.periodo" class="form-control">
+                  <option value="">---Seleccione el periodo del certificado---</option>
+                  <option ng-repeat="iPeriodo in aprobacionCoordinador.periodos" ng-value="iPeriodo">{{iPeriodo}} </option>
+                </select>
+              </div>
+
+              <div class="col-md-3">
                   <label> </label>
                   <input type="submit" class="form-control btn btn-success" value="{{'GEN_PDF' | translate}}" ng-click="aprobacionCoordinador.generarPDF()">
               </div>

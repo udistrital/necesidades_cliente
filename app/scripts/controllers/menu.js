@@ -18,6 +18,7 @@ angular.module('contractualClienteApp')
         $scope.actual = "";
         $scope.token_service = token_service;
         $scope.breadcrumb = [];
+
         $scope.perfil = "ADMINISTRADOR ARGO";
 
         // optiene los menus segun el rol

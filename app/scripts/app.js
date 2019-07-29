@@ -77,8 +77,11 @@ angular
             return date ? moment.utc(date).format('YYYY-MM-DD') : '';
         };
     })
-    .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
-        $locationProvider.hashPrefix("");
+    .config(['$locationProvider', '$routeProvider' ,'$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
+    
+        $httpProvider.defaults.headers.post = {};
+        $httpProvider.defaults.headers.put = {};
+        $locationProvider.hashPrefix(""); 
         $routeProvider
             .when('/', {
                 templateUrl: 'views/main.html',

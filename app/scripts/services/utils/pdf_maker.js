@@ -19,7 +19,7 @@ angular.module('contractualClienteApp')
             var terceraFila = [];
             var columnas = [];
             var tituloHoras = 'HORAS_SEMANALES';
-            if (nivelAcademico == 'POSGRADO') {
+            if (nivelAcademico === 'POSGRADO') {
                 tituloHoras = 'HORAS_SEMESTRALES'
             }
 
@@ -364,9 +364,9 @@ angular.module('contractualClienteApp')
                     widths: [80, 150, 150, 80],
                     body: [
                         ['', { text: $translate.instant('NOMBRE_COMPLETO'), style: 'tabla_revision' }, { text: $translate.instant('CARGO_PDF'), style: 'tabla_revision' }, { text: $translate.instant('FIRMA'), style: 'tabla_revision' }],
-                        [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, '', '', ''],
-                        [{ text: $translate.instant('REVISO'), style: 'tabla_revision' }, { text: 'JORGE ADELMO HERNANDEZ PARDO', style: 'tabla_revision' }, { text: $translate.instant('OF_DOCENCIA'), style: 'tabla_revision' }, ''],
-                        [{ text: $translate.instant('APROBO'), style: 'tabla_revision' }, '', '', ''],
+                        [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, { text: 'Edilberto Fernández Santos', style: 'tabla_revision' }, { text: 'Auxiliar administrativo DRH', style: 'tabla_revision' }, ''],
+                        [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Diana Mireya Parra Cardona', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica', style: 'tabla_revision' }, ''],
+                        [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Camilo Andrés Bustos Parra', style: 'tabla_revision' }, { text: 'Secretario general', style: 'tabla_revision' }, ''],
                     ]
                 }
             };

@@ -46,10 +46,14 @@ Sbi.sdk.namespace =  function() {
     for (i=0; i<a.length; ++i) {
         d=a[i].split(".");
         rt = d[0];
-        eval('if (typeof ' + rt + ' == "undefined"){' + rt + ' = {};} o = ' + rt + ';');
-        for (j=1; j<d.length; ++j) {
-            o[d[j]]=o[d[j]] || {};
-            o=o[d[j]];
+        try {
+            if (typeof window[rt] == "undefined"){window[rt] = {};} o = window[rt];
+            for (j=1; j<d.length; ++j) {
+                o[d[j]]=o[d[j]] || {};
+                o=o[d[j]];
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 };
@@ -332,10 +336,7 @@ Sbi.sdk.apply(Sbi.sdk.ajax, {
                     }
                 }
             }
-            finally
-            {
-                return obj;
-            }
+            return obj;
         },
 
         getConnectionObject:function()
@@ -352,10 +353,7 @@ Sbi.sdk.apply(Sbi.sdk.ajax, {
             }
             catch(e) {
             }
-            finally
-            {
-                return o;
-            }
+            return o;
         },
 
         asyncRequest:function(method, uri, callback, postData)
@@ -815,7 +813,7 @@ Sbi.sdk.apply(Sbi.sdk.services, {
         }
         
         if(this.services[serviceName] === undefined) {
-            alert('ERROR: Service [' + + '] does not exist');
+            swal("", 'ERROR: Service [' + + '] does not exist', 'error');
         } else {
             urlStr = '';
             urlStr = this.baseUrl.protocol + '://' + this.baseUrl.host + ":" + this.baseUrl.port + '/' + this.baseUrl.contextPath + '/' + this.baseUrl.controllerPath;
@@ -871,7 +869,7 @@ Sbi.sdk.apply(Sbi.sdk.api, {
 		var documentUrl = null;
 		
 		if(config.documentId === undefined && config.documentLabel === undefined) {
-			alert('ERRORE: at least one beetween documentId and documentLabel attributes must be specifyed');
+			swal("",'ERRORE: at least one beetween documentId and documentLabel attributes must be specifyed','error');
 			return null;
 		}
 		

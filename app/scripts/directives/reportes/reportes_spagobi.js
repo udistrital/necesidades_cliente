@@ -34,7 +34,9 @@ angular.module('contractualClienteApp')
           if ($scope.reporte && $scope.reporte.length !== 0) {
             var parametros = '';
             if ($scope.resolucion) {
-              parametros = 'id_resolucion=' + $scope.resolucion;
+
+              parametros = 'id_resolucion=' + $scope.resolucion + '&vigencia=' + $scope.vigencia;
+
             } else if ($scope.dependencia && $scope.vigencia) {
               parametros = 'id_dependencia=' + $scope.dependencia + '&vigencia=' + $scope.vigencia + '&numero_elaboracion=' + $scope.necesidad;
             }
