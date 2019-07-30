@@ -47,6 +47,6 @@
     "build": "grunt build"
   },
   "dependencies": {
-    "angular-cookies": "^1.6.9"
+    "angular-cookies": "^1.7.8"
   }
 }
