@@ -11,7 +11,7 @@
 angular
     .module('contractualClienteApp', [
         // Librerias
-        'ngCookies',
+        //'ngCookies',
         'angular-loading-bar',
         'ngAnimate',
         'ngCookies',
