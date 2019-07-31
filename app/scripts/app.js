@@ -10,15 +10,12 @@
  */
 angular
     .module('contractualClienteApp', [
-        // Librerias
-        //'ngCookies',
         'angular-loading-bar',
         'ngAnimate',
         'ngCookies',
         'ngMessages',
         'ngResource',
         'ngRoute',
-        //'ngSanitize',
         'afOAuth2',
         'treeControl',
         'ngMaterial',
@@ -43,7 +40,6 @@ angular
         'ui.knob',
         'file-model',
         'angularBootstrapFileinput',
-        // Servicios
         'financieraService',
         'coreService',
         'coreAmazonService',
