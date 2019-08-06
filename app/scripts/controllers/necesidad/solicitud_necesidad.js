@@ -317,8 +317,9 @@ angular.module('contractualClienteApp')
             self.tipo_necesidad_data = response.data;
             //ocultar terporalmente funcionalidad no implementada
             //TODO: implementar la demas funcionalidad
-            var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
-            self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return !tmpSet.includes(tn.Id) })
+            // var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
+            var tmpSet = [1,6] 
+            self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
             console.log(response.data);
         });
 
