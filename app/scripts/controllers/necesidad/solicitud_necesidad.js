@@ -72,10 +72,10 @@ angular.module('contractualClienteApp')
             var test = [self.necesidad.UnicoPago, self.necesidad.AgotarPresupuesto];
             Object.keys(self.duracionEspecialMap).forEach(function (k) {
                 var v = self.duracionEspecialMap[k].slice(1, 3);
-                if (_.isEqual(test, v)) {
+                 if (_.isEqual(test, v)) {
                     self.DuracionEspecial = k;
                     self.ver_duracion_fecha = self.duracionEspecialMap[k][0];
-                }
+                } 
             });
         };
 
@@ -319,6 +319,7 @@ angular.module('contractualClienteApp')
             //TODO: implementar la demas funcionalidad
             var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
             self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return !tmpSet.includes(tn.Id) })
+            console.log(response.data);
         });
 
         agoraRequest.get('unidad', $.param({
