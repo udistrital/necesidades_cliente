@@ -203,6 +203,95 @@
           </div>
         </ng-form>
 
+        <!-- financiacion, se muestra solo si se completo general y si la unidad ejecutora esta seleccionada -->
+                <!-- Financiación -->
+                <ng-form name="financiacion" class="form-group" ng-if="solicitudNecesidad.forms.General && solicitudNecesidad.necesidad.UnidadEjecutora!=undefined">
+                  <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(financiacion)">{{"FINANCIACION" |
+                    translate}}<span class="fa fa-plus pull-right" ng-show="financiacion.open"></span> <span class="fa fa-minus pull-right"
+                      ng-show="!financiacion.open"></span></legend>
+        
+                  <div class="panel-body" ng-hide="financiacion.open">
+        
+                    <div class="form-group">
+                      <label class=" control-label">{{"TIPO_FINANCIACION" | translate}}</label>
+                      <small>*{{"OBLIGATORIO" | translate}}</small>
+                      <select class="form-control" ng-model="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad" ng-options="tipof.Nombre for tipof in solicitudNecesidad.tipo_financiacion_data track by tipof.Id"
+                        required>
+                        <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"TIPO_FINANCIACION" | translate}}</option>
+                      </select>
+                    </div>
+        
+                    <div class="form-group" ng-show="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad!=undefined">
+                      <label class=" control-label">{{"SELECCIONAR" | translate}} {{"APROPIACIONES" | translate}}</label>
+        
+                      <div>
+                        <div class="form-group" ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre">
+                          <lista-apropiaciones vigencia=solicitudNecesidad.vigencia tipo="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre=='Inversion'?'3-3':'3-1'"
+                            apropiacion="solicitudNecesidad.apro" unidadejecutora=solicitudNecesidad.necesidad.UnidadEjecutora
+                            tipofinanciacion=solicitudNecesidad.necesidad.TipoFinanciacionNecesidad selhijos="true"></lista-apropiaciones>
+                          <div style="text-align:center;">
+                            <button type="button" class="btn btn-success btn-outline" ng-click="solicitudNecesidad.agregar_ffapropiacion(solicitudNecesidad.apro)">
+                              {{"AGREGAR" | translate}}
+                            </button>
+                          </div>
+                        </div>
+        
+                        <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
+                          <button type="button" class="btn btn-danger btn-sm col-md-offset-11" ng-click="solicitudNecesidad.eliminarRubro(ap)"
+                            aria-label="Left Align">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                          </button>
+        
+                          <label><span class="text-success">{{$index+1}}.</span> {{ap.aprop.Rubro.Nombre}}</label>
+                          <br>
+                          <div class="row">
+                          <div class="col-md-6">
+                            <fuentes-apropiacion apropiacion="ap.Apropiacion" fuenteapropiacion="ap.fuentes"
+                              init-fuenteapropiacion="ap.initFuentes" dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId"></fuentes-apropiacion>
+                          </div>
+        
+                          <ul class="list-group col-md-6">
+                            <li class="list-group-item">
+        
+                              <label class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
+        
+                            <li class="list-group-item" ng-repeat="fu in ap.fuentes">
+                              <label class="text-warning">{{"FUENTE" | translate}}</label>
+                              {{fu.FuenteFinanciamiento.Descripcion}}
+                              <br>
+                              <label class="text-warning">{{"VALOR_SOLICITADO" | translate}}</label>
+                              <input type="text" ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0" ng-model="fu.MontoParcial" ui-money-mask="0">
+                              <br>
+                            </li>
+                            </li>
+                          </ul>
+                        </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <productos-apropiacion rubro="ap.aprop.Rubro.Id" productoapropiacion="ap.productos"
+                                init-productoapropiacion="ap.initProductos"></productos-apropiacion>
+                            </div>
+                            <ul class="list-group col-md-6">
+                              <li class="list-group-item" ng-repeat="prod in ap.productos">
+                                <label class="text-warning">{{prod.Producto.Nombre}}</label>
+                                {{prod.Producto.Descripcion}}
+                              </li>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+        
+                        <div class="form-group">
+                          <label>{{"TOTAL_FINANCIACION" | translate}} </label> {{solicitudNecesidad.f_valor | currency}} <br>
+                          <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Total especificaciones: </label>
+                            {{solicitudNecesidad.valorTotalEspecificaciones | currency}}</div>
+                        </div>
+                      </div>
+        
+                    </div>
+                  </div>
+                </ng-form>
+
         <!-- Objeto contractual -->
         <ng-form name="objetoContractual" class="form-group" ng-if="solicitudNecesidad.forms.ObjetoContractual">
           <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(objetoContractual)">
@@ -422,93 +511,6 @@
           </div>
         </ng-form>
 
-        <!-- Financiación -->
-        <ng-form name="financiacion" class="form-group" ng-if="solicitudNecesidad.forms.General && solicitudNecesidad.necesidad.UnidadEjecutora!=undefined">
-          <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(financiacion)">{{"FINANCIACION" |
-            translate}}<span class="fa fa-plus pull-right" ng-show="financiacion.open"></span> <span class="fa fa-minus pull-right"
-              ng-show="!financiacion.open"></span></legend>
-
-          <div class="panel-body" ng-hide="financiacion.open">
-
-            <div class="form-group">
-              <label class=" control-label">{{"TIPO_FINANCIACION" | translate}}</label>
-              <small>*{{"OBLIGATORIO" | translate}}</small>
-              <select class="form-control" ng-model="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad" ng-options="tipof.Nombre for tipof in solicitudNecesidad.tipo_financiacion_data track by tipof.Id"
-                required>
-                <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"TIPO_FINANCIACION" | translate}}</option>
-              </select>
-            </div>
-
-            <div class="form-group" ng-show="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad!=undefined">
-              <label class=" control-label">{{"SELECCIONAR" | translate}} {{"APROPIACIONES" | translate}}</label>
-
-              <div>
-                <div class="form-group" ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre">
-                  <lista-apropiaciones vigencia=solicitudNecesidad.vigencia tipo="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre=='Inversion'?'3-3':'3-1'"
-                    apropiacion="solicitudNecesidad.apro" unidadejecutora=solicitudNecesidad.necesidad.UnidadEjecutora
-                    tipofinanciacion=solicitudNecesidad.necesidad.TipoFinanciacionNecesidad selhijos="true"></lista-apropiaciones>
-                  <div style="text-align:center;">
-                    <button type="button" class="btn btn-success btn-outline" ng-click="solicitudNecesidad.agregar_ffapropiacion(solicitudNecesidad.apro)">
-                      {{"AGREGAR" | translate}}
-                    </button>
-                  </div>
-                </div>
-
-                <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
-                  <button type="button" class="btn btn-danger btn-sm col-md-offset-11" ng-click="solicitudNecesidad.eliminarRubro(ap)"
-                    aria-label="Left Align">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                  </button>
-
-                  <label><span class="text-success">{{$index+1}}.</span> {{ap.aprop.Rubro.Nombre}}</label>
-                  <br>
-                  <div class="row">
-                  <div class="col-md-6">
-                    <fuentes-apropiacion apropiacion="ap.Apropiacion" fuenteapropiacion="ap.fuentes"
-                      init-fuenteapropiacion="ap.initFuentes" dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId"></fuentes-apropiacion>
-                  </div>
-
-                  <ul class="list-group col-md-6">
-                    <li class="list-group-item">
-
-                      <label class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
-
-                    <li class="list-group-item" ng-repeat="fu in ap.fuentes">
-                      <label class="text-warning">{{"FUENTE" | translate}}</label>
-                      {{fu.FuenteFinanciamiento.Descripcion}}
-                      <br>
-                      <label class="text-warning">{{"VALOR_SOLICITADO" | translate}}</label>
-                      <input type="text" ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0" ng-model="fu.MontoParcial" ui-money-mask="0">
-                      <br>
-                    </li>
-                    </li>
-                  </ul>
-                </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <productos-apropiacion rubro="ap.aprop.Rubro.Id" productoapropiacion="ap.productos"
-                        init-productoapropiacion="ap.initProductos"></productos-apropiacion>
-                    </div>
-                    <ul class="list-group col-md-6">
-                      <li class="list-group-item" ng-repeat="prod in ap.productos">
-                        <label class="text-warning">{{prod.Producto.Nombre}}</label>
-                        {{prod.Producto.Descripcion}}
-                      </li>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label>{{"TOTAL_FINANCIACION" | translate}} </label> {{solicitudNecesidad.f_valor | currency}} <br>
-                  <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Total especificaciones: </label>
-                    {{solicitudNecesidad.valorTotalEspecificaciones | currency}}</div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </ng-form>
         <fieldset>
           <div style="text-align: center">
             <input type="submit" class="btn btn-success btn-outline " name="button" value="{{'REGISTRAR' | translate }}" />
