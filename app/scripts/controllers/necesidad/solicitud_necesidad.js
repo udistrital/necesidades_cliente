@@ -52,7 +52,7 @@ angular.module('contractualClienteApp')
         self.duracionEspecialMap = {
             duracion: [true, false, false, undefined],
             unico_pago: [false, true, false, 0],
-            agotar_presupuesto: [true, false, true, undefined]
+            agotar_presupuesto: [false, false, true, 0]
         };
 
         // El tipo de solicitud de contrato
