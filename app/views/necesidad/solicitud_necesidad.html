@@ -322,7 +322,7 @@
           <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(marcoLegal)">
             {{"MARCO_LEGAL" | translate}}<span class="fa fa-plus pull-right" ng-show="marcoLegal.open"></span> <span
               class="fa fa-minus pull-right" ng-show="!marcoLegal.open"></span></legend>
-          <div ng-bind-html="solicitudNecesidad.MarcoLegalNecesidadText" style="text-align: justify">
+          <div ng-bind-html="solicitudNecesidad.MarcoLegalNecesidadText" ng-show="!marcoLegal.open" style="text-align: justify">
           </div>
           <div class="panel-body" ng-hide="marcoLegal.open">
             <lista-documentos-legales class="col-md-12" documentos="solicitudNecesidad.documentos"></lista-documentos-legales>
