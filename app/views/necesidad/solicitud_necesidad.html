@@ -98,7 +98,7 @@
                 {{solicitudNecesidad.persona_solicitante.PrimerApellido}}
                 {{solicitudNecesidad.persona_solicitante.SegundoApellido}}</span>
             </div>
-
+          
             <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaDestino">
               <label for="dep_destino" class="control-label">{{"DEPENDENCIA_DESTINO" | translate}}</label>
               <small>*{{"OBLIGATORIO" | translate}}</small>
@@ -113,6 +113,13 @@
               <span class="form-control">{{solicitudNecesidad.jefe_destino.PrimerNombre}}
                 {{solicitudNecesidad.jefe_destino.SegundoNombre}} {{solicitudNecesidad.jefe_destino.PrimerApellido}}
                 {{solicitudNecesidad.jefe_destino.SegundoApellido}}</span>
+            </div>
+
+            <div class="col-md-12" ng-if="solicitudNecesidad.fields.General.Supervisor">
+              <label for="supervisor" class="control-label">{{"SUPERVISOR" | translate}}</label>
+              <select class="form-control" ng-model="solicitudNecesidad.necesidad.Supervisor" ng-options="sup.Id*1 as sup.PrimerNombre+' '+sup.SegundoNombre+' '+sup.PrimerApellido+' '+sup.SegundoApellido for sup in solicitudNecesidad.persona_data">
+                <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"SUPERVISOR" | translate}}</option>
+              </select>
             </div>
 
             <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.RolOrdenadorGasto">
@@ -183,7 +190,7 @@
                 placeholder="Análisis de riesgos" rows="6" required></textarea>
             </div>
 
-            <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.ModalidadSeleccion">
+            <div class="col-md-12" ng-if="solicitudNecesidad.fields.General.ModalidadSeleccion">
               <label for="modalidad_seleccion" class=" control-label">{{"MODALIDAD_SELECCION" | translate}}</label>
               <small>*{{"OBLIGATORIO" | translate}}</small>
               <select class="form-control" ng-model="solicitudNecesidad.necesidad.ModalidadSeleccion" ng-options="mod as mod.Id+'-'+mod.Nombre for mod in solicitudNecesidad.modalidad_data track by mod.Id"
@@ -192,12 +199,7 @@
               </select>
             </div>
 
-            <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.Supervisor">
-              <label for="supervisor" class="control-label">{{"SUPERVISOR" | translate}}</label>
-              <select class="form-control" ng-model="solicitudNecesidad.necesidad.Supervisor" ng-options="sup.Id*1 as sup.PrimerNombre+' '+sup.SegundoNombre+' '+sup.PrimerApellido+' '+sup.SegundoApellido for sup in solicitudNecesidad.persona_data">
-                <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"SUPERVISOR" | translate}}</option>
-              </select>
-            </div>
+           
           </div>
         </ng-form>
 
