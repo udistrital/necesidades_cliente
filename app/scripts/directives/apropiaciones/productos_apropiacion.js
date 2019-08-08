@@ -53,6 +53,7 @@ angular.module('contractualClienteApp')
           self.gridOptions.data = response.data;
         }).then(function (t) {
           //Se inicializa el grid api para seleccionar
+          //self.gridApi = new GridApi(grid);
           self.gridApi.grid.modifyRows(self.gridOptions.data);
 
           $scope.$watch('initProductoApropiacion', function () {
