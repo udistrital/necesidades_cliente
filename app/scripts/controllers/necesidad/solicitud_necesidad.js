@@ -320,7 +320,7 @@ angular.module('contractualClienteApp')
             // var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
             var tmpSet = [1,6] 
             self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
-            console.log(response.data);
+            // console.log(response.data);
         });
 
         agoraRequest.get('unidad', $.param({
