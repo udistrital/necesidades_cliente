@@ -35,7 +35,8 @@
     "nuxeo": "^3.5.0",
     "colombia-holidays": "^0.0.6",
     "angular-md5": "^0.1.10",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "md-steppers": "^0.4.1"
   },
   "resolutions": {
     "angular": "^1.7.8",

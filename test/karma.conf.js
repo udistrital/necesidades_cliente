@@ -60,6 +60,7 @@ module.exports = function(config) {
       'bower_components/nuxeo/dist/nuxeo.js',
       'bower_components/colombia-holidays/js/holidays.js',
       'bower_components/lodash/lodash.js',
+      'bower_components/md-steppers/dist/md-steppers.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

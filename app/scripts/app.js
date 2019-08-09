@@ -59,7 +59,9 @@ angular
         'requestService',
         'gridApiService',
         'colombiaHolidaysService',
-        'nuxeoClient'
+        'nuxeoClient',
+        'ngMaterial', 
+        'md-steppers',
     ])
     .run(function(amMoment) {
         amMoment.changeLocale('es');
