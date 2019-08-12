@@ -17,7 +17,7 @@ angular.module('contractualClienteApp')
         self.documentos = [];
         self.avance = undefined;
         self.formuIncompleto = true;
-
+        
         self.apro = undefined;
 
         self.dep_ned = {
@@ -45,6 +45,7 @@ angular.module('contractualClienteApp')
         self.f_valor = 0;
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
+        self.aniadirDoc = false;
         self.planes_anuales = [{
             Id: 1,
             Nombre: "Necesidad1 -2017"
@@ -648,4 +649,9 @@ angular.module('contractualClienteApp')
             self.necesidad.TipoContratoNecesidad = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
         };
 
+        self.AniadirDocumento = function () {
+            console.log("hola entre aqui");
+            self.aniadirDoc = !self.aniadirDoc;
+            console.log(self.aniadirDoc);
+        };
     });
