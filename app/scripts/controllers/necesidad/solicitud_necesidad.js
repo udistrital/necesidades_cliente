@@ -340,6 +340,7 @@ angular.module('contractualClienteApp')
             order: "asc",
         })).then(function (response) {
             self.persona_data = response.data;
+            console.info(self.persona_data);
         });
 
         necesidadService.getParametroEstandar().then(function (response) {
