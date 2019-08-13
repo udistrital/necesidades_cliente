@@ -7,7 +7,7 @@
  * # apropiaciones/listaApropiaciones
  */
 angular.module('contractualClienteApp')
-    .directive('listaApropiaciones', function (financieraRequest, $translate) {
+    .directive('listaApropiaciones', function (financieraRequest, planCuentasRequest, $translate) {
         return {
             restrict: 'E',
             scope: {
@@ -96,7 +96,7 @@ angular.module('contractualClienteApp')
 
 
                 self.actualiza_rubros = function () {
-                    financieraRequest.get('apropiacion', 'limit=-1&query=Vigencia:' + $scope.vigencia + ",Rubro.Codigo__startswith:" + $scope.tipo + ",Rubro.UnidadEjecutora:" + $scope.unidadejecutora + ",Estado.Id:" + 2).then(function (response) {
+                    planCuentasRequest.get('apropiacion', 'limit=-1&query=Vigencia:' + $scope.vigencia + ",Rubro.Codigo__startswith:" + $scope.tipo + ",Rubro.UnidadEjecutora:" + $scope.unidadejecutora + ",Estado.Id:" + 2).then(function (response) {
                         if (response.data !== null) {
                             self.gridOptions.data = response.data.sort(function (a, b) {
                                 if (a.Rubro.Codigo < b.Rubro.Codigo) { return -1; }
