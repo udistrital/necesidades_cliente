@@ -46,6 +46,11 @@ angular.module('contractualClienteApp')
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
         self.aniadirDoc = false;
+        self.obj_documento = {
+            NombreDocumento: '',
+            Enlace: ''
+        };
+
         self.planes_anuales = [{
             Id: 1,
             Nombre: "Necesidad1 -2017"
@@ -539,6 +544,7 @@ angular.module('contractualClienteApp')
                 ProductosNecesidad: self.productos_apropiaciones
             };
 
+
             var NecesidadHandle = function (response) {
                 self.alerta_necesidad = response.data;
                 if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && typeof (self.alerta_necesidad) === "string") {
@@ -650,9 +656,11 @@ angular.module('contractualClienteApp')
             self.necesidad.TipoContratoNecesidad = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
         };
 
-        self.AniadirDocumento = function () {
-            console.log("hola entre aqui");
+        self.HabilitarAgregarDocs = function () {
             self.aniadirDoc = !self.aniadirDoc;
-            console.log(self.aniadirDoc);
+        };
+
+        self.AniadirDocumento = function () {
+            administrativaRequest.post("marco_legal", self.obj_documento);
         };
     });

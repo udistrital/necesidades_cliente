@@ -17,8 +17,8 @@
       <form name="solicitudform" class="form-horizontal" ng-submit="solicitudNecesidad.submitForm(solicitudform)"
         novalidate>
         <!-- Tipo Necesidad -->
-        <ng-form name="tipoNecesidad" class="form-group col-md-6" style="text-align: center;">
-          <legend class="text-primary">
+        <ng-form name="tipoNecesidad" class="form-group col-md-6 " style="text-align: center;">
+          <legend class="text-success">
             {{"SOLICITUD_NECESIDAD_CONTRATO" | translate}}
           </legend>
           <label class="radio-inline" ng-repeat="tipo in solicitudNecesidad.tipo_necesidad_data">
@@ -28,8 +28,8 @@
           </label>
         </ng-form>
         <!-- Duración -->
-        <ng-form class="form-group col-md-6" style="text-align: center;">
-          <legend class="text-primary">
+        <ng-form class="form-group col-md-6 " style="text-align: center;">
+          <legend class="text-success">
             {{"DURACION_NECESIDAD_CONTRATO" | translate}}
           </legend>
           <label class="radio-inline">
@@ -361,21 +361,22 @@
               </div> -->
 
                   <button type="button" class="col-md-12 btn btn-primary btn-outline"
-                    ng-click="solicitudNecesidad.AniadirDocumento()" aria-label="Left Align">Agregar Documento</button>
+                    ng-click="solicitudNecesidad.HabilitarAgregarDocs()" aria-label="Left Align">Agregar Documento</button>
 
                   <div class="col-md-12" ng-show="solicitudNecesidad.aniadirDoc">
                     <div class="col-md-4" id="addDoc" name="addDoc">
                       <label class=" control-label">Nombre Documento</label>
                       <small>*{{"OBLIGATORIO" | translate}}</small>
-                      <input type="text" class="form-control" placeholder="Documento N° 1500 de 2010">
+                      <input type="text" class="form-control" placeholder="Documento N° 1500 de 2010" ng-model="solicitudNecesidad.obj_documento.NombreDocumento">
                     </div>
                     <div class="col-md-4">
                       <label class="control-label">URL Documento</label>
                       <small>*{{"OBLIGATORIO" | translate}}</small>
-                      <input type="text" class="form-control" placeholder="http://www.pagina.com/doc.pdf">
+                      <input type="text" class="form-control" placeholder="http://www.pagina.com/doc.pdf" ng-model="solicitudNecesidad.obj_documento.Enlace">
                     </div>
                     <div class="col-md-4">
-                      <input type="submit" class="form-control btn btn-primary" value="Registrar">
+                        <label>&nbsp;</label>
+                      <input type="submit" class="form-control btn btn-primary" value="Registrar" ng-click="solicitudNecesidad.AniadirDocumento()" >
                     </div>
                   </div>
 
