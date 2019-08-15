@@ -49,7 +49,7 @@ angular.module('contractualClienteApp')
             $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows();
           });
         };
-
+/* 
         financieraRequest.get('fuente_financiamiento_apropiacion', $.param({
           query: "Apropiacion:" + $scope.apropiacion + ",Dependencia:" + $scope.dependenciasolicitante
         })).then(function (response) {
@@ -70,7 +70,28 @@ angular.module('contractualClienteApp')
               }
             });
           });
-        });
+        }); */
+
+        planCuentasRequest.get('fuente_financiamiento_apropiacion',$.param({
+          query: "Apropiacion:" + $scope.apropiacion})).then(function (response) {
+            self.gridOptions.data = response.data;
+          }).then(function (t) {
+            // Se inicializa el grid api para seleccionar
+            self.gridApi.grid.modifyRows(self.gridOptions.data);
+  
+            // se observa cambios en idActividades para completar $scope.actividades y seleccionar las respectivas filas en la tabla
+            $scope.$watch('initFuenteApropiacion', function () {
+              self.fuenteapropiacion = [];
+              $scope.initFuenteapropiacion.forEach(function (fuente) {
+                var tmp = self.gridOptions.data.filter(function (e) { return e.FuenteFinanciamiento.Id == fuente.FuenteFinanciamiento[0].Id })
+                if (tmp.length > 0) {
+                  tmp[0].MontoParcial = fuente.MontoParcial;
+                  $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
+                  self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+                }
+              });
+            });
+          });
 
         $scope.$watch('[d_fuentesApropiacion.gridOptions.paginationPageSize, d_fuentesApropiacion.gridOptions.data]', function () {
           if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
