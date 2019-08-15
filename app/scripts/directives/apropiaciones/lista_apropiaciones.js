@@ -7,7 +7,7 @@
  * # apropiaciones/listaApropiaciones
  */
 angular.module('contractualClienteApp')
-    .directive('listaApropiaciones', function (financieraRequest, planCuentasRequest, $translate) {
+    .directive('listaApropiaciones', function ( planCuentasRequest, $translate) {
         return {
             restrict: 'E',
             scope: {
@@ -29,7 +29,7 @@ angular.module('contractualClienteApp')
                     showTreeExpandNoChildren: false,
 
                     columnDefs: [{
-                        field: 'Rubro.Codigo',
+                        field: 'Codigo',
                         displayName: $translate.instant('CODIGO_RUBRO'),
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
                         cellClass: function (row, col) {
@@ -42,11 +42,11 @@ angular.module('contractualClienteApp')
                         width: '15%'
                     },
                     {
-                        field: 'Rubro.Nombre',
+                        field: 'data.Nombre',
                         displayName: $translate.instant('NOMBRE_RUBRO'),
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
                         cellTooltip: function (row) {
-                            return row.entity.Rubro.Nombre;
+                            return row.entity.Nombre;
                         },
                         cellClass: function (row, col) {
                             if (col.treeNode.children.length === 0) {
@@ -58,10 +58,10 @@ angular.module('contractualClienteApp')
                         width: '58%'
                     },
                     {
-                        field: 'Valor',
+                        field: 'data.ApropiacionInicial',
                         displayName: $translate.instant('VALOR'),
                         cellFilter: 'currency',
-                        cellTemplate: '<div align="right">{{row.entity.Valor | currency}}</div>',
+                        // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
                         cellClass: function (row, col) {
                             if (col.treeNode.children.length === 0) {
@@ -96,24 +96,26 @@ angular.module('contractualClienteApp')
 
 
                 self.actualiza_rubros = function () {
-                    planCuentasRequest.get('apropiacion', 'limit=-1&query=Vigencia:' + $scope.vigencia + ",Rubro.Codigo__startswith:" + $scope.tipo + ",Rubro.UnidadEjecutora:" + $scope.unidadejecutora + ",Estado.Id:" + 2).then(function (response) {
-                        if (response.data !== null) {
-                            self.gridOptions.data = response.data.sort(function (a, b) {
-                                if (a.Rubro.Codigo < b.Rubro.Codigo) { return -1; }
-                                if (a.Rubro.Codigo > b.Rubro.Codigo) { return 1; }
+                    planCuentasRequest.get("arbol_rubro_apropiacion/arbol_apropiacion/3/"+ $scope.unidadejecutora +"/"+ $scope.vigencia ).then(function (response) {
+                        if (response.data.Body !== null) {
+                            console.info(response.data.Body)
+                            self.gridOptions.data = response.data.Body .sort(function (a, b) {
+                                if (a.Codigo < b.Codigo) { return -1; }
+                                if (a.Codigo > b.Codigo) { return 1; }
                                 return 0;
                             });
                             self.max_level = 0;
                             var level = 0;
+                            console.info(self.gridOptions.data.length)
                             for (var i = 0; i < self.gridOptions.data.length; i++) {
-                                level = (self.gridOptions.data[i].Rubro.Codigo.match(/-/g) || []).length;
+                                level = (self.gridOptions.data[i].Codigo.match(/-/g) || []).length;
                                 if (level > self.max_level) {
                                     self.max_level = level;
                                 }
                             }
 
                             for (var j = 0; j < self.gridOptions.data.length; j++) {
-                                level = (self.gridOptions.data[j].Rubro.Codigo.match(/-/g) || []).length;
+                                level = (self.gridOptions.data[j].Codigo.match(/-/g) || []).length;
                                 if (level < self.max_level) {
                                     self.gridOptions.data[j].$$treeLevel = level;
                                 }

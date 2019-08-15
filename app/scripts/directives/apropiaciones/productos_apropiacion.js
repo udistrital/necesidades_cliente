@@ -7,7 +7,7 @@
  * # apropiaciones/productosApropiacion
  */
 angular.module('contractualClienteApp')
-  .directive('productosApropiacion', function (financieraRequest) {
+  .directive('productosApropiacion', function (planCuentasRequest) {
     return {
       restrict: 'E',
       scope: {
@@ -47,9 +47,7 @@ angular.module('contractualClienteApp')
           });
         };
 
-        financieraRequest.get('producto_rubro', $.param({
-          query: "Rubro.Id:" + $scope.rubro + ",Activo:true"
-        })).then(function (response) {
+        planCuentasRequest.get('producto').then(function (response) {
           self.gridOptions.data = response.data;
         }).then(function (t) {
           //Se inicializa el grid api para seleccionar
@@ -59,7 +57,7 @@ angular.module('contractualClienteApp')
           $scope.$watch('initProductoApropiacion', function () {
             self.productoapropiacion = [];
             $scope.initProductoapropiacion.forEach(function (producto) {
-              var tmp = self.gridOptions.data.filter(function (e) { return e.Producto.Id == producto.ProductoRubroInfo[0].Producto.Id })
+              var tmp = self.gridOptions.data.filter(function (e) { return e.Producto._id == producto.ProductoRubroInfo[0].Producto._id })
               if (tmp.length > 0) {
                 $scope.productoapropiacion.push(tmp[0]); //enriquecer productos
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
