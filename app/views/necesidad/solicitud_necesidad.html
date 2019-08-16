@@ -523,17 +523,17 @@
 
                           <label class=" control-label">{{"IVA" | translate}} %</label>
                           <select class="form-control" ng-model="pro.Iva"
-                            ng-options="iva.Id as iva.Valor for iva in solicitudNecesidad.iva_data">
+                            ng-options="iva.Valor as iva.Valor for iva in solicitudNecesidad.iva_data">
                             <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"IVA" | translate}} %
                             </option>
                           </select>
 
                           <label class=" control-label">{{"VALOR_IVA" | translate}}</label>
-                          <input class="form-control" ng-model="(pro.Valor * 0.19)" placeholder="valor_con_iva"
+                          <input class="form-control" ng-model="(pro.Valor * (pro.Iva/100))" placeholder="valor_con_iva"
                             ui-money-mask="0" readonly>
 
                           <label class=" control-label">{{"PRECIO_MAS_IVA" | translate}}</label>
-                          <input class="form-control" ng-model="(pro.Valor * 0.19) + pro.Valor"
+                          <input class="form-control" ng-model="(pro.Valor * (pro.Iva/100)) + pro.Valor"
                             placeholder="valor_con_iva" ui-money-mask="0" readonly>
 
                           <label class=" control-label" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">{{"CANTIDAD" | translate}}</label>
@@ -541,7 +541,7 @@
                             ui-number-mask="0" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
 
                           <label class=" control-label">{{"TOTAL" | translate}}</label>
-                          <input class="form-control" ng-model="((pro.Valor * 0.19) + pro.Valor)*pro.Cantidad"
+                          <input class="form-control" ng-model="((pro.Valor * (pro.Iva/100)) + pro.Valor)*pro.Cantidad"
                             placeholder="Total" ui-money-mask="0" readonly>
 
 
