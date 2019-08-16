@@ -360,26 +360,6 @@
                 </ul> solicitudNecesidad.aniadirDoc = !solicitudNecesidad.aniadirDoc
               </div> -->
 
-                  <button type="button" class="col-md-12 btn btn-primary btn-outline"
-                    ng-click="solicitudNecesidad.HabilitarAgregarDocs()" aria-label="Left Align">Agregar Documento</button>
-
-                  <div class="col-md-12" ng-show="solicitudNecesidad.aniadirDoc">
-                    <div class="col-md-4" id="addDoc" name="addDoc">
-                      <label class=" control-label">Nombre Documento</label>
-                      <small>*{{"OBLIGATORIO" | translate}}</small>
-                      <input type="text" class="form-control" placeholder="Documento N° 1500 de 2010" ng-model="solicitudNecesidad.obj_documento.NombreDocumento">
-                    </div>
-                    <div class="col-md-4">
-                      <label class="control-label">URL Documento</label>
-                      <small>*{{"OBLIGATORIO" | translate}}</small>
-                      <input type="text" class="form-control" placeholder="http://www.pagina.com/doc.pdf" ng-model="solicitudNecesidad.obj_documento.Enlace">
-                    </div>
-                    <div class="col-md-4">
-                        <label>&nbsp;</label>
-                      <input type="submit" class="form-control btn btn-primary" value="Registrar" ng-click="solicitudNecesidad.AniadirDocumento()" >
-                    </div>
-                  </div>
-
 
                 </div>
 
@@ -587,6 +567,7 @@
                 </div>
               </ng-form>
 
+              <metas-actividades></metas-actividades>
               <fieldset>
                 <div style="text-align: center">
                   <input type="submit" class="btn btn-success btn-outline " name="button"

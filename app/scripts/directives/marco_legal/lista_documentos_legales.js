@@ -56,22 +56,30 @@ angular.module('contractualClienteApp')
 
         };
 
+        self.aniadirDoc = false;
+        self.obj_documento = {
+          NombreDocumento: '',
+          Enlace: ''
+        };
 
+        self.loadDocumentos = function () {
+          administrativaRequest.get('marco_legal', 'limit=0').then(function (response) {
+            self.gridOptions.data = response.data;
+          }).then(function () {
+            // Se inicializa el grid api para seleccionar
+            self.gridApi.grid.modifyRows(self.gridOptions.data);
+          });
+        }
 
-        administrativaRequest.get('marco_legal', 'limit=0').then(function (response) {
-          self.gridOptions.data = response.data;
-        }).then(function (t) {
-          // Se inicializa el grid api para seleccionar
-          self.gridApi.grid.modifyRows(self.gridOptions.data);
+        self.loadDocumentos();
 
-          // se observa cambios en documentos para seleccionar las respectivas filas en la tabla
-          $scope.$watch('documentos', function () {
-            $scope.documentos.forEach(function (doc) {
-              var tmp = self.gridOptions.data.filter(function (e) { return e.Id == doc.Id })
-              if (tmp.length > 0) {
-                self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-              }
-            });
+        // se observa cambios en documentos para seleccionar las respectivas filas en la tabla
+        $scope.$watch('documentos', function () {
+          $scope.documentos.forEach(function (doc) {
+            var tmp = self.gridOptions.data.filter(function (e) { return e.Id == doc.Id })
+            if (tmp.length > 0) {
+              self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+            }
           });
         });
 
@@ -87,7 +95,23 @@ angular.module('contractualClienteApp')
           }
         }, true);
 
+
+        self.HabilitarAgregarDocs = function () {
+          console.info("Funciono?")
+          self.aniadirDoc = !self.aniadirDoc;
+        };
+
+        self.AniadirDocumento = function () {
+          administrativaRequest.post("marco_legal", self.obj_documento).then(()=>{
+            self.loadDocumentos();
+          }
+          )
+          
+
+        };
       },
       controllerAs: 'd_listaDocumentosLegales'
     };
   });
+
+
