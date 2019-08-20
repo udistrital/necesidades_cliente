@@ -101,10 +101,10 @@ angular.module('contractualClienteApp')
         };
 
         self.AniadirDocumento = function () {
-          administrativaRequest.post("marco_legal", self.obj_documento).then(()=>{
+          administrativaRequest.post("marco_legal", self.obj_documento).then(function(){
             self.loadDocumentos();
           }
-          )
+          );
           
 
         };
