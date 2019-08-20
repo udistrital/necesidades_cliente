@@ -56,8 +56,8 @@ angular.module('contractualClienteApp')
 
         metasRequest.get('Metas').then(
           function (res) {
-            self.metas = res.data;
-            console.log(self.metas.Meta1);
+            self.metas = res.data.Metas;
+            console.log(self.metas.Metas);
           }
         );
 

@@ -12,12 +12,16 @@ angular.module('contractualClienteApp')
         var self = this;
         self.offset = 0;
         self.rechazada = false;
-        self.buttons = {};
+        self.buttons = {
+            AprobarNecesidad: true,
+            RechazarNecesidad: true,
+            EditarNecesidad: true,
+        };
         
         //permisos de los buttons segun el rol
-        rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
+/*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
             self.buttons = data;
-        });
+        }); */
         
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
