@@ -2,21 +2,25 @@
 
 /**
  * @ngdoc directive
- * @name contractualClienteApp.directive:marcoLegal/listaDocumentosLegales
+ * @name contractualClienteApp.directive:metasActividades
  * @description
- * # marcoLegal/listaDocumentosLegales
+ * # metasActividades
  */
 angular.module('contractualClienteApp')
-  .directive('listaDocumentosLegales', function (administrativaRequest, $translate) {
+  .directive('metasActividades', function (metasRequest) {
     return {
       restrict: 'E',
       scope: {
-        documentos: '='
+        meta: '=',
+        actividades: '='
       },
 
-      templateUrl: 'views/directives/marco_legal/lista_documentos_legales.html',
+
+      templateUrl: '/views/directives/metas/metas-actividades.html',
       controller: function ($scope) {
         var self = this;
+        self.metas = [];
+
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
           paginationPageSize: null,
@@ -30,23 +34,34 @@ angular.module('contractualClienteApp')
           useExternalPagination: false,
           multiSelect: true,
           columnDefs: [{
-            field: 'NombreDocumento',
-            displayName: $translate.instant('NOMBRE_DOCUMENTO'),
-            width: '80%',
+            field: 'Id',
+            displayName: 'Código',
+            width: '20%',
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
-              return row.entity.NombreDocumento;
+              return row.entity.Id;
             }
           },
           {
-            field: 'Enlace',
-            displayName: $translate.instant('VER'),
-            width: '20%',
-            cellTemplate: '<center><a href="{{row.entity.Enlace}}" onclick="window.open(this.href, \'\', \'resizable=yes,status=no,location=center,toolbar=no,menubar=no,fullscreen=yes,scrollbars=yes,dependent=no,width=1150,height=1600\'); return false;" ><span class="fa fa-eye"></span></a></center>',
-            headerCellClass: $scope.highlightFilteredHeader + ' text-info'
+            field: 'Descripcion',
+            displayName: 'Actividad',
+            width: '80%',
+            headerCellClass: $scope.highlightFilteredHeader + ' text-info',
+            cellTooltip: function (row) {
+              return row.entity.Descripcion;
+            }
           }
           ]
         };
+
+        metasRequest.get('Metas').then(
+          function (res) {
+            self.metas = res.data.Metas;
+            console.log(self.metas.Metas);
+          }
+        );
+
+
 
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
@@ -56,26 +71,21 @@ angular.module('contractualClienteApp')
 
         };
 
-        self.aniadirDoc = false;
-        self.obj_documento = {
-          NombreDocumento: '',
-          Enlace: ''
-        };
-
-        self.loadDocumentos = function () {
-          administrativaRequest.get('marco_legal', 'limit=0').then(function (response) {
+        self.loadActividades = function () {
+          metasRequest.get('Actividades').then(function (response) {
             self.gridOptions.data = response.data;
+            console.info(response.data)
           }).then(function () {
             // Se inicializa el grid api para seleccionar
             self.gridApi.grid.modifyRows(self.gridOptions.data);
           });
         }
 
-        self.loadDocumentos();
+        self.loadActividades();
 
-        // se observa cambios en documentos para seleccionar las respectivas filas en la tabla
-        $scope.$watch('documentos', function () {
-          $scope.documentos.forEach(function (doc) {
+        // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
+        $scope.$watch('actividades', function () {
+          $scope.actividades.forEach(function (doc) {
             var tmp = self.gridOptions.data.filter(function (e) { return e.Id == doc.Id })
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
@@ -95,22 +105,7 @@ angular.module('contractualClienteApp')
           }
         }, true);
 
-
-        self.HabilitarAgregarDocs = function () {
-          self.aniadirDoc = !self.aniadirDoc;
-        };
-
-        self.AniadirDocumento = function () {
-          administrativaRequest.post("marco_legal", self.obj_documento).then(()=>{
-            self.loadDocumentos();
-          }
-          )
-          
-
-        };
       },
-      controllerAs: 'd_listaDocumentosLegales'
+      controllerAs: 'd_metasActividades'
     };
   });
-
-

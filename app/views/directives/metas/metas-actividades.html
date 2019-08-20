@@ -1,0 +1,24 @@
+<br>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Metas y Actividades
+    </div>
+    <div class="panel-body">
+        <p>
+            Seleccione la meta y actividades pertinentes:
+        </p>
+
+        <div >
+            <ul>
+                <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas">
+                    <input type="radio"  name="name" value="{{ meta.Id}}" ng-model="d_metasActividades.meta" required />{{ meta.Nombre }}
+                </li>
+            </ul>
+        </div>
+        <div style="height: 250px" ui-grid="d_metasActividades.gridOptions" ui-grid-selection ui-grid-auto-resize
+            ui-grid-pagination></div>
+    </div>
+    <!--     <pre>
+        {{d_metasActividades.metas | json}}
+    </pre> -->
+</div>

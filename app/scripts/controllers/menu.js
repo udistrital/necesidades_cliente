@@ -23,9 +23,10 @@ angular.module('contractualClienteApp')
 
         // obtiene los menus segun el rol
         var roles = rolesService.roles().toString().replace(/,/g, '%2C');
-        configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + roles + 'Argo', '').then(function (response) {
+        configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + 'ADMIN_NECESIDADES/' + 'Necesidades', '').then(function (response) {
 
             $rootScope.my_menu = response.data;
+            console.info(response.data);
 
         });
 

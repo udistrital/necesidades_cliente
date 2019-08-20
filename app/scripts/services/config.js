@@ -97,6 +97,7 @@ var conf_pruebas = {
     CORE_AMAZON_SERVICE: "http://10.20.0.254/core_amazon_crud/v1/",
     FINANCIERA_MID_SERVICE: "http://10.20.0.254/financiera_mid_api/v1/",
     PLAN_CUENTAS_SERVICE: "http://10.20.0.254:8203/v1/",
+    METAS_SERVICE: "http://10.20.2.132:8087/",
     FINANCIERA_SERVICE: "http://10.20.0.254/financiera_api/v1/",
     MODELS_SERVICE: "scripts/models/",
     NOTIFICACION_WS: "ws://10.20.2.134:8080/ws/join",

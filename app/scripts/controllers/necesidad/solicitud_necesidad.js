@@ -45,11 +45,7 @@ angular.module('contractualClienteApp')
         self.f_valor = 0;
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
-        self.aniadirDoc = false;
-        self.obj_documento = {
-            NombreDocumento: '',
-            Enlace: ''
-        };
+
 
         self.planes_anuales = [{
             Id: 1,
@@ -671,11 +667,7 @@ angular.module('contractualClienteApp')
             self.necesidad.TipoContratoNecesidad = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
         };
 
-        self.HabilitarAgregarDocs = function () {
-            self.aniadirDoc = !self.aniadirDoc;
-        };
 
-        self.AniadirDocumento = function () {
-            administrativaRequest.post("marco_legal", self.obj_documento);
-        };
+
+
     });
