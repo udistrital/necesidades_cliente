@@ -97,7 +97,6 @@ angular.module('contractualClienteApp')
 
 
         self.HabilitarAgregarDocs = function () {
-          console.info("Funciono?")
           self.aniadirDoc = !self.aniadirDoc;
         };
 
