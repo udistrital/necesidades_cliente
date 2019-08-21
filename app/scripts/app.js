@@ -129,7 +129,10 @@ angular
                 templateUrl: 'views/necesidad/necesidad_contratacion_docente.html',
                 controller: 'NecesidadContratacionDocenteCtrl',
                 controllerAs: 'necesidadContratacionDocente'
-            })           
+            })   
+            .when('/no_permission', {
+                templateUrl: '404.html'
+            })        
             .otherwise({
                 redirectTo: '/'
             });
