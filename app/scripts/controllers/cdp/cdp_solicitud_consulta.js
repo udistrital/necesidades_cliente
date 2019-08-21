@@ -183,7 +183,7 @@ angular.module('contractualClienteApp')
             self.hayData = true;
             if (inicio !== undefined && fin !== undefined) {
 
-              financieraMidRequest.cancel();
+              financieraMidRequest.cancelSearch;
               financieraMidRequest.get('disponibilidad/Solicitudes/'+self.Vigencia,$.param({
                 UnidadEjecutora: self.UnidadEjecutora,
                 rangoinicio: inicio,
@@ -213,7 +213,7 @@ angular.module('contractualClienteApp')
               self.hayData = true;
             }else{
 
-              // financieraMidRequest.cancel();
+              financieraMidRequest.cancelSearch;
               financieraMidRequest.get('disponibilidad/Solicitudes/'+self.Vigencia,$.param({
                 UnidadEjecutora: self.UnidadEjecutora,
                 offset: offset

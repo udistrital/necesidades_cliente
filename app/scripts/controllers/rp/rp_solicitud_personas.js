@@ -316,7 +316,7 @@ angular.module('contractualClienteApp')
                 self.gridOptions.onRegisterApi = function(gridApi) {
                     self.gridApi = gridApi;
                     self.gridApi.core.on.filterChanged($scope, function() {
-                        service.cancel();
+                        service.cancelSearch;
                         var grid = this.grid;
                         var query = self.filter;
                         angular.forEach(grid.columns, function(value, key) {

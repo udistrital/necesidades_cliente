@@ -437,7 +437,10 @@ var text_es = {
         REGISTRAR: "Registrar",
         SOLICITAR_RP:"Solicitar RP",
         QUITAR_RUBRO: "Quitar",
-        VER_SEGUIMIENTO_FINANCIERO:"Ver seguimiento financiero"
+        VER_SEGUIMIENTO_FINANCIERO:"Ver seguimiento financiero",
+        APROBAR: "Aprobar",
+        RECHAZAR: "Rechazar",
+
     },
 
 
@@ -898,10 +901,51 @@ var text_es = {
     CONTRATO_FINALIZADO: "Contrato finalizado",
     RP: "RP",
     ANIO:" vigencia ",
+    //otros
     TITULO_SOLICITUD_CDP: "Solicitudes de Certificado de Disponibilidad Presupuestal",
+    FECHA_FINAL: "Fecha Final",
+    NO: "No. ",
+    DATOS_NECESIDAD: "Datos de la Necesidad",
+    JEFE_DEPENDENCIA: "Jefe de la Dependencia",
+    VALOR_CONTRATACION: "Valor de la Contratación",
+    SOLICITUD_CDP: "Solicitud de CDP No.",
+    NECESIDAD_NO: "Necesidad No. ",
+    VER_RESERVAS:"Ver Reservas",
+    VOLVER_VIGENCIA_ACTUAL: "Volver a vigencia actual",
+    LISTA_RESERVAS: "Lista de Reservas",
+    LISTA_CDP: "Lista De Certificados de Disponibilidad Presupuestal",
+    REPORTES: {
+        LISTADO_APROPIACIONES: "Listado de Apropiaciones",
+        FECHA_REPORTE: "Fecha del reporte",
+        CDP: "Certificado de Disponibilidad Presupuestal",
+        GENERAR_REPORTE: "Generar Reporte",
+        RP: "Certificado de Registro Presupuestal"
+      },
+    RESPONSABLE_SELECCION_PRESUPUESTO: "Responsable Sección De Presupuesto",
+    AFECTACION_PRESUPUESTAL: "Afectación Presupuestal",
 };
 
 var text_en = {
+    LISTA_CDP: "Lista De Certificados de Disponibilidad Presupuestal",
+    AFECTACION_PRESUPUESTAL: "Afectación Presupuestal",
+    RESPONSABLE_SELECCION_PRESUPUESTO: "Responsable Sección De Presupuesto",
+    REPORTES: {
+        LISTADO_APROPIACIONES: "Listado de Apropiaciones",
+        FECHA_REPORTE: "Fecha del reporte",
+        CDP: "Certificado de Disponibilidad Presupuestal",
+        GENERAR_REPORTE: "Generar Reporte",
+        RP: "Certificado de Registro Presupuestal"
+      },
+    LISTA_RESERVAS: "Lista de Reservas",
+    VOLVER_VIGENCIA_ACTUAL: "Volver a vigencia actual",
+    VER_RESERVAS:"Ver Reservas",
+    NECESIDAD_NO: "Necesidad No. ",
+    SOLICITUD_CDP: "Solicitud de CDP No.",
+    VALOR_CONTRATACION: "Valor de la Contratación",
+    JEFE_DEPENDENCIA: "Jefe de la Dependencia",
+    DATOS_NECESIDAD: "Datos de la Necesidad",
+    NO: "No. ",
+    FECHA_FINAL: "Fecha Final",
     SELECCIONAR_FILTRO: " Select the filter which is going to generate the RP request",
     BUSCAR: "Search",
     INGRESE_IDENTIFICACION_PROVEEDOR: "Enter provider id",
