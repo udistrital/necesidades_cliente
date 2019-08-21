@@ -42,7 +42,7 @@ angular.module('contractualClienteApp')
                         width: '15%'
                     },
                     {
-                        field: 'data.Nombre',
+                        field: 'Nombre',
                         displayName: $translate.instant('NOMBRE_RUBRO'),
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
                         cellTooltip: function (row) {
@@ -58,7 +58,7 @@ angular.module('contractualClienteApp')
                         width: '58%'
                     },
                     {
-                        field: 'data.ApropiacionInicial',
+                        field: 'ApropiacionInicial',
                         displayName: $translate.instant('VALOR'),
                         cellFilter: 'currency',
                         // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',
@@ -96,9 +96,9 @@ angular.module('contractualClienteApp')
 
 
                 self.actualiza_rubros = function () {
-                    planCuentasRequest.get("arbol_rubro_apropiacion/arbol_apropiacion/3/"+ $scope.unidadejecutora +"/"+ $scope.vigencia ).then(function (response) {
+                    planCuentasRequest.get("arbol_rubro_apropiacion/get_hojas/"+ $scope.unidadejecutora +"/"+ $scope.vigencia ).then(function (response) {
                         if (response.data.Body !== null) {
-                            console.info(response.data.Body)
+                            // console.info(response.data.Body)
                             self.gridOptions.data = response.data.Body .sort(function (a, b) {
                                 if (a.Codigo < b.Codigo) { return -1; }
                                 if (a.Codigo > b.Codigo) { return 1; }
@@ -106,7 +106,7 @@ angular.module('contractualClienteApp')
                             });
                             self.max_level = 0;
                             var level = 0;
-                            console.info(self.gridOptions.data.length)
+                            // console.info(self.gridOptions.data.length)
                             for (var i = 0; i < self.gridOptions.data.length; i++) {
                                 level = (self.gridOptions.data[i].Codigo.match(/-/g) || []).length;
                                 if (level > self.max_level) {

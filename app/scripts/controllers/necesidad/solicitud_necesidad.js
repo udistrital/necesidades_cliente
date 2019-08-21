@@ -105,6 +105,8 @@ angular.module('contractualClienteApp')
 
             if (trNecesidad.Ffapropiacion) {
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
+                console.info("trNecesidad.Ffapropiacion:")
+                console.info(self.f_apropiaciones)
                 //necesidadService.groupByApropiacion(self.f_apropiaciones, false).then(function (fap) { self.f_apropiacion = fap });
                 self.f_apropiaciones.forEach(function (apropiacion) {
                     var cantidadFuentes = apropiacion.Fuentes.length;
@@ -120,6 +122,16 @@ angular.module('contractualClienteApp')
                         productos: apropiacion.Productos,
                         initProductos: apropiacion.Productos
                     });
+                    console.info("agregar apr")
+                    console.info({
+                        Apropiacion: apropiacion.Apropiacion.Id,
+                        aprop: apropiacion.Apropiacion,
+                        fuentes: apropiacion.Fuentes,
+                        initFuentes: apropiacion.Fuentes,
+                        Monto: apropiacion.Monto,
+                        productos: apropiacion.Productos,
+                        initProductos: apropiacion.Productos
+                    })
                 })
             }
 
@@ -356,7 +368,7 @@ angular.module('contractualClienteApp')
             order: "asc",
         })).then(function (response) {
             self.persona_data = response.data;
-            console.info(self.persona_data);
+            // console.info(self.persona_data);
         });
 
         necesidadService.getParametroEstandar().then(function (response) {
@@ -408,7 +420,7 @@ angular.module('contractualClienteApp')
             if (self.f_apropiacion.filter(function (element) { return element.Apropiacion === apropiacion.Id; }).length > 0) {
                 swal(
                     'Apropiación ya agregada',
-                    'El rubro: <b>' + Fap.aprop.Rubro.Nombre + '</b> ya ha sido agregado',
+                    'El rubro: <b>' + Fap.aprop.Nombre + '</b> ya ha sido agregado',
                     'warning'
                 );
                 // Por el contrario, si el tamaño del arreglo que devuelve filter es menor a 0

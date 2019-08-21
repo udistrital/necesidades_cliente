@@ -7,7 +7,7 @@
  * # apropiaciones/fuentesApropiacion
  */
 angular.module('contractualClienteApp')
-  .directive('fuentesApropiacion', function (financieraRequest) {
+  .directive('fuentesApropiacion', function ( planCuentasRequest) {
     return {
       restrict: 'E',
       scope: {

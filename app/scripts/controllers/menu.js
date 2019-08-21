@@ -26,7 +26,7 @@ angular.module('contractualClienteApp')
         configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + 'ADMIN_NECESIDADES/' + 'Necesidades', '').then(function (response) {
 
             $rootScope.my_menu = response.data;
-            console.info(response.data);
+            // console.info(response.data);
 
         });
 
