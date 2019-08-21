@@ -114,7 +114,7 @@ var conf_pruebas = {
     TOKEN: {
         AUTORIZATION_URL: "https://autenticacion.udistrital.edu.co/oauth2/authorize",
         URL_USER_INFO: "https://autenticacion.udistrital.edu.co/oauth2/userinfo",
-        CLIENTE_ID: "od8hga1enbp5t3H2I4VqTGu6ECIa",
+        CLIENTE_ID: "9m9yYpCAjaD9HnS2RR7kq1zGurEa",
         REDIRECT_URL: "http://10.20.0.254/necesidades/",
         RESPONSE_TYPE: "id_token token",
         SCOPE: "openid email",
@@ -172,6 +172,6 @@ var conf_local = {
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        GENERAL: conf_local
+        GENERAL: conf_pruebas
     });
 
