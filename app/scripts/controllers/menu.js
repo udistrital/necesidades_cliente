@@ -118,14 +118,14 @@ angular.module('contractualClienteApp')
 
         if ($scope.token_service.live_token()) {
             self.perfil = $scope.token_service.getRoles();
-            configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades').then(function (response) {
+            configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades','').then(function (response) {
                 $rootScope.my_menu = response.data;
                 /*configuracionRequest.update_menu(https://10.20.0.162:9443/store/apis/authenticate response.data);
                 console.log("get menu");
                 $scope.menu_service = configuracionRequest.get_menu();*/
             }).catch(function (err) {
                 console.log('err ', err);
-                $location.path("/no_permission");
+                $location.path("/404");
                 $http.pendingRequests.forEach(function (request) {
                     if (request.cancel) {
                         request.cancel.resolve();

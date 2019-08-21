@@ -62,27 +62,43 @@ angular
         'gridApiService',
         'colombiaHolidaysService',
         'nuxeoClient',
-        'ngMaterial', 
+        'ngMaterial',
         'md-steppers',
         'implicitToken'
     ])
-    .run(function(amMoment) {
+    .run(function (amMoment) {
         amMoment.changeLocale('es');
     })
-    .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+    .factory('httpRequestInterceptor', function () {
+        return {
+            request: function (config) {
+
+                if (window.localStorage.getItem('access_token') !== undefined && window.localStorage.getItem('access_token') !== null) {
+                    config.headers['Authorization'] = 'Bearer ' + window.localStorage.getItem('access_token');
+                }
+                config.headers['Accept'] = 'application/json';
+
+                return config;
+            }
+        };
+    })
+    .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
         cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
         cfpLoadingBarProvider.spinnerTemplate = '<div class="loading-div"><div><span class="fa loading-spinner"></div><div class="fa sub-loading-div">Por favor espere, cargando...</div></div>';
     }])
-    .config(function($mdDateLocaleProvider) {
-        $mdDateLocaleProvider.formatDate = function(date) {
+    .config(function ($mdDateLocaleProvider) {
+        $mdDateLocaleProvider.formatDate = function (date) {
             return date ? moment.utc(date).format('YYYY-MM-DD') : '';
         };
     })
-    .config(['$locationProvider', '$routeProvider' ,'$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
-    
+    .config(function ($httpProvider) {
+        $httpProvider.interceptors.push('httpRequestInterceptor')
+    })
+    .config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
+
         $httpProvider.defaults.headers.post = {};
         $httpProvider.defaults.headers.put = {};
-        $locationProvider.hashPrefix(""); 
+        $locationProvider.hashPrefix("");
         $routeProvider
             .when('/', {
                 templateUrl: 'views/main.html',
@@ -119,7 +135,7 @@ angular
                 templateUrl: 'views/necesidad/necesidad_reportes.html',
                 controller: 'NecesidadReportesCtrl',
                 controllerAs: 'necesidadReportes'
-            })            
+            })
             .when('/necesidad/necesidad_externa', {
                 templateUrl: 'views/necesidad/necesidad_externa.html',
                 controller: 'NecesidadExternaCtrl',
@@ -129,10 +145,10 @@ angular
                 templateUrl: 'views/necesidad/necesidad_contratacion_docente.html',
                 controller: 'NecesidadContratacionDocenteCtrl',
                 controllerAs: 'necesidadContratacionDocente'
-            })   
+            })
             .when('/404', {
                 templateUrl: '404.html'
-            })        
+            })
             .otherwise({
                 redirectTo: '/'
             });
