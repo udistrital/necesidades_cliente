@@ -146,6 +146,16 @@ angular
                 controller: 'NecesidadContratacionDocenteCtrl',
                 controllerAs: 'necesidadContratacionDocente'
             })
+            .when('/cdp/cdp_solicitud_consulta', {
+                templateUrl: 'views/cdp/cdp_solicitud_consulta.html',
+                controller: 'CdpCdpSolicitudConsultaCtrl',
+                controllerAs: 'cdpSolicitudConsulta'
+            })
+            .when('/cdp/cdp_consulta', {
+                templateUrl: 'views/cdp/cdp_consulta.html',
+                controller: 'CdpCdpConsultaCtrl',
+                controllerAs: 'cdpConsulta'
+            })
             .when('/404', {
                 templateUrl: '404.html'
             })
