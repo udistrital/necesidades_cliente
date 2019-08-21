@@ -114,7 +114,7 @@ var conf_pruebas = {
     TOKEN: {
         AUTORIZATION_URL: "https://autenticacion.udistrital.edu.co/oauth2/authorize",
         URL_USER_INFO: "https://autenticacion.udistrital.edu.co/oauth2/userinfo",
-        CLIENTE_ID: "od8hga1enbp5t3H2I4VqTGu6ECIa",
+        CLIENTE_ID: "M39Npr35TpPtSr3Ub7a98rxckWsa",
         REDIRECT_URL: "http://10.20.0.254/necesidades/",
         RESPONSE_TYPE: "id_token token",
         SCOPE: "openid email",
@@ -122,8 +122,8 @@ var conf_pruebas = {
         SIGN_OUT_URL: "https://autenticacion.udistrital.edu.co/oidc/logout",
         SIGN_OUT_REDIRECT_URL: "http://10.20.0.254/necesidades/",
         SIGN_OUT_APPEND_TOKEN: "true",
-        REFRESH_TOKEN: "https://autenticacion.udistrital.edu.co/oauth2/token",
-        CLIENT_SECRET: "5srUXoy2myc4gtZfW3whfqxR5gIa"
+      
+      
     },
 };
 
@@ -165,13 +165,13 @@ var conf_local = {
         SIGN_OUT_URL: "https://autenticacion.udistrital.edu.co/oidc/logout",
         SIGN_OUT_REDIRECT_URL: "http://localhost:9000/",
         SIGN_OUT_APPEND_TOKEN: "true",
-        REFRESH_TOKEN: "https://autenticacion.udistrital.edu.co/oauth2/token",
-        CLIENT_SECRET: "2crHq2IRkFHEVTBfpznLhKHyKVIa"
+       
+       
     },
 };
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        GENERAL: conf_local
+        GENERAL: conf_pruebas
     });
 
