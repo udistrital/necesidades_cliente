@@ -5,16 +5,15 @@ angular.module('contractualClienteApp')
         var paths = [];
         $scope.token_service = token_service;
         $scope.$on('$routeChangeStart', function (scope, next, current) {
-
             var waitForMenu = function () {
-                if ($rootScope.my_menu != undefined) {
+                if ($rootScope.my_menu !== undefined) {
                     if ($scope.token_service.live_token() && current != undefined ) {
                         if (!$scope.havePermission(next.originalPath, $rootScope.my_menu)) {
-                            $location.path("/no_permission");
+                            $location.path("/404");
                         }
                     }  else if (current == undefined) {
                         if (!$scope.havePermission(next.originalPath, $rootScope.my_menu)) {
-                            $location.path("/no_permission");
+                            $location.path("/404");
                         }
                     }
                 } else {
@@ -37,44 +36,7 @@ angular.module('contractualClienteApp')
 
         $scope.breadcrumb = [];
 
-        $scope.menu_app = [{
-            id: "kronos",
-            title: "KRONOS",
-            url: "http://10.20.0.254/kronos"
-        },
-        {
-            id: "agora",
-            title: "AGORA",
-            url: "https://pruebasfuncionarios.intranetoas.udistrital.edu.co/agora"
-        }, {
-            id: "argo",
-            title: "ARGO",
-            url: "https://pruebasfuncionarios.intranetoas.udistrital.edu.co/argo"
-        }, {
-            id: "arka",
-            title: "ARKA",
-            url: "https://pruebasfuncionarios.intranetoas.udistrital.edu.co/arka"
-        }, {
-            id: "temis",
-            title: "TEMIS",
-            url: "https://pruebasfuncionarios.intranetoas.udistrital.edu.co/gefad"
-        }, {
-            id: "polux",
-            title: "POLUX",
-            url: "http://10.20.0.254/polux"
-        }, {
-            id: "jano",
-            title: "JANO",
-            url: "http://10.20.0.254/kronos"
-        }, {
-            id: "kyron",
-            title: "KYRON",
-            url: "http://10.20.0.254/kronos"
-        }, {
-            id: "sga",
-            title: "SGA",
-            url: "http://10.20.0.254/kronos"
-        }
+        $scope.menu_app = [
         ];
         //$scope.menu_service = [];
         $scope.changeLanguage = function (key) {

@@ -130,7 +130,7 @@ angular
                 controller: 'NecesidadContratacionDocenteCtrl',
                 controllerAs: 'necesidadContratacionDocente'
             })   
-            .when('/no_permission', {
+            .when('/404', {
                 templateUrl: '404.html'
             })        
             .otherwise({
