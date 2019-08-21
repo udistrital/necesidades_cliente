@@ -114,7 +114,7 @@ var conf_pruebas = {
     TOKEN: {
         AUTORIZATION_URL: "https://autenticacion.udistrital.edu.co/oauth2/authorize",
         URL_USER_INFO: "https://autenticacion.udistrital.edu.co/oauth2/userinfo",
-        CLIENTE_ID: "od8hga1enbp5t3H2I4VqTGu6ECIa",
+        CLIENTE_ID: "M39Npr35TpPtSr3Ub7a98rxckWsa",
         REDIRECT_URL: "http://10.20.0.254/necesidades/",
         RESPONSE_TYPE: "id_token token",
         SCOPE: "openid email",
