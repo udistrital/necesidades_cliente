@@ -897,7 +897,8 @@ var text_es = {
     CONTRATO_CANCELADO: "Contrato cancelado",
     CONTRATO_FINALIZADO: "Contrato finalizado",
     RP: "RP",
-    ANIO:" vigencia "
+    ANIO:" vigencia ",
+    TITULO_SOLICITUD_CDP: "Solicitudes de Certificado de Disponibilidad Presupuestal",
 };
 
 var text_en = {
@@ -1352,6 +1353,7 @@ var text_en = {
     NO_EXISTE_RESOLUCION: "A document with that information doesn't exist",
     RESOLUCION_NO_VINCULACION: "A document with that information doesn't exist",
     RESOLUCION_NO_EXPEDIDA: "The document must be issued",
+    TITULO_SOLICITUD_CDP: "Solicitudes de Certificado de Disponibilidad Presupuestal",
 };
 
 angular.module('contractualClienteApp')

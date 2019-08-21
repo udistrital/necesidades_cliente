@@ -1,0 +1,111 @@
+<div class="panel panel-primary panel-body">
+    <h2 class="page-header" align="center">{{'TITULO_SOLICITUD_CDP' | translate}}</h2>
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-md-4 col-md-offset-1">
+                            <label for="select_vigencia" class="col-form-label">{{'VIGENCIA' | translate}} </label>
+                            <br>
+                            <!--input type="text" name="select_vigencia" disabled="true" ng-model="cdpSolicitudConsulta.Vigencia" class="form-control"-->
+                            <select class="form-control" name="select_vigencia" id="select_vigencia" ng-model="cdpSolicitudConsulta.Vigencia" ng-model-options="{ updateOn: 'default', debounce: { default: 500} }">
+                              <option ng-repeat="option in cdpSolicitudConsulta.years" value="{{option}}">{{option}}</option>
+                            </select>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label for="tipo_ingreso">{{'FECHA_INICIO' | translate}}</label><br>
+                            <md-datepicker ng-model="cdpSolicitudConsulta.fechaInicio" md-placeholder="{{'FECHA_INICIO' | translate}}" flex md-current-view="year" md-min-date="cdpSolicitudConsulta.fechamin" md-max-date="cdpSolicitudConsulta.fechamax"></md-datepicker>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="tipo_ingreso">{{'FECHA_FINAL' | translate}}</label><br>
+                            <md-datepicker ng-model="cdpSolicitudConsulta.fechaFin" md-placeholder="{{'FECHA_FINAL' | translate}}" flex md-current-view="year" md-min-date="cdpSolicitudConsulta.fechamin" md-max-date="cdpSolicitudConsulta.fechamax"></md-datepicker>
+                        </div>
+                        <div class="col-md-1">
+                            <br>
+                            <a type="button" name="button" ng-click="cdpSolicitudConsulta.cargarDatos(0,'')" class="fa fa-search btn btn-info btn-outline" aria-hidden="true"></a>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+
+
+        <div ui-grid="cdpSolicitudConsulta.gridOptions"  ui-grid-selection ui-grid-pagination ui-grid-auto-resize class="myGrid">
+          <div class="watermark" ng-show="!cdpSolicitudConsulta.hayData">{{'NO_DATA'| translate}}</div>
+          <div class="watermark" ng-show="cdpSolicitudConsulta.cargando">{{'CARGANDO'| translate}}   <i class="fa fa-spin fa-spinner"></i></div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div id="myModal" class="modal fade col-md-12" role="dialog">
+    <div class="modal-content col-md-offset-1 col-md-10">
+        <div class="modal-header">
+            <button type="button" class="btn btn-outline btn-danger btn-xs pull-right" data-dismiss="modal">&times</button><br>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="page-header">{{'SOLICITUD_CDP' | translate}} {{cdpSolicitudConsulta.data.SolicitudDisponibilidad.Numero}} de {{cdpSolicitudConsulta.data.SolicitudDisponibilidad.Vigencia}}</h3>
+                <div align="right">{{'FECHA_SOLICITUD' | translate}} {{cdpSolicitudConsulta.data.SolicitudDisponibilidad.FechaSolicitud | date:"yyyy-MM-dd":"UTC"}}</div>
+            </div>
+            <div class="panel-body">
+                <h4 class="text-info">{{'DATOS_NECESIDAD' | translate}}</h4>
+                <table class="table">
+                    <tr>
+                        <th>{{'VIGENCIA' | translate}}: </th>
+                        <td>{{cdpSolicitudConsulta.data.SolicitudDisponibilidad.Necesidad.Vigencia}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'DEPENDENCIA_SOLICITANTE' | translate }}: </th>
+                        <td>{{cdpSolicitudConsulta.data.DependenciaSolicitante.Nombre}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'JEFE_DEPENDENCIA' | translate }}: </th>
+                        <td>{{cdpSolicitudConsulta.data.DependenciaSolicitante.InfoJefeDependencia.PrimerApellido + ' ' + cdpSolicitudConsulta.data.DependenciaSolicitante.InfoJefeDependencia.SegundoApellido + ' ' + cdpSolicitudConsulta.data.DependenciaSolicitante.InfoJefeDependencia.PrimerNombre
+                            + ' '+ cdpSolicitudConsulta.data.DependenciaSolicitante.InfoJefeDependencia.SegundoNombre + ' '}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'DEPENDENCIA_DESTINO' | translate }}: </th>
+                        <td>{{cdpSolicitudConsulta.data.DependenciaDestino.Nombre}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'ORDENADOR_GASTO' | translate }}: </th>
+                        <td>{{cdpSolicitudConsulta.data.DependenciaSolicitante.InfoOrdenador.PrimerApellido + ' ' + cdpSolicitudConsulta.data.DependenciaSolicitante.InfoOrdenador.SegundoApellido + ' ' + cdpSolicitudConsulta.data.DependenciaSolicitante.InfoOrdenador.PrimerNombre
+                            + ' '+ cdpSolicitudConsulta.data.DependenciaSolicitante.InfoOrdenador.SegundoNombre + ' '}}</td>
+                    </tr>
+                    <th>{{ 'UNIDAD_EJECUTORA' | translate }}: </th>
+                    <td>{{cdpSolicitudConsulta.data.SolicitudDisponibilidad.Necesidad.UnidadEjecutora}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'OBJETO_CONTRACTUAL' | translate }}: </th>
+                        <td>{{cdpSolicitudConsulta.data.SolicitudDisponibilidad.Necesidad.Objeto}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'VALOR_CONTRATACION' | translate }}: </th>
+                        <td>{{cdpSolicitudConsulta.data.SolicitudDisponibilidad.Necesidad.Valor | currency}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'JUSTIFICACION' | translate }}: </th>
+                        <td>{{cdpSolicitudConsulta.data.SolicitudDisponibilidad.Necesidad.Justificacion}}</td>
+                    </tr>
+                </table>
+                <hr>
+                
+                <!-- <fuente-financiacion-necesidad necesidad="cdpSolicitudConsulta.data.SolicitudDisponibilidad.Necesidad.Id" apropiacion="apropiaciones" resumenafectacion="afectacion">
+                </fuente-financiacion-necesidad> -->
+
+                <hr>
+                <center ng-if="!cdpSolicitudConsulta.data.SolicitudDisponibilidad.Expedida && cdpSolicitudConsulta.data.SolicitudDisponibilidad.Necesidad.Vigencia === cdpSolicitudConsulta.vigenciaActual">
+                    <button class="btn btn-success btn-outline" ng-click="cdpSolicitudConsulta.generar_disponibilidad()">{{ 'BTN.APROBAR' | translate }}</button>
+                    <button class="btn btn-danger btn-outline" ng-click="cdpSolicitudConsulta.Rechazar()">{{ 'BTN.RECHAZAR' | translate }}</button>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>

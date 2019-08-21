@@ -1,0 +1,28 @@
+<!--<div class="">
+            <pre>{{fuenteFinanciacionNecesidad.resumen_afectacion_presupuestal|json}}</pre>
+          </div> -->
+
+<div ng-show="resumenafectacion.length != 0">
+<h4 class="text-info" >{{'AFECTACION_PRESUPUESTAL' | translate}}</h4>
+</div>
+<ul class="list-unstyled" ng-repeat="item in resumenafectacion">
+  <hr class="hr-primary">
+  <li><b>{{'RUBRO' | translate}}:</b> {{item[0].Apropiacion.Rubro.Codigo+" / "+item[0].Apropiacion.Rubro.Nombre}}
+    <ul>
+      <li ng-show="item[0].FuenteFinanciamiento.Id !== 0"><b>{{'FUENTES_AFECTADAS' | translate}}:</b>
+        <ul ng-repeat="fuente in item">
+          <li>{{fuente.FuenteFinanciamiento.Codigo + " / "+fuente.FuenteFinanciamiento.Nombre + " "}}
+            <ul>
+              <li><b>{{'VALOR_AFECTACION' | translate}}:</b> {{" "+fuente.MontoParcial|currency}}</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li ng-show="item[0].FuenteFinanciamiento.Id === 0"><b>{{'VALOR_AFECTACION_FUNCIONAMIENTO' | translate}}:</b>
+        <ul ng-repeat="fuente in item">
+          <li>{{'VALOR_AFECTACION' | translate}}:</b> {{" "+fuente.MontoParcial|currency}}</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
