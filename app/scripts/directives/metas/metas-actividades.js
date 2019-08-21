@@ -11,16 +11,17 @@ angular.module('contractualClienteApp')
     return {
       restrict: 'E',
       scope: {
+        aproSel: '=',
         meta: '=',
-        actividades: '='
+        actividades: '=',
       },
 
 
       templateUrl: '/views/directives/metas/metas-actividades.html',
       controller: function ($scope) {
         var self = this;
-        self.metas = [];
-
+        self.actividades = [];
+        self.meta = undefined;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
           paginationPageSize: null,
@@ -54,12 +55,14 @@ angular.module('contractualClienteApp')
           ]
         };
 
-        metasRequest.get('Metas').then(
-          function (res) {
-            self.metas = res.data.Metas;
-            console.log(self.metas.Metas);
-          }
-        );
+        self.cargarMetas = function () {
+          metasRequest.get('Metas').then(
+            function (res) {
+              self.metas = res.data.Metas;
+            }
+          );
+        }
+
 
 
 
@@ -81,12 +84,23 @@ angular.module('contractualClienteApp')
           });
         }
 
-        self.loadActividades();
+        self.lala = function () {
+          console.info($scope.aproSeleccionada + "Agaga");
+        }
+
+        self.lala();
+        //self.loadActividades();
+
+
+        if ($scope.aproSeleccionada != undefined) {
+          console.info($scope.aproSeleccionada + "Agaga");
+          self.cargarMetas();
+        }
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
-          $scope.actividades.forEach(function (doc) {
-            var tmp = self.gridOptions.data.filter(function (e) { return e.Id == doc.Id })
+          $scope.actividades.forEach(function (act) {
+            var tmp = self.gridOptions.data.filter(function (e) { return e.Id == act.Id })
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }

@@ -137,6 +137,7 @@ angular.module('contractualClienteApp')
                     });
                     self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                         $scope.apropiacion = row.entity;
+                        console.info($scope.apropiacion);
                     });
                 };
 

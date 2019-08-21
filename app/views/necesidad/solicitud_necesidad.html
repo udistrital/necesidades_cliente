@@ -276,7 +276,7 @@
                       </div>
 
 
-              <metas-actividades></metas-actividades>
+              <metas-actividades ng-show="solicitudNecesidad.apro != null" aproSel="solicitudNecesidad.apro" meta="solicitudNecesidad.meta" actividades="solicitudNecesidad.actividades"></metas-actividades>
 
                       <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
                         <button type="button" class="btn btn-danger btn-sm col-md-offset-11"

@@ -19,7 +19,9 @@ angular.module('contractualClienteApp')
         self.formuIncompleto = true;
 
         self.apro = undefined;
-
+        self.meta = undefined;
+        self.actividades = [];
+        
         self.dep_ned = {
             JefeDependenciaSolicitante: 6
         };
