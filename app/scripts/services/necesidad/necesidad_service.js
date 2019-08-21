@@ -205,6 +205,8 @@ angular.module('contractualClienteApp')
               
             return adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + IdNecesidad).then(function (response) {
               trNecesidad.Ffapropiacion = response.data;
+              console.info("fuentes init necesidad")
+              console.info(response.data)
 
               return administrativaRequest.get('marco_legal_necesidad', $.param({
                 query: 'Necesidad:' + IdNecesidad
