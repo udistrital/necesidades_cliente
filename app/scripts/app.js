@@ -64,6 +64,7 @@ angular
         'nuxeoClient',
         'ngMaterial', 
         'md-steppers',
+        'implicitToken'
     ])
     .run(function(amMoment) {
         amMoment.changeLocale('es');
