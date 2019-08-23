@@ -30,11 +30,11 @@ angular.module('contractualClienteApp')
           enableVerticalScrollbar: 0,
           enableSelectAll: true,
           columnDefs: [{
-            field: 'Producto.Nombre',
+            field: 'Nombre',
             displayName: $translate.instant('PRODUCTOS'),
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
-              return row.entity.Producto.Nombre;
+              return row.entity.Nombre;
             }
           }
           ]
@@ -48,16 +48,16 @@ angular.module('contractualClienteApp')
         };
 
         planCuentasRequest.get('producto').then(function (response) {
-          self.gridOptions.data = response.data;
+          self.gridOptions.data = response.data.Body;
         }).then(function (t) {
-          //Se inicializa el grid api para seleccionar
-          //self.gridApi = new GridApi(grid);
-          self.gridApi.grid.modifyRows(self.gridOptions.data);
+          var gridOptData = Object.values(self.gridOptions.data);
+          self.gridApi.grid.modifyRows(gridOptData[0]);
+          
 
           $scope.$watch('initProductoApropiacion', function () {
             self.productoapropiacion = [];
             $scope.initProductoapropiacion.forEach(function (producto) {
-              var tmp = self.gridOptions.data.filter(function (e) { return e.Producto._id == producto.ProductoRubroInfo[0].Producto._id })
+              var tmp = self.gridOptions.data.filter(function (e) { return e._id == producto._id })
               if (tmp.length > 0) {
                 $scope.productoapropiacion.push(tmp[0]); //enriquecer productos
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
