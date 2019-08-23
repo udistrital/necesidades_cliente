@@ -481,13 +481,13 @@ angular.module('contractualClienteApp')
                 // self.subtotalEspecificaciones+= self.productos[i].Valor * self.productos[i].Cantidad;
                 // self.valorIVA=(self.productos[i].Valor*self.productos[i].Iva/100)*self.productos;
                 // self.valorTotalEspecificaciones += ((self.productos[i].Valor * 0.19) + self.productos[i].Valor) * self.productos[i].Cantidad;
-                self.subtotalEspecificaciones = self.productos.reduce(function(total=0, producto){
+             /*    self.subtotalEspecificaciones = self.productos.reduce(function(total=0, producto){
                     return total+(producto.Valor*producto.Cantidad);
                 },0);
                 self.valorIVA=self.productos.reduce(function(total=0, producto){
                     return total+(producto.Valor*(producto.Iva/100));
                 },0);
-                self.valorTotalEspecificaciones = self.valorIVA+self.subtotalEspecificaciones;
+                self.valorTotalEspecificaciones = self.valorIVA+self.subtotalEspecificaciones; */
         }, true);
 
         $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad.Id', function () {
