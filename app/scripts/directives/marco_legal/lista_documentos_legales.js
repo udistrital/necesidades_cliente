@@ -104,7 +104,7 @@ angular.module('contractualClienteApp')
           administrativaRequest.post("marco_legal", self.obj_documento).then(function(){
             self.loadDocumentos();
           }
-          )
+          );
           
 
         };

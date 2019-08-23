@@ -131,6 +131,7 @@ angular.module('contractualClienteApp')
                 order: "desc",
                 query: query.join(",")
             }, true))
+            console.log
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
         };
@@ -236,6 +237,7 @@ angular.module('contractualClienteApp')
             var idNecesidad = self.g_necesidad.Id;
             $("#myModal").modal("hide");
             $('#myModal').on('hidden.bs.modal', function (e) {
+                console.info('/necesidad/solicitud_necesidad/' + idNecesidad);
                 $window.location.href = '#/necesidad/solicitud_necesidad/' + idNecesidad;
             })
         };

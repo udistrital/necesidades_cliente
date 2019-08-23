@@ -18,8 +18,12 @@ angular.module('contractualClienteApp')
         self.avance = undefined;
         self.formuIncompleto = true;
 
-        self.apro = undefined;
-
+        
+        self.meta = {};
+        self.actividades = [];
+        self.apSelected = false;
+        self.apSelectedOb = undefined;
+        
         self.dep_ned = {
             JefeDependenciaSolicitante: 6
         };
@@ -45,6 +49,8 @@ angular.module('contractualClienteApp')
         self.f_valor = 0;
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
+        self.subtotalEspecificaciones = 0;
+        self.valorIVA = 0;
 
 
         self.planes_anuales = [{
@@ -73,6 +79,7 @@ angular.module('contractualClienteApp')
             }
         }
 
+        
         // El tipo de solicitud de contrato
         self.duracionEspecialFunc = function (especial) {
             self.necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
@@ -107,31 +114,24 @@ angular.module('contractualClienteApp')
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
                 console.info("trNecesidad.Ffapropiacion:")
                 console.info(self.f_apropiaciones)
+   
                 //necesidadService.groupByApropiacion(self.f_apropiaciones, false).then(function (fap) { self.f_apropiacion = fap });
                 self.f_apropiaciones.forEach(function (apropiacion) {
                     var cantidadFuentes = apropiacion.Fuentes.length;
+                    console.info("HAY"+ cantidadFuentes + "xd")
                     for (var i = 0; i < cantidadFuentes; i++) {
                         apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
                     }
                     self.f_apropiacion.push({
-                        Apropiacion: apropiacion.Apropiacion.Id,
+                        Apropiacion: apropiacion.Codigo,
                         aprop: apropiacion.Apropiacion,
-                        fuentes: apropiacion.Fuentes,
-                        initFuentes: apropiacion.Fuentes,
-                        Monto: apropiacion.Monto,
+                        // fuentes: apropiacion.Fuentes,
+                        // initFuentes: apropiacion.Fuentes,
+                        Monto: apropiacion.ApropiacionInicial,
                         productos: apropiacion.Productos,
                         initProductos: apropiacion.Productos
                     });
-                    console.info("agregar apr")
-                    console.info({
-                        Apropiacion: apropiacion.Apropiacion.Id,
-                        aprop: apropiacion.Apropiacion,
-                        fuentes: apropiacion.Fuentes,
-                        initFuentes: apropiacion.Fuentes,
-                        Monto: apropiacion.Monto,
-                        productos: apropiacion.Productos,
-                        initProductos: apropiacion.Productos
-                    })
+
                 })
             }
 
@@ -408,6 +408,8 @@ angular.module('contractualClienteApp')
             if (apropiacion == undefined) {
                 return
             }
+            self.apSelected=true;
+            self.apSelectedOb = apropiacion;
             var Fap = {
                 aprop: apropiacion,
                 Apropiacion: apropiacion.Id,
@@ -472,9 +474,20 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('solicitudNecesidad.productos', function () {
             self.valorTotalEspecificaciones = 0;
-            for (var i = 0; i < self.productos.length; i++) {
-                self.valorTotalEspecificaciones += ((self.productos[i].Valor * 0.19) + self.productos[i].Valor) * self.productos[i].Cantidad;
-            }
+            self.subtotalEspecificaciones = 0;
+            self.valorIVA = 0;
+
+            
+                // self.subtotalEspecificaciones+= self.productos[i].Valor * self.productos[i].Cantidad;
+                // self.valorIVA=(self.productos[i].Valor*self.productos[i].Iva/100)*self.productos;
+                // self.valorTotalEspecificaciones += ((self.productos[i].Valor * 0.19) + self.productos[i].Valor) * self.productos[i].Cantidad;
+                self.subtotalEspecificaciones = self.productos.reduce(function(total=0, producto){
+                    return total+(producto.Valor*producto.Cantidad);
+                },0);
+                self.valorIVA=self.productos.reduce(function(total=0, producto){
+                    return total+(producto.Valor*(producto.Iva/100));
+                },0);
+                self.valorTotalEspecificaciones = self.valorIVA+self.subtotalEspecificaciones;
         }, true);
 
         $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad.Id', function () {

@@ -17,8 +17,25 @@
         </div>
         <div style="height: 250px" ui-grid="d_metasActividades.gridOptions" ui-grid-selection ui-grid-auto-resize
             ui-grid-pagination></div>
+
+          
     </div>
-    <!--     <pre>
-        {{d_metasActividades.metas | json}}
-    </pre> -->
+
 </div>
+
+<div class="panel-footer">
+        <div class="row" ng-repeat="actividad in d_metasActividades.actividades">
+                <div class="col">
+                        <p>{{ actividad.Descripcion}}</p>
+                    </div>
+                    <div class="col">
+                        <input class="form-control" type="number" name="valor" id="val" ui-money-mask="0">
+                    </div>
+        </div>
+</div>
+
+
+<div>
+
+        
+    </div>

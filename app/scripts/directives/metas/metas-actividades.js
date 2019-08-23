@@ -11,16 +11,16 @@ angular.module('contractualClienteApp')
     return {
       restrict: 'E',
       scope: {
-        meta: '=',
-        actividades: '='
+        apropiacion: '=',
+        actividades: '=',
       },
 
 
       templateUrl: '/views/directives/metas/metas-actividades.html',
       controller: function ($scope) {
         var self = this;
-        self.metas = [];
-
+        self.actividades = [];
+        self.meta = undefined;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
           paginationPageSize: null,
@@ -54,19 +54,31 @@ angular.module('contractualClienteApp')
           ]
         };
 
-        metasRequest.get('Metas').then(
-          function (res) {
-            self.metas = res.data.Metas;
-            console.log(self.metas.Metas);
+        self.cargarMetas = function () {
+          metasRequest.get('Metas').then(
+            function (res) {
+              self.metas = res.data.Metas;
+            }
+          );
+        }
+
+        $scope.$watch('apropiacion', function () {
+          if ($scope.apropiacion !== undefined) {
+            self.cargarMetas();
           }
-        );
+        });
 
+        $scope.$watch('d_metasActividades.meta',function () {
+          if(self.meta !== undefined){
+            self.loadActividades();
+          }
+        });
 
-
+        
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.documentos = self.gridApi.selection.getSelectedRows();
+            $scope.actividades = self.gridApi.selection.getSelectedRows();
           });
 
         };
@@ -74,23 +86,23 @@ angular.module('contractualClienteApp')
         self.loadActividades = function () {
           metasRequest.get('Actividades').then(function (response) {
             self.gridOptions.data = response.data;
-            console.info(response.data)
           }).then(function () {
             // Se inicializa el grid api para seleccionar
             self.gridApi.grid.modifyRows(self.gridOptions.data);
           });
         }
 
-        self.loadActividades();
+
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
-          $scope.actividades.forEach(function (doc) {
-            var tmp = self.gridOptions.data.filter(function (e) { return e.Id == doc.Id })
+          $scope.actividades.forEach(function (act) {
+            var tmp = self.gridOptions.data.filter(function (e) { return e.Id == act.Id })
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
           });
+          self.actividades = $scope.actividades;
         });
 
         $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {

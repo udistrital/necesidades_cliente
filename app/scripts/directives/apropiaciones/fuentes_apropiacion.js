@@ -7,7 +7,7 @@
  * # apropiaciones/fuentesApropiacion
  */
 angular.module('contractualClienteApp')
-  .directive('fuentesApropiacion', function ( planCuentasRequest) {
+  .directive('fuentesApropiacion', function (planCuentasRequest) {
     return {
       restrict: 'E',
       scope: {
@@ -32,11 +32,11 @@ angular.module('contractualClienteApp')
           enableVerticalScrollbar: 0,
           enableSelectAll: true,
           columnDefs: [{
-            field: 'FuenteFinanciamiento.Nombre',
+            field: 'Nombre',
             displayName: $translate.instant('FUENTE'),
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
-              return row.entity.FuenteFinanciamiento.Nombre;
+              return row.entity.Nombre;
             }
           }
           ]
@@ -49,49 +49,42 @@ angular.module('contractualClienteApp')
             $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows();
           });
         };
-/* 
-        financieraRequest.get('fuente_financiamiento_apropiacion', $.param({
-          query: "Apropiacion:" + $scope.apropiacion + ",Dependencia:" + $scope.dependenciasolicitante
-        })).then(function (response) {
-          self.gridOptions.data = response.data;
+        /* 
+                financieraRequest.get('fuente_financiamiento_apropiacion', $.param({
+                  query: "Apropiacion:" + $scope.apropiacion + ",Dependencia:" + $scope.dependenciasolicitante
+                })).then(function (response) {
+                  self.gridOptions.data = response.data;
+                }).then(function (t) {
+                  // Se inicializa el grid api para seleccionar
+                  self.gridApi.grid.modifyRows(self.gridOptions.data);
+        
+                  // se observa cambios en idActividades para completar $scope.actividades y seleccionar las respectivas filas en la tabla
+                  $scope.$watch('initFuenteApropiacion', function () {
+                    self.fuenteapropiacion = [];
+                    $scope.initFuenteapropiacion.forEach(function (fuente) {
+                      var tmp = self.gridOptions.data.filter(function (e) { return e.FuenteFinanciamiento.Id == fuente.FuenteFinanciamiento[0].Id })
+                      if (tmp.length > 0) {
+                        tmp[0].MontoParcial = fuente.MontoParcial;
+                        $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
+                        self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+                      }
+                    });
+                  });
+                }); */
+
+        planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Codigo).then(function (response) {
+          self.gridOptions.data = response.data.Body;
         }).then(function (t) {
-          // Se inicializa el grid api para seleccionar
-          self.gridApi.grid.modifyRows(self.gridOptions.data);
-
-          // se observa cambios en idActividades para completar $scope.actividades y seleccionar las respectivas filas en la tabla
-          $scope.$watch('initFuenteApropiacion', function () {
-            self.fuenteapropiacion = [];
-            $scope.initFuenteapropiacion.forEach(function (fuente) {
-              var tmp = self.gridOptions.data.filter(function (e) { return e.FuenteFinanciamiento.Id == fuente.FuenteFinanciamiento[0].Id })
-              if (tmp.length > 0) {
-                tmp[0].MontoParcial = fuente.MontoParcial;
-                $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
-                self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-              }
-            });
-          });
-        }); */
-
-        planCuentasRequest.get('fuente_financiamiento_apropiacion',$.param({
-          query: "Apropiacion:" + $scope.apropiacion})).then(function (response) {
-            self.gridOptions.data = response.data;
-          }).then(function (t) {
-            // Se inicializa el grid api para seleccionar
-            self.gridApi.grid.modifyRows(self.gridOptions.data);
-  
-            // se observa cambios en idActividades para completar $scope.actividades y seleccionar las respectivas filas en la tabla
-            $scope.$watch('initFuenteApropiacion', function () {
-              self.fuenteapropiacion = [];
-              $scope.initFuenteapropiacion.forEach(function (fuente) {
-                var tmp = self.gridOptions.data.filter(function (e) { return e.FuenteFinanciamiento.Id == fuente.FuenteFinanciamiento[0].Id })
-                if (tmp.length > 0) {
-                  tmp[0].MontoParcial = fuente.MontoParcial;
-                  $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
-                  self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-                }
-              });
-            });
-          });
+          var gridOptData = Object.values(self.gridOptions.data);
+          self.gridApi.grid.modifyRows(gridOptData[0]);
+          self.fuenteapropiacion = [];
+          var tmp = gridOptData;
+          if (tmp.length > 0) {
+            //tmp[0].MontoParcial = fuente.MontoParcial;
+            $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
+            self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+          }
+        });
 
         $scope.$watch('[d_fuentesApropiacion.gridOptions.paginationPageSize, d_fuentesApropiacion.gridOptions.data]', function () {
           if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
