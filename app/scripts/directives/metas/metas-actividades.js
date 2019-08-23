@@ -16,7 +16,7 @@ angular.module('contractualClienteApp')
       },
 
 
-      templateUrl: '/views/directives/metas/metas-actividades.html',
+      templateUrl: 'views/directives/metas/metas-actividades.html',
       controller: function ($scope) {
         var self = this;
         self.actividades = [];
