@@ -74,14 +74,12 @@ angular.module('contractualClienteApp')
 
         planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Codigo).then(function (response) {
           self.gridOptions.data = response.data.Body;
-          console.table(self.gridOptions.data);
         }).then(function (t) {
           var gridOptData = Object.values(self.gridOptions.data);
           self.gridApi.grid.modifyRows(gridOptData[0]);
           self.fuenteapropiacion = [];
-          var tmp = self.gridOptions.data.Body;
+          var tmp = gridOptData;
           if (tmp.length > 0) {
-            console.info(tmp.length);
             //tmp[0].MontoParcial = fuente.MontoParcial;
             $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
             self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas

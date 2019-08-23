@@ -121,6 +121,11 @@ angular
                 controller: 'SolicitudNecesidadCtrl',
                 controllerAs: 'solicitudNecesidad'
             })
+            .when('/necesidad/solicitud_necesidad/:IdNecesidad?', {
+                templateUrl: 'views/necesidad/solicitud_necesidad.html',
+                controller: 'SolicitudNecesidadCtrl',
+                controllerAs: 'solicitudNecesidad'
+            })
             .when('/necesidades', {
                 templateUrl: 'views/necesidad/necesidades.html',
                 controller: 'NecesidadesCtrl',
