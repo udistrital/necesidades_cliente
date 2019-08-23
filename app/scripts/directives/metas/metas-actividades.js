@@ -11,8 +11,7 @@ angular.module('contractualClienteApp')
     return {
       restrict: 'E',
       scope: {
-        aproSel: '=',
-        meta: '=',
+        apropiacion: '=',
         actividades: '=',
       },
 
@@ -63,13 +62,23 @@ angular.module('contractualClienteApp')
           );
         }
 
+        $scope.$watch('apropiacion', function () {
+          if ($scope.apropiacion !== undefined) {
+            self.cargarMetas();
+          }
+        });
 
+        $scope.$watch('d_metasActividades.meta',function () {
+          if(self.meta !== undefined){
+            self.loadActividades();
+          }
+        });
 
-
+        
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.documentos = self.gridApi.selection.getSelectedRows();
+            $scope.actividades = self.gridApi.selection.getSelectedRows();
           });
 
         };
@@ -77,25 +86,13 @@ angular.module('contractualClienteApp')
         self.loadActividades = function () {
           metasRequest.get('Actividades').then(function (response) {
             self.gridOptions.data = response.data;
-            console.info(response.data)
           }).then(function () {
             // Se inicializa el grid api para seleccionar
             self.gridApi.grid.modifyRows(self.gridOptions.data);
           });
         }
 
-        self.lala = function () {
-          console.info($scope.aproSeleccionada + "Agaga");
-        }
 
-        self.lala();
-        //self.loadActividades();
-
-
-        if ($scope.aproSeleccionada != undefined) {
-          console.info($scope.aproSeleccionada + "Agaga");
-          self.cargarMetas();
-        }
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
@@ -105,6 +102,9 @@ angular.module('contractualClienteApp')
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
           });
+
+          self.actividades = $scope.actividades;
+          console.info(self.actividades);
         });
 
         $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {

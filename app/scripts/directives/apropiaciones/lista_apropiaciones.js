@@ -11,7 +11,7 @@ angular.module('contractualClienteApp')
         return {
             restrict: 'E',
             scope: {
-                apropiacion: '=',
+                apropiacion: '=?',
                 vigencia: "=",
                 tipo: "<",
                 unidadejecutora: "=",
@@ -137,7 +137,6 @@ angular.module('contractualClienteApp')
                     });
                     self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                         $scope.apropiacion = row.entity;
-                        console.info($scope.apropiacion);
                     });
                 };
 
