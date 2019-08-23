@@ -100,6 +100,14 @@ angular.module('contractualClienteApp')
                                 });
                             });
 
+                            administrativaRequest.get('modalidad_seleccion', $.param({
+                                limit: -1,
+                                sortby: "NumeroOrden",
+                                order: "asc",
+                            })).then(function (response) {
+                                self.modalidad_data = response.data;
+
+                            });
 
                             agoraRequest.get('informacion_persona_natural', $.param({
                                 query: 'Id:' + response.data[0].OrdenadorGasto

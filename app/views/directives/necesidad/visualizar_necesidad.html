@@ -4,7 +4,8 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-md-12">
-        <h3 class="page-header">{{ 'NECESIDAD' | translate }} <span ng-show="estado === d_visualizarNecesidad.estados.aprobada">{{d_visualizarNecesidad.v_necesidad.Numero}}
+        <h3 class="page-header">{{ 'NECESIDAD' | translate }} <span
+            ng-show="estado === d_visualizarNecesidad.estados.aprobada">{{d_visualizarNecesidad.v_necesidad.Numero}}
             {{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>
           <span class="pull-right text-info">{{d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Nombre}}</span></h3>
       </div>
@@ -103,8 +104,26 @@
 
         <h3 class="text-info">{{"MARCO_LEGAL" | translate}}</h3>
         <p class="text-muted text-justify">
-          <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">{{doc.MarcoLegal.NombreDocumento}}</li>
+          <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">{{doc.MarcoLegal.NombreDocumento}}
+          </li>
         </p>
+
+        <h3 class="text-info">Modalidad de Selección</h3>
+          <div class="col-md-12" >
+            <select ng-show="estado.Id===1" class="form-control" ng-model="d_visualizarNecesidad.necesidad.ModalidadSeleccion"
+              ng-options="mod as mod.Id+'-'+mod.Nombre for mod in d_visualizarNecesidad.modalidad_data track by mod.Id"
+              required>
+              <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
+            </select>
+          </div>
+
+        <h3 class="text-info">Clase de Contratación</h3>
+        <p class="text-muted text-justify">
+
+          <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">{{doc.MarcoLegal.NombreDocumento}}
+          </li>
+        </p>
+
       </div>
       <div class="col-sm-6" ng-show="d_visualizarNecesidad.verJustificacion">
         <h3 class="text-info">{{"NECESIDAD_JUSTIFICACION_RECHAZO" | translate}}</h3>
