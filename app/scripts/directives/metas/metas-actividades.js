@@ -102,9 +102,7 @@ angular.module('contractualClienteApp')
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
           });
-
           self.actividades = $scope.actividades;
-          console.info(self.actividades);
         });
 
         $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {

@@ -413,7 +413,6 @@ angular.module('contractualClienteApp')
             });
 
         self.agregar_ffapropiacion = function (apropiacion) {
-            console.info(apropiacion);
             if (apropiacion == undefined) {
                 return
             }
@@ -429,7 +428,6 @@ angular.module('contractualClienteApp')
             // si lo que devuelve filter es un arreglo mayor que 0, significa que el elemento a agregar ya existe
             // por lo tanto devuelve un mensaje de alerta
             if (self.f_apropiacion.filter(function (element) { return element.Apropiacion === apropiacion.Id; }).length > 0) {
-                console.info($scope.apro);
                 swal(
                     'Apropiación ya agregada',
                     'El rubro: <b>' + Fap.aprop.Nombre + '</b> ya ha sido agregado',

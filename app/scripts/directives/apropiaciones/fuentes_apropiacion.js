@@ -74,7 +74,7 @@ angular.module('contractualClienteApp')
 
         planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/'+$scope.apropiacion.Codigo).then(function (response) {
             self.gridOptions.data = response.data;
-            console.info(response.data + "respuestita");
+            console.table(response.data);
           }).then(function (t) {
             // Se inicializa el grid api para seleccionar
             self.gridApi.grid.modifyRows(self.gridOptions.data);
