@@ -98,7 +98,7 @@ angular.module('contractualClienteApp')
                 self.actualiza_rubros = function () {
                     planCuentasRequest.get("arbol_rubro_apropiacion/get_hojas/"+ $scope.unidadejecutora +"/"+ $scope.vigencia ).then(function (response) {
                         if (response.data.Body !== null) {
-                            // console.info(response.data.Body)
+                            console.info(response.data.Body)
                             self.gridOptions.data = response.data.Body .sort(function (a, b) {
                                 if (a.Codigo < b.Codigo) { return -1; }
                                 if (a.Codigo > b.Codigo) { return 1; }

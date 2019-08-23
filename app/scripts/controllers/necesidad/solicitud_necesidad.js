@@ -118,28 +118,20 @@ angular.module('contractualClienteApp')
                 //necesidadService.groupByApropiacion(self.f_apropiaciones, false).then(function (fap) { self.f_apropiacion = fap });
                 self.f_apropiaciones.forEach(function (apropiacion) {
                     var cantidadFuentes = apropiacion.Fuentes.length;
+                    console.info("HAY"+ cantidadFuentes + "xd")
                     for (var i = 0; i < cantidadFuentes; i++) {
                         apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
                     }
                     self.f_apropiacion.push({
-                        Apropiacion: apropiacion.Apropiacion.Id,
+                        Apropiacion: apropiacion.Codigo,
                         aprop: apropiacion.Apropiacion,
-                        fuentes: apropiacion.Fuentes,
-                        initFuentes: apropiacion.Fuentes,
-                        Monto: apropiacion.Monto,
+                        // fuentes: apropiacion.Fuentes,
+                        // initFuentes: apropiacion.Fuentes,
+                        Monto: apropiacion.ApropiacionInicial,
                         productos: apropiacion.Productos,
                         initProductos: apropiacion.Productos
                     });
-                    console.info("agregar apr")
-                    console.info({
-                        Apropiacion: apropiacion.Apropiacion.Id,
-                        aprop: apropiacion.Apropiacion,
-                        fuentes: apropiacion.Fuentes,
-                        initFuentes: apropiacion.Fuentes,
-                        Monto: apropiacion.Monto,
-                        productos: apropiacion.Productos,
-                        initProductos: apropiacion.Productos
-                    })
+
                 })
             }
 
