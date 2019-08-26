@@ -88,8 +88,9 @@
           </div>
         </ng-form>
 
-        <md-steppers class="col-md-12">
-          <md-step label="Responsables" md-complete="step1.completed" ng-disabled="step1.disabled">
+        <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
+          <md-step label="Responsables" md-complete="solicitudNecesidad.SeccionesFormulario.general.completo"
+            ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
             <md-content md-dynamic-height style="overflow: hidden;">
               <!-- Responsables -->
               <ng-form name="responsables" class="form-group" ng-if="solicitudNecesidad.forms.Responsables">
@@ -240,12 +241,18 @@
                       ng-model="solicitudNecesidad.necesidad.AnalisisRiesgo" placeholder="Análisis de riesgos" rows="6"
                       required></textarea>
                   </div>
-
                 </div>
               </ng-form>
+              <div style="text-align:center;">
+                <button type="button" class="btn btn-primary btn-outline"
+                  ng-click="solicitudNecesidad.CambiarForm('financiacion');">
+                  {{"SIGUIENTE" | translate}}</button>
+              </div>
+
             </md-content>
           </md-step>
-          <md-step label="Financiación" md-complete="step2.completed" ng-disabled="step2.disabled">
+          <md-step label="Financiación" md-complete="solicitudNecesidad.SeccionesFormulario.financiacion.completo"
+            ng-disabled="!solicitudNecesidad.SeccionesFormulario.financiacion.activo">
             <md-content>
               <!-- financiacion, se muestra solo si se completo general y si la unidad ejecutora esta seleccionada -->
               <ng-form name="financiacion" class="form-group"
@@ -275,8 +282,8 @@
                         </div>
                       </div>
 
-<!-- meta="solicitudNecesidad.meta" -->
-              <metas-actividades ng-show="solicitudNecesidad.apSelected" apropiacion="solicitudNecesidad.apSelectedOb"  actividades="solicitudNecesidad.actividades"></metas-actividades>
+                      <!-- meta="solicitudNecesidad.meta" -->
+
 
                       <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
                         <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
@@ -284,12 +291,18 @@
                           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </button>
 
-                        <label><span class="text-success">{{$index+1}}.</span> {{ap.aprop.Rubro.Nombre}}</label>
+                        <h3><span class="text-success">Apropiacion: {{$index+1}}.</span> {{ap.Codigo}}
+                          {{ap.Apropiacion.Nombre}}</h3>
                         <br>
                         <div class="row">
+                          <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
+                          <metas-actividades apropiacion="ap.Apropiacion" actividades="solicitudNecesidad.actividades">
+                          </metas-actividades>
+                        </div>
+                        <div class="row">
                           <div class="col-md-6">
-                            <fuentes-apropiacion apropiacion="solicitudNecesidad.apSelectedOb" fuenteapropiacion="ap.fuentes"
-                              init-fuenteapropiacion="ap.initFuentes"
+                            <fuentes-apropiacion apropiacion="solicitudNecesidad.apSelectedOb"
+                              fuenteapropiacion="ap.fuentes" init-fuenteapropiacion="ap.initFuentes"
                               dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
                             </fuentes-apropiacion>
                           </div>
@@ -314,11 +327,12 @@
                         </div>
                         <div class="row">
                           <div class="col-md-6">
-                            <productos-apropiacion rubro="ap.aprop.Rubro.Id" productoapropiacion="ap.productos"
+                            <productos-apropiacion rubro="ap.Apropiacion.Codigo"
+                              productoapropiacion="ap.Apropiacion.productos"
                               init-productoapropiacion="ap.initProductos"></productos-apropiacion>
                           </div>
                           <ul class="list-group col-md-6">
-                            <li class="list-group-item" ng-repeat="prod in ap.productos">
+                            <li class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
                               <label class="text-warning">{{prod.Producto.Nombre}}</label>
                               {{prod.Producto.Descripcion}}
                             </li>
@@ -338,9 +352,20 @@
                   </div>
                 </div>
               </ng-form>
+              <div style="text-align:center;">
+                <button type="button" class="btn btn-primary btn-outline"
+                  ng-click="solicitudNecesidad.CambiarForm('general');">
+                  {{"ATRAS" | translate}}</button>
+                <button type="button" class="btn btn-primary btn-outline"
+                  ng-click="solicitudNecesidad.CambiarForm('legal');">
+                  {{"SIGUIENTE" | translate}}</button>
+              </div>
+
             </md-content>
+
           </md-step>
-          <md-step label="Marco Legal" md-complete="step2.completed" ng-disabled="step2.disabled">
+          <md-step label="Marco Legal" md-complete="solicitudNecesidad.SeccionesFormulario.legal.completo"
+            ng-disabled="!solicitudNecesidad.SeccionesFormulario.legal.activo">
             <md-content>
               <!-- Marco legal -->
               <ng-form name="marcoLegal" class="form-group" ng-if="solicitudNecesidad.forms.MarcoLegal">
@@ -367,9 +392,21 @@
                 </div>
 
               </ng-form>
+              <div style="text-align:center;">
+                <button type="button" class="btn btn-primary btn-outline"
+                  ng-click="solicitudNecesidad.CambiarForm('financiacion');">
+                  {{"ATRAS" | translate}}</button>
+                <button type="button" class="btn btn-primary btn-outline"
+                  ng-click="solicitudNecesidad.CambiarForm('contratacion');">
+                  {{"SIGUIENTE" | translate}}</button>
+              </div>
+
             </md-content>
+
           </md-step>
-          <md-step label="Clase de Contratación" md-complete="step3.completed" ng-disabled="step3.disabled">
+          <md-step label="Clase de Contratación"
+            md-complete="solicitudNecesidad.SeccionesFormulario.contratacion.completo"
+            ng-disabled="!solicitudNecesidad.SeccionesFormulario.contratacion.activo">
             <md-content>
               <!-- Especificaciones -->
               <ng-form name="especificaciones" class="form-group" ng-if="solicitudNecesidad.forms.Especificaciones">
@@ -493,8 +530,11 @@
                           {{pro.i=$index+1}}
                           <textarea ng-model="pro.Elemento" class="form-control" maxlength="200"
                             placeholder="Elemento (Descripción)"></textarea>
-                          <label class=" control-label" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">{{"UNIDAD_MEDIDA" | translate}}</label>
-                          <select ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4" class="form-control" ng-model="pro.Unidad"
+                          <label class=" control-label"
+                            ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">{{"UNIDAD_MEDIDA" | translate}}</label>
+                          <select
+                            ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4"
+                            class="form-control" ng-model="pro.Unidad"
                             ng-options="unidad.Id as unidad.Unidad for unidad in solicitudNecesidad.unidad_data">
                             <option value="" disabled selected>{{"SELECCIONAR" | translate}}
                               {{"UNIDAD_MEDIDA" | translate}}</option>
@@ -519,9 +559,11 @@
                           <input class="form-control" ng-model="(pro.Valor * (pro.Iva/100)) + pro.Valor"
                             placeholder="valor_con_iva" ui-money-mask="0" readonly>
 
-                          <label class=" control-label" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">{{"CANTIDAD" | translate}}</label>
+                          <label class=" control-label"
+                            ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">{{"CANTIDAD" | translate}}</label>
                           <input class="form-control" ng-model="pro.Cantidad" placeholder="Cantidad de Elementos"
-                            ui-number-mask="0" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+                            ui-number-mask="0"
+                            ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
 
                           <label class=" control-label">{{"TOTAL" | translate}}</label>
                           <input class="form-control" ng-model="((pro.Valor * (pro.Iva/100)) + pro.Valor)*pro.Cantidad"
@@ -556,19 +598,19 @@
                           </div>
                         </div>
 
-    
+
                       </div>
                     </div>
 
                     <div class="form-group">
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Subtotal : </label>
-                          {{solicitudNecesidad.subtotalEspecificaciones | currency}}
+                      <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Subtotal : </label>
+                        {{solicitudNecesidad.subtotalEspecificaciones | currency}}
                       </div>
                       <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> IVA : </label>
                         {{solicitudNecesidad.valorIVA | currency}}
-                    </div>
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Total : </label>
-                          {{solicitudNecesidad.valorTotalEspecificaciones | currency}}
+                      </div>
+                      <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Total : </label>
+                        {{solicitudNecesidad.valorTotalEspecificaciones | currency}}
                       </div>
                     </div>
 
@@ -583,8 +625,13 @@
                 </div>
               </fieldset>
       </form>
+      <div style="text-align:center;">
+        <button type="button" class="btn btn-primary btn-outline"
+          ng-click="solicitudNecesidad.CambiarForm('legal');">
+          {{"ATRAS" | translate}}</button>
 
       </md-content>
+
       </md-step>
       </md-steppers>
 
