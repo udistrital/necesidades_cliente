@@ -394,7 +394,7 @@
                   <div
                     ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
 
-                    <div class="col-md-6">
+                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
                       <label for="perfil" class="control-label">{{"PERFIL" | translate}}</label>
                       <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.Perfil"
                         ng-options="parames.Id as parames.ValorParametro for parames in solicitudNecesidad.parametro_estandar_data">
@@ -403,7 +403,7 @@
                       </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
                       <label class=" control-label">{{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</label>
                       <select class="form-control" ng-model="solicitudNecesidad.nucleoarea"
                         ng-options="nucleoa.Id as nucleoa.Nombre for nucleoa in solicitudNecesidad.nucleo_area_data">
@@ -412,7 +412,7 @@
                       </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
                       <!-- ng-show="solicitudNecesidad.nucleoarea!=undefined" -->
                       <label class="control-label">{{"NUCLEO_CONOCIMIENTO" | translate}}</label>
                       <select class="form-control"
@@ -422,6 +422,17 @@
                           {{"NUCLEO_CONOCIMIENTO" | translate}}</option>
                       </select>
                     </div>
+
+
+                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+                        <label class="control-label">TIPO DE SERVICIO</label>
+                        <select class="form-control"
+                          ng-model="solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento"
+                          ng-options="nucleoc.Id*1 as nucleoc.Nombre for nucleoc in solicitudNecesidad.nucleo_conocimiento_data">
+                          <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
+                            {{"SERVICIO" | translate}}</option>
+                        </select>
+                      </div>
 
                     <div class="col-md-6">
                       <label class="control-label">{{"CANTIDAD" | translate}}</label>
