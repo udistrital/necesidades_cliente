@@ -86,12 +86,13 @@
               <strong>{{p.ProductoRubroInfo[0].Producto.Nombre}}:</strong>
               {{p.ProductoRubroInfo[0].Producto.Descripcion}}
             </li>
-
-            <br><strong >Meta</strong>
-            <br><strong >Actividades</strong>
-            <li ng-repeat='p in inv.Actividades'>
-                <strong></strong>
-              </li>
+          </ul>
+          <ul>
+              <br><strong >{{"META" | translate}}</strong>
+              <br><strong >{{"ACTIVIDADES_META" | translate}}</strong>
+              <li ng-repeat='p in inv.Actividades'>
+                  <strong></strong>
+                </li>
           </ul>
         </p>
 
@@ -114,7 +115,7 @@
           </li>
         </p>
 
-        <h3 class="text-info">Modalidad de Selección</h3>
+        <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
           <div class="col-md-12" >
             <select ng-show="estado.Id===1" class="form-control" ng-model="d_visualizarNecesidad.necesidad.ModalidadSeleccion"
               ng-options="mod as mod.Id+'-'+mod.Nombre for mod in d_visualizarNecesidad.modalidad_data track by mod.Id"
@@ -123,7 +124,7 @@
             </select>
           </div>
 
-        <h3 class="text-info">Clase de Contratación</h3>
+        <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
         <p class="text-muted text-justify">
 
           <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">{{doc.MarcoLegal.NombreDocumento}}

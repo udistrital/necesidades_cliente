@@ -330,7 +330,7 @@
                       <div class="form-group">
                         <label>{{"TOTAL_FINANCIACION" | translate}} </label> {{solicitudNecesidad.f_valor | currency}}
                         <br>
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Total especificaciones: </label>
+                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"VALOR_TOTAL" | translate}} {{"ESPECIFICACIONES" | translate}}</label>
                           {{solicitudNecesidad.valorTotalEspecificaciones | currency}}</div>
                       </div>
                     </div>
@@ -379,7 +379,7 @@
                 <div class="panel-body" ng-hide="especificaciones.open">
 
                   <div class="col-md-12">
-                    <label class=" control-label">Clase de Contratación</label>
+                    <label class=" control-label">{{ "CLASE_CONTRATACION" | translate}}</label>
                     <small>*{{"OBLIGATORIO" | translate}}</small>
                     <!-- Filtra tipo necesidad no aplica Tipo necesidad == 3 -->
                     <select class="form-control" ng-model="solicitudNecesidad.necesidad.TipoContratoNecesidad"
@@ -425,7 +425,7 @@
 
 
                     <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
-                        <label class="control-label">TIPO DE SERVICIO</label>
+                        <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
                         <select class="form-control"
                           ng-model="solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento"
                           ng-options="nucleoc.Id*1 as nucleoc.Nombre for nucleoc in solicitudNecesidad.nucleo_conocimiento_data">
@@ -572,13 +572,13 @@
                     </div>
 
                     <div class="form-group">
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Subtotal : </label>
+                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"SUBTOTAL" | translate}} </label>
                           {{solicitudNecesidad.subtotalEspecificaciones | currency}}
                       </div>
-                      <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> IVA : </label>
+                      <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"IVA" | translate}} </label>
                         {{solicitudNecesidad.valorIVA | currency}}
                     </div>
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> Total : </label>
+                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label>{{"VALOR_TOTALs" | translate}} </label>
                           {{solicitudNecesidad.valorTotalEspecificaciones | currency}}
                       </div>
                     </div>
