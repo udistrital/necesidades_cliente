@@ -109,6 +109,15 @@ angular.module('contractualClienteApp')
 
                             });
 
+                            agoraRequest.get('tipo_contrato', $.param({
+                                limit: -1,
+                                sortby: "Id",
+                                order: "asc",
+                            })).then(function (response) {
+                                self.tipo_contrato_data = response.data;
+
+                            });
+
                             agoraRequest.get('informacion_persona_natural', $.param({
                                 query: 'Id:' + response.data[0].OrdenadorGasto
                             })).then(function (response) {

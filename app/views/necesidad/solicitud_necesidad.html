@@ -427,8 +427,8 @@
                     <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
                         <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
                         <select class="form-control"
-                          ng-model="solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento"
-                          ng-options="nucleoc.Id*1 as nucleoc.Nombre for nucleoc in solicitudNecesidad.nucleo_conocimiento_data">
+                          ng-model="solicitudNecesidad.detalle_servicio_necesidad.tipoServicio"
+                          ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
                           <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
                             {{"SERVICIO" | translate}}</option>
                         </select>
