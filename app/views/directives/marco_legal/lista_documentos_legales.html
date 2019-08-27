@@ -7,16 +7,16 @@
     </div>
 
     <button type="button" class="col-md-12 btn btn-primary btn-outline"
-    ng-click="d_listaDocumentosLegales.HabilitarAgregarDocs()" aria-label="Left Align">Agregar Documento</button>
+    ng-click="d_listaDocumentosLegales.HabilitarAgregarDocs()" aria-label="Left Align">{{"AGREGAR_DOCUMENTO" | translate}}</button>
 
   <div class="col-md-12" ng-show="d_listaDocumentosLegales.aniadirDoc">
     <div class="col-md-4" id="addDoc" name="addDoc">
-      <label class=" control-label">Nombre Documento</label>
+      <label class=" control-label">{{"NOMBRE_DOCUMENTO" | translate}}</label>
       <small>*{{"OBLIGATORIO" | translate}}</small>
       <input type="text" class="form-control" placeholder="Documento N° 1500 de 2010" ng-model="d_listaDocumentosLegales.obj_documento.NombreDocumento">
     </div>
     <div class="col-md-4">
-      <label class="control-label">URL Documento</label>
+      <label class="control-label">{{"URL_DOCUMENTO" | translate}}</label>
       <small>*{{"OBLIGATORIO" | translate}}</small>
       <input type="text" class="form-control" placeholder="http://www.pagina.com/doc.pdf" ng-model="d_listaDocumentosLegales.obj_documento.Enlace">
     </div>

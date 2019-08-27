@@ -106,6 +106,7 @@ var text_es = {
     LABEL_SEMANAS_TOTALES: "Semanas Totales",
     LABEL_VALOR_ADICIONAR: "Valor a adicionar",
     TIPO_SERVICIO: "Tipo de Servicio",
+    CLASE_CONTRATACION: "Clase de Contratación",
     PERFIL: "Perfil",
     EL_TIPO_DE: "el Tipo de",
     NUCLEO_CONOCIMIENTO_AREA: "Núcleo Conocimiento Área",
@@ -133,6 +134,9 @@ var text_es = {
     //lista_documentos_legales
     MARCO_LEGAL: "Marco Legal",
     NOMBRE_DOCUMENTO: "Nombre del Documento",
+    AGREGAR_DOCUMENTO: "Agregar Documento",
+    NOMBRE_DOCUMENTO: "Nombre Documento",
+    URL_DOCUMENTO: "URL Documento",
     //lista_actividades_economicas
     ACTIVIDADES_ECONOMICAS: "Actividades Económicas",
     ACTIVIDAD_ECONOMICA: "Actividad Económica",
@@ -258,6 +262,7 @@ var text_es = {
     ORDEN: "Orden",
     ACUMULADO: "Acumulado",
     TOTAL: "Total",
+    SUBTOTAL: "Subtotal",
     UNITARIO: "Unitario",
     NO_HAY_DATOS_REDIRIGIR: "No hay datos para mostrar, será redirigido al menú anterior",
     //SEGUIMIENTO LEGAL
@@ -802,7 +807,9 @@ var text_es = {
     GEN_INFORME: "GENERAR INFORME DE GESTIÓN",
     AGREGAR_REG: "AGREGAR REGISTRO",
     ACTI_REALI: "ACTIVIDADES REALIZADAS",
-    METAS: "METAS",
+    METAS: "Metas",
+    META: "Meta",
+    ACTIVIDADES_META : "Actividades",
     INDI_DE_CUMP: "INDICADOR DE CUMPLIMIENTO",
     OBSERVACIONES: "OBSERVACIONES",
     NIV_AVAN: "NIVEL DE AVANCE",
