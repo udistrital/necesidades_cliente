@@ -7,11 +7,11 @@ angular.module('contractualClienteApp')
         $scope.$on('$routeChangeStart', function (scope, next, current) {
             var waitForMenu = function () {
                 if ($rootScope.my_menu !== undefined) {
-                    if ($scope.token_service.live_token() && current != undefined ) {
+                    if ($scope.token_service.live_token() && current != undefined) {
                         if (!$scope.havePermission(next.originalPath, $rootScope.my_menu)) {
                             $location.path("/404");
                         }
-                    }  else if (current == undefined) {
+                    } else if (current == undefined) {
                         if (!$scope.havePermission(next.originalPath, $rootScope.my_menu)) {
                             $location.path("/404");
                         }
@@ -118,7 +118,7 @@ angular.module('contractualClienteApp')
 
         if ($scope.token_service.live_token()) {
             self.perfil = $scope.token_service.getRoles();
-            configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades','').then(function (response) {
+            configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades', '').then(function (response) {
                 $rootScope.my_menu = response.data;
                 /*configuracionRequest.update_menu(https://10.20.0.162:9443/store/apis/authenticate response.data);
                 console.log("get menu");

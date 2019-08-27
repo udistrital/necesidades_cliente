@@ -405,7 +405,7 @@ angular.module('contractualClienteApp')
 
             });
 
-            // Se carga JSON con los tipos de servicio
+        // Se carga JSON con los tipos de servicio
         $http.get("scripts/models/tipo_servicio.json")
             .then(function (response) {
                 self.TiposServicios = response.data;
