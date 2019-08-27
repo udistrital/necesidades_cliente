@@ -1,0 +1,41 @@
+<br>
+<div class="panel panel-default">
+    <div class="panel-heading">
+            {{"METAS" | translate}} {{"Y" | translate}} {{"ACTIVIDADES_META" | translate}}
+    </div>
+    <div class="panel-body">
+        <p>
+            Seleccione la meta y actividades pertinentes:
+        </p>
+
+        <div >
+            <ul>
+                <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas">
+                    <input type="radio"  name="name" value="{{ meta.Id}}" ng-model="d_metasActividades.meta" required />{{ meta.Nombre }}
+                </li>
+            </ul>
+        </div>
+        <div style="height: 250px" ui-grid="d_metasActividades.gridOptions" ui-grid-selection ui-grid-auto-resize
+            ui-grid-pagination></div>
+
+          
+    </div>
+
+</div>
+
+<div class="panel-footer">
+        <div class="row" ng-repeat="actividad in d_metasActividades.actividades">
+                <div class="col">
+                        <p>{{ actividad.Descripcion}}</p>
+                    </div>
+                    <div class="col">
+                        <input class="form-control" type="number" name="valor" id="val" ui-money-mask="0">
+                    </div>
+        </div>
+</div>
+
+
+<div>
+
+        
+    </div>

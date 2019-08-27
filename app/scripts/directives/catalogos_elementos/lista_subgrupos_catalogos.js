@@ -68,6 +68,15 @@ angular.module('contractualClienteApp')
                     order: "asc",
                 })).then(function(response) {
                     self.gridOptions.data = response.data;
+                    if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
+                        $scope.gridHeight = self.gridOptions.rowHeight * 2 + (self.gridOptions.data.length * self.gridOptions.rowHeight);
+                        if (self.gridOptions.data.length <= 5) {
+                          self.gridOptions.enablePaginationControls = false;
+                        }
+                      } else {
+                        $scope.gridHeight = self.gridOptions.rowHeight * 3 + (self.gridOptions.paginationPageSize * self.gridOptions.rowHeight);
+                        self.gridOptions.enablePaginationControls = true;
+                      }
                 });
 
             },

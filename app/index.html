@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Sistema de Gestión Administrativa</title>
+    <title>Necesidades</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <script src="https://use.fontawesome.com/64b53ddd5b.js"></script>
+    <!-- <script src="https://use.fontawesome.com/64b53ddd5b.js"></script> -->
+    <script src="https://use.fontawesome.com/3d3a53909b.js"></script>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -23,6 +24,7 @@
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
     <link rel="stylesheet" href="bower_components/select2/select2.css" />
     <link rel="stylesheet" href="bower_components/bootstrap-fileinput/css/fileinput.min.css" />
+    <link rel="stylesheet" href="bower_components/md-steppers/dist/md-steppers.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -31,8 +33,7 @@
     <link rel="stylesheet" href="styles/table-demo.css">
     <link rel="stylesheet" href="styles/timeline.css">
     <link rel="stylesheet" href="styles/loading-bar.css">
-    <script type="text/javascript" src="http://visjs.org/dist/vis.js"></script>
-    <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="styles/stepper.css">
     <!-- endbuild -->
     <link rel="stylesheet" href="https://s3.amazonaws.com/assets-oas/sb-admin-2.css">
     <link rel="stylesheet" href="https://s3.amazonaws.com/assets-oas/oas-style.css">
@@ -91,7 +92,6 @@
     <script src="bower_components/sweetalert2/dist/sweetalert2.js"></script>
     <script src="bower_components/angular-timelinejs3/dist/js/ng-timeline.js"></script>
     <script src="bower_components/chart.js/dist/Chart.js"></script>
-    <script src="bower_components/vis/dist/vis.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/nvd3/build/nv.d3.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
@@ -104,6 +104,8 @@
     <script src="bower_components/angular-bootstrap-fileinput/angular-bootstrap-fileinput.js"></script>
     <script src="bower_components/nuxeo/dist/nuxeo.js"></script>
     <script src="bower_components/colombia-holidays/js/holidays.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
+    <script src="bower_components/md-steppers/dist/md-steppers.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -123,6 +125,7 @@
 <script src="scripts/decorators/text_translate.js"></script>
 <script src="scripts/controllers/about.js"></script>
 <script src="scripts/controllers/necesidad/solicitud_necesidad.js"></script>
+<script src="scripts/controllers/cdp/cdp_solicitud_consulta.js"></script>
 <script src="scripts/services/financiera_service.js"></script>
 <script src="scripts/directives/actividades_economicas/lista_actividades_economicas.js"></script>
 <script src="scripts/services/administrativa_service.js"></script>
@@ -196,6 +199,13 @@
 <script src="scripts/controllers/seguimientoycontrol/legal/consulta_novedades.js"></script>
 <script src="scripts/controllers/seguimientoycontrol/legal/novedad_otro_si_aclaratorio.js"></script>
 <script src="scripts/controllers/seguimientoycontrol/legal/novedad_otro_si_modificatorio.js"></script>
+<script src="scripts/services/plancuentas_service.js"></script>
+<script src="scripts/services/metas_service.js"></script>
+<script src="scripts/directives/metas/metas-actividades.js"></script>
+<script src="scripts/directives/apropiaciones/fuente_financiacion_necesidad.js"></script>
+<script src="scripts/controllers/cdp/cdp_consulta.js"></script>
+<script src="scripts/directives/apropiaciones/fuente_financiacion_cdp.js"></script>
+
 <!-- endbuild -->
 <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 

@@ -12,12 +12,16 @@ angular.module('contractualClienteApp')
         var self = this;
         self.offset = 0;
         self.rechazada = false;
-        self.buttons = {};
+        self.buttons = {
+            AprobarNecesidad: true,
+            RechazarNecesidad: true,
+            EditarNecesidad: true,
+        };
         
         //permisos de los buttons segun el rol
-        rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
+/*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
             self.buttons = data;
-        });
+        }); */
         
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
@@ -127,6 +131,7 @@ angular.module('contractualClienteApp')
                 order: "desc",
                 query: query.join(",")
             }, true))
+            console.log
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
         };
@@ -232,6 +237,7 @@ angular.module('contractualClienteApp')
             var idNecesidad = self.g_necesidad.Id;
             $("#myModal").modal("hide");
             $('#myModal').on('hidden.bs.modal', function (e) {
+                console.info('/necesidad/solicitud_necesidad/' + idNecesidad);
                 $window.location.href = '#/necesidad/solicitud_necesidad/' + idNecesidad;
             })
         };

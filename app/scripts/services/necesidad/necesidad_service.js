@@ -205,6 +205,8 @@ angular.module('contractualClienteApp')
               
             return adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + IdNecesidad).then(function (response) {
               trNecesidad.Ffapropiacion = response.data;
+              console.info("fuentes init necesidad")
+              console.info(response.data)
 
               return administrativaRequest.get('marco_legal_necesidad', $.param({
                 query: 'Necesidad:' + IdNecesidad
@@ -224,7 +226,6 @@ angular.module('contractualClienteApp')
               }))
             }).then(function (response) {
               trNecesidad.DependenciaNecesidadDestino = response.data[0].DependenciaId;
-
               return coreRequest.get('jefe_dependencia', $.param({
                 query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaSolicitante + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
                 limit: -1,
@@ -237,7 +238,9 @@ angular.module('contractualClienteApp')
                 limit: -1
               }))
             }).then(function (response) {
+              console.info("Prueba Cams"+response.data);
               trNecesidad.RolOrdenadorGasto = response.data[0].DependenciaId;
+              
               return new Promise(function (resolve, reject) {
                 resolve(trNecesidad);
               });
