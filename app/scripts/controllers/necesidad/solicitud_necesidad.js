@@ -51,6 +51,7 @@ angular.module('contractualClienteApp')
         self.valorTotalEspecificaciones = 0;
         self.subtotalEspecificaciones = 0;
         self.valorIVA = 0;
+        self.FormularioSeleccionado = 0;
 
 
         self.planes_anuales = [{
@@ -76,6 +77,26 @@ angular.module('contractualClienteApp')
             iva3: {
                 Id: 3,
                 Valor: 0,
+            }
+        }
+
+
+        self.SeccionesFormulario = {
+            general: {
+                activo: true,
+                completado: false,
+            },
+            financiacion: {
+                activo: false,
+                completado: false,
+            },
+            legal: {
+                activo: false,
+                completado: false,
+            },
+            contratacion: {
+                activo: false,
+                completado: false,
             }
         }
 
@@ -116,20 +137,21 @@ angular.module('contractualClienteApp')
                 console.info(self.f_apropiaciones)
 
                 //necesidadService.groupByApropiacion(self.f_apropiaciones, false).then(function (fap) { self.f_apropiacion = fap });
-                self.f_apropiaciones.forEach(function (apropiacion) {
-                    var cantidadFuentes = apropiacion.Fuentes.length;
+                self.f_apropiaciones.forEach(function (element) {
+                    var cantidadFuentes = element.apropiacion.Fuentes.length;
+
                     console.info("HAY" + cantidadFuentes + "xd")
                     for (var i = 0; i < cantidadFuentes; i++) {
-                        apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
+                        element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
                     }
                     self.f_apropiacion.push({
-                        Apropiacion: apropiacion.Codigo,
-                        aprop: apropiacion.Apropiacion,
+                        Codigo: element.Codigo,
+                        apropiacion: element.apropiacion,
                         // fuentes: apropiacion.Fuentes,
                         // initFuentes: apropiacion.Fuentes,
-                        Monto: apropiacion.ApropiacionInicial,
-                        productos: apropiacion.Productos,
-                        initProductos: apropiacion.Productos
+                        Monto: element.apropiacion.ApropiacionInicial,
+                        productos: element.apropiacion.Productos,
+                        initProductos: element.apropiacion.Productos
                     });
 
                 })
@@ -419,18 +441,18 @@ angular.module('contractualClienteApp')
             self.apSelected = true;
             self.apSelectedOb = apropiacion;
             var Fap = {
-                aprop: apropiacion,
-                Apropiacion: apropiacion.Id,
+                Apropiacion: apropiacion,
+                Codigo: apropiacion.Codigo,
                 MontoPorApropiacion: 0,
             };
 
             // Busca si en f_apropiacion ya existe el elemento que intenta agregarse, comparandolo con su id
             // si lo que devuelve filter es un arreglo mayor que 0, significa que el elemento a agregar ya existe
             // por lo tanto devuelve un mensaje de alerta
-            if (self.f_apropiacion.filter(function (element) { return element.Apropiacion === apropiacion.Id; }).length > 0) {
+            if (self.f_apropiacion.filter(function (element) { return element.Codigo === apropiacion.Codigo; }).length > 0) {
                 swal(
                     'Apropiación ya agregada',
-                    'El rubro: <b>' + Fap.aprop.Nombre + '</b> ya ha sido agregado',
+                    'El rubro: <b>' + Fap.Codigo + ": " + Fap.Apropiacion.Nombre + '</b> ya ha sido agregado',
                     'warning'
                 );
                 // Por el contrario, si el tamaño del arreglo que devuelve filter es menor a 0
@@ -485,13 +507,14 @@ angular.module('contractualClienteApp')
             self.subtotalEspecificaciones = 0;
             self.valorIVA = 0;
 
-                self.productos.forEach(function( producto){
-                     self.subtotalEspecificaciones+=(producto.Valor*producto.Cantidad);
-                });
-                self.productos.forEach(function(producto){
-                    self.valorIVA+=(producto.Valor*(producto.Iva/100));
-                });
-                self.valorTotalEspecificaciones = self.valorIVA+self.subtotalEspecificaciones; 
+            self.productos.forEach(function (producto) {
+                self.subtotalEspecificaciones += (producto.Valor * producto.Cantidad);
+            });
+            self.productos.forEach(function (producto) {
+                self.valorIVA += (producto.Valor * (producto.Iva / 100));
+            });
+            self.valorTotalEspecificaciones = self.valorIVA + self.subtotalEspecificaciones;
+
         }, true);
 
         $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad.Id', function () {
@@ -695,6 +718,57 @@ angular.module('contractualClienteApp')
             _.merge(self.fields, self.estructura[self.TipoNecesidadType[TipoNecesidad]])
             self.necesidad.TipoContratoNecesidad = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
         };
+        //control avance y retroceso en el formulario
+        self.CambiarForm = function (form) {
+            console.info(form)
+            switch (form) {
+                case 'general':
+                    self.FormularioSeleccionado = 0;
+                    break;
+                case 'financiacion':
+                    if (self.ValidarSeccion('general')) {
+                        self.SeccionesFormulario.general.completado = true;
+                        self.SeccionesFormulario.financiacion.activo = true;
+                        self.FormularioSeleccionado = 1;
+                    }
+                    else {
+                        swal('complete la seccion general');
+                    }
+                    break;
+                case 'legal':
+                    if (self.ValidarSeccion('financiacion')) {
+                        self.SeccionesFormulario.financiacion.completado = true;
+                        self.SeccionesFormulario.legal.activo = true;
+                        self.FormularioSeleccionado = 2;
+                    }
+                    else {
+                        swal('complete la seccion financiacion');
+                    }
+                    break;
+                case 'contratacion':
+                    if (self.ValidarSeccion('legal')) {
+                        self.SeccionesFormulario.legal.completado = true;
+                        self.SeccionesFormulario.contratacion.activo = true;
+                        self.FormularioSeleccionado = 3;
+                    }
+                    else {
+                        swal('complete la seccion legal');
+                    }
+                    break;
+            }
+        };
+        self.ValidarSeccion = function (form) {
+            switch (form) {
+                case 'general':
+                    return true;
+                case 'financiacion':
+                    return true;
+                case 'legal':
+                    return true;
+                case 'contratacion':
+                    return true;
+            }
+        }
 
 
 

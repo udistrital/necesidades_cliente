@@ -120,9 +120,6 @@ angular.module('contractualClienteApp')
             self.perfil = $scope.token_service.getRoles();
             configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades', '').then(function (response) {
                 $rootScope.my_menu = response.data;
-                /*configuracionRequest.update_menu(https://10.20.0.162:9443/store/apis/authenticate response.data);
-                console.log("get menu");
-                $scope.menu_service = configuracionRequest.get_menu();*/
             }).catch(function (err) {
                 console.log('err ', err);
                 $location.path("/404");
