@@ -93,7 +93,7 @@
             ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
             <md-content md-dynamic-height style="overflow: hidden;">
               <!-- Responsables -->
-              <ng-form name="responsables" class="form-group" ng-if="solicitudNecesidad.forms.Responsables">
+              <ng-form id="f_responsables" name="responsables" class="form-group" ng-if="solicitudNecesidad.forms.Responsables">
                 <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(responsables)">{{"RESPONSABLES"
                         | translate}} <span class="fa fa-plus pull-right" ng-show="responsables.open"></span> <span
                     class="fa fa-minus pull-right" ng-show="!responsables.open"></span></legend>
@@ -165,7 +165,7 @@
               </ng-form>
 
               <!--  General -->
-              <ng-form name="general" class="form-group" ng-if="solicitudNecesidad.forms.General">
+              <ng-form id="f_general" name="general" class="form-group" ng-if="solicitudNecesidad.forms.General">
                 <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(general)">{{"GENERAL"
                             | translate}}
                   <span class="fa fa-plus pull-right" ng-show="general.open"></span> <span
@@ -243,6 +243,7 @@
                   </div>
                 </div>
               </ng-form>
+
               <div style="text-align:center;">
                 <button type="button" class="btn btn-primary btn-outline"
                   ng-click="solicitudNecesidad.CambiarForm('financiacion');">
@@ -255,7 +256,7 @@
             ng-disabled="!solicitudNecesidad.SeccionesFormulario.financiacion.activo">
             <md-content>
               <!-- financiacion, se muestra solo si se completo general y si la unidad ejecutora esta seleccionada -->
-              <ng-form name="financiacion" class="form-group"
+              <ng-form id="f_financiacion" name="financiacion" class="form-group"
                 ng-if="solicitudNecesidad.forms.General && solicitudNecesidad.necesidad.UnidadEjecutora!=undefined">
                 <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(financiacion)">{{"FINANCIACION" |
                           translate}}<span class="fa fa-plus pull-right" ng-show="financiacion.open"></span> <span
@@ -366,7 +367,7 @@
             ng-disabled="!solicitudNecesidad.SeccionesFormulario.legal.activo">
             <md-content>
               <!-- Marco legal -->
-              <ng-form name="marcoLegal" class="form-group" ng-if="solicitudNecesidad.forms.MarcoLegal">
+              <ng-form id="f_legal" name="marcoLegal" class="form-group" ng-if="solicitudNecesidad.forms.MarcoLegal">
                 <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(marcoLegal)">
                   {{"MARCO_LEGAL" | translate}}<span class="fa fa-plus pull-right" ng-show="marcoLegal.open"></span>
                   <span class="fa fa-minus pull-right" ng-show="!marcoLegal.open"></span></legend>

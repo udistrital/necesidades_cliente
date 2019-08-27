@@ -720,7 +720,6 @@ angular.module('contractualClienteApp')
         };
         //control avance y retroceso en el formulario
         self.CambiarForm = function (form) {
-            console.info(form)
             switch (form) {
                 case 'general':
                     self.FormularioSeleccionado = 0;
@@ -732,7 +731,7 @@ angular.module('contractualClienteApp')
                         self.FormularioSeleccionado = 1;
                     }
                     else {
-                        swal('complete la seccion general');
+                        self.AlertSeccion('General')
                     }
                     break;
                 case 'legal':
@@ -742,7 +741,7 @@ angular.module('contractualClienteApp')
                         self.FormularioSeleccionado = 2;
                     }
                     else {
-                        swal('complete la seccion financiacion');
+                        self.AlertSeccion('Financiación')
                     }
                     break;
                 case 'contratacion':
@@ -752,22 +751,33 @@ angular.module('contractualClienteApp')
                         self.FormularioSeleccionado = 3;
                     }
                     else {
-                        swal('complete la seccion legal');
+                        self.AlertSeccion('Legal')
                     }
                     break;
             }
         };
         self.ValidarSeccion = function (form) {
+            var n = self.solicitudNecesidad;
             switch (form) {
                 case 'general':
-                    return true;
+                    return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
-                    return true;
+                    return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine');
                 case 'legal':
-                    return true;
+                    return !document.getElementById("f_legal").classList.contains('ng-invalid');
                 case 'contratacion':
                     return true;
             }
+        }
+
+        self.AlertSeccion = function(seccion) {
+            swal({
+                title: 'Seccion '+seccion+' incompleta',
+                type: 'error',
+                text: 'Por favor, complete la sección: '+seccion,
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR")
+            });
         }
 
 
