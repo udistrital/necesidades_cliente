@@ -80,6 +80,7 @@ angular.module('contractualClienteApp')
             }
         }
 
+
         self.SeccionesFormulario = {
             general: {
                 activo: true,
@@ -138,6 +139,7 @@ angular.module('contractualClienteApp')
                 //necesidadService.groupByApropiacion(self.f_apropiaciones, false).then(function (fap) { self.f_apropiacion = fap });
                 self.f_apropiaciones.forEach(function (element) {
                     var cantidadFuentes = element.apropiacion.Fuentes.length;
+
                     console.info("HAY" + cantidadFuentes + "xd")
                     for (var i = 0; i < cantidadFuentes; i++) {
                         element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
@@ -191,6 +193,7 @@ angular.module('contractualClienteApp')
                 necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
                     self.ordenador_gasto = JD.Persona;
                     self.dep_ned.OrdenadorGasto = parseInt(JD.Persona.Id);
+                    console.info(JD.Persona.Id);
                 }).catch(function (err) {
                     //console.log(err)
                 });
@@ -424,6 +427,13 @@ angular.module('contractualClienteApp')
 
             });
 
+        // Se carga JSON con los tipos de servicio
+        $http.get("scripts/models/tipo_servicio.json")
+            .then(function (response) {
+                self.TiposServicios = response.data;
+
+            });
+
         self.agregar_ffapropiacion = function (apropiacion) {
             if (apropiacion == undefined) {
                 return
@@ -497,10 +507,6 @@ angular.module('contractualClienteApp')
             self.subtotalEspecificaciones = 0;
             self.valorIVA = 0;
 
-
-            // self.subtotalEspecificaciones+= self.productos[i].Valor * self.productos[i].Cantidad;
-            // self.valorIVA=(self.productos[i].Valor*self.productos[i].Iva/100)*self.productos;
-            // self.valorTotalEspecificaciones += ((self.productos[i].Valor * 0.19) + self.productos[i].Valor) * self.productos[i].Cantidad;
             self.productos.forEach(function (producto) {
                 self.subtotalEspecificaciones += (producto.Valor * producto.Cantidad);
             });
@@ -508,6 +514,7 @@ angular.module('contractualClienteApp')
                 self.valorIVA += (producto.Valor * (producto.Iva / 100));
             });
             self.valorTotalEspecificaciones = self.valorIVA + self.subtotalEspecificaciones;
+
         }, true);
 
         $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad.Id', function () {
