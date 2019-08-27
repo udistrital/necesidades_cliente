@@ -573,8 +573,8 @@
                             ui-number-mask="0"
                             ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
 
-                          <label class=" control-label">{{"TOTAL" | translate}}</label>
-                          <input class="form-control" ng-model="((pro.Valor * (pro.Iva/100)) + pro.Valor)*pro.Cantidad"
+                          <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
+                          <input class="form-control" ng-model="pro.Subtotal"
                             placeholder="Total" ui-money-mask="0" readonly>
 
 
