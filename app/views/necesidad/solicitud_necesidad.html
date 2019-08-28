@@ -325,14 +325,14 @@
                         </div>
                         <div class="row">
                           <div class="col-md-6">
-                            <productos-apropiacion rubro="ap.Apropiacion.Codigo"
+                            <productos-apropiacion rubro="ap.Apropiacion"
                               productoapropiacion="ap.Apropiacion.productos"
-                              init-productoapropiacion="ap.initProductos"></productos-apropiacion>
+                              initProductoapropiacion="ap.initProductos"></productos-apropiacion>
                           </div>
                           <ul class="list-group col-md-6">
                             <li class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
-                              <label class="text-warning">{{prod.Producto.Nombre}}</label>
-                              {{prod.Producto.Descripcion}}
+                              <label class="text-warning">{{prod.Nombre}}</label>
+                              {{prod.Descripcion}}
                             </li>
                             </li>
                           </ul>

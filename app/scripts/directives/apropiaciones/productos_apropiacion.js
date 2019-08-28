@@ -47,11 +47,22 @@ angular.module('contractualClienteApp')
           });
         };
 
-        planCuentasRequest.get('producto').then(function (response) {
-          self.gridOptions.data = response.data.Body;
-        }).then(function (t) {
-          var gridOptData = Object.values(self.gridOptions.data);
-          self.gridApi.grid.modifyRows(gridOptData[0]);
+
+        var idProductos=[];
+        var productosData=[];
+        for(var id in $scope.rubro.Productos){
+          idProductos.push(id);
+        }
+
+        Promise.all(idProductos.map(function(id){
+          return planCuentasRequest.get('producto/'+id).then(function(response){
+            (response.data.Body !== null) ? productosData.push(response.data.Body) : console.info('no encontre producto: '+id);
+          })
+        })).then(function (t) {
+          self.gridOptions.data = productosData;
+          console.info(self.gridOptions.data)
+          var gridOptData = self.gridOptions.data;
+          gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData[0]) : _;
           
 
           $scope.$watch('initProductoApropiacion', function () {
