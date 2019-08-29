@@ -75,34 +75,37 @@ angular.module('contractualClienteApp')
         planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Codigo).then(function (response) {
           self.gridOptions.data = response.data.Body;
         }).then(function (t) {
-          if (self.gridOptions.data) {
-            var gridOptData = Object.values(self.gridOptions.data);
-            self.gridApi.grid.modifyRows(gridOptData);
-            self.fuenteapropiacion = [];
-            var tmp = gridOptData;
-            if (tmp.length > 0) {
-              //tmp[0].MontoParcial = fuente.MontoParcial;
-              $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
-              self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-            }
+          // Se inicializa el grid api para seleccionar
+          self.gridApi.grid.modifyRows(self.gridOptions.data);
+          console.info(self.gridOptions.data);
+          $scope.initFuenteapropiacion.forEach(function (fuente) {
+            var tmp = self.gridOptions.data.filter(function (e) { return e.FuenteFinanciamiento.Codigo == fuente.Codigo });
+            console.info(tmp);
+            //if (tmp.length > 0) {}
+          // if (tmp.length > 0) {
+          //   tmp[0].ValorOriginal = fuente.MontoParcial;
+          //   $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
+          //   self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+          // }
 
-          }
         });
+      });
 
-        $scope.$watch('[d_fuentesApropiacion.gridOptions.paginationPageSize, d_fuentesApropiacion.gridOptions.data]', function () {
-          if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
-            $scope.gridHeight = self.gridOptions.rowHeight * 2 + (self.gridOptions.data.length * self.gridOptions.rowHeight);
-            if (self.gridOptions.data.length <= 5) {
-              self.gridOptions.enablePaginationControls = false;
-            }
-          } else {
-            $scope.gridHeight = self.gridOptions.rowHeight * 3 + (self.gridOptions.paginationPageSize * self.gridOptions.rowHeight);
-            self.gridOptions.enablePaginationControls = true;
-          }
-        }, true);
+
+$scope.$watch('[d_fuentesApropiacion.gridOptions.paginationPageSize, d_fuentesApropiacion.gridOptions.data]', function () {
+  if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
+    $scope.gridHeight = self.gridOptions.rowHeight * 2 + (self.gridOptions.data.length * self.gridOptions.rowHeight);
+    if (self.gridOptions.data.length <= 5) {
+      self.gridOptions.enablePaginationControls = false;
+    }
+  } else {
+    $scope.gridHeight = self.gridOptions.rowHeight * 3 + (self.gridOptions.paginationPageSize * self.gridOptions.rowHeight);
+    self.gridOptions.enablePaginationControls = true;
+  }
+}, true);
 
 
       },
-      controllerAs: 'd_fuentesApropiacion'
+controllerAs: 'd_fuentesApropiacion'
     };
   });

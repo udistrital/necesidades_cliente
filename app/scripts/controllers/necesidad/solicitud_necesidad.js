@@ -19,8 +19,13 @@ angular.module('contractualClienteApp')
         self.formuIncompleto = true;
 
 
-        self.meta = {};
-        self.actividades = [];
+        self.meta = undefined;
+        self.meta_necesidad = {
+            Meta: undefined,
+            Actividades : [],
+            MontoPorMeta: 0
+        };
+        self.actividades = undefined;
         self.apSelected = false;
         self.apSelectedOb = undefined;
 
@@ -47,6 +52,7 @@ angular.module('contractualClienteApp')
         self.actividades_economicas_id = [];
         self.productos = [];
         self.f_valor = 0;
+        self.meta_valor = 0;
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
         self.subtotalEspecificaciones = 0;
@@ -133,14 +139,11 @@ angular.module('contractualClienteApp')
 
             if (trNecesidad.Ffapropiacion) {
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
-                console.info("trNecesidad.Ffapropiacion:")
-                console.info(self.f_apropiaciones)
-
-                //necesidadService.groupByApropiacion(self.f_apropiaciones, false).then(function (fap) { self.f_apropiacion = fap });
+                console.info(self.f_apropiaciones);
                 self.f_apropiaciones.forEach(function (element) {
+                    console.info(element);
                     var cantidadFuentes = element.apropiacion.Fuentes.length;
 
-                    console.info("HAY" + cantidadFuentes + "xd")
                     for (var i = 0; i < cantidadFuentes; i++) {
                         element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
                     }
@@ -148,7 +151,7 @@ angular.module('contractualClienteApp')
                         Codigo: element.Codigo,
                         apropiacion: element.apropiacion,
                         // fuentes: apropiacion.Fuentes,
-                        // initFuentes: apropiacion.Fuentes,
+                        initFuentes: apropiacion.Fuentes,
                         Monto: element.apropiacion.ApropiacionInicial,
                         productos: element.apropiacion.Productos,
                         initProductos: element.apropiacion.Productos
@@ -184,7 +187,7 @@ angular.module('contractualClienteApp')
                     self.jefe_destino = JD.Persona;
                     self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
                 }).catch(function (err) {
-                    //console.log(err)
+
                 });
             }, true);
 
@@ -193,9 +196,7 @@ angular.module('contractualClienteApp')
                 necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
                     self.ordenador_gasto = JD.Persona;
                     self.dep_ned.OrdenadorGasto = parseInt(JD.Persona.Id);
-                    console.info(JD.Persona.Id);
                 }).catch(function (err) {
-                    //console.log(err)
                 });
             }, true);
 
@@ -373,7 +374,6 @@ angular.module('contractualClienteApp')
             // var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
             var tmpSet = [1, 6]
             self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
-            // console.log(response.data);
         });
 
         agoraRequest.get('unidad', $.param({
@@ -391,7 +391,6 @@ angular.module('contractualClienteApp')
             order: "asc",
         })).then(function (response) {
             self.persona_data = response.data;
-            // console.info(self.persona_data);
         });
 
         necesidadService.getParametroEstandar().then(function (response) {
@@ -463,6 +462,15 @@ angular.module('contractualClienteApp')
 
         };
 
+
+
+           self.meta_necesidad = {
+                Meta: self.meta,
+                Actividades : self.actividades,
+                MontoPorMeta: 0
+            };
+
+
         self.eliminarRubro = function (rubro) {
             for (var i = 0; i < self.f_apropiacion.length; i++) {
                 if (self.f_apropiacion[i] === rubro) {
@@ -501,6 +509,18 @@ angular.module('contractualClienteApp')
                 self.f_valor += self.f_apropiacion[i].MontoPorApropiacion;
             }
         }, true);
+
+        $scope.$watch('solicitudNecesidad.actividades', function () {
+                console.info(self.meta_necesidad.Actividades ,"Aqui hay algo?");
+                (self.meta_necesidad.Actividades) ? self.meta_necesidad.Actividades.forEach(function(act){
+                    self.meta_necesidad.MontoPorMeta+=act.MontoParcial;
+                    console.info(act)
+                }) : self.meta_necesidad.MontoPorMeta=0;
+                
+                console.info(self.meta_necesidad.MontoPorMeta);
+            
+        }, true);
+
 
         $scope.$watch('solicitudNecesidad.productos', function () {
             self.valorTotalEspecificaciones = 0;
@@ -557,18 +577,6 @@ angular.module('contractualClienteApp')
         self.crear_solicitud = function () {
             self.actividades_economicas_id = self.actividades_economicas.map(function (ae) { return { ActividadEconomica: ae.Codigo } });
             self.marcos_legales = self.documentos.map(function (d) { return { MarcoLegal: d } });
-
-            // if (self.necesidad.TipoContratoNecesidad) {
-            //     if (self.f_valor !== self.valorTotalEspecificaciones && self.necesidad.TipoContratoNecesidad.Id === 1 /*tipo compra*/) {
-            //         swal(
-            //             'Error',
-            //             'El valor del contrato (' + self.valorTotalEspecificaciones + ') debe ser igual que el de la financiación(' + self.f_valor + ')',
-            //             'warning'
-            //         );
-            //         return;
-            //     }
-            // }
-
             self.f_apropiaciones = [];
             self.productos_apropiaciones = [];
             self.f_apropiacion
@@ -578,8 +586,9 @@ angular.module('contractualClienteApp')
                         var f = {
                             Apropiacion: fap.Apropiacion,
                             MontoParcial: fuente.MontoParcial,
-                            FuenteFinanciamiento: fuente.FuenteFinanciamiento.Id,
+                            FuenteFinanciamiento: fuente.Codigo,
                         };
+                        console.info(f, "Camila Guerrero");
                         self.f_apropiaciones.push(f);
                     });
                     //Construye objeto relación producto-rubro para persistir
@@ -602,6 +611,7 @@ angular.module('contractualClienteApp')
                 ActividadEconomicaNecesidad: self.actividades_economicas_id,
                 MarcoLegalNecesidad: self.marcos_legales,
                 Ffapropiacion: self.f_apropiaciones,
+                MetasActs : self.meta_necesidad,
                 DependenciaNecesidad: self.dep_ned,
                 DetalleServicioNecesidad: self.detalle_servicio_necesidad,
                 ProductosNecesidad: self.productos_apropiaciones
