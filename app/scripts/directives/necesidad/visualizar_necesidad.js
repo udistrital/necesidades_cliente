@@ -37,9 +37,6 @@ angular.module('contractualClienteApp')
                     administrativaRequest.get('necesidad', $.param({
                         query: "NumeroElaboracion:" + $scope.numero + ",Vigencia:" + $scope.vigencia
                     })).then(function (response) {
-                        console.info(response.data);
-                        console.info(response.data[0]);
-                        console.info(response.data[0].DependenciaReversa[0].OrdenadorGasto);
                         self.v_necesidad = response.data[0];
                         if (self.verJustificacion) {
                             administrativaRequest.get('necesidad_rechazada', $.param({
@@ -53,17 +50,16 @@ angular.module('contractualClienteApp')
                             query: "Necesidad:" + response.data[0].Id,
                             fields: "MarcoLegal"
                         })).then(function (response) {
-                            console.info(response.data);
                             self.marco_legal = response.data;
                         });
                         adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
                             self.ff_necesidad = response.data;
+                            console.info(self.v_necesidad.Id,self.ff_necesidad);
                         });
 
                         administrativaRequest.get('solicitud_disponibilidad', $.param({
                             query: "Necesidad:" + response.data[0].Id,
                         })).then(function (response) {
-                            console.info(response.data);
                             self.solicitud_disponibilidad =
                                 (response.data != null && response.data.length > 0) ?
                                     response.data[0] : { Numero: '' };
@@ -73,23 +69,19 @@ angular.module('contractualClienteApp')
                             query: "Necesidad:" + response.data[0].Id,
                             fields: "JefeDependenciaSolicitante,JefeDependenciaDestino,OrdenadorGasto"
                         })).then(function (response) {
-                            console.info(response.data);
                             self.dependencias = response.data[0];
 
                             coreRequest.get('jefe_dependencia', $.param({
                                 query: 'Id:' + response.data[0].JefeDependenciaSolicitante
                             })).then(function (response) {
-                                console.info(response.data);
                                 agoraRequest.get('informacion_persona_natural', $.param({
                                     query: 'Id:' + response.data[0].TerceroId
                                 })).then(function (response2) {
-                                    console.info(response2.data);
                                     self.jefe_dependencia_solicitante = response2.data[0];
                                 });
                                 oikosRequest.get('dependencia', $.param({
                                     query: 'Id:' + response.data[0].DependenciaId
                                 })).then(function (response3) {
-                                    console.info(response3.data);
                                     self.dependencia_solicitante = response3.data[0];
                                 }); response.data[0].OrdenadorGasto
                             });
@@ -97,17 +89,14 @@ angular.module('contractualClienteApp')
                             coreRequest.get('jefe_dependencia', $.param({
                                 query: 'Id:' + response.data[0].JefeDependenciaDestino
                             })).then(function (response) {
-                                console.info(response.data);
                                 agoraRequest.get('informacion_persona_natural', $.param({
                                     query: 'Id:' + response.data[0].TerceroId
                                 })).then(function (response2) {
-                                    console.info(response2.data);
                                     self.jefe_dependencia_destino = response2.data[0];
                                 });
                                 oikosRequest.get('dependencia', $.param({
                                     query: 'Id:' + response.data[0].DependenciaId
                                 })).then(function (response3) {
-                                    console.info(response3.data);
                                     self.dependencia_destino = response3.data[0];
                                 });
                             });
@@ -117,7 +106,6 @@ angular.module('contractualClienteApp')
                                 sortby: "NumeroOrden",
                                 order: "asc",
                             })).then(function (response) {
-                                console.info(response.data);
                                 self.modalidad_data = response.data;
 
                             });
@@ -127,7 +115,6 @@ angular.module('contractualClienteApp')
                                 sortby: "Id",
                                 order: "asc",
                             })).then(function (response) {
-                                console.info(response.data);
                                 self.tipo_contrato_data = response.data;
 
                             });
@@ -135,7 +122,6 @@ angular.module('contractualClienteApp')
                             agoraRequest.get('informacion_persona_natural', $.param({
                                 query: 'Id:' + response.data[0].DependenciaReversa[0].OrdenadorGasto
                             })).then(function (response) {
-                                console.info(response[0].data, "lala");
                                 self.ordenador_gasto = response.data[0];
                             });
                         });

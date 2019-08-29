@@ -13,13 +13,14 @@ angular.module('contractualClienteApp')
       scope: {
         apropiacion: '=',
         actividades: '=',
+        meta : '='
       },
 
 
       templateUrl: 'views/directives/metas/metas-actividades.html',
       controller: function ($scope) {
         var self = this;
-        self.actividades = [];
+        self.actividades = $scope.actividades;
         self.meta = undefined;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
@@ -70,8 +71,10 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){
+            $scope.meta = self.meta;
             self.loadActividades();
           }
+
         });
 
         

@@ -14,6 +14,8 @@
                     <input type="radio"  name="name" value="{{ meta.Id}}" ng-model="d_metasActividades.meta" required />{{ meta.Nombre }}
                 </li>
             </ul>
+            <label
+            class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>
         </div>
         <div style="height: 250px" ui-grid="d_metasActividades.gridOptions" ui-grid-selection ui-grid-auto-resize
             ui-grid-pagination></div>
@@ -25,12 +27,13 @@
 
 <div class="panel-footer">
         <div class="row" ng-repeat="actividad in d_metasActividades.actividades">
-                <div class="col">
+                <div class="col-sm-6 col-form-label">
                         <p>{{ actividad.Descripcion}}</p>
                     </div>
-                    <div class="col">
-                        <input class="form-control" type="number" name="valor" id="val" ui-money-mask="0">
-                    </div>
+                    <div class="col-sm-6">
+                            <input class="form-control col-sm-10" type="number" name="valor" ng-init="actividad.MontoParcial = actividad.MontoParcial ? actividad.MontoParcial : 0" ng-model="actividad.MontoParcial">
+                        </div>
+
         </div>
 </div>
 

@@ -293,7 +293,10 @@
                         <br>
                         <div class="row">
                           <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
-                          <metas-actividades apropiacion="ap.Apropiacion" actividades="solicitudNecesidad.actividades">
+                          <label
+                                class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{solicitudNecesidad.meta_necesidad.MontoPorMeta | currency}}
+
+                          <metas-actividades apropiacion="ap.Apropiacion" actividades="solicitudNecesidad.meta_necesidad.Actividades" meta="solicitudNecesidad.meta_necesidad.Meta">
                           </metas-actividades>
                         </div>
                         <div class="row">
