@@ -232,7 +232,7 @@ angular.module('contractualClienteApp')
                     query: "Id:" + self.cdp.Responsable,
                     limit: 1
                 })).then(function(response) {
-                    if (response.data != null) {
+                    if (response.data !== null) {
                         self.cdp.Responsable = response.data[0];
                     }
 
@@ -258,11 +258,11 @@ angular.module('contractualClienteApp')
 
         self.anularDisponibilidad = function() {
 
-            if (self.motivo == undefined || self.motivo === "" || self.motivo == null) {
-                swal("", $translate.instant("E_A02"), "error")
-            } else if (self.tipoAnulacion == undefined || self.tipoAnulacion === "" || self.tipoAnulacion == null) {
-                swal("", $translate.instant("E_A03"), "error")
-            } else if ((self.Rubro_sel == undefined || self.Rubro_sel === "" || self.Rubro_sel == null) && (self.tipoAnulacion.Nombre === "Parcial")) {
+            if (self.motivo === undefined || self.motivo === "" || self.motivo === null) {
+                swal("", $translate.instant("E_A02"), "error");
+            } else if (self.tipoAnulacion === undefined || self.tipoAnulacion === "" || self.tipoAnulacion === null) {
+                swal("", $translate.instant("E_A03"), "error");
+            } else if ((self.Rubro_sel === undefined || self.Rubro_sel === "" || self.Rubro_sel === null) && (self.tipoAnulacion.Nombre === "Parcial")) {
                 swal("", $translate.instant("E_A05"), "error")
             } else if ((self.Valor == undefined || self.Valor === "" || self.Valor == null) && (self.tipoAnulacion.Nombre === "Parcial")) {
                 swal("", $translate.instant("E_A04"), "error")
