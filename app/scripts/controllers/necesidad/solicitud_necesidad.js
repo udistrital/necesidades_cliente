@@ -67,8 +67,8 @@ angular.module('contractualClienteApp')
 
         self.duracionEspecialMap = {
             duracion: [true, false, false, undefined],
-            unico_pago: [false, true, false, 0],
-            agotar_presupuesto: [false, false, true, 0]
+            unico_pago: [true, true, false, undefined],
+            agotar_presupuesto: [true, false, true, undefined]
         };
 
         self.iva_data = {
@@ -362,6 +362,7 @@ angular.module('contractualClienteApp')
             sortby: "Nombre",
             order: "asc",
         })).then(function (response) {
+            console.info(response.data);
             //self.unidad_ejecutora_data = response.data.filter(function(d) {return (d.Id === 7 || d.Id === 12)}); //TODO: usar query:Id__in:(7,12) con la sistaxis correcta si beego tiene soporte
             self.unidad_ejecutora_data = response.data;
         });
