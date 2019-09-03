@@ -448,10 +448,10 @@ module.exports = function(grunt) {
           dryRun: false,
           sonar: {
             host: {
-              url: 'http://10.20.0.77:9000'
+              url: 'http://localhost:9000'
             },
-            projectKey: 'administrativa_cliente:resoluciones',
-            projectName: 'administrativa_cliente:resoluciones',
+            projectKey: 'administrativa_cliente:necesidades',
+            projectName: 'administrativa_cliente:necesidades',
             projectVersion: '0.1',
             sources: ['app', 'test'].join(','),
             language: 'js',

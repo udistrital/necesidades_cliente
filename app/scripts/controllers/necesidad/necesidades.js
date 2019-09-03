@@ -120,7 +120,7 @@ angular.module('contractualClienteApp')
 
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema
         self.cargarDatosNecesidades = function (offset, query) {
-            if (query === undefined) {query = []};
+            if (query === undefined) {query = []}
             query = typeof (query) === "string" ? [query] : query;
             query.push("EstadoNecesidad.Nombre__not_in:Borrador");
 
@@ -167,7 +167,7 @@ angular.module('contractualClienteApp')
 
                 administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function (response) {
                     self.alerta = "";
-                    for (var i = 1; i < response.data.length; i++) {
+                    for (var i = 1; i < response.data.length; i += 1) {
                         self.alerta = self.alerta + response.data[i] + "\n";
                     }
                     swal("", self.alerta, response.data[0]);
@@ -245,7 +245,7 @@ angular.module('contractualClienteApp')
             self.sol_cdp.Necesidad = self.g_necesidad;
             administrativaRequest.post("solicitud_disponibilidad", self.sol_cdp).then(function (response) {
                 self.alerta = "";
-                for (var i = 1; i < response.data.length; i++) {
+                for (var i = 1; i < response.data.length; i += 1) {
                     self.alerta = self.alerta + response.data[i] + "\n";
                 }
                 swal("", self.alerta, response.data[0]);

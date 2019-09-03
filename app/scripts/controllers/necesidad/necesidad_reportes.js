@@ -23,7 +23,7 @@ angular.module('contractualClienteApp')
     self.consultarReporte = function() {
       if (self.dependencia && self.vigencia) {
         self.numeroElaboracion = self.numeroElaboracion ? self.numeroElaboracion : 0;
-        self.generarReporte++;
+        self.generarReporte += 1;
       } else {
         swal({
           title: $translate.instant('ERROR'),

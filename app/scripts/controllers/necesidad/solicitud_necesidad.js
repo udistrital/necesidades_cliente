@@ -112,7 +112,7 @@ angular.module('contractualClienteApp')
             self.necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias) ;
 
             var s = self.duracionEspecialMap[especial];
-            if (!s) {return};
+            if (!s) {return}
 
             self.ver_duracion_fecha = s[0];
             self.necesidad.UnicoPago = s[1];
@@ -135,7 +135,7 @@ angular.module('contractualClienteApp')
             self.necesidad = trNecesidad.Necesidad;
             self.detalle_servicio_necesidad = trNecesidad.DetalleServicioNecesidad;
             self.ActividadEspecifica = trNecesidad.ActividadEspecifica;
-            if (self.necesidad.TipoContratoNecesidad.Id === 2) {self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) { return parseInt(d.ActividadEconomica); })};
+            if (self.necesidad.TipoContratoNecesidad.Id === 2) {self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) { return parseInt(d.ActividadEconomica, 10); })}
 
             if (trNecesidad.Ffapropiacion) {
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
@@ -144,7 +144,7 @@ angular.module('contractualClienteApp')
                     console.info(element);
                     var cantidadFuentes = element.apropiacion.Fuentes.length;
 
-                    for (var i = 0; i < cantidadFuentes; i++) {
+                    for (var i = 0; i < cantidadFuentes; i += 1) {
                         element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
                     }
                     self.f_apropiacion.push({
@@ -197,11 +197,10 @@ angular.module('contractualClienteApp')
             $scope.$watch('solicitudNecesidad.rol_ordenador_gasto', function () {
                 necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
                     self.ordenador_gasto = JD.Persona;
-                    self.dep_ned.OrdenadorGasto = parseInt(JD.Persona.Id);
+                    self.dep_ned.OrdenadorGasto = parseInt(JD.Persona.Id, 10);
                 }).catch(function (err) {
                 });
             }, true);
-
         });
 
         self.estructura = {
@@ -322,7 +321,9 @@ angular.module('contractualClienteApp')
         }, true);
 
         $scope.$watch('solicitudNecesidad.necesidad.TipoNecesidad.Id', function () {
-            if (!self.necesidad) return;
+            if (!self.necesidad) {
+                return;
+            }
             var TipoNecesidad = self.necesidad.TipoNecesidad.Id;
             self.CambiarTipoNecesidad(TipoNecesidad);
         });
@@ -375,7 +376,8 @@ angular.module('contractualClienteApp')
             //TODO: implementar la demas funcionalidad
             // var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
             var tmpSet = [1, 6];
-            self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
+            self.tipo_necesidad_data = self.tipo_necesidad_data;
+            //self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
         });
 
         agoraRequest.get('unidad', $.param({
@@ -474,7 +476,7 @@ angular.module('contractualClienteApp')
 
 
         self.eliminarRubro = function (rubro) {
-            for (var i = 0; i < self.f_apropiacion.length; i++) {
+            for (var i = 0; i < self.f_apropiacion.length; i += 1) {
                 if (self.f_apropiacion[i] === rubro) {
                     self.f_apropiacion.splice(i, 1);
                 }
@@ -483,7 +485,7 @@ angular.module('contractualClienteApp')
         };
 
         self.eliminarRequisito = function (requisito) {
-            for (var i = 0; i < self.requisitos_minimos.length; i++) {
+            for (var i = 0; i < self.requisitos_minimos.length; i += 1) {
                 if (self.requisitos_minimos[i] === requisito) {
                     self.requisitos_minimos.splice(i, 1);
                 }
@@ -491,7 +493,7 @@ angular.module('contractualClienteApp')
         };
 
         self.eliminarActividad = function (actividad) {
-            for (var i = 0; i < self.ActividadEspecifica.length; i++) {
+            for (var i = 0; i < self.ActividadEspecifica.length; i += 1) {
                 if (self.ActividadEspecifica[i] === actividad) {
                     self.ActividadEspecifica.splice(i, 1);
                 }
@@ -501,10 +503,10 @@ angular.module('contractualClienteApp')
         $scope.$watch('solicitudNecesidad.f_apropiacion', function () {
             self.f_valor = 0;
 
-            for (var i = 0; i < self.f_apropiacion.length; i++) {
+            for (var i = 0; i < self.f_apropiacion.length; i += 1) {
                 self.f_apropiacion[i].MontoPorApropiacion = 0;
                 if (self.f_apropiacion[i].fuentes !== undefined) {
-                    for (var k = 0; k < self.f_apropiacion[i].fuentes.length; k++) {
+                    for (var k = 0; k < self.f_apropiacion[i].fuentes.length; k += 1) {
                         self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].fuentes[k].MontoParcial;
                     }
                 }
@@ -650,10 +652,11 @@ angular.module('contractualClienteApp')
                     $translate.instant('VALOR') + "</th>";
 
                 var forEachResponse = function (data) {
-                    if (data.Type === "error")
+                    if (data.Type === "error") {
                         templateAlert += "<tr class='danger'>";
-                    else
+                    } else {
                         templateAlert += "<tr class='" + data.Type + "'>";
+                    }
 
                     var n = typeof (data.Body) === "object" ? data.Body.Necesidad : self.necesidad;
 
@@ -710,7 +713,7 @@ angular.module('contractualClienteApp')
             var TipoNecesidad = self.necesidad.TipoNecesidad.Id;
             necesidadService.initNecesidad().then(function (trNecesidad) {
                 self.necesidad = trNecesidad.Necesidad;
-                self.necesidad.TipoNecesidad = { Id: parseInt(TipoNecesidad) };
+                self.necesidad.TipoNecesidad = { Id: parseInt(TipoNecesidad, 10) };
                 self.CambiarTipoNecesidad(TipoNecesidad);
             });
 

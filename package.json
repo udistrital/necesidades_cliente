@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "angular-cookies": "^1.7.8",
+    "jslint": "^0.12.1",
     "md-steppers": "^0.4.1"
   }
 }

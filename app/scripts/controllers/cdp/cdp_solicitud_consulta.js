@@ -125,11 +125,11 @@ angular.module('contractualClienteApp')
     self.UnidadEjecutora = 1;
     financieraRequest.get("orden_pago/FechaActual/2006",'') //formato de entrada  https://golang.org/src/time/format.go
     .then(function(response) { //error con el success
-      self.vigenciaActual = parseInt(response.data);
+      self.vigenciaActual = parseInt(response.data, 10);
       var dif = self.vigenciaActual - 1995 ;
       var range = [];
       range.push(self.vigenciaActual);
-      for(var i=1;i<dif;i++) {
+      for(var i=1;i<dif;i += 1) {
         range.push(self.vigenciaActual - i);
       }
       self.years = range;

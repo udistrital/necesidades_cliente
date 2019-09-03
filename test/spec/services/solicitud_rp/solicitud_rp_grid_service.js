@@ -6,7 +6,7 @@ describe('Service: solicitudRp/solicitudRpGridService', function () {
   beforeEach(module('contractualClienteApp'));
 
   // instantiate service
-  var solicitudRp/solicitudRpGridService;
+  var solicitudRp,solicitudRpGridService;
   beforeEach(inject(function (_solicitudRp/solicitudRpGridService_) {
     solicitudRp/solicitudRpGridService = _solicitudRp/solicitudRpGridService_;
   }));

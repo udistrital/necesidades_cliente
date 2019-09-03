@@ -116,7 +116,7 @@ angular.module('contractualClienteApp')
         if ($scope.token_service.live_token()) {
             self.perfil = $scope.token_service.getRoles();
             configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades', '').then(function (response) {
-                console.info(response.data,self.perfil);
+                console.info(response.data, self.perfil);
                 $rootScope.my_menu = response.data;
             }).catch(function (err) {
                 console.log('err ', err);

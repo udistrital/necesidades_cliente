@@ -41,7 +41,7 @@ angular.module('configuracionService', [])
          */
         get_acciones: function(path, a) {
             a = a || [];
-            for (var i = 0; i < a.length; i++) {
+            for (var i = 0; i < a.length; i += 1) {
                 if (a[i].Url === path) {
                     return a[i];
                 } else if (a[i].Opciones !== null) {

@@ -11,7 +11,7 @@ angular.module('colombiaHolidaysService', [])
                 }
                 var myHolidays = holidays.getColombiaHolidaysByYear(date.getFullYear());
                 var strDate = date.toJSON().split('T')[0];
-                for (var i = 0; i < myHolidays.length; i++) {
+                for (var i = 0; i < myHolidays.length; i += 1) {
                     if (myHolidays[i].holiday === strDate) {
                         return false;
                     }

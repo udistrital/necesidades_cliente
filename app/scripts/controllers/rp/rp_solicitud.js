@@ -347,7 +347,7 @@ angular.module('contractualClienteApp')
 
 
         if (self.disponibilidad.Id !== null) {
-            for (var i = 0; i < self.rubros.length; i++) {
+            for (var i = 0; i < self.rubros.length; i += 1) {
                 var saldo = self.DescripcionRubro(self.rubros[i].Id);
                 self.rubros[i].saldo = saldo;
             }
@@ -359,7 +359,7 @@ angular.module('contractualClienteApp')
 
             $scope.seleccionado = rubro_seleccionado;
             if (rubro_seleccionado !== undefined) {
-                for (var i = 0; i < self.rubros_seleccionados.length; i++) {
+                for (var i = 0; i < self.rubros_seleccionados.length; i += 1) {
                     if (self.rubros_seleccionados[i].Id === rubro_seleccionado.Id) {
                         bandera = false;
                     }
@@ -376,14 +376,14 @@ angular.module('contractualClienteApp')
 
         self.quitarRubro = function(id) {
 
-            for (var i = 0; i < self.rubros_select.length; i++) {
+            for (var i = 0; i < self.rubros_select.length; i += 1) {
                 if (self.rubros_select[i].Id === id) {
 
                     self.rubros.push(self.rubros_select[i]);
                     self.rubros_select.splice(i, 1);
                 }
             }
-            for (i = 0; i < self.rubros_seleccionados.length; i++) {
+            for (i = 0; i < self.rubros_seleccionados.length; i += 1) {
 
                 if (self.rubros_seleccionados[i].Id === id) {
                     self.rubros_seleccionados.splice(i, 1);
@@ -393,7 +393,7 @@ angular.module('contractualClienteApp')
 
         self.DescripcionRubro = function(id) {
             var rubro;
-            for (var i = 0; i < self.rubros.length; i++) {
+            for (var i = 0; i < self.rubros.length; i += 1) {
 
                 if (self.rubros[i].Id === id) {
                     rubro = self.rubros[i];
@@ -451,7 +451,7 @@ angular.module('contractualClienteApp')
                 });
             } else {
                 self.boton_registrar = true;
-                for (var i = 0; i < self.rubros_seleccionados.length; i++) {
+                for (var i = 0; i < self.rubros_seleccionados.length; i += 1) {
                     self.rubros_seleccionados[i].ValorAsignado = parseFloat(self.rubros_seleccionados[i].ValorAsignado);
                 }
 
@@ -464,7 +464,7 @@ angular.module('contractualClienteApp')
                 if (self.solicitudresolucion_bool === true) {
                     self.disponibilidad = self.disponibilidad[0];
                 }
-                for (var x = 0; x < self.contrato.length; x++) {
+                for (var x = 0; x < self.contrato.length; x += 1) {
                     Solicitud_rp = {};
                     //se agrega el campo de monto para que se pueda iterar en la peticion de disponibilidad_apropiacion_solicitud_rp
                     if (self.solicitudcdp_bool === true) {
@@ -477,7 +477,7 @@ angular.module('contractualClienteApp')
                             TipoCompromiso: self.compromiso.Id,
                             Justificacion_rechazo: 0,
                             Masivo: self.masivo_seleccion,
-                            NumeroCompromiso: parseInt(self.NumeroCompromiso)
+                            NumeroCompromiso: parseInt(self.NumeroCompromiso, 10)
                         };
                     } else if (self.solicitudresolucion_bool === true) {
                         Solicitud_rp = {
@@ -487,12 +487,12 @@ angular.module('contractualClienteApp')
                             Expedida: false,
                             NumeroContrato: self.contrato[x].Numero_contrato,
                             VigenciaContrato: self.contrato[x].Vigencia_contrato,
-                            Monto: parseInt(self.contrato[x].Valor_contrato),
+                            Monto: parseInt(self.contrato[x].Valor_contrato, 10),
                             TipoCompromiso: self.compromiso.Id,
                             Justificacion_rechazo: 0,
                             Masivo: self.masivo_seleccion,
-                            Proveedor: parseInt(self.contrato[x].Id_proveedor),
-                            NumeroCompromiso: parseInt(self.NumeroCompromiso)
+                            Proveedor: parseInt(self.contrato[x].Id_proveedor, 10),
+                            NumeroCompromiso: parseInt(self.NumeroCompromiso, 10)
                         };
                     } else {
                         Solicitud_rp = {
@@ -502,12 +502,12 @@ angular.module('contractualClienteApp')
                             Expedida: false,
                             NumeroContrato: self.contrato[x].Numero_suscrito,
                             VigenciaContrato: self.contrato[x].Vigencia_contrato,
-                            Monto: parseInt(self.contrato[x].Valor_contrato),
+                            Monto: parseInt(self.contrato[x].Valor_contrato, 10),
                             TipoCompromiso: self.compromiso.Id,
                             Justificacion_rechazo: 0,
                             Masivo: self.masivo_seleccion,
                             Proveedor: self.contrato[x].Contratista.Id,
-                            NumeroCompromiso: parseInt(self.NumeroCompromiso)
+                            NumeroCompromiso: parseInt(self.NumeroCompromiso, 10)
                         };
                     }
 
@@ -520,7 +520,7 @@ angular.module('contractualClienteApp')
                     };
                     //administrativaRequest.post('solicitud_rp', solicitud_rp).then(function(response) {
                     //respuestas_solicitudes.push(response.data);
-                    for (var i = 0; i < self.rubros_seleccionados.length; i++) {
+                    for (var i = 0; i < self.rubros_seleccionados.length; i += 1) {
                         var Disponibilidad_apropiacion_solicitud_rp = {};
                         if (self.solicitudresolucion_bool === true) {
                             Disponibilidad_apropiacion_solicitud_rp = {
@@ -614,7 +614,7 @@ angular.module('contractualClienteApp')
             administrativaRequest.post('disponibilidad_apropiacion_solicitud_rp', Disponibilidad_apropiacion_solicitud_rp).then(function() {
                 var imprimir = "<h2>Solicitudes creadas correctamente !</h2>";
                 imprimir = imprimir + "<div style='height:150px;overflow:auto'><table class='col-md-8 col-md-offset-2'><tr><td style='height:20px;width:120px'><b>Numero solicitud rp</b></td><td style='height:10px;width:80px'><b>Numero contrato</b></td><td style='height:10px;width:80px'><b>Numero vigencia</b></td></tr>";
-                for (var x = 0; x < respuestas_solicitudes.length; x++) {
+                for (var x = 0; x < respuestas_solicitudes.length; x += 1) {
 
                     imprimir = imprimir + "<tr style='height:20px'><td>" + respuestas_solicitudes[x].Id +
                         "</td><td>" + respuestas_solicitudes[x].NumeroContrato +
