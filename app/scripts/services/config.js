@@ -127,7 +127,7 @@ var conf_pruebas = {
     },
 };
 
-var conf_local = {
+/* var conf_local = {
     WSO2_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services",
     ACADEMICA_SERVICE: "http://10.20.0.127/urano/index.php?data=B-7djBQWvIdLAEEycbH1n6e-3dACi5eLUOb63vMYhGq0kPBs7NGLYWFCL0RSTCu1yTlE5hH854MOgmjuVfPWyvdpaJDUOyByX-ksEPFIrrQQ7t1p4BkZcBuGD2cgJXeD",
     ACADEMICA_WSO_SERVICE: "https://jbpm.udistritaloas.edu.co:8243/services/academicaProxy/",
@@ -168,10 +168,40 @@ var conf_local = {
        
        
     },
+}; */
+
+var conf_local = {
+    WSO2_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services", // NO ESTA URL EN PREPROD
+    ADMINISTRATIVA_MID_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8091/v1/",
+    ADMINISTRATIVA_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8090/v1/",
+    ADMINISTRATIVA_PRUEBAS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8104/v1/", 
+    CONFIGURACION_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8086/",
+    CORE_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8106/v1/",
+    CORE_AMAZON_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8106/v1/", 
+    PLAN_CUENTAS_SERVICE: "http://10.20.0.254:8203/v1/", // NO ESTA URL EN PREPROD
+    FINANCIERA_MID_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8089/v1/",
+    FINANCIERA_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8084/v1/",
+    METAS_SERVICE: "http://10.20.2.132:8087/",
+    MODELS_SERVICE: "scripts/models/",
+    OIKOS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/",
+    ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
+    CONTRATO_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services/contratoSuscritoProxyService/", // NO ESTA URL EN PREPROD
+    TOKEN: {
+        AUTORIZATION_URL: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize",
+        URL_USER_INFO: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/userinfo",
+        CLIENTE_ID: "fftE67YyfTsExQfR86Fp6Y8HGvMa",
+        REDIRECT_URL: "http://localhost:9000/",
+        RESPONSE_TYPE: "id_token token",
+        SCOPE: "openid email documento",
+        BUTTON_CLASS: "btn btn-warning btn-sm",
+        SIGN_OUT_URL: "https://autenticacion.portaloas.udistrital.edu.co/oidc/logout",
+        SIGN_OUT_REDIRECT_URL: "http://localhost:9000/",
+        SIGN_OUT_APPEND_TOKEN: "true",
+    },
 };
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        GENERAL: conf_cloud
+        GENERAL: conf_local
     });
 

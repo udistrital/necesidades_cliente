@@ -263,11 +263,11 @@ angular.module('contractualClienteApp')
             } else if (self.tipoAnulacion === undefined || self.tipoAnulacion === "" || self.tipoAnulacion === null) {
                 swal("", $translate.instant("E_A03"), "error");
             } else if ((self.Rubro_sel === undefined || self.Rubro_sel === "" || self.Rubro_sel === null) && (self.tipoAnulacion.Nombre === "Parcial")) {
-                swal("", $translate.instant("E_A05"), "error")
-            } else if ((self.Valor == undefined || self.Valor === "" || self.Valor == null) && (self.tipoAnulacion.Nombre === "Parcial")) {
-                swal("", $translate.instant("E_A04"), "error")
+                swal("", $translate.instant("E_A05"), "error");
+            } else if ((self.Valor === undefined || self.Valor === "" || self.Valor === null) && (self.tipoAnulacion.Nombre === "Parcial")) {
+                swal("", $translate.instant("E_A04"), "error");
             } else if (parseFloat(self.Valor) <= 0) {
-                swal("", $translate.instant("E_A07"), "error")
+                swal("", $translate.instant("E_A07"), "error");
             } else {
                 var valor = 0;
                 self.alerta = "<ol>";
@@ -303,7 +303,7 @@ angular.module('contractualClienteApp')
                     swal("", self.alerta, self.alerta_anulacion_cdp[0]).then(function() {
 
                         self.limpiar();
-                        if(self.alerta_anulacion_cdp[0] == "success"){
+                        if(self.alerta_anulacion_cdp[0] === "success"){
                             $("#myModal").modal("hide");
                         }
 
@@ -382,7 +382,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watch("cdpConsulta.Vigencia", function() {
 
-                if(self.reservas != true){
+                if(self.reservas !== true){
                   self.ver_titulo_reservas = false;
                   self.ver_boton_reservas = true;
                   self.reservas = false;
@@ -481,6 +481,6 @@ angular.module('contractualClienteApp')
             self.Vigencia = self.vigenciaActual;
             self.ver_boton_reservas = true;
             self.actualizarLista(0, '');
-        }
+        };
 
     });

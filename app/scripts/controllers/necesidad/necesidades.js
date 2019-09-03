@@ -120,7 +120,7 @@ angular.module('contractualClienteApp')
 
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema
         self.cargarDatosNecesidades = function (offset, query) {
-            if (query == undefined) query = [];
+            if (query === undefined) {query = []};
             query = typeof (query) === "string" ? [query] : query;
             query.push("EstadoNecesidad.Nombre__not_in:Borrador");
 
@@ -130,8 +130,7 @@ angular.module('contractualClienteApp')
                 sortby: "Vigencia,NumeroElaboracion",
                 order: "desc",
                 query: query.join(",")
-            }, true))
-            console.log
+            }, true));
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
         };
@@ -163,7 +162,7 @@ angular.module('contractualClienteApp')
             var nec_apro = {};
             administrativaRequest.get('necesidad/' + self.g_necesidad.Id
             ).then(function (response) {
-                nec_apro = response.data == undefined ? {} : response.data;
+                nec_apro = response.data === undefined ? {} : response.data;
                 nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Aprobada;
 
                 administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function (response) {
@@ -237,9 +236,8 @@ angular.module('contractualClienteApp')
             var idNecesidad = self.g_necesidad.Id;
             $("#myModal").modal("hide");
             $('#myModal').on('hidden.bs.modal', function (e) {
-                console.info('/necesidad/solicitud_necesidad/' + idNecesidad);
                 $window.location.href = '#/necesidad/solicitud_necesidad/' + idNecesidad;
-            })
+            });
         };
 
         self.solicitar_cdp = function () {

@@ -86,7 +86,7 @@ angular.module('contractualClienteApp')
             self.gridApi.core.on.filterChanged($scope, function() {
                 var grid = this.grid;
                 var query = '';
-                angular.forEach(grid.columns, function(value, key) {
+                angular.forEach(grid.columns, function(value) {
                     if (value.filters[0].term) {
 
                         var formtstr = value.colDef.name.replace('[0]','');
@@ -106,7 +106,7 @@ angular.module('contractualClienteApp')
 
                 var query = '';
                 var grid = this.grid;
-                angular.forEach(grid.columns, function(value, key) {
+                angular.forEach(grid.columns, function(value) {
                     if (value.filters[0].term) {
                         var formtstr = value.colDef.name.replace('[0]','');
                         if (query === ''){
@@ -174,7 +174,7 @@ angular.module('contractualClienteApp')
   };
 
 
-    self.cargarDatos = function(offset,query){
+    self.cargarDatos = function(offset){
 
             self.gridOptions.data = [];
             var inicio = $filter('date')(self.fechaInicio, "yyyy-MM-dd");

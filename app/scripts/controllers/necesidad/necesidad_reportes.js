@@ -8,7 +8,7 @@
 * Controller of the clienteApp
 */
 angular.module('contractualClienteApp')
-  .controller('NecesidadReportesCtrl', function (necesidadService, adminMidRequest, resolucion, administrativaRequest, $scope, $window, $mdDialog, $translate, gridApiService) {
+  .controller('NecesidadReportesCtrl', function (necesidadService, adminMidRequest, resolucion, administrativaRequest, $scope, $window, $mdDialog, $translate) {
     var self = this;
     self.nombreReporte = "";
     self.resolucionId = 0;
@@ -16,7 +16,7 @@ angular.module('contractualClienteApp')
 
     necesidadService.getAllDependencias().then(function (Dependencias) {
       self.dependencias = Dependencias;
-    })
+    });
     //TODO: Generar años a partir de 2018 hasta la fecha actual
     self.vigencias = [2018];
 
@@ -30,8 +30,8 @@ angular.module('contractualClienteApp')
           text: $translate.instant('COMPLETE_CAMPOS'),
           type: 'error',
           confirmButtonText: $translate.instant('ACEPTAR')
-        })
+        });
       }
-    }
+    };
 
   });
