@@ -43,12 +43,12 @@ Sbi.sdk.apply = function(o, c, defaults){
  */
 Sbi.sdk.namespace =  function() {
     var a=arguments, o=null, i, j, d, rt;
-    for (i=0; i<a.length; ++i) {
+    for (i=0; i<a.length; i += 1) {
         d=a[i].split(".");
         rt = d[0];
         try {
             if (typeof window[rt] == "undefined"){window[rt] = {};} o = window[rt];
-            for (j=1; j<d.length; ++j) {
+            for (j=1; j<d.length; j += 1) {
                 o[d[j]]=o[d[j]] || {};
                 o=o[d[j]];
             }
@@ -79,7 +79,7 @@ Sbi.sdk.urlEncode = function(o){
             buf.push(k, "=", encodeURIComponent(ov), "&");
         }else if(ov instanceof Array){
             if (ov.length) {
-                for(var i = 0, len = ov.length; i < len; i++) {
+                for(var i = 0, len = ov.length; i < len; i += 1) {
                     buf.push(k, "=", encodeURIComponent(ov[i] === undefined ? '' : ov[i]), "&");
                 }
             } else {
@@ -104,7 +104,7 @@ Sbi.sdk.urlDecode = function(string, overwrite){
     var obj = {};
     var pairs = string.split('&');
     var pair, name, value;
-    for(var i = 0, len = pairs.length; i < len; i++){
+    for(var i = 0, len = pairs.length; i < len; i += 1){
         pair = pairs[i].split('=');
         name = decodeURIComponent(pair[0]);
         value = decodeURIComponent(pair[1]);
@@ -212,7 +212,7 @@ Sbi.sdk.apply(Sbi.sdk.ajax, {
             }
 
             var el, name, val, disabled, data = '', hasSubmit = false;
-            for (var i = 0; i < form.elements.length; i++) {
+            for (var i = 0; i < form.elements.length; i += 1) {
                 el = form.elements[i];
                 disabled = form.elements[i].disabled;
                 name = form.elements[i].name;
@@ -223,10 +223,10 @@ Sbi.sdk.apply(Sbi.sdk.ajax, {
                             {
                         case 'select-one':
                         case 'select-multiple':
-                            for (var j = 0; j < el.options.length; j++) {
+                            for (var j = 0; j < el.options.length; j += 1) {
                                 if (el.options[j].selected) {
                                     if (Ext.isIE) {
-                                        data += encodeURIComponent(name) + '=' + encodeURIComponent(el.options[j].attributes['value'].specified ? el.options[j].value : el.options[j].text) + '&';
+                                        data += encodeURIComponent(name) + '=' + encodeURIComponent(el.options[j].attributes.value.specified ? el.options[j].value : el.options[j].text) + '&';
                                     }
                                     else {
                                         data += encodeURIComponent(name) + '=' + encodeURIComponent(el.options[j].hasAttribute('value') ? el.options[j].value : el.options[j].text) + '&';
@@ -323,7 +323,7 @@ Sbi.sdk.apply(Sbi.sdk.ajax, {
             }
             catch(e)
             {
-                for (var i = 0; i < this.activeX.length; ++i) {
+                for (var i = 0; i < this.activeX.length; i += 1) {
                     try
                     {
 
@@ -348,7 +348,7 @@ Sbi.sdk.apply(Sbi.sdk.ajax, {
             {
                 o = this.createXhrObject(tId);
                 if (o) {
-                    this.transactionId++;
+                    this.transactionId += 1;
                 }
             }
             catch(e) {
@@ -497,7 +497,7 @@ Sbi.sdk.apply(Sbi.sdk.ajax, {
             {
                 var headerStr = o.conn.getAllResponseHeaders();
                 var header = headerStr.split('\n');
-                for (var i = 0; i < header.length; i++) {
+                for (var i = 0; i < header.length; i += 1) {
                     var delimitPos = header[i].indexOf(':');
                     if (delimitPos != -1) {
                         headerObj[header[i].substring(0, delimitPos)] = header[i].substring(delimitPos + 2);
@@ -672,7 +672,7 @@ Sbi.sdk.apply(Sbi.sdk.jsonp, {
         	uri += (uri.indexOf("?") != -1 ? "&" : "?") + "_dc=" + (new Date().getTime());
         }
         
-        var transId = ++this.trans_id;
+        var transId = this.trans_id += 1;
         
         var trans = {
             id : transId,
@@ -875,13 +875,25 @@ Sbi.sdk.apply(Sbi.sdk.api, {
 		
 		var params = Sbi.sdk.apply({}, config.parameters || {});
 		
-		if(config.documentId !== undefined) params.OBJECT_ID = config.documentId;
-		if(config.documentLabel !== undefined) params.OBJECT_LABEL = config.documentLabel;
+		if (config.documentId !== undefined) {
+            params.OBJECT_ID = config.documentId;
+        }
+		if (config.documentLabel !== undefined) {
+            params.OBJECT_LABEL = config.documentLabel;
+        }
 		
-		if (config.executionRole !== undefined) params.ROLE = config.executionRole;
-		if (config.displayToolbar !== undefined) params.TOOLBAR_VISIBLE = config.displayToolbar;
-		if (config.displaySliders !== undefined) params.SLIDERS_VISIBLE = config.displaySliders;
-		if (config.theme !== undefined)	params.theme = config.theme;
+		if (config.executionRole !== undefined) {
+            params.ROLE = config.executionRole;
+        }
+		if (config.displayToolbar !== undefined) {
+            params.TOOLBAR_VISIBLE = config.displayToolbar;
+        }
+		if (config.displaySliders !== undefined) {
+            params.SLIDERS_VISIBLE = config.displaySliders;
+        }
+		if (config.theme !== undefined) {
+            params.theme = config.theme;
+        }
 		
 			//if(config.useExtUI === true) {
 		// no more modality different from ext
@@ -909,9 +921,15 @@ Sbi.sdk.apply(Sbi.sdk.api, {
 		documentHtml += '<iframe';
 		documentHtml += ' id = "' + config.iframe.id + '" ';
 		documentHtml += ' src = "' + serviceUrl + '" ';
-		if(config.iframe.style !== undefined) documentHtml += ' style = "' + config.iframe.style + '" ';
-		if(config.iframe.width !== undefined) documentHtml += ' width = "' + config.iframe.width + '" ';
-		if(config.iframe.height !== undefined) documentHtml += ' height = "' + config.iframe.height + '" ';
+		if (config.iframe.style !== undefined) {
+            documentHtml += ' style = "' + config.iframe.style + '" ';
+        }
+		if (config.iframe.width !== undefined) {
+            documentHtml += ' width = "' + config.iframe.width + '" ';
+        }
+		if (config.iframe.height !== undefined) {
+            documentHtml += ' height = "' + config.iframe.height + '" ';
+        }
 		documentHtml += '></iframe>';
 		
 		return documentHtml;

@@ -27,7 +27,7 @@ angular.module('contractualClienteApp')
       meses = meses == undefined ? 0 : meses;
       dias = dias == undefined ? 0 : dias;
 
-      return ((parseInt(anos) * 360) + (parseInt(meses) * 30) + parseInt(dias));
+      return ((parseInt(anos, 10) * 360) + (parseInt(meses, 10) * 30) + parseInt(dias, 10));
     };
 
     self.calculo_total_dias_rev = function (DiasDuracion) {
@@ -45,7 +45,9 @@ angular.module('contractualClienteApp')
     self.getJefeDependencia = function (idDependencia, idOrDep) {
       var out = { JefeDependencia: {}, Persona: {} }
       return new Promise(function (resolve, reject) {
-        if (!idDependencia) reject(out);
+        if (!idDependencia) {
+          reject(out);
+        }
 
         coreRequest.get('jefe_dependencia', $.param({
           query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia) + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
@@ -81,7 +83,9 @@ angular.module('contractualClienteApp')
     self.getApropiacionesData = function (Ffapropiacion) {
       var apropiaciones_data = [];
       return new Promise(function (resolve, reject) {
-        if (Ffapropiacion.length === 0) resolve([]);
+        if (Ffapropiacion.length === 0) {
+          resolve([]);
+        }
         Ffapropiacion.map(function (ap, i, arr) {
           financieraRequest.get('apropiacion', $.param({
             query: 'Id:' + ap.Apropiacion
@@ -145,11 +149,15 @@ angular.module('contractualClienteApp')
                   query: 'Id:' + fuente.FuenteFinanciamiento
                 })).then(function (response) {
                   fuentes.push({ Monto: fuente.MontoParcial, FuenteFinanciamiento: response.data[0] })
-                  if (i === apropiacion.length - 1) resolve(fuentes);
+                  if (i === apropiacion.length - 1) {
+                    resolve(fuentes);
+                  }
                 })
               } else {
                 fuentes.push({ Monto: fuente.MontoParcial, FuenteFinanciamiento: { Id: fuente.FuenteFinanciamiento } });
-                if (i === apropiacion.length - 1) resolve(fuentes);
+                if (i === apropiacion.length - 1) {
+                  resolve(fuentes);
+                }
               }
             });
           }).then(function (fuentes) {
@@ -159,8 +167,10 @@ angular.module('contractualClienteApp')
               initFuentes: fuentes,
               Monto: monto
             });
-            if (counter === tmp.size - 1) resolve(f_apropiacion);
-            counter++;
+            if (counter === tmp.size - 1) {
+              resolve(f_apropiacion);
+            }
+            counter += 1;
           })
         });
       })
@@ -200,7 +210,9 @@ angular.module('contractualClienteApp')
                 trNecesidad.ActividadEconomicaNecesidad = response.data;
                 resolve("OK");
               });
-            } else resolve("Ok");
+            } else {
+              resolve("Ok");
+            }
           }).then(function (response) {
               
             return adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + IdNecesidad).then(function (response) {

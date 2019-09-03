@@ -40,7 +40,7 @@ angular.module('contractualClienteApp')
             } else if ($scope.dependencia && $scope.vigencia) {
               parametros = 'id_dependencia=' + $scope.dependencia + '&vigencia=' + $scope.vigencia + '&numero_elaboracion=' + $scope.necesidad;
             }
-            
+
             function execTest() {
               var url = sbi.api.getDocumentHtml({
                 documentLabel: $scope.reporte, 
@@ -56,7 +56,7 @@ angular.module('contractualClienteApp')
               });
               $('#frame').html('');
               $('#frame').append(url);
-            };
+            }
 
             sbi.api.authenticate({
               params: {

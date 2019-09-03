@@ -95,7 +95,7 @@ angular.module('contractualClienteApp')
             var tercera = [];
             var cantidadColumnas = columnas.length;
 
-            for (var i = 0, j = 0; i < cantidadColumnas; i++){
+            for (var i = 0, j = 0; i < cantidadColumnas; i += 1){
                 if (i < 6 || i > 9) {
                     datoFila.push({ text: fila[columnas[i]] != undefined ? fila[columnas[i]].toString() : '', rowSpan: 3 });
                 }
@@ -104,7 +104,7 @@ angular.module('contractualClienteApp')
                     segunda[i] = fila[segundaFila[j]] != undefined ? fila[segundaFila[j]].toString() : '';
                     tercera[i] = fila[terceraFila[j]] != undefined ? fila[terceraFila[j]].toString() : '';
                     tercera[i] = i == 6 ? 'Total ' + tercera[i] : tercera[i] ;
-                    j++;
+                    j += 1;
                 }
             }
             return [datoFila, segunda, tercera];
@@ -115,14 +115,14 @@ angular.module('contractualClienteApp')
             var segunda = [];
             var cantidadColumnas = columnas.length;
 
-            for (var i = 0, j = 0; i < cantidadColumnas; i++){
+            for (var i = 0, j = 0; i < cantidadColumnas; i += 1){
                 if (i < 6 || i > 8) {
                     datoFila.push({ text: fila[columnas[i]].toString(), rowSpan:2 });
                 }
                 if (i > 5 && i < 9) {
                     datoFila.push({ text: fila[columnas[i]].toString() });
                     segunda[i] = 'Pasa a '+fila[segundaFila[j]].toString();
-                    j++;
+                    j += 1;
                 }
             }
             return [datoFila, segunda];
@@ -196,8 +196,8 @@ angular.module('contractualClienteApp')
 
                         });
                     }
-                    index++;
-                    numero++;
+                    index += 1;
+                    numero += 1;
                 });
             }
             contenido.push({
@@ -402,7 +402,7 @@ angular.module('contractualClienteApp')
                 articulo.Paragrafos.forEach(function (paragrafo) {
                         aux.push({ text: " " + $translate.instant('PARAGRAFO') + " " + numeroParagrafo + 'º. ', style: 'texto_numeracion' });
                     aux.push(paragrafo.Texto);
-                    numeroParagrafo++;
+                    numeroParagrafo += 1;
                 });
             }
             }

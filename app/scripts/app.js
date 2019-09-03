@@ -51,8 +51,6 @@ angular
         'oikosAmazonService',
         'financieraMidService',
         'adminMidService',
-        'sicapitalService',
-        'titan_service',
         'amazonAdministrativaService',
         'academicaService',
         'contratoService',
@@ -74,9 +72,9 @@ angular
             request: function (config) {
 
                 if (window.localStorage.getItem('access_token') !== undefined && window.localStorage.getItem('access_token') !== null) {
-                    config.headers['Authorization'] = 'Bearer ' + window.localStorage.getItem('access_token');
+                    config.headers.Authorization = 'Bearer ' + window.localStorage.getItem('access_token');
                 }
-                config.headers['Accept'] = 'application/json';
+                config.headers.Accept = 'application/json';
 
                 return config;
             }
@@ -92,7 +90,7 @@ angular
         };
     })
     .config(function ($httpProvider) {
-        $httpProvider.interceptors.push('httpRequestInterceptor')
+        $httpProvider.interceptors.push('httpRequestInterceptor');
     })
     .config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
 
