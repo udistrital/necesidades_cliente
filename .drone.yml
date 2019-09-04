@@ -25,27 +25,27 @@ pipeline:
   publish_s3:
     image: plugins/s3
     secrets: [ aws_access_key_id, aws_secret_access_key ]
-    region: "us-east-1"    
+    region: "us-east-1"
     bucket: "cliente-pruebas"
     source: dist/**/*
-    target: /pruebas${DRONE_REPO_NAME%%_cliente}.portaloas.udistrital.edu.co
+    target: /pruebas${DRONE_REPO_NAME%%-cliente}.portaloas.udistrital.edu.co
     strip_prefix: dist/
     when:
       branch: test
-      event: [push, pull_request] 
-    
+      event: [push, pull_request]
+
   # upload app.zip to s3 bucket for CodePipline
   publish_s3:
     image: plugins/s3
     secrets: [ aws_access_key_id, aws_secret_access_key ]
-    region: "us-east-1"    
+    region: "us-east-1"
     bucket: "cliente-pruebas"
     source: dist/**/*
-    target: /${DRONE_REPO_NAME%%_cliente}.portaloas.udistrital.edu.co
+    target: /${DRONE_REPO_NAME%%-cliente}.portaloas.udistrital.edu.co
     strip_prefix: dist/
     when:
       branch: master
-      event: [push, pull_request] 
+      event: [push, pull_request]
 
   #Notify results to telegram
   notify_telegram:
