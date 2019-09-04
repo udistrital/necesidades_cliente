@@ -120,7 +120,7 @@ angular.module('contractualClienteApp')
 
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema
         self.cargarDatosNecesidades = function (offset, query) {
-            if (query === undefined) {query = []}
+            if (query === undefined) {query = [];}
             query = typeof (query) === "string" ? [query] : query;
             query.push("EstadoNecesidad.Nombre__not_in:Borrador");
 
@@ -210,7 +210,7 @@ angular.module('contractualClienteApp')
                 }
 
                 return administrativaRequest.put('necesidad', nec_rech.Necesidad.Id, nec_rech.Necesidad);
-            }).then(function (response) {
+            }).then(function () {
                 return administrativaRequest.post('necesidad_rechazada', nec_rech);
             }).then(function (response) {
                 if (response.data !== undefined) {
@@ -235,7 +235,7 @@ angular.module('contractualClienteApp')
         self.editar_necesidad = function () {
             var idNecesidad = self.g_necesidad.Id;
             $("#myModal").modal("hide");
-            $('#myModal').on('hidden.bs.modal', function (e) {
+            $('#myModal').on('hidden.bs.modal', function () {
                 $window.location.href = '#/necesidad/solicitud_necesidad/' + idNecesidad;
             });
         };

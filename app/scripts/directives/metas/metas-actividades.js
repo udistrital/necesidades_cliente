@@ -35,41 +35,48 @@ angular.module('contractualClienteApp')
           useExternalPagination: false,
           multiSelect: true,
           columnDefs: [{
-            field: 'Id',
-            displayName: 'Código',
+            field: 'actividad_id',
+            displayName: 'Id',
             width: '20%',
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
-              return row.entity.Id;
+              return row.entity.actividad_id;
             }
           },
           {
-            field: 'Descripcion',
+            field: 'actividad',
             displayName: 'Actividad',
             width: '80%',
             headerCellClass: $scope.highlightFilteredHeader + ' text-info',
             cellTooltip: function (row) {
-              return row.entity.Descripcion;
+              return row.entity.actividad;
             }
           }
           ]
         };
 
         self.cargarMetas = function () {
-          metasRequest.get('Metas').then(
+          metasRequest.get('2019').then(
             function (res) {
-              self.metas = res.data.Metas;
+              var tempmetas = res.data.metas.actividades; // falta un filter por rubro
+              self.metas=[];
+              tempmetas.forEach(function(meta){
+                (self.metas.filter(function(m){return m === meta;}).length === 0) ? self.metas.push(meta) : _ ;
+              })
+              console.info("Hello from the other side",res.data.metas.actividades);
             }
           );
         }
 
         $scope.$watch('apropiacion', function () {
+          console.info("Hello it's me", $scope.apropiacion);
           if ($scope.apropiacion !== undefined) {
             self.cargarMetas();
           }
         });
 
         $scope.$watch('d_metasActividades.meta',function () {
+          console.info("I've been wondering",self.meta);
           if(self.meta !== undefined){
             $scope.meta = self.meta;
             self.loadActividades();
@@ -87,11 +94,18 @@ angular.module('contractualClienteApp')
         };
 
         self.loadActividades = function () {
-          metasRequest.get('Actividades').then(function (response) {
-            self.gridOptions.data = response.data;
+          metasRequest.get('2019').then(function (response) {
+            self.gridOptions.data = response.data.metas;
+            console.info(self.gridOptions.data.actividades, ":v")
           }).then(function () {
             // Se inicializa el grid api para seleccionar
-            self.gridApi.grid.modifyRows(self.gridOptions.data);
+            var tmpAct = self.gridOptions.data.actividades;
+            console.info(tmpAct);
+            var act = tmpAct.filter(function(m){
+            console.info(m.meta_id, self.meta , "Carlos Gutierrez ");
+             return (m.meta_id === self.meta); 
+            })
+            self.gridApi.grid.modifyRows(act);
           });
         }
 

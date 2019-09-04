@@ -49,7 +49,7 @@
             | translate}}
           </label>
         </ng-form>
-<label >*En caso de que tenga duración, especificarla</label>
+        <label>*En caso de que tenga duración, especificarla</label>
         <div ng-show="solicitudNecesidad.ver_duracion_fecha">
           <div class="form-group">
             <label class="col-sm-1 control-label">{{"AÑOS" | translate}}</label>
@@ -93,7 +93,8 @@
             ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
             <md-content md-dynamic-height style="overflow: hidden;">
               <!-- Responsables -->
-              <ng-form id="f_responsables" name="responsables" class="form-group" ng-if="solicitudNecesidad.forms.Responsables">
+              <ng-form id="f_responsables" name="responsables" class="form-group"
+                ng-if="solicitudNecesidad.forms.Responsables">
                 <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(responsables)">{{"RESPONSABLES"
                         | translate}} <span class="fa fa-plus pull-right" ng-show="responsables.open"></span> <span
                     class="fa fa-minus pull-right" ng-show="!responsables.open"></span></legend>
@@ -282,6 +283,7 @@
                           </button>
                         </div>
                       </div>
+    
 
                       <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
                         <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
@@ -295,15 +297,16 @@
                         <div class="row">
                           <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
                           <label
-                                class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{solicitudNecesidad.meta_necesidad.MontoPorMeta | currency}}
+                            class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{solicitudNecesidad.meta_necesidad.MontoPorMeta | currency}}
 
-                          <metas-actividades apropiacion="ap.Apropiacion" actividades="solicitudNecesidad.meta_necesidad.Actividades" meta="solicitudNecesidad.meta_necesidad.Meta">
+                          <metas-actividades apropiacion="ap.Apropiacion" actividades="ap.Apropiacion.meta.actividades"
+                            meta="ap.Apropiacion.meta">
                           </metas-actividades>
                         </div>
                         <div class="row">
                           <div class="col-md-6">
                             <fuentes-apropiacion apropiacion="solicitudNecesidad.apSelectedOb"
-                              fuenteapropiacion="ap.fuentes" init-fuenteapropiacion="ap.initFuentes"
+                              fuenteapropiacion="ap.Apropiacion.fuentes" init-fuenteapropiacion="ap.initFuentes"
                               dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
                             </fuentes-apropiacion>
                           </div>
@@ -326,16 +329,19 @@
                             </li>
                           </ul>
                         </div>
+                        
                         <div class="row">
+                          <pre>{{ap.Apropiacion.productos}}</pre>
                           <div class="col-md-6">
-                            <productos-apropiacion rubro="ap.Apropiacion"
-                              productoapropiacion="ap.Apropiacion.productos"
+                            <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Apropiacion.productos"
                               initProductoapropiacion="ap.initProductos"></productos-apropiacion>
                           </div>
                           <ul class="list-group col-md-6">
                             <li class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
-                              <label class="text-warning">{{prod.Nombre}}</label>
-                              {{prod.Descripcion}}
+                              <label class="text-warning col-md-8">Valor Asignado a {{prod.Nombre}}</label>
+                              <input class="col-md-4"type="text" ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
+                                ng-model="prod.MontoParcial" ui-money-mask="0">
+                              <br>
                             </li>
                             </li>
                           </ul>
@@ -578,8 +584,8 @@
                             ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
 
                           <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
-                          <input class="form-control" ng-model="pro.Subtotal"
-                            placeholder="Total" ui-money-mask="0" readonly>
+                          <input class="form-control" ng-model="pro.Subtotal" placeholder="Total" ui-money-mask="0"
+                            readonly>
 
 
                           <label for="objeto" class="control-label">{{"REQUISITOS_MINIMOS" | translate}}</label>
@@ -641,13 +647,12 @@
               </fieldset>
       </form>
       <div style="text-align:center;">
-        <button type="button" class="btn btn-primary btn-outline"
-          ng-click="solicitudNecesidad.CambiarForm('legal');">
+        <button type="button" class="btn btn-primary btn-outline" ng-click="solicitudNecesidad.CambiarForm('legal');">
           {{"ATRAS" | translate}}</button>
 
-      </md-content>
+        </md-content>
 
-      </md-step>
-      </md-steppers>
+        </md-step>
+        </md-steppers>
 
 </html>
