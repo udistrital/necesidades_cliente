@@ -11,7 +11,7 @@
         <div >
             <ul>
                 <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas">
-                    <input type="radio"  name="name" value="{{meta.meta_id}}" ng-model="d_metasActividades.meta" required />{{ meta.meta }}
+                    <input type="radio"  name="name" value="{{meta.Id}}" ng-model="d_metasActividades.meta" required />{{ meta.Id }}, {{ meta.Nombre }}
                 </li>
             </ul>
             <label
@@ -28,10 +28,10 @@
 <div class="panel-footer">
         <div class="row" ng-repeat="actividad in d_metasActividades.actividades">
                 <div class="col-sm-6 col-form-label">
-                        <p>{{ actividad.Descripcion}}</p>
+                        <p>{{ actividad.actividad}}</p>
                     </div>
                     <div class="col-sm-6">
-                            <input class="form-control col-sm-10" type="number" name="valor" ng-init="actividad.MontoParcial = actividad.MontoParcial ? actividad.MontoParcial : 0" ng-model="actividad.MontoParcial">
+                            <input class="col-md-4"type="text" ng-init="actividad.MontoParcial = actividad.MontoParcial ? actividad.MontoParcial : 0" ng-model="actividad.MontoParcial" ui-money-mask="0">
                         </div>
 
         </div>

@@ -60,10 +60,9 @@ angular.module('contractualClienteApp')
             function (res) {
               var tempmetas = res.data.metas.actividades; // falta un filter por rubro
               self.metas=[];
-              tempmetas.forEach(function(meta){
-                (self.metas.filter(function(m){return m === meta;}).length === 0) ? self.metas.push(meta) : _ ;
+              tempmetas.forEach(function(act){
+                (self.metas.filter(function(m){ return (m.Id === act.meta_id);}).length === 0) ? self.metas.push({Id: act.meta_id , Nombre: act.meta}) : _ ;
               })
-              console.info("Hello from the other side",res.data.metas.actividades);
             }
           );
         }
@@ -78,7 +77,7 @@ angular.module('contractualClienteApp')
         $scope.$watch('d_metasActividades.meta',function () {
           console.info("I've been wondering",self.meta);
           if(self.meta !== undefined){
-            $scope.meta = self.meta;
+            $scope.meta = self.meta.Id;
             self.loadActividades();
           }
 
@@ -95,17 +94,15 @@ angular.module('contractualClienteApp')
 
         self.loadActividades = function () {
           metasRequest.get('2019').then(function (response) {
-            self.gridOptions.data = response.data.metas;
-            console.info(self.gridOptions.data.actividades, ":v")
+            self.gridOptions.data = response.data.metas.actividades;
+            console.info(self.gridOptions.data, " before :v")
           }).then(function () {
             // Se inicializa el grid api para seleccionar
-            var tmpAct = self.gridOptions.data.actividades;
-            console.info(tmpAct);
-            var act = tmpAct.filter(function(m){
-            console.info(m.meta_id, self.meta , "Carlos Gutierrez ");
+            self.gridOptions.data=self.gridOptions.data.filter(function(m){
              return (m.meta_id === self.meta); 
             })
-            self.gridApi.grid.modifyRows(act);
+            console.info(self.gridOptions.data,"after")
+            self.gridApi.grid.modifyRows(self.gridOptions.data);
           });
         }
 
