@@ -15,7 +15,8 @@
                 </li>
             </ul>
             <label
-            class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>
+            class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{solicitudNecesidad.f_valor | currency}}
+
         </div>
         <div style="height: 250px" ui-grid="d_metasActividades.gridOptions" ui-grid-selection ui-grid-auto-resize
             ui-grid-pagination></div>

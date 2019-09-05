@@ -11,14 +11,12 @@ angular.module('planCuentasService',[])
   .service('planCuentasRequest', function ($http, $q, token_service, CONF) {
     // Service logic
     // ...
-    // var path = "http://127.0.0.1:8082/v1/";
     var path = CONF.GENERAL.PLAN_CUENTAS_SERVICE;
     // Public API here
     var cancelSearch; //defer object
     return {
         get: function(tabla, params) {
             cancelSearch = $q.defer();
-            console.info(path + tabla + "/?" + params);
             return $http.get(path + tabla + "/?" + params, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
         },
         post: function(tabla, elemento) {

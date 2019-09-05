@@ -146,7 +146,6 @@ angular.module('contractualClienteApp')
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
                 console.info(self.f_apropiaciones);
                 self.f_apropiaciones.forEach(function (element) {
-                    console.info(element);
                     var cantidadFuentes = element.apropiacion.Fuentes.length;
 
                     for (var i = 0; i < cantidadFuentes; i += 1) {
@@ -195,7 +194,7 @@ angular.module('contractualClienteApp')
                     self.jefe_destino = JD.Persona;
                     self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
                 }).catch(function (err) {
-                    console.info(err);
+                    //console.info(err);
                 });
             }, true);
 
@@ -510,24 +509,35 @@ angular.module('contractualClienteApp')
             }
         };
 
+        /*     $scope.$watch('solicitudNecesidad.f_apropiaciones', function () {
+                self.f_valor = 0;
+                solicitudNecesidad.f_apropiaciones.forEach(function(element) {
+                    for (var i = 0; i < element.length; i += 1) {
+                        self.element[i].MontoPorApropiacion = 0;
+                        if (self.element[i].fuentes !== undefined) {
+                            for (var k = 0; k < self.element[i].fuentes.length; k += 1) {
+                                self.element[i].MontoPorApropiacion += self.element[i].fuentes[k].MontoParcial;
+                            }
+                        }
+                        self.f_valor += self.element[i].MontoPorApropiacion;
+                    }
+        
+                    console.info(self.element.Apropiacion);
+                });
+    
+            }, true); */
+
         $scope.$watch('solicitudNecesidad.f_apropiacion', function () {
             self.f_valor = 0;
-
-            for (var i = 0; i < self.f_apropiacion.length; i += 1) {
+            for (var i = 0; i < self.f_apropiacion.length; i++) {
                 self.f_apropiacion[i].MontoPorApropiacion = 0;
-                if (self.f_apropiacion[i].fuentes !== undefined) {
-                    for (var k = 0; k < self.f_apropiacion[i].fuentes.length; k += 1) {
-                        self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].fuentes[k].MontoParcial;
+                if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
+                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
+                        self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
                     }
                 }
                 self.f_valor += self.f_apropiacion[i].MontoPorApropiacion;
             }
-        }, true);
-
-        $scope.$watch('solicitudNecesidad.actividades', function () {
-            (self.meta_necesidad.Actividades) ? self.meta_necesidad.Actividades.forEach(function (act) {
-                self.meta_necesidad.MontoPorMeta += act.MontoParcial;
-            }) : self.meta_necesidad.MontoPorMeta = 0;
         }, true);
 
 

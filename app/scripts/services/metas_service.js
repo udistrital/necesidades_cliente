@@ -17,10 +17,8 @@ angular.module('metasService', [])
             get: function (tabla, params) {
                 cancelSearch = $q.defer();
                 if (params === undefined) {
-                    console.info(path + tabla );
                     return $http.get(path + tabla, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
                 } else {
-                    console.info(path + tabla + "/?" + params);
                     return $http.get(path + tabla + "/?" + params, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
                 }
             },

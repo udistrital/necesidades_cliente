@@ -68,14 +68,12 @@ angular.module('contractualClienteApp')
         }
 
         $scope.$watch('apropiacion', function () {
-          console.info("Hello it's me", $scope.apropiacion);
           if ($scope.apropiacion !== undefined) {
             self.cargarMetas();
           }
         });
 
         $scope.$watch('d_metasActividades.meta',function () {
-          console.info("I've been wondering",self.meta);
           if(self.meta !== undefined){
             $scope.meta = self.meta.Id;
             self.loadActividades();
@@ -95,13 +93,11 @@ angular.module('contractualClienteApp')
         self.loadActividades = function () {
           metasRequest.get('2019').then(function (response) {
             self.gridOptions.data = response.data.metas.actividades;
-            console.info(self.gridOptions.data, " before :v")
           }).then(function () {
             // Se inicializa el grid api para seleccionar
             self.gridOptions.data=self.gridOptions.data.filter(function(m){
              return (m.meta_id === self.meta); 
-            })
-            console.info(self.gridOptions.data,"after")
+            });
             self.gridApi.grid.modifyRows(self.gridOptions.data);
           });
         }

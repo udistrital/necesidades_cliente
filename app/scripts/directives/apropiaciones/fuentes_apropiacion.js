@@ -92,7 +92,6 @@ angular.module('contractualClienteApp')
           self.gridApi.grid.modifyRows(self.gridOptions.data);
           self.gridOptions.data.forEach(function (fuente) {
             var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo === fuente.Codigo });
-            console.info("tmp",tmp);
             if (tmp.length > 0) {}
           if (tmp.length > 0) {
             tmp[0].ValorOriginal = fuente.ValorOriginal;
