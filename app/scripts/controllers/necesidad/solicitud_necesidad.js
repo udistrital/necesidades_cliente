@@ -29,9 +29,6 @@ angular.module('contractualClienteApp')
         self.apSelected = false;
         self.apSelectedOb = undefined;
 
-        self.dep_ned = {
-            JefeDependenciaSolicitante: 6
-        };
 
         self.fecha_actual = new Date();
         self.vigencia = self.fecha_actual.getFullYear();
@@ -189,6 +186,16 @@ angular.module('contractualClienteApp')
                 });
             }, true);
 
+            $scope.$watch('solicitudNecesidad.dep_ned', function () {
+                necesidadService.getJefeDependencia(self.dep_ned).then(function (JD) {
+                    self.jefe_solicitante = JD.Persona;
+                    self.dep_sol.JefeDependenciaSolicitante = JD.JefeDependencia.Id;
+                }).catch(function (err) {
+                    //console.info(err);
+                });
+            }, true);
+
+
             $scope.$watch('solicitudNecesidad.dependencia_destino', function () {
                 necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
                     self.jefe_destino = JD.Persona;
@@ -289,9 +296,9 @@ angular.module('contractualClienteApp')
             }
         };
 
-        coreRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, $.param({ query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') })).then(function (response) {
-            self.dependencia_solicitante_data = response.data;
-        });
+        // coreRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, $.param({ query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') })).then(function (response) {
+        //     self.dependencia_solicitante_data = response.data;
+        // });
 
         $scope.$watch('solicitudNecesidad.especificaciones.Valor', function () {
             self.valor_iva = (self.especificaciones.Iva / 100) * self.especificaciones.Valor * self.especificaciones.Cantidad;
@@ -345,19 +352,19 @@ angular.module('contractualClienteApp')
             self.ordenador_gasto_data = response.data;
         });
 
-        oikosRequest.get('dependencia', $.param({
-            query: 'Id:122',
-            limit: -1
-        })).then(function (response) {
-            self.dependencia_solicitante = response.data[0];
-        });
+        // oikosRequest.get('dependencia', $.param({
+        //     query: 'Id:122',
+        //     limit: -1
+        // })).then(function (response) {
+        //     self.dependencia_solicitante = response.data[0];
+        // });
 
-        agoraRequest.get('informacion_persona_natural', $.param({
-            query: 'Id:52204982',
-            limit: -1
-        })).then(function (response) {
-            self.persona_solicitante = response.data[0];
-        });
+        // agoraRequest.get('informacion_persona_natural', $.param({
+        //     query: 'Id:52204982',
+        //     limit: -1
+        // })).then(function (response) {
+        //     self.persona_solicitante = response.data[0];
+        // });
 
 
         //TODO: cambio de identificacion en financiera a oikos (7,12, etc)
@@ -546,6 +553,13 @@ angular.module('contractualClienteApp')
             self.subtotalEspecificaciones = 0;
             self.valorIVA = 0;
 
+            self.productos.forEach(function (pro) {
+                pro.Subtotal = (pro.Valor * pro.Cantidad) || 0;
+                pro.ValorIVA = (pro.Valor * (pro.Iva/100)) || 0;
+                pro.preciomasIVA = (pro.Valor * (pro.Iva/100))+pro.Valor || 0;
+            });
+
+
             self.productos.forEach(function (producto) {
                 self.subtotalEspecificaciones += (producto.Valor * producto.Cantidad);
             });
@@ -557,7 +571,7 @@ angular.module('contractualClienteApp')
         }, true);
 
         $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad.Id', function () {
-            if (self.necesidad && self.necesidad.TipoContratoNecesidad.Id === 1 /* tipo compra */) {
+            if (self.necesidad && (self.necesidad.TipoContratoNecesidad.Id === 1 || self.necesidad.TipoContratoNecesidad.Id === 4) /* tipo compra o compra y servicio */) {
                 self.MostrarTotalEspc = true;
             } else {
                 self.MostrarTotalEspc = false;

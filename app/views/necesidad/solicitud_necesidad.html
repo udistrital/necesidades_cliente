@@ -100,8 +100,8 @@
                     class="fa fa-minus pull-right" ng-show="!responsables.open"></span></legend>
 
                 <div class="panel-body" ng-hide="responsables.open">
-
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
+                  <!-- DEP SOLICITANTE ANTERIOR -->
+                  <!-- <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
                     <label class="control-label">{{'DEPENDENCIA_SOLICITANTE' | translate}}</label>
                     <span class="form-control">{{solicitudNecesidad.dependencia_solicitante.Nombre}}</span>
                   </div>
@@ -113,7 +113,28 @@
                       {{solicitudNecesidad.persona_solicitante.SegundoNombre}}
                       {{solicitudNecesidad.persona_solicitante.PrimerApellido}}
                       {{solicitudNecesidad.persona_solicitante.SegundoApellido}}</span>
-                  </div>
+                  </div> -->
+                  <!-- DEP SOLICITANTE NEW -->
+                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
+                      <label for="dep_solicitante" class="control-label">{{"DEPENDENCIA_SOLICITANTE" | translate}}</label>
+                      <small>*{{"OBLIGATORIO" | translate}}</small>
+                      <select class="form-control" ng-model="solicitudNecesidad.dep_ned"
+                        ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
+                        <option value="" disabled selected>{{"SELECCIONAR" | translate}}
+                          {{"DEPENDENCIA_SOLICITANTE" | translate}}</option>
+                      </select>
+                    </div>
+  
+                    <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.JefeDependenciaDestino">
+                      <label for="jefe_solicitante"
+                        class="control-label">{{"JEFE_DEPENDENCIA_SOLICITANTE" | translate}}</label>
+                        <span class="form-control">{{solicitudNecesidad.jefe_solicitante.PrimerNombre}}
+                            {{solicitudNecesidad.jefe_solicitante.SegundoNombre}}
+                            {{solicitudNecesidad.jefe_solicitante.PrimerApellido}}
+                            {{solicitudNecesidad.jefe_solicitante.SegundoApellido}}</span>
+                    </div>
+  
+                    <!-- DEPENDENCIA DESTINO -->
 
                   <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaDestino">
                     <label for="dep_destino" class="control-label">{{"DEPENDENCIA_DESTINO" | translate}}</label>
@@ -305,8 +326,7 @@
                         </div>
                         <div class="row">
                           <div class="col-md-6">
-                            <fuentes-apropiacion apropiacion="ap"
-                              fuenteapropiacion="ap.Apropiacion.fuentes" 
+                            <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Apropiacion.fuentes"
                               dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
                             </fuentes-apropiacion>
                           </div>
@@ -314,7 +334,8 @@
                           <ul class="list-group col-md-6">
                             <li class="list-group-item">
 
-                              <label class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
+                              <label
+                                class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
                             <li class="list-group-item" ng-repeat="fu in ap.Apropiacion.fuentes">
                               <label class="text-warning">{{"FUENTE" | translate}} {{fu.Descripcion}}</label>
                               <br>
@@ -535,6 +556,28 @@
                     </div>
                     <h4>{{"ELEMENTOS" | translate}}</h4>
 
+                    <div class="container-flex">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"SUBTOTAL" | translate}} </label>
+                            {{solicitudNecesidad.subtotalEspecificaciones  | currency}}
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"IVA" | translate}} </label>
+                            {{solicitudNecesidad.valorIVA | currency}}
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label>{{"VALOR_TOTAL" | translate}}
+                            </label>
+                            {{solicitudNecesidad.valorTotalEspecificaciones | currency}}
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
                     <div class="col-md-4" ng-repeat="pro in solicitudNecesidad.productos">
                       <div class="panel panel-default">
                         <div class="panel-heading">
@@ -555,9 +598,19 @@
                               {{"UNIDAD_MEDIDA" | translate}}</option>
                           </select>
 
+                          <label class=" control-label"
+                            ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">{{"CANTIDAD" | translate}}</label>
+                          <input class="form-control" ng-model="pro.Cantidad" placeholder="Cantidad de Elementos"
+                            ui-number-mask="0"
+                            ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+
                           <label class=" control-label">{{"VALOR_UNITARIO" | translate}}</label>
                           <input class="form-control" ng-init="pro.Valor = 0" ng-model="pro.Valor;"
                             placeholder="Valor Unitario" ui-money-mask="0">
+
+                          <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
+                          <input class="form-control" ng-model="pro.Subtotal" placeholder="Total" ui-money-mask="0"
+                            readonly>
 
                           <label class=" control-label">{{"IVA" | translate}} %</label>
                           <select class="form-control" ng-model="pro.Iva"
@@ -567,23 +620,12 @@
                           </select>
 
                           <label class=" control-label">{{"VALOR_IVA" | translate}}</label>
-                          <input class="form-control" ng-model="(pro.Valor * (pro.Iva/100))" placeholder="valor_con_iva"
+                          <input class="form-control" ng-model="pro.ValorIVA" placeholder="valor_con_iva"
                             ui-money-mask="0" readonly>
 
                           <label class=" control-label">{{"PRECIO_MAS_IVA" | translate}}</label>
-                          <input class="form-control" ng-model="(pro.Valor * (pro.Iva/100)) + pro.Valor"
+                          <input class="form-control" ng-model="pro.preciomasIVA"
                             placeholder="valor_con_iva" ui-money-mask="0" readonly>
-
-                          <label class=" control-label"
-                            ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">{{"CANTIDAD" | translate}}</label>
-                          <input class="form-control" ng-model="pro.Cantidad" placeholder="Cantidad de Elementos"
-                            ui-number-mask="0"
-                            ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
-
-                          <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
-                          <input class="form-control" ng-model="pro.Subtotal" placeholder="Total" ui-money-mask="0"
-                            readonly>
-
 
                           <label for="objeto" class="control-label">{{"REQUISITOS_MINIMOS" | translate}}</label>
 
@@ -617,20 +659,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group">
 
-                      <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"SUBTOTAL" | translate}} </label>
-                        {{solicitudNecesidad.subtotalEspecificaciones | currency}}
-                      </div>
-                      <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"IVA" | translate}} </label>
-                        {{solicitudNecesidad.valorIVA | currency}}
-                      </div>
-
-                      <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label>{{"VALOR_TOTAL" | translate}} </label>
-
-                        {{solicitudNecesidad.valorTotalEspecificaciones | currency}}
-                      </div>
-                    </div>
 
                   </div>
                 </div>
