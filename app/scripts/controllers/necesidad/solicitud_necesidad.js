@@ -135,7 +135,12 @@ angular.module('contractualClienteApp')
             self.necesidad = trNecesidad.Necesidad;
             self.detalle_servicio_necesidad = trNecesidad.DetalleServicioNecesidad;
             self.ActividadEspecifica = trNecesidad.ActividadEspecifica;
-            if (self.necesidad.TipoContratoNecesidad.Id === 2) { self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) { return parseInt(d.ActividadEconomica, 10); }); }
+
+            if (self.necesidad.TipoContratoNecesidad.Id === 2) {
+                self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
+                    return parseInt(d.ActividadEconomica, 10);
+                });
+            }
 
             if (trNecesidad.Ffapropiacion) {
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
@@ -366,9 +371,9 @@ angular.module('contractualClienteApp')
             console.info(response.data);
             //self.unidad_ejecutora_data = response.data.filter(function(d) {return (d.Id === 7 || d.Id === 12)}); //TODO: usar query:Id__in:(7,12) con la sistaxis correcta si beego tiene soporte
             self.unidad_ejecutora_data = response.data;
-        }).catch(function(e){
-            self.unidad_ejecutora_data=[{Id:1,Nombre:'Rector'},{Id:2, Nombre:'Convenios'}]; //PRovisional esta asquerosidad :) 
-            
+        }).catch(function (e) {
+            self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }]; //PRovisional esta asquerosidad :) 
+
         });
 
 
@@ -382,8 +387,7 @@ angular.module('contractualClienteApp')
             //TODO: implementar la demas funcionalidad
             // var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
             var tmpSet = [1, 6];
-            self.tipo_necesidad_data = self.tipo_necesidad_data;
-            //self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
+            self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
         });
 
         agoraRequest.get('unidad', $.param({

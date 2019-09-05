@@ -283,7 +283,7 @@
                           </button>
                         </div>
                       </div>
-    
+
 
                       <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
                         <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
@@ -305,8 +305,8 @@
                         </div>
                         <div class="row">
                           <div class="col-md-6">
-                            <fuentes-apropiacion apropiacion="solicitudNecesidad.apSelectedOb"
-                              fuenteapropiacion="ap.Apropiacion.fuentes" init-fuenteapropiacion="ap.initFuentes"
+                            <fuentes-apropiacion apropiacion="ap"
+                              fuenteapropiacion="ap.Apropiacion.fuentes" 
                               dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
                             </fuentes-apropiacion>
                           </div>
@@ -314,12 +314,9 @@
                           <ul class="list-group col-md-6">
                             <li class="list-group-item">
 
-                              <label
-                                class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
-
-                            <li class="list-group-item" ng-repeat="fu in ap.fuentes">
-                              <label class="text-warning">{{"FUENTE" | translate}}</label>
-                              {{fu.FuenteFinanciamiento.Descripcion}}
+                              <label class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
+                            <li class="list-group-item" ng-repeat="fu in ap.Apropiacion.fuentes">
+                              <label class="text-warning">{{"FUENTE" | translate}} {{fu.Descripcion}}</label>
                               <br>
                               <label class="text-warning">{{"VALOR_SOLICITADO" | translate}}</label>
                               <input type="text" ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
@@ -329,9 +326,8 @@
                             </li>
                           </ul>
                         </div>
-                        
+
                         <div class="row">
-                          <pre>{{ap.Apropiacion.productos}}</pre>
                           <div class="col-md-6">
                             <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Apropiacion.productos"
                               initProductoapropiacion="ap.initProductos"></productos-apropiacion>
@@ -339,13 +335,15 @@
                           <ul class="list-group col-md-6">
                             <li class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
                               <label class="text-warning col-md-8">Valor Asignado a {{prod.Nombre}}</label>
-                              <input class="col-md-4"type="text" ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
+                              <input class="col-md-4" type="text"
+                                ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
                                 ng-model="prod.MontoParcial" ui-money-mask="0">
                               <br>
                             </li>
                             </li>
                           </ul>
                         </div>
+                        <pre> ap object {{ap.Apropiacion | json}}</pre>
                       </div>
 
                       <div class="form-group">
