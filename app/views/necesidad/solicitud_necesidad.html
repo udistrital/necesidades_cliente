@@ -88,6 +88,11 @@
           </div>
         </ng-form>
 
+
+        <h1>Aqui debería haber algo >:v</h1>
+        <pre>{{ solicitudNecesidad.necesidad | json}}</pre>
+        <pre>{{ solicitudNecesidad.f_apropiacion | json}}</pre>
+
         <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
           <md-step label="Responsables" md-complete="solicitudNecesidad.SeccionesFormulario.general.completo"
             ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
@@ -118,7 +123,7 @@
                   <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
                       <label for="dep_solicitante" class="control-label">{{"DEPENDENCIA_SOLICITANTE" | translate}}</label>
                       <small>*{{"OBLIGATORIO" | translate}}</small>
-                      <select class="form-control" ng-model="solicitudNecesidad.dep_ned"
+                      <select class="form-control" ng-model="solicitudNecesidad.dependencia_solicitante"
                         ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
                         <option value="" disabled selected>{{"SELECCIONAR" | translate}}
                           {{"DEPENDENCIA_SOLICITANTE" | translate}}</option>
@@ -678,7 +683,11 @@
 
         </md-content>
 
+
         </md-step>
+        
         </md-steppers>
+
+
 
 </html>
