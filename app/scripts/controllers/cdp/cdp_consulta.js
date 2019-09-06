@@ -158,7 +158,7 @@ angular.module('contractualClienteApp')
 
         self.actualizarLista = function(offset, query) {
 
-            financieraMidRequest.cancelSearch;
+            financieraMidRequest.cancel();
             self.gridOptions.data = [];
             self.cargando = true;
             self.hayData = true;

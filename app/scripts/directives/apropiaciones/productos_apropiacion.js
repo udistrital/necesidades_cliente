@@ -60,7 +60,6 @@ angular.module('contractualClienteApp')
           })
         })).then(function (t) {
           self.gridOptions.data = productosData;
-          console.info(self.gridOptions.data)
           var gridOptData = self.gridOptions.data;
           gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData[0]) : _;
           

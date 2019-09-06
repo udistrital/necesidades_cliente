@@ -35,30 +35,34 @@ angular.module('contractualClienteApp')
           useExternalPagination: false,
           multiSelect: true,
           columnDefs: [{
-            field: 'Id',
-            displayName: 'Código',
+            field: 'actividad_id',
+            displayName: 'Id',
             width: '20%',
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
-              return row.entity.Id;
+              return row.entity.actividad_id;
             }
           },
           {
-            field: 'Descripcion',
+            field: 'actividad',
             displayName: 'Actividad',
             width: '80%',
             headerCellClass: $scope.highlightFilteredHeader + ' text-info',
             cellTooltip: function (row) {
-              return row.entity.Descripcion;
+              return row.entity.actividad;
             }
           }
           ]
         };
 
         self.cargarMetas = function () {
-          metasRequest.get('Metas').then(
+          metasRequest.get('2019').then(
             function (res) {
-              self.metas = res.data.Metas;
+              var tempmetas = res.data.metas.actividades; // falta un filter por rubro
+              self.metas=[];
+              tempmetas.forEach(function(act){
+                (self.metas.filter(function(m){ return (m.Id === act.meta_id);}).length === 0) ? self.metas.push({Id: act.meta_id , Nombre: act.meta}) : _ ;
+              })
             }
           );
         }
@@ -71,7 +75,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){
-            $scope.meta = self.meta;
+            $scope.meta = self.meta.Id;
             self.loadActividades();
           }
 
@@ -87,10 +91,13 @@ angular.module('contractualClienteApp')
         };
 
         self.loadActividades = function () {
-          metasRequest.get('Actividades').then(function (response) {
-            self.gridOptions.data = response.data;
+          metasRequest.get('2019').then(function (response) {
+            self.gridOptions.data = response.data.metas.actividades;
           }).then(function () {
             // Se inicializa el grid api para seleccionar
+            self.gridOptions.data=self.gridOptions.data.filter(function(m){
+             return (m.meta_id === self.meta); 
+            });
             self.gridApi.grid.modifyRows(self.gridOptions.data);
           });
         }
@@ -99,12 +106,12 @@ angular.module('contractualClienteApp')
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
-          $scope.actividades.forEach(function (act) {
+          $scope.actividades ? $scope.actividades.forEach(function (act) {
             var tmp = self.gridOptions.data.filter(function (e) { return e.Id == act.Id })
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
-          });
+          }) : _;
           self.actividades = $scope.actividades;
         });
 

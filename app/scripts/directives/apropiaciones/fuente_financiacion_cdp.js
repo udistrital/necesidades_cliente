@@ -20,12 +20,10 @@ angular.module('contractualClienteApp')
         var self = this;
         self.resumen_afectacion_presupuestal = [];
         $scope.resumen = [];
-        console.log("entro");
         $scope.$watch('apropiacion', function(){
           self.resumen_afectacion_presupuestal = [];
           $scope.resumen = [];
-          console.log("entro");
-          if ($scope.cdp != undefined && $scope.apropiacion != undefined){
+          if ($scope.cdp !== undefined && $scope.apropiacion !== undefined){
 
             angular.forEach($scope.apropiacion, function(apropiacion_data) {
               financieraRequest.get('disponibilidad_apropiacion',$.param({
@@ -35,7 +33,7 @@ angular.module('contractualClienteApp')
                 self.rubros_afectados = response.data;
                 angular.forEach(self.rubros_afectados, function(rubros_data) {
                   $scope.resumen.push(rubros_data);
-                  console.log($scope.resumen);
+
                   financieraRequest.get('apropiacion',$.param({
                     query: "Id:"+rubros_data.Apropiacion.Id,
                     limit: 1
@@ -65,8 +63,8 @@ angular.module('contractualClienteApp')
                     rubros_data.Saldo  = response.data.saldo;
                     rubros_data.Comprometido = response.data.TotalComprometidoRp;
                     rubros_data.AnuladoRp = response.data.TotalAnuladoRp;
-                    rubros_data.Anulado = response.data.TotalAnuladoCdp
-                    rubros_data.Valor = response.data.Valor
+                    rubros_data.Anulado = response.data.TotalAnuladoCdp;
+                    rubros_data.Valor = response.data.Valor;
                   });
                 });
 

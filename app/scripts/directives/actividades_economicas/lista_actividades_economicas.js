@@ -66,7 +66,7 @@ angular.module('contractualClienteApp')
           order: "asc",
         })).then(function (response) {
           self.gridOptions.data = response.data;
-        }).then(function (t) {
+        }).then(function () {
           // Se inicializa el grid api para seleccionar
           self.gridApi.grid.modifyRows(self.gridOptions.data);
 
@@ -74,7 +74,7 @@ angular.module('contractualClienteApp')
           $scope.$watch('idActividades', function () {
             self.actividades = [];
             $scope.idActividades.forEach(function (id) {
-              var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo == id })
+              var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo === id; });
               if (tmp.length > 0) {
                 $scope.actividades.push(tmp[0]); //enriquecer actividades
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas

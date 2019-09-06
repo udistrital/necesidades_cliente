@@ -13,7 +13,6 @@ angular.module('contractualClienteApp')
       scope: {
         apropiacion: '=',
         fuenteapropiacion: '=',
-        initFuenteapropiacion: '=?',
         dependenciasolicitante: '='
       },
       templateUrl: 'views/directives/apropiaciones/fuentes_apropiacion.html',
@@ -38,7 +37,21 @@ angular.module('contractualClienteApp')
             cellTooltip: function (row) {
               return row.entity.Nombre;
             }
-          }
+          },
+          {
+            field: 'ValorOriginal',
+            displayName: $translate.instant('VALOR'),
+            cellFilter: 'currency',
+            headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
+            cellClass: function (row, col) {
+                    return "unbold";
+            },
+            cellTooltip: function (row) {
+              return row.entity.Nombre;
+            },
+
+            width: '20%'
+        }
           ]
         };
 
@@ -73,20 +86,19 @@ angular.module('contractualClienteApp')
                 }); */
 
         planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Codigo).then(function (response) {
-          self.gridOptions.data = response.data.Body;
+          self.gridOptions.data = response.data.Body || [];
         }).then(function (t) {
           // Se inicializa el grid api para seleccionar
           self.gridApi.grid.modifyRows(self.gridOptions.data);
-          console.info(self.gridOptions.data);
-          $scope.initFuenteapropiacion.forEach(function (fuente) {
-            var tmp = self.gridOptions.data.filter(function (e) { return e.FuenteFinanciamiento.Codigo == fuente.Codigo });
-            console.info(tmp);
-            //if (tmp.length > 0) {}
-          // if (tmp.length > 0) {
-          //   tmp[0].ValorOriginal = fuente.MontoParcial;
-          //   $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
-          //   self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-          // }
+          self.gridOptions.data.forEach(function (fuente) {
+            var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo === fuente.Codigo });
+            if (tmp.length > 0) {}
+          if (tmp.length > 0) {
+            tmp[0].ValorOriginal = fuente.ValorOriginal;
+            !$scope.fuenteapropiacion ? $scope.fuenteapropiacion=[] : _;
+            $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
+            self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+          }
 
         });
       });
