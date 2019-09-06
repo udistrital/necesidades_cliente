@@ -101,13 +101,13 @@ var conf_test = {
     TOKEN: {
         AUTORIZATION_URL: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize",
         URL_USER_INFO: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/userinfo",
-        CLIENTE_ID: "ZNMCnOala3D9egDWsRArpWj3ma8a",
-        REDIRECT_URL: "pruebasnecesidades.portaloas.udistrital.edu.co",
+        CLIENTE_ID: "AYlkE7sU8jftbmV9NY4TJRfA0nsa",
+        REDIRECT_URL: "https://pruebasnecesidades.portaloas.udistrital.edu.co",
         RESPONSE_TYPE: "id_token token",
         SCOPE: "openid email documento",
         BUTTON_CLASS: "btn btn-warning btn-sm",
         SIGN_OUT_URL: "https://autenticacion.portaloas.udistrital.edu.co/oidc/logout",
-        SIGN_OUT_REDIRECT_URL: "pruebasnecesidades.portaloas.udistrital.edu.co",
+        SIGN_OUT_REDIRECT_URL: "https://pruebasnecesidades.portaloas.udistrital.edu.co",
         SIGN_OUT_APPEND_TOKEN: "true",
     },
 };
