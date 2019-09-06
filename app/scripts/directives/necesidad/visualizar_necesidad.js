@@ -16,7 +16,7 @@ angular.module('contractualClienteApp')
                 estado: '=',
             },
             templateUrl: 'views/directives/necesidad/visualizar_necesidad.html',
-            controller: function (financieraRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, $scope) {
+            controller: function (financieraRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, planCuentasRequest, $scope) {
                 var self = this;
                 self.verJustificacion = false;
                 self.justificaciones_rechazo = [];
@@ -55,6 +55,19 @@ angular.module('contractualClienteApp')
                         adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
                             self.ff_necesidad = response.data;
                             console.info(self.v_necesidad.Id,self.ff_necesidad);
+                        });
+
+                        planCuentasRequest.get('necesidades',$.param({
+                            query: "idAdministrativa:" + self.v_necesidad.Id,
+                        })).then(function (responseMongo) {
+                            self.metaId = responseMongo.data.apropiaciones.metas.codigo;
+                            self.actividadesMongo = responseMongo.data.apropiaciones.metas.actividades;
+                        });
+
+                        metasRequest.get('2019').then(function(responsePA){
+                            self.actividadesInfo = self.actividadesMongo.forEach(function(actividad){
+                                // Mapeo en un objeto con la información de Actividades.
+                            });
                         });
 
                         administrativaRequest.get('solicitud_disponibilidad', $.param({
