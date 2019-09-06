@@ -141,14 +141,13 @@ angular.module('contractualClienteApp')
 
             if (trNecesidad.Ffapropiacion) {
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
-                console.info(self.f_apropiaciones);
                 self.f_apropiaciones.forEach(function (element) {
                     var cantidadFuentes = element.apropiacion.Fuentes.length;
 
                     for (var i = 0; i < cantidadFuentes; i += 1) {
                         element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
                     }
-                    console.info(element.Apropiacion);
+
                     self.f_apropiacion.push({
                         Codigo: element.Codigo,
                         apropiacion: element.Apropiacion,
@@ -190,9 +189,7 @@ angular.module('contractualClienteApp')
                 necesidadService.getJefeDependencia(self.dependencia_solicitante).then(function (JD) {
                     self.jefe_solicitante = JD.Persona;
                     self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id;
-                    console.info(self.dependencia_solicitante);
                 }).catch(function (err) {
-                    //console.info(err);
                 });
             }, true);
 
@@ -202,7 +199,6 @@ angular.module('contractualClienteApp')
                     self.jefe_destino = JD.Persona;
                     self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
                 }).catch(function (err) {
-                    //console.info(err);
                 });
             }, true);
 
@@ -375,7 +371,7 @@ angular.module('contractualClienteApp')
             sortby: "Nombre",
             order: "asc",
         })).then(function (response) {
-            console.info(response.data);
+
             //self.unidad_ejecutora_data = response.data.filter(function(d) {return (d.Id === 7 || d.Id === 12)}); //TODO: usar query:Id__in:(7,12) con la sistaxis correcta si beego tiene soporte
             self.unidad_ejecutora_data = response.data;
         }).catch(function (e) {
@@ -517,24 +513,6 @@ angular.module('contractualClienteApp')
             }
         };
 
-        /*     $scope.$watch('solicitudNecesidad.f_apropiaciones', function () {
-                self.f_valor = 0;
-                solicitudNecesidad.f_apropiaciones.forEach(function(element) {
-                    for (var i = 0; i < element.length; i += 1) {
-                        self.element[i].MontoPorApropiacion = 0;
-                        if (self.element[i].fuentes !== undefined) {
-                            for (var k = 0; k < self.element[i].fuentes.length; k += 1) {
-                                self.element[i].MontoPorApropiacion += self.element[i].fuentes[k].MontoParcial;
-                            }
-                        }
-                        self.f_valor += self.element[i].MontoPorApropiacion;
-                    }
-        
-                    console.info(self.element.Apropiacion);
-                });
-    
-            }, true); */
-
         $scope.$watch('solicitudNecesidad.f_apropiacion', function () {
             self.f_valor = 0;
             for (var i = 0; i < self.f_apropiacion.length; i++) {
@@ -650,7 +628,6 @@ angular.module('contractualClienteApp')
                 ProductosNecesidad: self.productos_apropiaciones
             };
 
-            console.info(self.tr_necesidad);
             self.necesidad_plancuentas = {
                 apropiaciones: self.f_apropiacion.map(function (ap) {
                     return {
@@ -684,14 +661,12 @@ angular.module('contractualClienteApp')
                 })
             }
 
-            console.info("NPC",self.necesidad_plancuentas);
 
 
 
 
 var NecesidadHandle = function (response) {
     self.alerta_necesidad = response.data;
-    console.info(self.alerta_necesidad);
     if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && typeof (self.alerta_necesidad) === "string") {
         swal({
             title: '',

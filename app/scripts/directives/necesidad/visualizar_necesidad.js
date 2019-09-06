@@ -54,7 +54,6 @@ angular.module('contractualClienteApp')
                         });
                         adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
                             self.ff_necesidad = response.data;
-                            console.info(self.v_necesidad.Id,self.ff_necesidad);
                         });
 
                         planCuentasRequest.get('necesidades',$.param({
