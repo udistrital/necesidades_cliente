@@ -832,7 +832,7 @@ self.ValidarSeccion = function (form) {
 
 self.AlertSeccion = function (seccion) {
     swal({
-        title: 'Seccion ' + seccion + ' incompleta',
+        title: 'Sección ' + seccion + ' incompleta',
         type: 'error',
         text: 'Por favor, complete la sección: ' + seccion,
         showCloseButton: true,
