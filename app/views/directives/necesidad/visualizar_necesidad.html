@@ -88,18 +88,39 @@
             </li>
           </ul>
           <ul>
-            <br><strong>{{"META" | translate}}</strong> {{ d_visualizarNecesidad.meta | uppercase}}
-            <table class="table text-justify" style=" width:100%">
-              <tr>
-                <th>Actividad</th>
-                <th>Valor</th>
-              </tr>
-              <tr ng-repeat='p in d_visualizarNecesidad.metasObj'>
-                <td>{{p.Nombre}} </td>
-                <td>{{p.Valor | currency}}</td>
-              </tr>
-            </table>
+            <p> Apropiación / Proyecto</strong> {{d_visualizarNecesidad.codAp}} {{d_visualizarNecesidad.nombreAp}} </p>
+            <strong>
+
+              <p><strong>Fuentes de Financiamiento</strong>
+                <ul>
+                  <li ng-repeat='f in d_visualizarNecesidad.ff_apropiacion'>
+                    {{f.codigo}} <strong>{{"Monto" | translate}}:</strong> {{f.valor | currency}}
+                  </li>
+                </ul>
+              </p>
+
+              <p> <strong>Productos</strong>
+                <ul>
+                  <li ng-repeat='p in d_visualizarNecesidad.prod_apropiacion'>
+                    {{p._id}} <strong>{{"Monto" | translate}}:</strong> {{p.valor | currency}}
+                  </li>
+                </ul>
+              </p>
+
+              <p> <br><strong>{{"META" | translate}}</strong> {{ d_visualizarNecesidad.meta | uppercase}}
+                <table class="table text-justify" style=" width:100%">
+                  <tr>
+                    <th>Actividad</th>
+                    <th>Valor</th>
+                  </tr>
+                  <tr ng-repeat='p in d_visualizarNecesidad.metasObj'>
+                    <td>{{p.Nombre}} </td>
+                    <td>{{p.Valor | currency}}</td>
+                  </tr>
+                </table>
           </ul>
+        </p>
+
         </p>
 
         <h3 class="text-info">{{"JUSTIFICACION_CONTRATO" | translate}}</h3>

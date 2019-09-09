@@ -90,15 +90,15 @@ angular.module('contractualClienteApp')
                 completado: true,
             },
             financiacion: {
-                activo: false,
+                activo: true,
                 completado: true,
             },
             legal: {
-                activo: false,
+                activo: true,
                 completado: true,
             },
             contratacion: {
-                activo: false,
+                activo: true,
                 completado: true,
             }
         };

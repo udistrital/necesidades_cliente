@@ -61,6 +61,18 @@ angular.module('contractualClienteApp')
                         })).then(function (responseMongo) {
                             self.metaId = responseMongo.data.Body[0].apropiaciones[0].metas[0].codigo;
                             self.actividadesMongo = responseMongo.data.Body[0].apropiaciones[0].metas[0].actividades;
+                            self.codAp =responseMongo.data.Body[0].apropiaciones[0].codigo;
+                            self.ff_apropiacion = responseMongo.data.Body[0].apropiaciones[0].fuentes;
+                            self.prod_apropiacion = responseMongo.data.Body[0].apropiaciones[0].productos;
+
+                            console.info(self.ff_apropiacion,"Lalala",self.prod_apropiacion);
+                        });
+
+                        planCuentasRequest.get('arbol_rubro_apropiacion/get_hojas/'+'1/'+$scope.vigencia,$.param({
+                            query: "Codigo:" + self.codAp,
+                        })).then(function (apropiacionData) {
+                            self.nombreAp = apropiacionData.data.Body[0].Nombre;
+
                         });
 
                         metasRequest.get('2019').then(function(responsePA){
@@ -81,7 +93,6 @@ angular.module('contractualClienteApp')
                                     }
                                     self.meta = responsePA.data.metas.actividades[index].meta;
                                 }
-                                console.info(self.metasObj);
                             });
                         });
 
