@@ -52,18 +52,18 @@ var conf_test = {
     ADMINISTRATIVA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_crud_api/v1",
     ADMINISTRATIVA_PRUEBAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_amazon_api/v1",
     CONFIGURACION_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/configuracion_crud_api/v1/",
-    CORE_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/core_crud/v1",
-    CORE_AMAZON_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/core_crud/v1",
+    CORE_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/core_api/v1",
+    CORE_AMAZON_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/core_api/v1",
     PLAN_CUENTAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mongo_crud/v1/",
     METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/oikos_crud_api/v1",
-    ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
+    ARGO_NOSQL_SERVICE: "", // NO ESTA URL EN PREPROD
     CONTRATO_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_jbpm/v1", // NO ESTA URL EN PREPROD
     TOKEN: {
         AUTORIZATION_URL: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize",
         URL_USER_INFO: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/userinfo",
-        CLIENTE_ID: "ZNMCnOala3D9egDWsRArpWj3ma8a",
+        CLIENTE_ID: "AYlkE7sU8jftbmV9NY4TJRfA0nsa",
         REDIRECT_URL: "pruebasnecesidades.portaloas.udistrital.edu.co",
         RESPONSE_TYPE: "id_token token",
         SCOPE: "openid email documento",
@@ -92,7 +92,7 @@ var conf_presentacion = {
     TOKEN: {
         AUTORIZATION_URL: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize",
         URL_USER_INFO: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/userinfo",
-        CLIENTE_ID: "ZNMCnOala3D9egDWsRArpWj3ma8a",
+        CLIENTE_ID: "AYlkE7sU8jftbmV9NY4TJRfA0nsa",
         REDIRECT_URL: "pruebasnecesidades.portaloas.udistrital.edu.co",
         RESPONSE_TYPE: "id_token token",
         SCOPE: "openid email documento",
@@ -165,6 +165,6 @@ var conf_local = {
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        GENERAL: conf_presentacion,
+        GENERAL: conf_test,
     });
 
