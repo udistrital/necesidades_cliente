@@ -16,7 +16,7 @@ angular.module('contractualClienteApp')
                 estado: '=',
             },
             templateUrl: 'views/directives/necesidad/visualizar_necesidad.html',
-            controller: function (financieraRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, planCuentasRequest, $scope) {
+            controller: function (financieraRequest,metasRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, planCuentasRequest, $scope) {
                 var self = this;
                 self.verJustificacion = false;
                 self.justificaciones_rechazo = [];
@@ -59,13 +59,29 @@ angular.module('contractualClienteApp')
                         planCuentasRequest.get('necesidades',$.param({
                             query: "idAdministrativa:" + self.v_necesidad.Id,
                         })).then(function (responseMongo) {
-                            self.metaId = responseMongo.data.apropiaciones.metas.codigo;
-                            self.actividadesMongo = responseMongo.data.apropiaciones.metas.actividades;
+                            self.metaId = responseMongo.data.Body[0].apropiaciones[0].metas[0].codigo;
+                            self.actividadesMongo = responseMongo.data.Body[0].apropiaciones[0].metas[0].actividades;
                         });
 
                         metasRequest.get('2019').then(function(responsePA){
-                            self.actividadesInfo = self.actividadesMongo.forEach(function(actividad){
-                                // Mapeo en un objeto con la información de Actividades.
+                           self.metasObj = [];
+                           self.meta = '';
+                            self.actividadesMongo.forEach(function(actividad){
+                                for (var index = 0; index < responsePA.data.metas.actividades.length; index++) {
+                                    if(actividad.codigo===responsePA.data.metas.actividades[index].actividad_id){
+                                        self.metasObj.push(
+                                            {
+                                                Meta :   responsePA.data.metas.actividades[index].meta,
+                                                Codigo : actividad.codigo,
+                                                Nombre : responsePA.data.metas.actividades[index].actividad,
+                                                Valor : actividad.valor
+                                            }
+                                            
+                                        );
+                                    }
+                                    self.meta = responsePA.data.metas.actividades[index].meta;
+                                }
+                                console.info(self.metasObj);
                             });
                         });
 

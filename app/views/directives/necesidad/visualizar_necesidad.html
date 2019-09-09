@@ -66,7 +66,7 @@
 
     </p>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
 
         <h3 class="text-info">{{"OBJETO_CONTRACTUAL" | translate}}</h3>
         <p class="text-muted text-justify">
@@ -88,11 +88,17 @@
             </li>
           </ul>
           <ul>
-            <br><strong>{{"META" | translate}}</strong> {{ d_visualizarNecesidad.meta }}
-            <br><strong>{{"ACTIVIDADES_META" | translate}}</strong>
-            <li ng-repeat='p in d_visualizarNecesidad.actividades'>
-              <strong></strong>
-            </li>
+            <br><strong>{{"META" | translate}}</strong> {{ d_visualizarNecesidad.meta | uppercase}}
+            <table class="table text-justify" style=" width:100%">
+              <tr>
+                <th>Actividad</th>
+                <th>Valor</th>
+              </tr>
+              <tr ng-repeat='p in d_visualizarNecesidad.metasObj'>
+                <td>{{p.Nombre}} </td>
+                <td>{{p.Valor | currency}}</td>
+              </tr>
+            </table>
           </ul>
         </p>
 
@@ -133,9 +139,6 @@
             <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
           </select>
         </div>
-
-        <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">{{doc.MarcoLegal.NombreDocumento}}
-        </li>
         </p>
 
       </div>
