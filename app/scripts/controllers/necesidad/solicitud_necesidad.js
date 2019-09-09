@@ -9,7 +9,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, planCuentasRequest , $scope, $sce, $http, $filter, $window, agoraRequest, oikosRequest, coreAmazonRequest, financieraRequest, coreRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, oikosRequest, coreAmazonRequest, financieraRequest, coreRequest, $translate, $routeParams, necesidadService) {
         var self = this;
 
         self.IdNecesidad = $routeParams.IdNecesidad;
@@ -615,14 +615,14 @@ angular.module('contractualClienteApp')
                 });
 
             self.necesidad.Valor = self.f_valor;
-            self.necesidad.ModalidadSeleccion =   {
+            self.necesidad.ModalidadSeleccion = {
                 Id: 8,
                 Nombre: "Otra",
                 Descripcion: "",
                 CodigoAbreviacion: "",
                 Estado: true,
                 NumeroOrden: "8.00"
-              }; 
+            };
 
             self.tr_necesidad = {
                 Necesidad: self.necesidad,
@@ -677,23 +677,23 @@ angular.module('contractualClienteApp')
             var NecesidadHandle = function (response, type) {
                 self.alerta_necesidad = response.data;
 
-                if((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id) {
-                    if(type === "post"){
-                        self.necesidad_plancuentas.IdAdministrativa=self.alerta_necesidad.Body.Necesidad.Id;
-                        console.info("el objeto .v ",self.necesidad_plancuentas)
+                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id) {
+                    if (type === "post") {
+                        self.necesidad_plancuentas.IdAdministrativa = self.alerta_necesidad.Body.Necesidad.Id;
+                        console.info("el objeto .v ", self.necesidad_plancuentas)
                         planCuentasRequest.post('necesidades', self.necesidad_plancuentas).then(
-                            function(res){
+                            function (res) {
                                 console.info("post financiancion", res)
                             }
-                        ).catch(function(err){
+                        ).catch(function (err) {
                             console.info("post financiancion fallo", err)
 
                         });
                     }
-                    if(type === "put"){
-                        
+                    if (type === "put") {
+
                     }
-                } 
+                }
                 console.info("Necesidad responde", response.data);
 
                 if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && typeof (self.alerta_necesidad) === "string") {
@@ -778,16 +778,43 @@ angular.module('contractualClienteApp')
                     return;
                 }
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Modificada;
-                console.info("tr_necesidad put", self.tr_necesidad )
+                console.info("tr_necesidad put", self.tr_necesidad)
                 administrativaRequest.put("tr_necesidad", self.IdNecesidad, self.tr_necesidad).then(NecesidadHandle("put"));
             } else {
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
-                console.info("tr_necesidad post", self.tr_necesidad )
-                administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function(res){
-                    NecesidadHandle(res,'post')
+                console.info("tr_necesidad post", self.tr_necesidad)
+                administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
+                    NecesidadHandle(res, 'post')
                 });
             }
         };
+
+        self.ValidarFinanciacion = function () {
+            var fin_valid = true;
+            self.f_apropiacion.forEach(function (ap) {
+                var v_fuentes = 0;
+                var v_act = 0;
+                var v_productos = 0;
+                ap.Apropiacion.fuentes ? ap.Apropiacion.fuentes.forEach(function (e) { v_fuentes += e.MontoParcial; }) : _;
+                ap.Apropiacion.meta.actividades ? ap.Apropiacion.meta.actividades.forEach(function (e) { v_act += e.MontoParcial; }) : _;
+                ap.Apropiacion.productos ? ap.Apropiacion.productos.forEach(function (e) { v_productos += e.MontoParcial }) : _;
+                fin_valid = fin_valid && (v_fuentes===v_act && v_act=== v_productos);
+            });
+            !fin_valid ? swal({
+                title: 'Valores de financiacion errados',
+                type: 'error',
+                text: 'Por favor, verifique la igualdad de los valores de financiacion ' ,
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR")
+            }) : swal({
+                title: 'Financiacion OK',
+                type: 'success',
+                text: 'Valores de financiacion en igualdad',
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR")
+            });
+            return fin_valid;
+        }
 
 
         self.ResetNecesidad = function () {
@@ -855,7 +882,7 @@ angular.module('contractualClienteApp')
                 case 'general':
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
-                    return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine');
+                    return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine') && self.ValidarFinanciacion();
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
                 case 'contratacion':
