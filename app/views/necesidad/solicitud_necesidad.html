@@ -460,7 +460,7 @@
 
                   <!-- Tipo contrato necesidad === (servicio || Compra y Servicio)-->
                   <div
-                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
 
                     <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
                       <label for="perfil" class="control-label">{{"PERFIL" | translate}}</label>
@@ -492,7 +492,7 @@
                     </div>
 
 
-                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
                       <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
                       <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.tipoServicio"
                         ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
@@ -555,7 +555,7 @@
                   <!--Revisar con nueva estructura Arka -->
                   <!-- Tipo contrato necesidad === (compra || Compra y Servicio || Servicio)-->
                   <div class="form-group"
-                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
+                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
                     <div class="col-md-12">
                       <lista-subgrupos-catalogos productos="solicitudNecesidad.productos"></lista-subgrupos-catalogos>
                     </div>
