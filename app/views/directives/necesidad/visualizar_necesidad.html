@@ -88,26 +88,27 @@
             </li>
           </ul>
           <ul>
-            <p> Apropiación / Proyecto</strong> {{d_visualizarNecesidad.codAp}} {{d_visualizarNecesidad.nombreAp}} </p>
-            <strong>
+            <p><strong> Apropiación / Proyecto </strong>  <br>
+              {{d_visualizarNecesidad.codAp}} {{d_visualizarNecesidad.nombreAp}} </p>
 
               <p><strong>Fuentes de Financiamiento</strong>
                 <ul>
-                  <li ng-repeat='f in d_visualizarNecesidad.ff_apropiacion'>
-                    {{f.codigo}} <strong>{{"Monto" | translate}}:</strong> {{f.valor | currency}}
+                  <li ng-repeat='f in d_visualizarNecesidad.fuentesInfo'>
+                    {{f.data.Body.Nombre}} <strong>{{"Monto" | translate}}:</strong> {{f.data.Body.Monto | currency}}
                   </li>
                 </ul>
               </p>
 
               <p> <strong>Productos</strong>
                 <ul>
-                  <li ng-repeat='p in d_visualizarNecesidad.prod_apropiacion'>
-                    {{p._id}} <strong>{{"Monto" | translate}}:</strong> {{p.valor | currency}}
+                  <li ng-repeat='p in d_visualizarNecesidad.productosInfo'>
+                    {{p.data.Body.Nombre}} <strong>{{"Monto" | translate}}:</strong> {{p.data.Body.Monto | currency}}
                   </li>
                 </ul>
               </p>
 
-              <p> <br><strong>{{"META" | translate}}</strong> {{ d_visualizarNecesidad.meta | uppercase}}
+              <p> <br><strong>{{"META" | translate}}</strong> <br>
+                {{ d_visualizarNecesidad.meta | uppercase}} 
                 <table class="table text-justify" style=" width:100%">
                   <tr>
                     <th>Actividad</th>

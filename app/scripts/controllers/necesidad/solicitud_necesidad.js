@@ -680,21 +680,16 @@ angular.module('contractualClienteApp')
                 if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id) {
                     if (type === "post") {
                         self.necesidad_plancuentas.IdAdministrativa = self.alerta_necesidad.Body.Necesidad.Id;
-                        console.info("el objeto .v ", self.necesidad_plancuentas)
                         planCuentasRequest.post('necesidades', self.necesidad_plancuentas).then(
                             function (res) {
-                                console.info("post financiancion", res)
                             }
                         ).catch(function (err) {
-                            console.info("post financiancion fallo", err)
-
                         });
                     }
                     if (type === "put") {
 
                     }
                 }
-                console.info("Necesidad responde", response.data);
 
                 if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && typeof (self.alerta_necesidad) === "string") {
                     swal({
@@ -778,11 +773,9 @@ angular.module('contractualClienteApp')
                     return;
                 }
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Modificada;
-                console.info("tr_necesidad put", self.tr_necesidad)
                 administrativaRequest.put("tr_necesidad", self.IdNecesidad, self.tr_necesidad).then(NecesidadHandle("put"));
             } else {
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
-                console.info("tr_necesidad post", self.tr_necesidad)
                 administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
                     NecesidadHandle(res, 'post')
                 });
