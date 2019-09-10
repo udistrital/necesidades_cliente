@@ -174,12 +174,12 @@ angular.module('contractualClienteApp')
 
             $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
                 if (!self.detalle_servicio_necesidad) { return; }
-                coreAmazonRequest.get('snies_nucleo_basico', $.param({
+                coreAmazonRequest.get('nucleo_basico_conocimiento', $.param({
                     query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
                     limit: -1
                 })).then(function (response) {
                     if (response.data !== null && response.data.lenght > 0) {
-                        self.nucleoarea = response.data[0].IdArea.Id;
+                        self.nucleoarea = response.data[0].AreaConocimientoId.Id;
                     }
 
                 });
@@ -313,16 +313,16 @@ angular.module('contractualClienteApp')
             self.valor_total = (self.especificaciones.Valor * self.especificaciones.Cantidad) + self.valor_iva;
         }, true);
 
-        coreAmazonRequest.get('snies_area', $.param({
+        coreAmazonRequest.get('area_conocimiento', $.param({ //Primer Select NAC
             limit: -1,
-            query: 'Estado:ACTIVO'
+            query: 'Activo:true'
         })).then(function (response) {
             self.nucleo_area_data = response.data;
         });
 
         $scope.$watch('solicitudNecesidad.nucleoarea', function () {
-            coreAmazonRequest.get('snies_nucleo_basico', $.param({
-                query: 'IdArea.Id:' + self.nucleoarea,
+            coreAmazonRequest.get('nucleo_basico_conocimiento', $.param({
+                query: 'AreaConocimientoId.Id:' + self.nucleoarea,
                 limit: -1
             })).then(function (response) {
                 self.nucleo_conocimiento_data = response.data;
@@ -341,7 +341,7 @@ angular.module('contractualClienteApp')
             self.dependencia_data = Dependencias;
         });
 
-        coreAmazonRequest.get('ordenador_gasto', $.param({
+        coreRequest.get('ordenador_gasto', $.param({
             limit: -1,
             sortby: "Cargo",
             order: "asc",
