@@ -14,7 +14,7 @@
 
     <div class="panel-body">
 
-      <form name="solicitudform" class="form-horizontal" ng-submit="solicitudNecesidad.submitForm(solicitudform)"
+      <form name="solicitudform" class="form-horizontal" 
         novalidate>
         <!-- Tipo Necesidad -->
         <ng-form name="tipoNecesidad" class="form-group col-md-6 " style="text-align: center;">
@@ -672,8 +672,8 @@
 
               <fieldset>
                 <div style="text-align: center">
-                  <input type="submit" class="btn btn-success btn-outline " name="button"
-                    value="{{'REGISTRAR' | translate }}" />
+                    <button type="button" class="btn btn-success btn-outline" ng-click="solicitudNecesidad.submitForm(solicitudform)">
+                        {{'REGISTRAR' | translate }}</button>
                 </div>
               </fieldset>
       </form>
