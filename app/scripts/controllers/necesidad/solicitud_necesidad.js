@@ -613,7 +613,8 @@ angular.module('contractualClienteApp')
                         });
                     }
                 });
-
+            
+            ;
             self.necesidad.Valor = self.f_valor;
             self.necesidad.ModalidadSeleccion = {
                 Id: 8,
@@ -636,6 +637,7 @@ angular.module('contractualClienteApp')
                 ProductosNecesidad: self.productos_apropiaciones
             };
 
+    
             self.necesidad_plancuentas = {
                 apropiaciones: self.f_apropiacion.map(function (ap) {
                     return {
@@ -664,12 +666,19 @@ angular.module('contractualClienteApp')
                                 _id: p._id,
                                 valor: p.MontoParcial,
                             }
-                        })
+                        }),
+
+
 
                     }
-                })
+                }),
+                detalleServicio : {
+                    valor:  self.f_valor,
+                    codigo: self.detalle_servicio_necesidadPC.codigo+"",
+                    descripcion: "._."
+                }
             }
-
+            console.info(self.detalle_servicio_necesidadPC, self.necesidad_plancuentas);
 
 
 
@@ -679,6 +688,7 @@ angular.module('contractualClienteApp')
 
                 if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id) {
                     if (type === "post") {
+                        console.info(self.alerta_necesidad)
                         self.necesidad_plancuentas.IdAdministrativa = self.alerta_necesidad.Body.Necesidad.Id;
                         planCuentasRequest.post('necesidades', self.necesidad_plancuentas).then(
                             function (res) {

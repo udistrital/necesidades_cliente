@@ -52,9 +52,9 @@ angular.module('contractualClienteApp')
                         })).then(function (response) {
                             self.marco_legal = response.data;
                         });
-                        adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
-                            self.ff_necesidad = response.data;
-                        });
+                        // adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
+                        //     self.ff_necesidad = response.data;
+                        // });
 
                         self.productosInfo = [];
                         self.fuentesInfo = [];
