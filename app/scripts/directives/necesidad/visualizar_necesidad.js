@@ -16,7 +16,7 @@ angular.module('contractualClienteApp')
                 estado: '=',
             },
             templateUrl: 'views/directives/necesidad/visualizar_necesidad.html',
-            controller: function (financieraRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, planCuentasRequest, $scope) {
+            controller: function (financieraRequest, metasRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, planCuentasRequest, $scope) {
                 var self = this;
                 self.verJustificacion = false;
                 self.justificaciones_rechazo = [];
@@ -52,20 +52,64 @@ angular.module('contractualClienteApp')
                         })).then(function (response) {
                             self.marco_legal = response.data;
                         });
-                        adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
-                            self.ff_necesidad = response.data;
-                        });
+                        // adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
+                        //     self.ff_necesidad = response.data;
+                        // });
 
-                        planCuentasRequest.get('necesidades',$.param({
+                        self.productosInfo = [];
+                        self.fuentesInfo = [];
+                    
+                        planCuentasRequest.get('necesidades', $.param({
                             query: "idAdministrativa:" + self.v_necesidad.Id,
                         })).then(function (responseMongo) {
-                            self.metaId = responseMongo.data.apropiaciones.metas.codigo;
-                            self.actividadesMongo = responseMongo.data.apropiaciones.metas.actividades;
+                            self.metaId = responseMongo.data.Body[0].apropiaciones[0].metas[0].codigo;
+                            self.actividadesMongo = responseMongo.data.Body[0].apropiaciones[0].metas[0].actividades;
+                            self.codAp = responseMongo.data.Body[0].apropiaciones[0].codigo;
+                            self.ff_apropiacion = responseMongo.data.Body[0].apropiaciones[0].fuentes;
+                            self.prod_apropiacion = responseMongo.data.Body[0].apropiaciones[0].productos;
+
+                            self.ff_apropiacion.forEach(function (fuente) {
+                                planCuentasRequest.get('fuente_financiamiento/' + fuente.codigo).then(function (fuenteData) {
+                                    fuenteData.data.Body.Monto = fuente.valor;
+                                    self.fuentesInfo.push(fuenteData);
+                                });
+                            })
+                            self.prod_apropiacion.forEach(function (producto) {
+                                planCuentasRequest.get('producto/' + producto._id).then(function (productoData) {
+                                    productoData.data.Body.Monto = producto.valor;
+                                    self.productosInfo.push(productoData);
+                                });
+                            });
+
                         });
 
-                        metasRequest.get('2019').then(function(responsePA){
-                            self.actividadesInfo = self.actividadesMongo.forEach(function(actividad){
-                                // Mapeo en un objeto con la información de Actividades.
+
+
+                        planCuentasRequest.get('arbol_rubro_apropiacion/get_hojas/' + '1/' + $scope.vigencia, $.param({
+                            query: "Codigo:" + self.codAp,
+                        })).then(function (apropiacionData) {
+                            self.nombreAp = apropiacionData.data.Body[0].Nombre;
+
+                        });
+
+                        metasRequest.get('2019').then(function (responsePA) {
+                            self.metasObj = [];
+                            self.meta = '';
+                            self.actividadesMongo.forEach(function (actividad) {
+                                for (var index = 0; index < responsePA.data.metas.actividades.length; index++) {
+                                    if (actividad.codigo === responsePA.data.metas.actividades[index].actividad_id) {
+                                        self.metasObj.push(
+                                            {
+                                                Meta: responsePA.data.metas.actividades[index].meta,
+                                                Codigo: actividad.codigo,
+                                                Nombre: responsePA.data.metas.actividades[index].actividad,
+                                                Valor: actividad.valor
+                                            }
+
+                                        );
+                                    }
+                                    self.meta = responsePA.data.metas.actividades[index].meta;
+                                }
                             });
                         });
 

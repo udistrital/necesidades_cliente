@@ -70,7 +70,6 @@ angular.module('contractualClienteApp')
         };
 
         $scope.havePermission = function (viewPath, menu) {
-            console.info(viewPath,menu);
             if (viewPath !== undefined && viewPath !== null) {
                 var currentPath = viewPath.substr(1);
                 var head = menu;

@@ -8,7 +8,7 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function (administrativaRequest, coreRequest, agoraRequest, oikosRequest, financieraRequest, adminMidRequest) {
+  .service('necesidadService', function (administrativaRequest, planCuentasRequest,coreRequest, agoraRequest, oikosRequest, financieraRequest, adminMidRequest) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
@@ -185,13 +185,14 @@ angular.module('contractualClienteApp')
 
     self.initNecesidad = function (IdNecesidad) {
       var trNecesidad = {};
+      var trNecesidadPC = {};
       if (IdNecesidad) {
         return administrativaRequest.get('necesidad', $.param({
           query: 'Id:' + IdNecesidad
         })).then(function (response) {
           trNecesidad.Necesidad = response.data[0];
           return new Promise(function (resolve, reject) {
-            if (trNecesidad.Necesidad.TipoContratoNecesidad.Id === 2) { // Tipo Servicio
+            if (trNecesidad.Necesidad.TipoContratoNecesidad.Id === 5) { // Tipo Servicio
               administrativaRequest.get('detalle_servicio_necesidad', $.param({
                 query: 'Necesidad:' + IdNecesidad
               })).then(function (response) {
@@ -215,8 +216,15 @@ angular.module('contractualClienteApp')
             }
           }).then(function (response) {
               
-            return adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + IdNecesidad).then(function (response) {
+        /*     return adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + IdNecesidad).then(function (response) {
               trNecesidad.Ffapropiacion = response.data;
+ */
+
+            return  planCuentasRequest.get('necesidades', $.param({
+              query: "idAdministrativa:" + IdNecesidad,
+          })).then(function (responseMongo) {
+            trNecesidadPC = responseMongo.data;
+            console.info(trNecesidadPC);
 
               return administrativaRequest.get('marco_legal_necesidad', $.param({
                 query: 'Necesidad:' + IdNecesidad
@@ -249,13 +257,13 @@ angular.module('contractualClienteApp')
               }))
             }).then(function (response) {
               trNecesidad.RolOrdenadorGasto = response.data[0].DependenciaId;
-              
+              console.info(trNecesidad);
               return new Promise(function (resolve, reject) {
                 resolve(trNecesidad);
               });
             });
           });
-        });
+       });
 
 
       } else {

@@ -14,7 +14,7 @@
 
     <div class="panel-body">
 
-      <form name="solicitudform" class="form-horizontal" ng-submit="solicitudNecesidad.submitForm(solicitudform)"
+      <form name="solicitudform" class="form-horizontal" 
         novalidate>
         <!-- Tipo Necesidad -->
         <ng-form name="tipoNecesidad" class="form-group col-md-6 " style="text-align: center;">
@@ -87,11 +87,6 @@
             <div class="col-md-3"></div>
           </div>
         </ng-form>
-
-
-       
-        <!-- <pre>{{ solicitudNecesidad.necesidad | json}}</pre>
-        <pre>{{ solicitudNecesidad.f_apropiacion | json}}</pre> -->
 
         <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
           <md-step label="Responsables" md-complete="solicitudNecesidad.SeccionesFormulario.general.completo"
@@ -460,7 +455,7 @@
 
                   <!-- Tipo contrato necesidad === (servicio || Compra y Servicio)-->
                   <div
-                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
 
                     <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
                       <label for="perfil" class="control-label">{{"PERFIL" | translate}}</label>
@@ -492,9 +487,9 @@
                     </div>
 
 
-                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
                       <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
-                      <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.tipoServicio"
+                      <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidadPC.codigo"
                         ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
                         <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
                           {{"SERVICIO" | translate}}</option>
@@ -502,10 +497,16 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label class="control-label">{{"VALOR_SOLICITADO" | translate}}</label>
+                        <input type="text"  class="form-control"
+                          ng-model="solicitudNecesidad.f_valor" ui-money-mask="0" disabled>
+                    </div>
+<!-- 
+                    <div class="col-md-6">
                       <label class="control-label">{{"CANTIDAD" | translate}}</label>
                       <input class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.Cantidad"
                         placeholder="Cantidad" ui-number-mask="0">
-                    </div>
+                    </div> -->
 
                     <div class="col-md-12">
                       <label for="objeto" class="control-label">{{"ACTIVIDADES_ESPECIFICAS" | translate}}</label>
@@ -555,7 +556,7 @@
                   <!--Revisar con nueva estructura Arka -->
                   <!-- Tipo contrato necesidad === (compra || Compra y Servicio || Servicio)-->
                   <div class="form-group"
-                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
+                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
                     <div class="col-md-12">
                       <lista-subgrupos-catalogos productos="solicitudNecesidad.productos"></lista-subgrupos-catalogos>
                     </div>
@@ -672,8 +673,8 @@
 
               <fieldset>
                 <div style="text-align: center">
-                  <input type="submit" class="btn btn-success btn-outline " name="button"
-                    value="{{'REGISTRAR' | translate }}" />
+                    <button type="button" class="btn btn-success btn-outline" ng-click="solicitudNecesidad.submitForm(solicitudform)">
+                        {{'REGISTRAR' | translate }}</button>
                 </div>
               </fieldset>
       </form>
