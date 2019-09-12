@@ -9,7 +9,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, oikosRequest, coreAmazonRequest, financieraRequest, coreRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, oikosRequest, parametrosGobiernoRequest, financieraRequest, coreRequest, $translate, $routeParams, necesidadService) {
         var self = this;
 
         self.IdNecesidad = $routeParams.IdNecesidad;
@@ -175,7 +175,7 @@ angular.module('contractualClienteApp')
 
             $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
                 if (!self.detalle_servicio_necesidad) { return; }
-                coreAmazonRequest.get('nucleo_basico_conocimiento', $.param({
+                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
                     query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
                     limit: -1
                 })).then(function (response) {
@@ -314,7 +314,7 @@ angular.module('contractualClienteApp')
             self.valor_total = (self.especificaciones.Valor * self.especificaciones.Cantidad) + self.valor_iva;
         }, true);
 
-        coreAmazonRequest.get('area_conocimiento', $.param({ //Primer Select NAC
+        parametrosGobiernoRequest.get('area_conocimiento', $.param({ //Primer Select NAC
             limit: -1,
             query: 'Activo:true'
         })).then(function (response) {
@@ -322,7 +322,7 @@ angular.module('contractualClienteApp')
         });
 
         $scope.$watch('solicitudNecesidad.nucleoarea', function () {
-            coreAmazonRequest.get('nucleo_basico_conocimiento', $.param({
+            parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
                 query: 'AreaConocimientoId.Id:' + self.nucleoarea,
                 limit: -1
             })).then(function (response) {
