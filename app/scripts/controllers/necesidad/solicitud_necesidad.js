@@ -686,7 +686,7 @@ angular.module('contractualClienteApp')
             var NecesidadHandle = function (response, type) {
                 self.alerta_necesidad = response.data;
 
-                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id) {
+                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id && (self.f_valor === self.valorTotalEspecificaciones)) {
                     if (type === "post") {
                         console.info(self.alerta_necesidad)
                         self.necesidad_plancuentas.IdAdministrativa = self.alerta_necesidad.Body.Necesidad.Id;
@@ -701,7 +701,7 @@ angular.module('contractualClienteApp')
                     }
                 }
 
-                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && typeof (self.alerta_necesidad) === "string") {
+                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && typeof (self.alerta_necesidad) === "string" ) {
                     swal({
                         title: '',
                         type: 'error',
@@ -817,6 +817,25 @@ angular.module('contractualClienteApp')
                 confirmButtonText: $translate.instant("CERRAR")
             });
             return fin_valid;
+        }
+
+        self.ValidarContratacion = function(){
+            var contr_valid = true;
+            contr_valid = contr_valid && (self.f_valor===self.valorTotalEspecificaciones);
+            !contr_valid ? swal({
+                title: 'Valores errados',
+                type: 'error',
+                text: 'Por favor, verifique la igualdad de los valores de Financiacion y de Clase de Contratación ' ,
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR")
+            }) : swal({
+                title: 'Clase de Contratación OK ',
+                type: 'success',
+                text: 'Valores de financiacion y de clase de contratación en igualdad',
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR")
+            });
+            return contr_valid;
         }
 
 
