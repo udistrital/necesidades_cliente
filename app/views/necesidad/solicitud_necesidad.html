@@ -88,11 +88,6 @@
           </div>
         </ng-form>
 
-
-       
-        <pre>{{ solicitudNecesidad.necesidad | json}}</pre>
-        <pre>{{ solicitudNecesidad.f_apropiacion | json}}</pre>
-
         <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
           <md-step label="Responsables" md-complete="solicitudNecesidad.SeccionesFormulario.general.completo"
             ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
@@ -502,10 +497,16 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label class="control-label">{{"VALOR_SOLICITADO" | translate}}</label>
+                        <input type="text"  class="form-control"
+                          ng-model="solicitudNecesidad.f_valor" ui-money-mask="0" disabled>
+                    </div>
+<!-- 
+                    <div class="col-md-6">
                       <label class="control-label">{{"CANTIDAD" | translate}}</label>
                       <input class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.Cantidad"
                         placeholder="Cantidad" ui-number-mask="0">
-                    </div>
+                    </div> -->
 
                     <div class="col-md-12">
                       <label for="objeto" class="control-label">{{"ACTIVIDADES_ESPECIFICAS" | translate}}</label>

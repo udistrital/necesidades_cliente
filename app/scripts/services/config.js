@@ -112,7 +112,8 @@ var conf_local2 = {
     CONFIGURACION_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/configuracion_crud_api/v1/",
     CORE_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8106/v1/",
     CORE_AMAZON_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/",
-    PLAN_CUENTAS_SERVICE: "http://10.20.2.126:8082/v1/", // NO ESTA URL EN PREPROD
+    //PLAN_CUENTAS_SERVICE: "http://10.20.2.126:8082/v1/", // NO ESTA URL EN PREPROD
+    PLAN_CUENTAS_SERVICE: "http://10.20.2.126:8082/v1/",
     METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/",

@@ -7,7 +7,7 @@
  * # listaActividadesEconomicas
  */
 angular.module('contractualClienteApp')
-  .directive('listaActividadesEconomicas', function (coreRequest, $translate) {
+  .directive('listaActividadesEconomicas', function (coreAmazonRequest, $translate) {
     return {
       restrict: 'E',
       scope: {
@@ -59,7 +59,7 @@ angular.module('contractualClienteApp')
           });
         };
 
-        coreRequest.get('actividad_economica', $.param({
+        coreAmazonRequest.get('actividad_economica', $.param({
           limit: -1,
           query: "ClasificacionCiiuId.Nombre:Subclase,Activo:true",
           sortby: "Id",

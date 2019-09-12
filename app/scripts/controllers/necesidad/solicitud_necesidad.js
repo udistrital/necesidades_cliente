@@ -17,7 +17,7 @@ angular.module('contractualClienteApp')
         self.documentos = [];
         self.avance = undefined;
         self.formuIncompleto = true;
-
+        
 
         self.meta = undefined;
         self.meta_necesidad = {
@@ -131,6 +131,7 @@ angular.module('contractualClienteApp')
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
             self.necesidad = trNecesidad.Necesidad;
             self.detalle_servicio_necesidad = trNecesidad.DetalleServicioNecesidad;
+            self.detalle_servicio_necesidad.Cantidad = 1;
             self.ActividadEspecifica = trNecesidad.ActividadEspecifica;
 
             if (self.necesidad.TipoContratoNecesidad.Id === 2) {
@@ -407,7 +408,9 @@ angular.module('contractualClienteApp')
             sortby: "PrimerNombre",
             order: "asc",
         })).then(function (response) {
-            self.persona_data = response.data;
+            self.persona_data = response.data.filter(function(p){
+                return p.Cargo !== "";
+            });
         });
 
         necesidadService.getParametroEstandar().then(function (response) {
@@ -685,7 +688,7 @@ angular.module('contractualClienteApp')
 
             var NecesidadHandle = function (response, type) {
                 self.alerta_necesidad = response.data;
-
+                console.info(self.f_valor, " es igual? ", self.valorTotalEspecificaciones);
                 if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id && (self.f_valor === self.valorTotalEspecificaciones)) {
                     if (type === "post") {
                         console.info(self.alerta_necesidad)
@@ -701,7 +704,7 @@ angular.module('contractualClienteApp')
                     }
                 }
 
-                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && typeof (self.alerta_necesidad) === "string" ) {
+                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && (self.f_valor !== self.valorTotalEspecificaciones)) {
                     swal({
                         title: '',
                         type: 'error',
@@ -786,9 +789,21 @@ angular.module('contractualClienteApp')
                 administrativaRequest.put("tr_necesidad", self.IdNecesidad, self.tr_necesidad).then(NecesidadHandle("put"));
             } else {
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
-                administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
-                    NecesidadHandle(res, 'post')
-                });
+
+                if(self.f_valor===self.valorTotalEspecificaciones){
+                    administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
+                        NecesidadHandle(res, 'post')
+                    });
+                }else {
+                    swal({
+                        title: 'Valores errados',
+                        type: 'error',
+                        text: 'Por favor, verifique la igualdad de los valores de Financiacion y de Clase de Contratación ' ,
+                        showCloseButton: true,
+                        confirmButtonText: $translate.instant("CERRAR")
+                    })
+                }
+
             }
         };
 
@@ -818,26 +833,6 @@ angular.module('contractualClienteApp')
             });
             return fin_valid;
         }
-
-        self.ValidarContratacion = function(){
-            var contr_valid = true;
-            contr_valid = contr_valid && (self.f_valor===self.valorTotalEspecificaciones);
-            !contr_valid ? swal({
-                title: 'Valores errados',
-                type: 'error',
-                text: 'Por favor, verifique la igualdad de los valores de Financiacion y de Clase de Contratación ' ,
-                showCloseButton: true,
-                confirmButtonText: $translate.instant("CERRAR")
-            }) : swal({
-                title: 'Clase de Contratación OK ',
-                type: 'success',
-                text: 'Valores de financiacion y de clase de contratación en igualdad',
-                showCloseButton: true,
-                confirmButtonText: $translate.instant("CERRAR")
-            });
-            return contr_valid;
-        }
-
 
         self.ResetNecesidad = function () {
             var TipoNecesidad = self.necesidad.TipoNecesidad.Id;

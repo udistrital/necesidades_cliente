@@ -107,7 +107,8 @@ angular.module('contractualClienteApp')
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
           $scope.actividades ? $scope.actividades.forEach(function (act) {
-            var tmp = self.gridOptions.data.filter(function (e) { return e.Id == act.Id })
+            var tmp = self.gridOptions.data.filter(function (e) { return e.Id !== act.Id })
+            console.info(tmp);
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
