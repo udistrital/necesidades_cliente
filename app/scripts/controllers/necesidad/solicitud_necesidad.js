@@ -672,11 +672,11 @@ angular.module('contractualClienteApp')
 
                     }
                 }),
-                detalleServicio : {
-                    valor:  self.f_valor,
-                    codigo: self.detalle_servicio_necesidadPC.codigo+"",
-                    descripcion: "._."
-                }
+                detalleServicio : (self.necesidad.TipoContratoNecesidad.Id === 4 || self.necesidad.TipoContratoNecesidad.Id === 5) ? {
+                    valor:  self.f_valor || 0,
+                    codigo: self.detalle_servicio_necesidadPC.codigo+"" || "",
+                    descripcion: ""
+                } : {}
             }
             console.info(self.detalle_servicio_necesidadPC, self.necesidad_plancuentas);
 
