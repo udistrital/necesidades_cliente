@@ -17,7 +17,11 @@ angular.module('planCuentasService',[])
     return {
         get: function(tabla, params) {
             cancelSearch = $q.defer();
-            return $http.get(path + tabla + "/?" + params, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
+            if (params === undefined) {
+                return $http.get(path + tabla, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
+            } else {
+                return $http.get(path + tabla + "/?" + params, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
+            }
         },
         post: function(tabla, elemento) {
             return $http.post(path + tabla, elemento, token_service.setting_bearer.headers);
