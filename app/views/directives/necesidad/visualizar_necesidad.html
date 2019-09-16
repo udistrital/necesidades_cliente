@@ -143,25 +143,17 @@
           </li>
         </p>
 
-        <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
-        <div class="col-md-12">
-          <select ng-show="estado.Id===1" class="form-control"
-            ng-model="d_visualizarNecesidad.necesidad.ModalidadSeleccion"
-            ng-options="mod as mod.Id+'-'+mod.Nombre for mod in d_visualizarNecesidad.modalidad_data track by mod.Id"
-            required>
-            <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
-          </select>
-        </div>
+   <div ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===2">
+      <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
+      <div class="col-md-12">
+          {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Id}} - {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Nombre}}
+      </div>
 
-        <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
-        <div class="col-md-12">
-          <select ng-show="estado.Id===1" class="form-control" ng-model="d_visualizarNecesidad.necesidad.TipoContrato"
-            ng-options="tc as tc.Id+'-'+tc.TipoContrato for tc in d_visualizarNecesidad.tipo_contrato_data track by tc.Id"
-            required>
-            <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
-          </select>
-        </div>
-        </p>
+      <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
+      <div class="col-md-12">
+          {{ d_visualizarNecesidad.v_necesidad.TipoContrato.data[0].Id}} - {{ d_visualizarNecesidad.v_necesidad.TipoContrato.data[0].TipoContrato}}
+      </div>
+   </div>
 
       </div>
       <div class="col-sm-6" ng-show="d_visualizarNecesidad.verJustificacion">
