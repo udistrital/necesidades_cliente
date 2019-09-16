@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * @ngdoc directive
@@ -13,14 +13,13 @@ angular.module('contractualClienteApp')
       scope: {
         apropiacion: '=',
         fuenteapropiacion: '=',
-        initFuenteapropiacion: '=?',
         dependenciasolicitante: '='
       },
       templateUrl: 'views/directives/apropiaciones/fuentes_apropiacion.html',
       controller: function ($scope, $translate) {
-        var self = this;
-        $scope.fuente = $translate.instant('FUENTE');
-
+        var self = this
+        $scope.fuente = $translate.instant('FUENTE')
+        self.fuenteapropiacion = $scope.fuenteapropiacion;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
           paginationPageSize: 5,
@@ -36,20 +35,31 @@ angular.module('contractualClienteApp')
             displayName: $translate.instant('FUENTE'),
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
-              return row.entity.Nombre;
+              return row.entity.Nombre
             }
-          }
-          ]
-        };
-
+          },
+          {
+            field: 'ValorOriginal',
+            displayName: $translate.instant('VALOR'),
+            cellFilter: 'currency',
+            headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
+            cellClass: function (row, col) {
+              return 'unbold'
+            },
+            cellTooltip: function (row) {
+              return row.entity.Nombre
+            },
+            width: '20%'
+          }]
+        }
 
         self.gridOptions.onRegisterApi = function (gridApi) {
-          self.gridApi = gridApi;
+          self.gridApi = gridApi
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows();
-          });
-        };
-        /* 
+            $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows()
+          })
+        }
+        /*
                 financieraRequest.get('fuente_financiamiento_apropiacion', $.param({
                   query: "Apropiacion:" + $scope.apropiacion + ",Dependencia:" + $scope.dependenciasolicitante
                 })).then(function (response) {
@@ -57,7 +67,7 @@ angular.module('contractualClienteApp')
                 }).then(function (t) {
                   // Se inicializa el grid api para seleccionar
                   self.gridApi.grid.modifyRows(self.gridOptions.data);
-        
+
                   // se observa cambios en idActividades para completar $scope.actividades y seleccionar las respectivas filas en la tabla
                   $scope.$watch('initFuenteApropiacion', function () {
                     self.fuenteapropiacion = [];
@@ -73,39 +83,34 @@ angular.module('contractualClienteApp')
                 }); */
 
         planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Codigo).then(function (response) {
-          self.gridOptions.data = response.data.Body;
-        }).then(function (t) {
-          // Se inicializa el grid api para seleccionar
-          self.gridApi.grid.modifyRows(self.gridOptions.data);
-          console.info(self.gridOptions.data);
-          $scope.initFuenteapropiacion.forEach(function (fuente) {
-            var tmp = self.gridOptions.data.filter(function (e) { return e.FuenteFinanciamiento.Codigo == fuente.Codigo });
-            console.info(tmp);
-            //if (tmp.length > 0) {}
-          // if (tmp.length > 0) {
-          //   tmp[0].ValorOriginal = fuente.MontoParcial;
-          //   $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
-          //   self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-          // }
+          self.gridOptions.data = response.data.Body || [];
+          var gridOptData = self.gridOptions.data;
+          gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData[0]) : _;
 
-        });
-      });
+          $scope.$watch('fuenteapropiacion', function () {
+            $scope.fuenteapropiacion ? $scope.fuenteapropiacion.forEach(function (act) {
+              var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo !== act.Codigo })
+              console.info(tmp);
+              if (tmp.length > 0) {
+                self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+              }
+            }) : _;
+            self.fuenteapropiacion = $scope.fuenteapropiacion;
+          })
+        })
 
-
-$scope.$watch('[d_fuentesApropiacion.gridOptions.paginationPageSize, d_fuentesApropiacion.gridOptions.data]', function () {
-  if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
-    $scope.gridHeight = self.gridOptions.rowHeight * 2 + (self.gridOptions.data.length * self.gridOptions.rowHeight);
-    if (self.gridOptions.data.length <= 5) {
-      self.gridOptions.enablePaginationControls = false;
-    }
-  } else {
-    $scope.gridHeight = self.gridOptions.rowHeight * 3 + (self.gridOptions.paginationPageSize * self.gridOptions.rowHeight);
-    self.gridOptions.enablePaginationControls = true;
-  }
-}, true);
-
-
+        $scope.$watch('[d_fuentesApropiacion.gridOptions.paginationPageSize, d_fuentesApropiacion.gridOptions.data]', function () {
+          if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
+            $scope.gridHeight = self.gridOptions.rowHeight * 2 + (self.gridOptions.data.length * self.gridOptions.rowHeight)
+            if (self.gridOptions.data.length <= 5) {
+              self.gridOptions.enablePaginationControls = false
+            }
+          } else {
+            $scope.gridHeight = self.gridOptions.rowHeight * 3 + (self.gridOptions.paginationPageSize * self.gridOptions.rowHeight)
+            self.gridOptions.enablePaginationControls = true
+          }
+        }, true)
       },
-controllerAs: 'd_fuentesApropiacion'
-    };
-  });
+      controllerAs: 'd_fuentesApropiacion'
+    }
+  })

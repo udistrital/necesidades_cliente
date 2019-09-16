@@ -105,15 +105,14 @@ angular.module('contractualClienteApp')
                             });
                             self.max_level = 0;
                             var level = 0;
-                            // console.info(self.gridOptions.data.length)
-                            for (var i = 0; i < self.gridOptions.data.length; i++) {
+                            for (var i = 0; i < self.gridOptions.data.length; i += 1) {
                                 level = (self.gridOptions.data[i].Codigo.match(/-/g) || []).length;
                                 if (level > self.max_level) {
                                     self.max_level = level;
                                 }
                             }
 
-                            for (var j = 0; j < self.gridOptions.data.length; j++) {
+                            for (var j = 0; j < self.gridOptions.data.length; j += 1) {
                                 level = (self.gridOptions.data[j].Codigo.match(/-/g) || []).length;
                                 if (level < self.max_level) {
                                     self.gridOptions.data[j].$$treeLevel = level;

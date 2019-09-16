@@ -394,7 +394,7 @@ angular.module('contractualClienteApp')
                 if (response.data !== null) {
                     vinculacion_docente = response.data;
                     //consulta para traer la informacion de las personas de los docentes asociados a una resolucion
-                    for (var x = 0; x < vinculacion_docente.length; x++) {
+                    for (var x = 0; x < vinculacion_docente.length; x += 1) {
                         numContrato = vinculacion_docente[x].NumeroContrato;
                         vigenciaContrato = vinculacion_docente[x].Vigencia;
 
@@ -440,7 +440,7 @@ angular.module('contractualClienteApp')
                 self.boton_solicitar = true;
                 // si es solicitud por contrato
                 if ($scope.radioB === 1) {
-                    for (var i = 0; i < seleccion.length; i++) {
+                    for (var i = 0; i < seleccion.length; i += 1) {
                         contrato_unidad = [];
                         contrato_unidad.Numero_contrato = seleccion[i].Id;
                         contrato_unidad.Numero_suscrito = seleccion[i].ContratoSuscrito[0].NumeroContratoSuscrito;
@@ -474,7 +474,7 @@ angular.module('contractualClienteApp')
                         if (response.data !== null) {
                             vinculacion_docente = response.data;
                             //consulta para traer la informacion de las personas de los docentes asociados a una resolucion
-                            for (var x = 0; x < vinculacion_docente.length; x++) {
+                            for (var x = 0; x < vinculacion_docente.length; x += 1) {
                                 numContrato = vinculacion_docente[x].NumeroContrato;
                                 vigenciaContrato = vinculacion_docente[x].Vigencia;
                                 if (numContrato !== "" || vigenciaContrato !== "" || vigenciaContrato !== 0) {

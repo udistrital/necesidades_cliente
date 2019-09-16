@@ -23,11 +23,11 @@ if (window.localStorage.getItem('access_token') === null ||
     // consider using POST so query isn't logged
     var query = 'https://' + window.location.host + '?' + queryString;
     req.open('GET', query, true);
-    if (params['id_token'] !== null && params['id_token'] !== undefined) {
-        window.localStorage.setItem('access_token', params['access_token']);
-        window.localStorage.setItem('id_token', params['id_token']);
-        window.localStorage.setItem('state', params['state']);
-        window.localStorage.setItem('expires_in', params['expires_in']);
+    if (params.id_token !== null && params.id_token !== undefined) {
+        window.localStorage.setItem('access_token', params.access_token);
+        window.localStorage.setItem('id_token', params.id_token);
+        window.localStorage.setItem('state', params.state);
+        window.localStorage.setItem('expires_in', params.expires_in);
     } else {
         window.localStorage.clear();     
     }
@@ -124,7 +124,7 @@ angular.module('implicitToken', [])
             setExpiresAt: function () {
                 if (angular.isUndefined(window.localStorage.getItem('expires_at')) || window.localStorage.getItem('expires_at') === null) {
                     var expires_at = new Date();
-                    expires_at.setSeconds(expires_at.getSeconds() + parseInt(window.localStorage.getItem('expires_in')) - 60); // 60 seconds less to secure browser and response latency
+                    expires_at.setSeconds(expires_at.getSeconds() + parseInt(window.localStorage.getItem('expires_in'), 10) - 60); // 60 seconds less to secure browser and response latency
                     window.localStorage.setItem('expires_at', expires_at);
                 }
             },

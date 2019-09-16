@@ -14,18 +14,25 @@ angular.module('contractualClienteApp')
                 vigencia: '=',
                 numero: '=',
                 estado: '=',
+                modalidadSel: '=?',
+                tipoContrato: '='
             },
             templateUrl: 'views/directives/necesidad/visualizar_necesidad.html',
-            controller: function (financieraRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, $scope) {
+            controller: function (financieraRequest, metasRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, planCuentasRequest, $scope) {
                 var self = this;
                 self.verJustificacion = false;
                 self.justificaciones_rechazo = [];
                 self.v_necesidad = null;
                 self.solicitud_disponibilidad = null;
+                self.modalidadSel = {};
 
                 $scope.$watch('[vigencia,numero]', function () {
                     self.cargar_necesidad();
                 });
+
+              $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
+                    $scope.modalidadSel=self.modalidadSel;
+                }); 
 
                 self.cargar_necesidad = function () {
                     self.verJustificacion = [
@@ -52,9 +59,74 @@ angular.module('contractualClienteApp')
                         })).then(function (response) {
                             self.marco_legal = response.data;
                         });
-                        adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
-                            self.ff_necesidad = response.data;
-                            console.info(self.v_necesidad.Id,self.ff_necesidad);
+                        // adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
+                        //     self.ff_necesidad = response.data;
+                        // });
+
+                        self.productosInfo = [];
+                        self.fuentesInfo = [];
+                    
+                        planCuentasRequest.get('necesidades', $.param({
+                            query: "idAdministrativa:" + self.v_necesidad.Id,
+                        })).then(function (responseMongo) {
+                            self.metaId = responseMongo.data.Body[0].apropiaciones[0].metas[0].codigo;
+                            self.actividadesMongo = responseMongo.data.Body[0].apropiaciones[0].metas[0].actividades;
+                            self.codAp = responseMongo.data.Body[0].apropiaciones[0].codigo;
+                            self.ff_apropiacion = responseMongo.data.Body[0].apropiaciones[0].fuentes;
+                            self.prod_apropiacion = responseMongo.data.Body[0].apropiaciones[0].productos;
+                            self.tipoContrato = responseMongo.data.Body[0].tipoContrato;
+                            
+                            
+
+                            agoraRequest.get('tipo_contrato', $.param({
+                                query: "Id:" + self.tipoContrato,
+                            })).then(function (responseADM) {
+                                self.v_necesidad.TipoContrato = responseADM;
+                            });
+
+                            self.ff_apropiacion.forEach(function (fuente) {
+                                planCuentasRequest.get('fuente_financiamiento/' + fuente.codigo).then(function (fuenteData) {
+                                    fuenteData.data.Body.Monto = fuente.valor;
+                                    self.fuentesInfo.push(fuenteData);
+                                });
+                            })
+                            self.prod_apropiacion.forEach(function (producto) {
+                                planCuentasRequest.get('producto/' + producto._id).then(function (productoData) {
+                                    productoData.data.Body.Monto = producto.valor;
+                                    self.productosInfo.push(productoData);
+                                });
+                            });
+
+                        });
+
+
+
+                        planCuentasRequest.get('arbol_rubro_apropiacion/get_hojas/' + '1/' + $scope.vigencia, $.param({
+                            query: "Codigo:" + self.codAp,
+                        })).then(function (apropiacionData) {
+                            self.nombreAp = apropiacionData.data.Body[0].Nombre;
+
+                        });
+
+                        metasRequest.get('2019').then(function (responsePA) {
+                            self.metasObj = [];
+                            self.meta = '';
+                            self.actividadesMongo.forEach(function (actividad) {
+                                for (var index = 0; index < responsePA.data.metas.actividades.length; index++) {
+                                    if (actividad.codigo === responsePA.data.metas.actividades[index].actividad_id) {
+                                        self.metasObj.push(
+                                            {
+                                                Meta: responsePA.data.metas.actividades[index].meta,
+                                                Codigo: actividad.codigo,
+                                                Nombre: responsePA.data.metas.actividades[index].actividad,
+                                                Valor: actividad.valor
+                                            }
+
+                                        );
+                                    }
+                                    self.meta = responsePA.data.metas.actividades[index].meta;
+                                }
+                            });
                         });
 
                         administrativaRequest.get('solicitud_disponibilidad', $.param({
@@ -101,23 +173,7 @@ angular.module('contractualClienteApp')
                                 });
                             });
 
-                            administrativaRequest.get('modalidad_seleccion', $.param({
-                                limit: -1,
-                                sortby: "NumeroOrden",
-                                order: "asc",
-                            })).then(function (response) {
-                                self.modalidad_data = response.data;
-
-                            });
-
-                            agoraRequest.get('tipo_contrato', $.param({
-                                limit: -1,
-                                sortby: "Id",
-                                order: "asc",
-                            })).then(function (response) {
-                                self.tipo_contrato_data = response.data;
-
-                            });
+                        
 
                             agoraRequest.get('informacion_persona_natural', $.param({
                                 query: 'Id:' + response.data[0].DependenciaReversa[0].OrdenadorGasto

@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, agoraRequest, planCuentasRequest,rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -17,12 +17,15 @@ angular.module('contractualClienteApp')
             RechazarNecesidad: true,
             EditarNecesidad: true,
         };
-        
+
+        self.modalidadSel = {};
+        self.TipoContrato = {};
+
         //permisos de los buttons segun el rol
-/*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
-            self.buttons = data;
-        }); */
-        
+        /*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
+                    self.buttons = data;
+                }); */
+
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
             paginationPageSize: 10,
@@ -118,9 +121,13 @@ angular.module('contractualClienteApp')
             }
         };
 
+        $scope.$watch('necesidades.modalidadSel', function () {
+
+        })
+
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema
         self.cargarDatosNecesidades = function (offset, query) {
-            if (query == undefined) query = [];
+            if (query === undefined) { query = []; }
             query = typeof (query) === "string" ? [query] : query;
             query.push("EstadoNecesidad.Nombre__not_in:Borrador");
 
@@ -130,8 +137,7 @@ angular.module('contractualClienteApp')
                 sortby: "Vigencia,NumeroElaboracion",
                 order: "desc",
                 query: query.join(",")
-            }, true))
-            console.log
+            }, true));
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
         };
@@ -142,6 +148,7 @@ angular.module('contractualClienteApp')
             self.g_necesidad = necesidad;
             self.numero_el = necesidad.NumeroElaboracion;
             self.vigencia = necesidad.Vigencia;
+            self.modalidadSel = necesidad.ModalidadSeleccion;
 
             //para mostrar informacion de rechazo
 
@@ -150,8 +157,8 @@ angular.module('contractualClienteApp')
             var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id]
                 .includes(necesidad.EstadoNecesidad.Id);
 
-            self.verBotonAprobarNecesidad = aproOrRech  && self.buttons.AprobarNecesidad;
-            self.verBotonRechazarNecesidad = aproOrRech  && self.buttons.RechazarNecesidad;
+            self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
+            self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
             self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidad.Id && self.buttons.EditarNecesidad;
             self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidad.Id && self.buttons.SolicitarCDP;
 
@@ -161,14 +168,28 @@ angular.module('contractualClienteApp')
 
         self.aprobar_necesidad = function () {
             var nec_apro = {};
+            var tipoC = {};
             administrativaRequest.get('necesidad/' + self.g_necesidad.Id
             ).then(function (response) {
-                nec_apro = response.data == undefined ? {} : response.data;
+                nec_apro = response.data === undefined ? {} : response.data;
                 nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Aprobada;
-
+                nec_apro.ModalidadSeleccion = self.modalidadSel;
+                tipoC = self.TipoContrato;
                 administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function (response) {
+                    planCuentasRequest.get('necesidades', $.param({
+                        query: "idAdministrativa:" + nec_apro.Id,
+                    })).then(function (responseMongo) {
+                       var  npc= responseMongo.data.Body[0] || {} ;
+                        npc.tipoContrato = self.TipoContrato.Id;
+                        planCuentasRequest.put('necesidades',npc._id, npc).then(function(r){
+                        }).catch(function (err) {
+                            nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
+                            administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function(response) {
+                            }); 
+                        });
+                    });
                     self.alerta = "";
-                    for (var i = 1; i < response.data.length; i++) {
+                    for (var i = 1; i < response.data.length; i += 1) {
                         self.alerta = self.alerta + response.data[i] + "\n";
                     }
                     swal("", self.alerta, response.data[0]);
@@ -211,7 +232,7 @@ angular.module('contractualClienteApp')
                 }
 
                 return administrativaRequest.put('necesidad', nec_rech.Necesidad.Id, nec_rech.Necesidad);
-            }).then(function (response) {
+            }).then(function () {
                 return administrativaRequest.post('necesidad_rechazada', nec_rech);
             }).then(function (response) {
                 if (response.data !== undefined) {
@@ -233,13 +254,30 @@ angular.module('contractualClienteApp')
             });
         };
 
+        administrativaRequest.get('modalidad_seleccion', $.param({
+            limit: -1,
+            sortby: "NumeroOrden",
+            order: "asc",
+        })).then(function (response) {
+            self.modalidad_data = response.data;
+
+        });
+
+        agoraRequest.get('tipo_contrato', $.param({
+            limit: -1,
+            sortby: "Id",
+            order: "asc",
+        })).then(function (response) {
+            self.tipo_contrato_data = response.data;
+
+        });
+
         self.editar_necesidad = function () {
             var idNecesidad = self.g_necesidad.Id;
             $("#myModal").modal("hide");
-            $('#myModal').on('hidden.bs.modal', function (e) {
-                console.info('/necesidad/solicitud_necesidad/' + idNecesidad);
+            $('#myModal').on('hidden.bs.modal', function () {
                 $window.location.href = '#/necesidad/solicitud_necesidad/' + idNecesidad;
-            })
+            });
         };
 
         self.solicitar_cdp = function () {
@@ -247,7 +285,7 @@ angular.module('contractualClienteApp')
             self.sol_cdp.Necesidad = self.g_necesidad;
             administrativaRequest.post("solicitud_disponibilidad", self.sol_cdp).then(function (response) {
                 self.alerta = "";
-                for (var i = 1; i < response.data.length; i++) {
+                for (var i = 1; i < response.data.length; i += 1) {
                     self.alerta = self.alerta + response.data[i] + "\n";
                 }
                 swal("", self.alerta, response.data[0]);

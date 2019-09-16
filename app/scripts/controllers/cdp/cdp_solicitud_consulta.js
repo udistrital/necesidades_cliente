@@ -86,7 +86,7 @@ angular.module('contractualClienteApp')
             self.gridApi.core.on.filterChanged($scope, function() {
                 var grid = this.grid;
                 var query = '';
-                angular.forEach(grid.columns, function(value, key) {
+                angular.forEach(grid.columns, function(value) {
                     if (value.filters[0].term) {
 
                         var formtstr = value.colDef.name.replace('[0]','');
@@ -106,7 +106,7 @@ angular.module('contractualClienteApp')
 
                 var query = '';
                 var grid = this.grid;
-                angular.forEach(grid.columns, function(value, key) {
+                angular.forEach(grid.columns, function(value) {
                     if (value.filters[0].term) {
                         var formtstr = value.colDef.name.replace('[0]','');
                         if (query === ''){
@@ -125,11 +125,11 @@ angular.module('contractualClienteApp')
     self.UnidadEjecutora = 1;
     financieraRequest.get("orden_pago/FechaActual/2006",'') //formato de entrada  https://golang.org/src/time/format.go
     .then(function(response) { //error con el success
-      self.vigenciaActual = parseInt(response.data);
+      self.vigenciaActual = parseInt(response.data, 10);
       var dif = self.vigenciaActual - 1995 ;
       var range = [];
       range.push(self.vigenciaActual);
-      for(var i=1;i<dif;i++) {
+      for(var i=1;i<dif;i += 1) {
         range.push(self.vigenciaActual - i);
       }
       self.years = range;
@@ -174,7 +174,7 @@ angular.module('contractualClienteApp')
   };
 
 
-    self.cargarDatos = function(offset,query){
+    self.cargarDatos = function(offset){
 
             self.gridOptions.data = [];
             var inicio = $filter('date')(self.fechaInicio, "yyyy-MM-dd");
@@ -183,7 +183,7 @@ angular.module('contractualClienteApp')
             self.hayData = true;
             if (inicio !== undefined && fin !== undefined) {
 
-              financieraMidRequest.cancelSearch;
+              financieraMidRequest.cancel();
               financieraMidRequest.get('disponibilidad/Solicitudes/'+self.Vigencia,$.param({
                 UnidadEjecutora: self.UnidadEjecutora,
                 rangoinicio: inicio,
@@ -213,7 +213,7 @@ angular.module('contractualClienteApp')
               self.hayData = true;
             }else{
 
-              financieraMidRequest.cancelSearch;
+              financieraMidRequest.cancel();
               financieraMidRequest.get('disponibilidad/Solicitudes/'+self.Vigencia,$.param({
                 UnidadEjecutora: self.UnidadEjecutora,
                 offset: offset

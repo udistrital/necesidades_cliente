@@ -25,7 +25,7 @@ angular.module('gridApiService', [])
                     var formtstr = value.colDef.name.replace('[0]', '');
                     //console.log("change ", value.filters[0].term);
                     query.push(formtstr + '__icontains:' + value.filters[0].term);
-                };
+                }
             });
             return query;
         };

@@ -2,24 +2,24 @@
 
 angular.module('contractualClienteApp')
     .controller('menuCtrl', function ($location, $window, $q, requestRequest, $scope, token_service, notificacion, $translate, $route, $mdSidenav, configuracionRequest, $rootScope, $http) {
-        var paths = [];
+        var self = this;
         $scope.token_service = token_service;
         $scope.$on('$routeChangeStart', function (scope, next, current) {
             var waitForMenu = function () {
                 if ($rootScope.my_menu !== undefined) {
-                    if ($scope.token_service.live_token() && current != undefined) {
+                    if ($scope.token_service.live_token() && current !== undefined) {
                         if (!$scope.havePermission(next.originalPath, $rootScope.my_menu)) {
-                            $location.path("/404");
+                            $location.path("/");
                         }
-                    } else if (current == undefined) {
+                    } else if (current === undefined) {
                         if (!$scope.havePermission(next.originalPath, $rootScope.my_menu)) {
-                            $location.path("/404");
+                            $location.path("/");
                         }
                     }
                 } else {
                     setTimeout(waitForMenu, 250);
                 }
-            }
+            };
             waitForMenu();
 
 
@@ -110,25 +110,65 @@ angular.module('contractualClienteApp')
             }))
                 .then(function (response) {
                     if (response.data !== null) {
-                        console.log("not ", response.data)
-
                     }
                 });
         }
 
         if ($scope.token_service.live_token()) {
             self.perfil = $scope.token_service.getRoles();
-            configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades', '').then(function (response) {
-                $rootScope.my_menu = response.data;
-            }).catch(function (err) {
-                console.log('err ', err);
-                $location.path("/404");
-                $http.pendingRequests.forEach(function (request) {
-                    if (request.cancel) {
-                        request.cancel.resolve();
-                    }
-                });
-            });
+            // configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades', '').then(function (response) {
+            //     console.info(response.data, self.perfil);
+            //     $rootScope.my_menu = response.data;
+            // }).catch(function (err) {
+            //     console.log('err ', err);
+            //     $location.path("/404");
+            //     $http.pendingRequests.forEach(function (request) {
+            //         if (request.cancel) {
+            //             request.cancel.resolve();
+            //         }
+            //     });
+            // });
+            $rootScope.my_menu = [
+                {
+                    Id: 1,
+                    Nombre: "Gestion Necesidades",
+                    Opciones: [
+                        {
+                            Id: 2,
+                            Nombre: "Solicitud Necesidad",
+                            Opciones: null,
+                            TipoOpcion: "Menú",
+                            Url: "necesidad/solicitud_necesidad"
+                        },
+                        {
+                            Id: 3,
+                            Nombre: "Consultar Necesidad",
+                            Opciones: null,
+                            TipoOpcion: "Menú",
+                            Url: "necesidades"
+                        }
+                    ],
+                    TipoOpcion: "Menú",
+                    Url: ""
+                },
+                {
+                    Id: 331,
+                    Nombre: "Edit necesidad",
+                    Url: "necesidad/solicitud_necesidad/:IdNecesidad",
+                    TipoOpcion: "Acción",
+                    Opciones: null
+                },
+                {
+                    Id: 341,
+                    Nombre: "main",
+                    Url: "/",
+                    TipoOpcion: "Acción",
+                    Opciones: null
+                }
+
+            ];
+
+
         }
 
         //$scope.menuserv.actualizar_menu("Admin");

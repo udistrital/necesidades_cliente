@@ -2,24 +2,24 @@
 
 /**
  * @ngdoc service
- * @name contractualClienteApp.metasService
+ * @name contractualClienteApp.parametrosGobiernoRequest
  * @description
- * # metasService
+ * # parametrosgobiernoService
  * Service in the contractualClienteApp.
  */
-angular.module('metasService', [])
-    .service('metasRequest', function ($http, $q, token_service, CONF) {
+angular.module('parametrosGobiernoService', [])
+    .service('parametrosGobiernoRequest', function ($http, $q, token_service, CONF) {
         // AngularJS will instantiate a singleton by calling "new" on this function
-        var path = CONF.GENERAL.METAS_SERVICE;
+        var path = CONF.GENERAL.PARAMETROS_GOBIERNO_SERVICE;
         // Public API here
         var cancelSearch; //defer object
         return {
             get: function (tabla, params) {
                 cancelSearch = $q.defer();
                 if (params === undefined) {
-                    return $http.get(path + tabla, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
+                    return $http.get(path + tabla, [{timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
                 } else {
-                    return $http.get(path + tabla + "/?" + params, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
+                    return $http.get(path + tabla + "/?" + params, [{timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
                 }
             },
             post: function (tabla, elemento) {

@@ -66,7 +66,7 @@
 
     </p>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
 
         <h3 class="text-info">{{"OBJETO_CONTRACTUAL" | translate}}</h3>
         <p class="text-muted text-justify">
@@ -88,12 +88,40 @@
             </li>
           </ul>
           <ul>
-            <br><strong>{{"META" | translate}}</strong>
-            <br><strong>{{"ACTIVIDADES_META" | translate}}</strong>
-            <li ng-repeat='p in inv.Actividades'>
-              <strong></strong>
-            </li>
+            <p><strong> Apropiación / Proyecto </strong>  <br>
+              {{d_visualizarNecesidad.codAp}} {{d_visualizarNecesidad.nombreAp}} </p>
+
+              <p><strong>Fuentes de Financiamiento</strong>
+                <ul>
+                  <li ng-repeat='f in d_visualizarNecesidad.fuentesInfo'>
+                    {{f.data.Body.Nombre}} <strong>{{"Monto" | translate}}:</strong> {{f.data.Body.Monto | currency}}
+                  </li>
+                </ul>
+              </p>
+
+              <p> <strong>Productos</strong>
+                <ul>
+                  <li ng-repeat='p in d_visualizarNecesidad.productosInfo'>
+                    {{p.data.Body.Nombre}} <strong>{{"Monto" | translate}}:</strong> {{p.data.Body.Monto | currency}}
+                  </li>
+                </ul>
+              </p>
+
+              <p> <br><strong>{{"META" | translate}}</strong> <br>
+                {{ d_visualizarNecesidad.meta | uppercase}} 
+                <table class="table text-justify" style=" width:100%">
+                  <tr>
+                    <th>Actividad</th>
+                    <th>Valor</th>
+                  </tr>
+                  <tr ng-repeat='p in d_visualizarNecesidad.metasObj'>
+                    <td>{{p.Nombre}} </td>
+                    <td>{{p.Valor | currency}}</td>
+                  </tr>
+                </table>
           </ul>
+        </p>
+
         </p>
 
         <h3 class="text-info">{{"JUSTIFICACION_CONTRATO" | translate}}</h3>
@@ -115,28 +143,17 @@
           </li>
         </p>
 
-        <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
-        <div class="col-md-12">
-          <select ng-show="estado.Id===1" class="form-control"
-            ng-model="d_visualizarNecesidad.necesidad.ModalidadSeleccion"
-            ng-options="mod as mod.Id+'-'+mod.Nombre for mod in d_visualizarNecesidad.modalidad_data track by mod.Id"
-            required>
-            <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
-          </select>
-        </div>
+   <div ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===2">
+      <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
+      <div class="col-md-12">
+          {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Id}} - {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Nombre}}
+      </div>
 
-        <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
-        <div class="col-md-12">
-          <select ng-show="estado.Id===1" class="form-control" ng-model="d_visualizarNecesidad.necesidad.TipoContrato"
-            ng-options="tc as tc.Id+'-'+tc.TipoContrato for tc in d_visualizarNecesidad.tipo_contrato_data track by tc.Id"
-            required>
-            <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
-          </select>
-        </div>
-
-        <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">{{doc.MarcoLegal.NombreDocumento}}
-        </li>
-        </p>
+      <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
+      <div class="col-md-12">
+          {{ d_visualizarNecesidad.v_necesidad.TipoContrato.data[0].Id}} - {{ d_visualizarNecesidad.v_necesidad.TipoContrato.data[0].TipoContrato}}
+      </div>
+   </div>
 
       </div>
       <div class="col-sm-6" ng-show="d_visualizarNecesidad.verJustificacion">

@@ -121,11 +121,11 @@ angular.module('contractualClienteApp')
 
         financieraRequest.get("orden_pago/FechaActual/2006", '') //formato de entrada  https://golang.org/src/time/format.go
             .then(function(response) { //error con el success
-                self.vigenciaActual = parseInt(response.data);
+                self.vigenciaActual = parseInt(response.data, 10);
                 var dif = self.vigenciaActual - 1995;
                 var range = [];
                 range.push(self.vigenciaActual);
-                for (var i = 1; i < dif; i++) {
+                for (var i = 1; i < dif; i += 1) {
                     range.push(self.vigenciaActual - i);
                 }
                 self.years = range;
@@ -158,7 +158,7 @@ angular.module('contractualClienteApp')
 
         self.actualizarLista = function(offset, query) {
 
-            financieraMidRequest.cancelSearch;
+            financieraMidRequest.cancel();
             self.gridOptions.data = [];
             self.cargando = true;
             self.hayData = true;
@@ -232,7 +232,7 @@ angular.module('contractualClienteApp')
                     query: "Id:" + self.cdp.Responsable,
                     limit: 1
                 })).then(function(response) {
-                    if (response.data != null) {
+                    if (response.data !== null) {
                         self.cdp.Responsable = response.data[0];
                     }
 
@@ -258,16 +258,16 @@ angular.module('contractualClienteApp')
 
         self.anularDisponibilidad = function() {
 
-            if (self.motivo == undefined || self.motivo === "" || self.motivo == null) {
-                swal("", $translate.instant("E_A02"), "error")
-            } else if (self.tipoAnulacion == undefined || self.tipoAnulacion === "" || self.tipoAnulacion == null) {
-                swal("", $translate.instant("E_A03"), "error")
-            } else if ((self.Rubro_sel == undefined || self.Rubro_sel === "" || self.Rubro_sel == null) && (self.tipoAnulacion.Nombre === "Parcial")) {
-                swal("", $translate.instant("E_A05"), "error")
-            } else if ((self.Valor == undefined || self.Valor === "" || self.Valor == null) && (self.tipoAnulacion.Nombre === "Parcial")) {
-                swal("", $translate.instant("E_A04"), "error")
+            if (self.motivo === undefined || self.motivo === "" || self.motivo === null) {
+                swal("", $translate.instant("E_A02"), "error");
+            } else if (self.tipoAnulacion === undefined || self.tipoAnulacion === "" || self.tipoAnulacion === null) {
+                swal("", $translate.instant("E_A03"), "error");
+            } else if ((self.Rubro_sel === undefined || self.Rubro_sel === "" || self.Rubro_sel === null) && (self.tipoAnulacion.Nombre === "Parcial")) {
+                swal("", $translate.instant("E_A05"), "error");
+            } else if ((self.Valor === undefined || self.Valor === "" || self.Valor === null) && (self.tipoAnulacion.Nombre === "Parcial")) {
+                swal("", $translate.instant("E_A04"), "error");
             } else if (parseFloat(self.Valor) <= 0) {
-                swal("", $translate.instant("E_A07"), "error")
+                swal("", $translate.instant("E_A07"), "error");
             } else {
                 var valor = 0;
                 self.alerta = "<ol>";
@@ -303,7 +303,7 @@ angular.module('contractualClienteApp')
                     swal("", self.alerta, self.alerta_anulacion_cdp[0]).then(function() {
 
                         self.limpiar();
-                        if(self.alerta_anulacion_cdp[0] == "success"){
+                        if(self.alerta_anulacion_cdp[0] === "success"){
                             $("#myModal").modal("hide");
                         }
 
@@ -382,7 +382,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watch("cdpConsulta.Vigencia", function() {
 
-                if(self.reservas != true){
+                if(self.reservas !== true){
                   self.ver_titulo_reservas = false;
                   self.ver_boton_reservas = true;
                   self.reservas = false;
@@ -468,7 +468,7 @@ angular.module('contractualClienteApp')
 
             financieraRequest.get("orden_pago/FechaActual/2006", '') //formato de entrada  https://golang.org/src/time/format.go
                 .then(function(response) {
-                    self.Vigencia = parseInt(response.data)-1;
+                    self.Vigencia = parseInt(response.data, 10)-1;
                     self.reservas = true;
                     self.ver_boton_reservas = false;
                 });
@@ -481,6 +481,6 @@ angular.module('contractualClienteApp')
             self.Vigencia = self.vigenciaActual;
             self.ver_boton_reservas = true;
             self.actualizarLista(0, '');
-        }
+        };
 
     });
