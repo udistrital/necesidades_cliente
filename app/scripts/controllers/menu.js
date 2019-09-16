@@ -152,28 +152,6 @@ angular.module('contractualClienteApp')
                     Url: ""
                 },
                 {
-                    Id: 2,
-                    Nombre: "Gestion Disponibilidades",
-                    Opciones: [
-                        {
-                            Id: 4,
-                            Nombre: "solicitudes CDP",
-                            Opciones: null,
-                            TipoOpcion: "Menú",
-                            Url: "cdp/cdp_solicitud_consulta"
-                        },
-                        {
-                            Id: 5,
-                            Nombre: "lista CDP",
-                            Opciones: null,
-                            TipoOpcion: "Menú",
-                            Url: "cdp/cdp_consulta"
-                        }
-                    ],
-                    TipoOpcion: "Menú",
-                    Url: ""
-                },
-                {
                     Id: 331,
                     Nombre: "Edit necesidad",
                     Url: "necesidad/solicitud_necesidad/:IdNecesidad",
