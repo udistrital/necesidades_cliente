@@ -143,7 +143,17 @@
           </li>
         </p>
 
-   
+   <div ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===2">
+      <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
+      <div class="col-md-12">
+          {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Id}} - {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Nombre}}
+      </div>
+
+      <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
+      <div class="col-md-12">
+          {{ d_visualizarNecesidad.v_necesidad.TipoContrato.data[0].Id}} - {{ d_visualizarNecesidad.v_necesidad.TipoContrato.data[0].TipoContrato}}
+      </div>
+   </div>
 
       </div>
       <div class="col-sm-6" ng-show="d_visualizarNecesidad.verJustificacion">

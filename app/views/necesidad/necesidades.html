@@ -22,24 +22,27 @@
 
     <div class="modal-body" ng-if="necesidades.g_necesidad!=undefined">
       <visualizar-necesidad vigencia="necesidades.vigencia" numero="necesidades.numero_el" estado="necesidades.g_necesidad.EstadoNecesidad" modalidadSel="necesidades.modalidadSel" tipoContrato="necesidades.tipoContrato"/>
-      <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
-      <div class="col-md-12">
-        <select ng-show="true" class="form-control"
-          ng-model="necesidades.modalidadSel"
-          ng-options="mod as mod.Id+'-'+mod.Nombre for mod in necesidades.modalidad_data track by mod.Id"
-          required>
-          <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
-        </select>
+      <div class="col-md-12" ng-show="necesidades.g_necesidad.EstadoNecesidad.Id===1">
+          <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
+          <div class="col-md-12">
+            <select ng-show="true" class="form-control"
+              ng-model="necesidades.modalidadSel"
+              ng-options="mod as mod.Id+'-'+mod.Nombre for mod in necesidades.modalidad_data track by mod.Id"
+              required>
+              <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
+            </select>
+          </div>
+    
+          <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
+          <div class="col-md-12">
+            <select ng-show="true" class="form-control" 
+              ng-options="tc as tc.Id+'-'+tc.TipoContrato for tc in necesidades.tipo_contrato_data track by tc.Id" ng-model="necesidades.TipoContrato"
+              required>
+              <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
+            </select>
+          </div>
       </div>
 
-      <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
-      <div class="col-md-12">
-        <select ng-show="true" class="form-control" ng-model="necesidades.TipoContrato"
-          ng-options="tc as tc.Id+'-'+tc.TipoContrato for tc in necesidades.tipo_contrato_data track by tc.Id"
-          required>
-          <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
-        </select>
-      </div>
       </p>
     </div>
 

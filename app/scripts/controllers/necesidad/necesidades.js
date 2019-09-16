@@ -19,7 +19,7 @@ angular.module('contractualClienteApp')
         };
 
         self.modalidadSel = {};
-        self.tipoContrato = {};
+        self.TipoContrato = {};
 
         //permisos de los buttons segun el rol
         /*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
@@ -122,7 +122,7 @@ angular.module('contractualClienteApp')
         };
 
         $scope.$watch('necesidades.modalidadSel', function () {
-            console.info("WATCH MOD SEL", self.modalidadSel);
+
         })
 
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema
@@ -174,23 +174,17 @@ angular.module('contractualClienteApp')
                 nec_apro = response.data === undefined ? {} : response.data;
                 nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Aprobada;
                 nec_apro.ModalidadSeleccion = self.modalidadSel;
-                tipoC = self.tipoContrato;
-                console.info(nec_apro.Id);
+                tipoC = self.TipoContrato;
                 administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function (response) {
                     planCuentasRequest.get('necesidades', $.param({
                         query: "idAdministrativa:" + nec_apro.Id,
                     })).then(function (responseMongo) {
-                        console.info(responseMongo, "data mongo: " , responseMongo.data.Body[0]._id);
-                        npc= responseMongo.data.Body[0] || {} ;
-                        npc.tipoContrato = self.tipoContrato;
-                        console.info(npc);
+                       var  npc= responseMongo.data.Body[0] || {} ;
+                        npc.tipoContrato = self.TipoContrato.Id;
                         planCuentasRequest.put('necesidades',npc._id, npc).then(function(r){
-                            console.info("PUT Acomplished",r)
                         }).catch(function (err) {
-                            console.info("put a financiera falló", err);
                             nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
                             administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function(response) {
-                                console.info("revert", response);
                             }); 
                         });
                     });

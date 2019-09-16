@@ -32,8 +32,6 @@ angular.module('contractualClienteApp')
 
               $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
                     $scope.modalidadSel=self.modalidadSel;
-                    console.info($scope.modalidadSel, "scope")
-//Aqui si sirve xd
                 }); 
 
                 self.cargar_necesidad = function () {
@@ -76,6 +74,15 @@ angular.module('contractualClienteApp')
                             self.codAp = responseMongo.data.Body[0].apropiaciones[0].codigo;
                             self.ff_apropiacion = responseMongo.data.Body[0].apropiaciones[0].fuentes;
                             self.prod_apropiacion = responseMongo.data.Body[0].apropiaciones[0].productos;
+                            self.tipoContrato = responseMongo.data.Body[0].tipoContrato;
+                            
+                            
+
+                            agoraRequest.get('tipo_contrato', $.param({
+                                query: "Id:" + self.tipoContrato,
+                            })).then(function (responseADM) {
+                                self.v_necesidad.TipoContrato = responseADM;
+                            });
 
                             self.ff_apropiacion.forEach(function (fuente) {
                                 planCuentasRequest.get('fuente_financiamiento/' + fuente.codigo).then(function (fuenteData) {
