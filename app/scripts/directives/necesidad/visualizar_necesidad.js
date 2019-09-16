@@ -14,6 +14,8 @@ angular.module('contractualClienteApp')
                 vigencia: '=',
                 numero: '=',
                 estado: '=',
+                modalidadSel: '=?',
+                tipoContrato: '='
             },
             templateUrl: 'views/directives/necesidad/visualizar_necesidad.html',
             controller: function (financieraRequest, metasRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, planCuentasRequest, $scope) {
@@ -22,10 +24,17 @@ angular.module('contractualClienteApp')
                 self.justificaciones_rechazo = [];
                 self.v_necesidad = null;
                 self.solicitud_disponibilidad = null;
+                self.modalidadSel = {};
 
                 $scope.$watch('[vigencia,numero]', function () {
                     self.cargar_necesidad();
                 });
+
+              $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
+                    $scope.modalidadSel=self.modalidadSel;
+                    console.info($scope.modalidadSel, "scope")
+//Aqui si sirve xd
+                }); 
 
                 self.cargar_necesidad = function () {
                     self.verJustificacion = [
@@ -157,23 +166,7 @@ angular.module('contractualClienteApp')
                                 });
                             });
 
-                            administrativaRequest.get('modalidad_seleccion', $.param({
-                                limit: -1,
-                                sortby: "NumeroOrden",
-                                order: "asc",
-                            })).then(function (response) {
-                                self.modalidad_data = response.data;
-
-                            });
-
-                            agoraRequest.get('tipo_contrato', $.param({
-                                limit: -1,
-                                sortby: "Id",
-                                order: "asc",
-                            })).then(function (response) {
-                                self.tipo_contrato_data = response.data;
-
-                            });
+                        
 
                             agoraRequest.get('informacion_persona_natural', $.param({
                                 query: 'Id:' + response.data[0].DependenciaReversa[0].OrdenadorGasto

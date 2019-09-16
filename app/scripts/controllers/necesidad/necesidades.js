@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, agoraRequest, planCuentasRequest,rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -17,12 +17,15 @@ angular.module('contractualClienteApp')
             RechazarNecesidad: true,
             EditarNecesidad: true,
         };
-        
+
+        self.modalidadSel = {};
+        self.tipoContrato = {};
+
         //permisos de los buttons segun el rol
-/*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
-            self.buttons = data;
-        }); */
-        
+        /*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
+                    self.buttons = data;
+                }); */
+
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
             paginationPageSize: 10,
@@ -118,9 +121,13 @@ angular.module('contractualClienteApp')
             }
         };
 
+        $scope.$watch('necesidades.modalidadSel', function () {
+            console.info("WATCH MOD SEL", self.modalidadSel);
+        })
+
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema
         self.cargarDatosNecesidades = function (offset, query) {
-            if (query === undefined) {query = [];}
+            if (query === undefined) { query = []; }
             query = typeof (query) === "string" ? [query] : query;
             query.push("EstadoNecesidad.Nombre__not_in:Borrador");
 
@@ -141,6 +148,7 @@ angular.module('contractualClienteApp')
             self.g_necesidad = necesidad;
             self.numero_el = necesidad.NumeroElaboracion;
             self.vigencia = necesidad.Vigencia;
+            self.modalidadSel = necesidad.ModalidadSeleccion;
 
             //para mostrar informacion de rechazo
 
@@ -149,8 +157,8 @@ angular.module('contractualClienteApp')
             var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id]
                 .includes(necesidad.EstadoNecesidad.Id);
 
-            self.verBotonAprobarNecesidad = aproOrRech  && self.buttons.AprobarNecesidad;
-            self.verBotonRechazarNecesidad = aproOrRech  && self.buttons.RechazarNecesidad;
+            self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
+            self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
             self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidad.Id && self.buttons.EditarNecesidad;
             self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidad.Id && self.buttons.SolicitarCDP;
 
@@ -160,12 +168,25 @@ angular.module('contractualClienteApp')
 
         self.aprobar_necesidad = function () {
             var nec_apro = {};
+            var tipoC = {};
             administrativaRequest.get('necesidad/' + self.g_necesidad.Id
             ).then(function (response) {
                 nec_apro = response.data === undefined ? {} : response.data;
                 nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Aprobada;
-
+                nec_apro.ModalidadSeleccion = self.modalidadSel;
+                tipoC = self.tipoContrato;
+                console.info(nec_apro.Id);
                 administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function (response) {
+                    planCuentasRequest.get('necesidades', $.param({
+                        query: "idAdministrativa:" + nec_apro.Id,
+                    })).then(function (responseMongo) {
+                        console.info(responseMongo, "Espacio xd" , responseMongo.data.Body[0]._id, " Lalalalal ");
+                        responseMongo.tipoContrato = self.tipoContrato;
+                        console.info(responseMongo);
+                        planCuentasRequest.put('necesidades',responseMongo.data.Body[0]._id, responseMongo).then(function(r){
+                            console.info("PUT Acomplished",r)
+                        })
+                    });
                     self.alerta = "";
                     for (var i = 1; i < response.data.length; i += 1) {
                         self.alerta = self.alerta + response.data[i] + "\n";
@@ -231,6 +252,24 @@ angular.module('contractualClienteApp')
                 $("#myModal").modal("hide");
             });
         };
+
+        administrativaRequest.get('modalidad_seleccion', $.param({
+            limit: -1,
+            sortby: "NumeroOrden",
+            order: "asc",
+        })).then(function (response) {
+            self.modalidad_data = response.data;
+
+        });
+
+        agoraRequest.get('tipo_contrato', $.param({
+            limit: -1,
+            sortby: "Id",
+            order: "asc",
+        })).then(function (response) {
+            self.tipo_contrato_data = response.data;
+
+        });
 
         self.editar_necesidad = function () {
             var idNecesidad = self.g_necesidad.Id;
