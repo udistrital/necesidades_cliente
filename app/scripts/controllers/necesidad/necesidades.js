@@ -180,12 +180,19 @@ angular.module('contractualClienteApp')
                     planCuentasRequest.get('necesidades', $.param({
                         query: "idAdministrativa:" + nec_apro.Id,
                     })).then(function (responseMongo) {
-                        console.info(responseMongo, "Espacio xd" , responseMongo.data.Body[0]._id, " Lalalalal ");
-                        responseMongo.tipoContrato = self.tipoContrato;
-                        console.info(responseMongo);
-                        planCuentasRequest.put('necesidades',responseMongo.data.Body[0]._id, responseMongo).then(function(r){
+                        console.info(responseMongo, "data mongo: " , responseMongo.data.Body[0]._id);
+                        npc= responseMongo.data.Body[0] || {} ;
+                        npc.tipoContrato = self.tipoContrato;
+                        console.info(npc);
+                        planCuentasRequest.put('necesidades',npc._id, npc).then(function(r){
                             console.info("PUT Acomplished",r)
-                        })
+                        }).catch(function (err) {
+                            console.info("put a financiera falló", err);
+                            nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
+                            administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function(response) {
+                                console.info("revert", response);
+                            });
+                        });
                     });
                     self.alerta = "";
                     for (var i = 1; i < response.data.length; i += 1) {
