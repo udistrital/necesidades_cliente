@@ -191,7 +191,7 @@ angular.module('contractualClienteApp')
                             nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
                             administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function(response) {
                                 console.info("revert", response);
-                            });
+                            }); 
                         });
                     });
                     self.alerta = "";
