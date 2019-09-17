@@ -49,6 +49,7 @@ angular.module('contractualClienteApp')
         self.actividades_economicas_id = [];
         self.productos = [];
         self.f_valor = 0;
+        self.servicio_valor = 0;
         self.meta_valor = 0;
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
@@ -688,10 +689,8 @@ angular.module('contractualClienteApp')
 
             var NecesidadHandle = function (response, type) {
                 self.alerta_necesidad = response.data;
-                console.info(self.f_valor, " es igual? ", self.valorTotalEspecificaciones);
-                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id && (self.f_valor === self.valorTotalEspecificaciones)) {
+                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id && (self.f_valor === self.valorTotalEspecificaciones + self.servicio_valor)) {
                     if (type === "post") {
-                        console.info(self.alerta_necesidad)
                         self.necesidad_plancuentas.IdAdministrativa = self.alerta_necesidad.Body.Necesidad.Id;
                         planCuentasRequest.post('necesidades', self.necesidad_plancuentas).then(
                             function (res) {
@@ -704,7 +703,7 @@ angular.module('contractualClienteApp')
                     }
                 }
 
-                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && (self.f_valor !== self.valorTotalEspecificaciones)) {
+                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && (self.f_valor !== self.valorTotalEspecificaciones + self.servicio_valor)) {
                     swal({
                         title: '',
                         type: 'error',
@@ -790,11 +789,15 @@ angular.module('contractualClienteApp')
             } else {
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
 
-                if(self.f_valor===self.valorTotalEspecificaciones){
+                if(self.f_valor===self.valorTotalEspecificaciones && self.necesidad.TipoContratoNecesidad.Id === 1 ){
                     administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
                         NecesidadHandle(res, 'post')
                     });
-                }else {
+                }else if(self.f_valor===(self.valorTotalEspecificaciones+self.servicio_valor) && self.necesidad.TipoContratoNecesidad.Id === 4){
+                    administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
+                        NecesidadHandle(res, 'post')
+                    });
+                }else{
                     swal({
                         title: 'Valores errados',
                         type: 'error',
