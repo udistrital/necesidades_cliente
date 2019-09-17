@@ -682,9 +682,6 @@ angular.module('contractualClienteApp')
                     descripcion: ""
                 } : {}
             }
-            console.info(self.detalle_servicio_necesidadPC, self.necesidad_plancuentas);
-
-
 
 
             var NecesidadHandle = function (response, type) {
