@@ -19,14 +19,14 @@
   </div>
   <div class="panel-body">
     <div class="text-info pull-right text-right">
-      <cite class=""> {{d_visualizarNecesidad.v_necesidad.NumeroElaboracion || '-'}}</cite><br>
+      <cite class=""> {{vigencia|| '-'}}</cite><br>
       <cite class=""> {{d_visualizarNecesidad.v_necesidad.Numero || '-'}}</cite><br>
-      <cite class=""> {{d_visualizarNecesidad.solicitud_disponibilidad.Numero || '-'}}</cite>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===7" class=""> {{d_visualizarNecesidad.solicitud_disponibilidad.Numero || '-'}}</cite>
     </div>
     <div class="text-info pull-right">
-      <cite class="">{{"NUMERO_ELABORACION_NECESIDAD" | translate}}: </cite><br>
+      <cite class="">{{"VIGENCIA" | translate}}: </cite><br>
       <cite class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}: </cite><br>
-      <cite class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}: </cite>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===7" class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}: </cite>
     </div>
 
 
