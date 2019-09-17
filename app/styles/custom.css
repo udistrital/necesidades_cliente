@@ -4,7 +4,13 @@
     padding: 6px 6px;
   }
 
+
   textarea {
     resize: none;
   }
+
+.money {
+    text-align: right;
+}
+
   

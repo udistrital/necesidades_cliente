@@ -44,12 +44,12 @@ angular.module('contractualClienteApp')
             cellFilter: 'currency',
             headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
             cellClass: function (row, col) {
-              return 'unbold'
+              return 'money'
             },
             cellTooltip: function (row) {
               return row.entity.Nombre
             },
-            width: '20%'
+            width: '40%'
           }]
         }
 
