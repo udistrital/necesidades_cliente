@@ -14,8 +14,7 @@
 
     <div class="panel-body">
 
-      <form name="solicitudform" class="form-horizontal" 
-        novalidate>
+      <form name="solicitudform" class="form-horizontal" novalidate>
         <!-- Tipo Necesidad -->
         <ng-form name="tipoNecesidad" class="form-group col-md-6 " style="text-align: center;">
           <legend class="text-success">
@@ -116,25 +115,25 @@
                   </div> -->
                   <!-- DEP SOLICITANTE NEW -->
                   <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
-                      <label for="dep_solicitante" class="control-label">{{"DEPENDENCIA_SOLICITANTE" | translate}}</label>
-                      <small>*{{"OBLIGATORIO" | translate}}</small>
-                      <select class="form-control" ng-model="solicitudNecesidad.dependencia_solicitante"
-                        ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
-                        <option value="" disabled selected>{{"SELECCIONAR" | translate}}
-                          {{"DEPENDENCIA_SOLICITANTE" | translate}}</option>
-                      </select>
-                    </div>
-  
-                    <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.JefeDependenciaDestino">
-                      <label for="jefe_solicitante"
-                        class="control-label">{{"JEFE_DEPENDENCIA_SOLICITANTE" | translate}}</label>
-                        <span class="form-control">{{solicitudNecesidad.jefe_solicitante.PrimerNombre}}
-                            {{solicitudNecesidad.jefe_solicitante.SegundoNombre}}
-                            {{solicitudNecesidad.jefe_solicitante.PrimerApellido}}
-                            {{solicitudNecesidad.jefe_solicitante.SegundoApellido}}</span>
-                    </div>
-  
-                    <!-- DEPENDENCIA DESTINO -->
+                    <label for="dep_solicitante" class="control-label">{{"DEPENDENCIA_SOLICITANTE" | translate}}</label>
+                    <small>*{{"OBLIGATORIO" | translate}}</small>
+                    <select class="form-control" ng-model="solicitudNecesidad.dependencia_solicitante"
+                      ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
+                      <option value="" disabled selected>{{"SELECCIONAR" | translate}}
+                        {{"DEPENDENCIA_SOLICITANTE" | translate}}</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.JefeDependenciaDestino">
+                    <label for="jefe_solicitante"
+                      class="control-label">{{"JEFE_DEPENDENCIA_SOLICITANTE" | translate}}</label>
+                    <span class="form-control">{{solicitudNecesidad.jefe_solicitante.PrimerNombre}}
+                      {{solicitudNecesidad.jefe_solicitante.SegundoNombre}}
+                      {{solicitudNecesidad.jefe_solicitante.PrimerApellido}}
+                      {{solicitudNecesidad.jefe_solicitante.SegundoApellido}}</span>
+                  </div>
+
+                  <!-- DEPENDENCIA DESTINO -->
 
                   <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaDestino">
                     <label for="dep_destino" class="control-label">{{"DEPENDENCIA_DESTINO" | translate}}</label>
@@ -499,7 +498,8 @@
                     </div>
 
 
-                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
+                    <div class="col-md-6"
+                      ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
                       <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
                       <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidadPC.codigo"
                         ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
@@ -509,11 +509,17 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">{{"VALOR_SOLICITADO" | translate}}</label>
-                        <input type="text"  class="form-control money"
-                          ng-model="solicitudNecesidad.f_valor" ui-money-mask="0" disabled>
+                      <div class="col-md-6">
+                          <label class="control-label">Valor Servicio</label>
+                          <input type="text" class="form-control" ng-model="solicitudNecesidad.servicio_valor" ui-money-mask="0">
+                      </div>
+                      <div class="col-md-6">
+                        <label class="control-label">Valor Compra + Servicio</label>
+                        <input type="text" class="form-control" ng-model="solicitudNecesidad.f_valor" ui-money-mask="0" disabled>
+                      </div>
+
                     </div>
-<!-- 
+                    <!-- 
                     <div class="col-md-6">
                       <label class="control-label">{{"CANTIDAD" | translate}}</label>
                       <input class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.Cantidad"
@@ -693,8 +699,9 @@
 
               <fieldset>
                 <div style="text-align: center">
-                    <button type="button" class="btn btn-success btn-outline" ng-click="solicitudNecesidad.submitForm(solicitudform)">
-                        {{'REGISTRAR' | translate }}</button>
+                  <button type="button" class="btn btn-success btn-outline"
+                    ng-click="solicitudNecesidad.submitForm(solicitudform)">
+                    {{'REGISTRAR' | translate }}</button>
                 </div>
               </fieldset>
       </form>
@@ -706,7 +713,7 @@
 
 
         </md-step>
-        
+
         </md-steppers>
 
 
