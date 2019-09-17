@@ -185,7 +185,7 @@ var text_es = {
     VIGENCIA_ACTUAL: "Vigencia Actual ",
     VIGENCIA_SELECCIONADA: "Vigencia Seleccionada ",
     SELECCION_CDP: "Selección de CDP",
-    UNIDAD_EJECUTORA: "Unidad ejecutora",
+    UNIDAD_EJECUTORA: "Centro Gestor",
     ESTADO: "Estado",
     SELECCION_COMPROMISO: "Selección de Compromiso",
     SOLICITUD_RP: "Solicitud Registro Presupuestal",
