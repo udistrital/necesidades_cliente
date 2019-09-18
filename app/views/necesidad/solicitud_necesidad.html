@@ -175,7 +175,7 @@
                 <div class="col-md-12" ng-if="solicitudNecesidad.fields.General.Supervisor">
                   <label for="supervisor" class="control-label">{{"SUPERVISOR" | translate}}</label>
                   <select class="form-control" ng-model="solicitudNecesidad.necesidad.Supervisor"
-                    ng-options="sup.Id*1 as sup.Cargo for sup in solicitudNecesidad.persona_data">
+                    ng-options="sup.Id*1 as ( sup.Cargo + ' '  + sup.PrimerNombre+ ' '  + sup.SegundoNombre + ' '  + sup.PrimerApellido + ' '  + sup.SegundoApellido ) for sup in solicitudNecesidad.persona_data">
                     <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"SUPERVISOR" | translate}}
                     </option>
                   </select>
