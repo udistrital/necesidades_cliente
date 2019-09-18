@@ -55,7 +55,7 @@ angular.module('contractualClienteApp')
                                 return "text-info";
                             }
                         },
-                        width: '58%'
+                        width: '40%'
                     },
                     {
                         field: 'ApropiacionInicial',
@@ -65,12 +65,12 @@ angular.module('contractualClienteApp')
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
                         cellClass: function (row, col) {
                             if (col.treeNode.children.length === 0) {
-                                return "unbold";
+                                return "money";
                             } else {
-                                return "text-info";
+                                return "money";
                             }
                         },
-                        width: '20%'
+                        width: '40%'
                     }
                     ]
 

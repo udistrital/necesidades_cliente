@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, agoraRequest, planCuentasRequest,rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -40,13 +40,13 @@ angular.module('contractualClienteApp')
             multiSelect: false,
             columnDefs: [{
                 field: 'NumeroElaboracion',
-                displayName: $translate.instant('NUMERO_ELABORACION'),
+                displayName: $translate.instant('NUMERO_ELABORACION_NECESIDAD'),
                 type: 'number',
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
                     return row.entity.NumeroElaboracion;
                 },
-                width: '7%'
+                width: '15%'
             },
             {
                 field: 'Vigencia',
@@ -56,25 +56,34 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '7%'
+                width: '15%'
             },
+            // {
+            //     field: 'Objeto',
+            //     displayName: $translate.instant('OBJETO_CONTRACTUAL'),
+            //     headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+            //     cellTooltip: function (row) {
+            //         return row.entity.Objeto;
+            //     },
+            //     width: '35%'
+            // },
+            // {
+            //     field: 'Justificacion',
+            //     displayName: $translate.instant('JUSTIFICACION_CONTRATO'),
+            //     headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+            //     cellTooltip: function (row) {
+            //         return row.entity.Justificacion;
+            //     },
+            //     width: '25%'
+            // },
             {
-                field: 'Objeto',
-                displayName: $translate.instant('OBJETO_CONTRACTUAL'),
+                field: 'UnidadEjecutora',
+                displayName: $translate.instant('UNIDAD_EJECUTORA'),
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.Objeto;
+                    return row.entity.UnidadEjecutora;
                 },
-                width: '35%'
-            },
-            {
-                field: 'Justificacion',
-                displayName: $translate.instant('JUSTIFICACION_CONTRATO'),
-                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-                cellTooltip: function (row) {
-                    return row.entity.Justificacion;
-                },
-                width: '25%'
+                width: '15%'
             },
             {
                 field: 'EstadoNecesidad.Nombre',
@@ -83,7 +92,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidad.Nombre + ".\n" + row.entity.EstadoNecesidad.Descripcion;
                 },
-                width: '7%'
+                width: '15%'
             },
             {
                 field: 'TipoNecesidad.Nombre',
@@ -92,7 +101,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '13%'
+                width: '20%'
             },
             {
                 field: 'ver',
@@ -100,13 +109,13 @@ angular.module('contractualClienteApp')
                 enableSorting: false,
                 displayName: $translate.instant('VER'),
                 cellTemplate: function () {
-                    return '<div class="btn-small"><a href="" style="border:0" type="button" ng-click="grid.appScope.direccionar(row.entity)"><span class="fa fa-eye"></span></a></div><div class="btn-small" style="text-align: center; display: inline-block"><a href="" style="border:0" type="button" ng-click="grid.appScope.crearPDF(row.entity)"><span class="fa fa-file-pdf-o"></span></a></div>';
+                    return '<div class="col-md-3"></div><div class="col-md-2"><a href="" style="border:0; text-align: center; display: inline-block;" type="button" ng-click="grid.appScope.direccionar(row.entity)"><span class="fa fa-eye faa-shake animated-hover"></span></a></div><div class="col-md-2" style="text-align: center; display: inline-block"><a href="" style="border:0" type="button" ng-click="grid.appScope.crearPDF(row.entity)"><span class="fa fa-file-pdf-o faa-shake animated-hover"></span></a></div><div class="col-md-3"></div>';
                 },
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidad.Nombre + ".\n" + row.entity.EstadoNecesidad.Descripcion;
                 },
-                width: '10%'
+                width: '20%'
             }
             ],
             onRegisterApi: function (gridApi) {
@@ -117,6 +126,8 @@ angular.module('contractualClienteApp')
 
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     self.necesidad = row.entity;
+                    console.info(row.entity)
+                    necesidadService.initNecesidad(row.entity.Id)
                 });
             }
         };
@@ -179,13 +190,13 @@ angular.module('contractualClienteApp')
                     planCuentasRequest.get('necesidades', $.param({
                         query: "idAdministrativa:" + nec_apro.Id,
                     })).then(function (responseMongo) {
-                       var  npc= responseMongo.data.Body[0] || {} ;
+                        var npc = responseMongo.data.Body[0] || {};
                         npc.tipoContrato = self.TipoContrato.Id;
-                        planCuentasRequest.put('necesidades',npc._id, npc).then(function(r){
+                        planCuentasRequest.put('necesidades', npc._id, npc).then(function (r) {
                         }).catch(function (err) {
                             nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
-                            administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function(response) {
-                            }); 
+                            administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function (response) {
+                            });
                         });
                     });
                     self.alerta = "";
