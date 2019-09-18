@@ -127,6 +127,7 @@ angular.module('contractualClienteApp')
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     self.necesidad = row.entity;
                     console.info(row.entity)
+                    necesidadService.initNecesidad(row.entity.Id)
                 });
             }
         };

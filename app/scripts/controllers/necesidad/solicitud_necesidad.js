@@ -130,10 +130,12 @@ angular.module('contractualClienteApp')
         };
 
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
+            self.f_apropiacion = trNecesidad[1];
+            trNecesidad=trNecesidad[0]
             self.necesidad = trNecesidad.Necesidad;
-            self.detalle_servicio_necesidad = trNecesidad.DetalleServicioNecesidad;
-            self.detalle_servicio_necesidad.Cantidad = 1;
-            self.ActividadEspecifica = trNecesidad.ActividadEspecifica;
+            // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
+            // self.detalle_servicio_necesidad.Cantidad = 1;
+            self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica;
 
             if (self.necesidad.TipoContratoNecesidad.Id === 2) {
                 self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
@@ -840,7 +842,8 @@ angular.module('contractualClienteApp')
         self.ResetNecesidad = function () {
             var TipoNecesidad = self.necesidad.TipoNecesidad.Id;
             necesidadService.initNecesidad().then(function (trNecesidad) {
-                self.necesidad = trNecesidad.Necesidad;
+                self.necesidad = trNecesidad[0].Necesidad;
+                self.necesidad_plancuentas = trNecesidad[1];
                 self.necesidad.TipoNecesidad = { Id: parseInt(TipoNecesidad, 10) };
                 self.CambiarTipoNecesidad(TipoNecesidad);
             });
