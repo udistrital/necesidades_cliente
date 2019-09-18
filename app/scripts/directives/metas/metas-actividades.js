@@ -13,7 +13,9 @@ angular.module('contractualClienteApp')
       scope: {
         apropiacion: '=',
         actividades: '=',
-        meta : '='
+        meta : '=',
+        dependencia_destino: '=',
+        dependencia_solicitante: '='
       },
 
 
@@ -56,6 +58,7 @@ angular.module('contractualClienteApp')
         };
 
         self.cargarMetas = function () {
+          console.info($scope.dependencia_solicitante , $scope.dependencia_destino)
           metasRequest.get('2019').then(
             function (res) {
               var tempmetas = res.data.metas.actividades; // falta un filter por rubro

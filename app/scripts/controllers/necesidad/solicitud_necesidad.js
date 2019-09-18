@@ -60,7 +60,7 @@ angular.module('contractualClienteApp')
 
         self.planes_anuales = [{
             Id: 1,
-            Nombre: "Necesidad1 -2017"
+            Nombre: "Plan de Adquisición 2019"
         }];
 
         self.duracionEspecialMap = {
