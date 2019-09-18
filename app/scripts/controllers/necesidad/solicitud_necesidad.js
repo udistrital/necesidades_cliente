@@ -49,6 +49,7 @@ angular.module('contractualClienteApp')
         self.actividades_economicas_id = [];
         self.productos = [];
         self.f_valor = 0;
+        self.servicio_valor = 0;
         self.meta_valor = 0;
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
@@ -59,7 +60,7 @@ angular.module('contractualClienteApp')
 
         self.planes_anuales = [{
             Id: 1,
-            Nombre: "Necesidad1 -2017"
+            Nombre: "Plan de Adquisición 2019"
         }];
 
         self.duracionEspecialMap = {
@@ -129,10 +130,12 @@ angular.module('contractualClienteApp')
         };
 
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
+            self.f_apropiacion = trNecesidad[1];
+            trNecesidad=trNecesidad[0]
             self.necesidad = trNecesidad.Necesidad;
-            self.detalle_servicio_necesidad = trNecesidad.DetalleServicioNecesidad;
-            self.detalle_servicio_necesidad.Cantidad = 1;
-            self.ActividadEspecifica = trNecesidad.ActividadEspecifica;
+            // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
+            // self.detalle_servicio_necesidad.Cantidad = 1;
+            self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica;
 
             if (self.necesidad.TipoContratoNecesidad.Id === 2) {
                 self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
@@ -681,17 +684,12 @@ angular.module('contractualClienteApp')
                     descripcion: ""
                 } : {}
             }
-            console.info(self.detalle_servicio_necesidadPC, self.necesidad_plancuentas);
-
-
 
 
             var NecesidadHandle = function (response, type) {
                 self.alerta_necesidad = response.data;
-                console.info(self.f_valor, " es igual? ", self.valorTotalEspecificaciones);
-                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id && (self.f_valor === self.valorTotalEspecificaciones)) {
+                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id && (self.f_valor === self.valorTotalEspecificaciones + self.servicio_valor)) {
                     if (type === "post") {
-                        console.info(self.alerta_necesidad)
                         self.necesidad_plancuentas.IdAdministrativa = self.alerta_necesidad.Body.Necesidad.Id;
                         planCuentasRequest.post('necesidades', self.necesidad_plancuentas).then(
                             function (res) {
@@ -704,7 +702,7 @@ angular.module('contractualClienteApp')
                     }
                 }
 
-                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && (self.f_valor !== self.valorTotalEspecificaciones)) {
+                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && (self.f_valor !== self.valorTotalEspecificaciones + self.servicio_valor)) {
                     swal({
                         title: '',
                         type: 'error',
@@ -790,11 +788,15 @@ angular.module('contractualClienteApp')
             } else {
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
 
-                if(self.f_valor===self.valorTotalEspecificaciones){
+                if(self.f_valor===self.valorTotalEspecificaciones && self.necesidad.TipoContratoNecesidad.Id === 1 ){
                     administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
                         NecesidadHandle(res, 'post')
                     });
-                }else {
+                }else if(self.f_valor===(self.valorTotalEspecificaciones+self.servicio_valor) && self.necesidad.TipoContratoNecesidad.Id === 4){
+                    administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
+                        NecesidadHandle(res, 'post')
+                    });
+                }else{
                     swal({
                         title: 'Valores errados',
                         type: 'error',
@@ -837,7 +839,8 @@ angular.module('contractualClienteApp')
         self.ResetNecesidad = function () {
             var TipoNecesidad = self.necesidad.TipoNecesidad.Id;
             necesidadService.initNecesidad().then(function (trNecesidad) {
-                self.necesidad = trNecesidad.Necesidad;
+                self.necesidad = trNecesidad[0].Necesidad;
+                self.necesidad_plancuentas = trNecesidad[1];
                 self.necesidad.TipoNecesidad = { Id: parseInt(TipoNecesidad, 10) };
                 self.CambiarTipoNecesidad(TipoNecesidad);
             });

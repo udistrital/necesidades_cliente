@@ -15,6 +15,7 @@ angular.module('contractualClienteApp')
 
     self.generarNecesidad = function (IdNecesidad) {
       necesidadService.initNecesidad(IdNecesidad).then(function (trNecesidad) {
+        trNecesidad=trNecesidad[0];
         $scope.trNecesidad = trNecesidad;
 
         pdfMakerNecesidadesService.docDefinition($scope.trNecesidad).then(function (docDefinition) {
