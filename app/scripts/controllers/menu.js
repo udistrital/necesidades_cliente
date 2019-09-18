@@ -116,60 +116,59 @@ angular.module('contractualClienteApp')
 
         if ($scope.token_service.live_token()) {
             self.perfil = $scope.token_service.getRoles();
-            // configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades', '').then(function (response) {
-            //     console.info(response.data, self.perfil);
-            //     $rootScope.my_menu = response.data;
-            // }).catch(function (err) {
-            //     console.log('err ', err);
-            //     $location.path("/404");
-            //     $http.pendingRequests.forEach(function (request) {
-            //         if (request.cancel) {
-            //             request.cancel.resolve();
-            //         }
-            //     });
-            // });
-            $rootScope.my_menu = [
-                {
-                    Id: 1,
-                    Nombre: "Gestion Necesidades",
-                    Opciones: [
-                        {
-                            Id: 2,
-                            Nombre: "Solicitud Necesidad",
-                            Opciones: null,
-                            TipoOpcion: "Menú",
-                            Url: "necesidad/solicitud_necesidad"
-                        },
-                        {
-                            Id: 3,
-                            Nombre: "Consultar Necesidad",
-                            Opciones: null,
-                            TipoOpcion: "Menú",
-                            Url: "necesidades"
-                        }
-                    ],
-                    TipoOpcion: "Menú",
-                    Url: ""
-                },
-                {
-                    Id: 331,
-                    Nombre: "Edit necesidad",
-                    Url: "necesidad/solicitud_necesidad/:IdNecesidad",
-                    TipoOpcion: "Acción",
-                    Opciones: null
-                },
-                {
-                    Id: 341,
-                    Nombre: "main",
-                    Url: "/",
-                    TipoOpcion: "Acción",
-                    Opciones: null
-                }
+            configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + self.perfil + '/Necesidades', '').then(function (response) {
+                $rootScope.my_menu = response.data;
+            }).catch(function (err) {
+                console.log('error configuracion: ', err);
+                $location.path("/404");
+                $http.pendingRequests.forEach(function (request) {
+                    if (request.cancel) {
+                        request.cancel.resolve();
+                    }
+                });
+            });
+        //     $rootScope.my_menu = [  menu por si deja de servir configuracion
+        //         {
+        //             Id: 1,
+        //             Nombre: "Gestion Necesidades",
+        //             Opciones: [
+        //                 {
+        //                     Id: 2,
+        //                     Nombre: "Solicitud Necesidad",
+        //                     Opciones: null,
+        //                     TipoOpcion: "Menú",
+        //                     Url: "necesidad/solicitud_necesidad"
+        //                 },
+        //                 {
+        //                     Id: 3,
+        //                     Nombre: "Consultar Necesidad",
+        //                     Opciones: null,
+        //                     TipoOpcion: "Menú",
+        //                     Url: "necesidades"
+        //                 }
+        //             ],
+        //             TipoOpcion: "Menú",
+        //             Url: ""
+        //         },
+        //         {
+        //             Id: 331,
+        //             Nombre: "Edit necesidad",
+        //             Url: "necesidad/solicitud_necesidad/:IdNecesidad",
+        //             TipoOpcion: "Acción",
+        //             Opciones: null
+        //         },
+        //         {
+        //             Id: 341,
+        //             Nombre: "main",
+        //             Url: "/",
+        //             TipoOpcion: "Acción",
+        //             Opciones: null
+        //         }
 
-            ];
+        //     ];
 
 
-        }
+         }
 
         //$scope.menuserv.actualizar_menu("Admin");
         //$scope.menu_service =$scope.menuserv.get_menu();
