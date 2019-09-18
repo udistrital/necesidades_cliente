@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<div class="panel panel-primary panel-body" style="padding:30px; max-height: 10;">
+<div class="panel panel-primary panel-body" style="padding:0px; max-height: 2;">
 
   <div style="text-align: center">
     <h1 class="page-header text-center">{{"SOLICITUD_NECESIDAD" | translate}} <span
@@ -8,99 +8,118 @@
     </h1>
   </div>
 
-  <div>
+
+  <div class="panel-body">
 
 
+    <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
+      <form name="solicitudform" novalidate>
+        <md-step label="Responsables" md-complete="solicitudNecesidad.SeccionesFormulario.general.completo"
+          ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
+          <md-content md-dynamic-height style="overflow: hidden;">
 
-    <div class="panel-body">
 
-      <form name="solicitudform" class="form-horizontal" novalidate>
-        <!-- Tipo Necesidad -->
-        <ng-form name="tipoNecesidad" class="form-group col-md-6 " style="text-align: center;">
-          <legend class="text-success">
-            {{"SOLICITUD_NECESIDAD_CONTRATO" | translate}}
-          </legend>
-          <label class="radio-inline" ng-repeat="tipo in solicitudNecesidad.tipo_necesidad_data">
-            <input type="radio" ng-value="{{tipo.Id}}" ng-model="solicitudNecesidad.necesidad.TipoNecesidad.Id"
-              ng-change="solicitudNecesidad.ResetNecesidad()" required>
-            {{tipo.Nombre}}
-          </label>
-        </ng-form>
-        <!-- Duración -->
-        <ng-form class="form-group col-md-6 " style="text-align: center;">
-          <legend class="text-success">
-            {{"DURACION_NECESIDAD_CONTRATO" | translate}}
-          </legend>
-          <label class="radio-inline">
-            <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial" value="duracion"
-              ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"DURACION"
+            <div class="panel-body">
+              <!-- Tipo Necesidad -->
+              <ng-form name="tipoNecesidad" class="form-group col-md-6 "
+                style="text-align: center; vertical-align: middle;">
+                <div class="row">
+                  <div>
+                    <legend class="text-success">
+                      {{"SOLICITUD_NECESIDAD_CONTRATO" | translate}}
+                    </legend>
+                  </div>
+                  <div>
+                    <label class="radio-inline" ng-repeat="tipo in solicitudNecesidad.tipo_necesidad_data">
+                      <input type="radio" ng-value="{{tipo.Id}}"
+                        ng-model="solicitudNecesidad.necesidad.TipoNecesidad.Id"
+                        ng-change="solicitudNecesidad.ResetNecesidad()" required>
+                      {{tipo.Nombre}}
+                    </label></div>
+                </div>
+
+              </ng-form>
+
+              <!-- Duración -->
+              <ng-form class="form-group col-md-6 " style="text-align: center; vertical-align: middle;">
+                <div>
+                  <legend class="text-success">
+                    {{"DURACION_NECESIDAD_CONTRATO" | translate}}
+                  </legend>
+                </div>
+                <div>
+                  <label class="radio-inline">
+                    <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial" value="duracion"
+                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"DURACION"
             | translate}}
-          </label>
-          <label class="radio-inline">
-            <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial" value="unico_pago"
-              ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"UNICO_PAGO"
+                  </label>
+                  <label class="radio-inline">
+                    <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial"
+                      value="unico_pago"
+                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"UNICO_PAGO"
             | translate}}
-          </label>
-          <label class="radio-inline">
-            <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial"
-              value="agotar_presupuesto"
-              ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"HASTA_AGOTAR_PRESUPUESTO"
+                  </label>
+                  <label class="radio-inline">
+                    <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial"
+                      value="agotar_presupuesto"
+                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"HASTA_AGOTAR_PRESUPUESTO"
             | translate}}
-          </label>
-        </ng-form>
-        <label>*En caso de que tenga duración, especificarla</label>
-        <div ng-show="solicitudNecesidad.ver_duracion_fecha">
-          <div class="form-group">
-            <label class="col-sm-1 control-label">{{"AÑOS" | translate}}</label>
-            <div class="col-sm-3">
-              <input type="text" class="form-control" placeholder="Años" maxlength="4"
-                ng-model="solicitudNecesidad.anos"
-                ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
-                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                  </label>
+                </div>
+              </ng-form>
 
-            </div>
-            <label class="col-sm-1 control-label">{{"MESES" | translate}}</label>
-            <div class="col-sm-3">
-              <input type="text" class="form-control" placeholder="Meses" ng-model="solicitudNecesidad.meses"
-                ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
-                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
-            </div>
+              <div class="col-md-6" ng-show="solicitudNecesidad.ver_duracion_fecha">
+                <div class="form-group">
+                  <label class="col-sm-1 control-label">{{"AÑOS" | translate}}</label>
+                  <div class="col-sm-3">
+                    <input type="text" class="form-control" placeholder="Años" maxlength="4"
+                      ng-model="solicitudNecesidad.anos"
+                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
 
-            <label class="col-sm-1 control-label">{{"DIAS" | translate}}</label>
-            <div class="col-sm-3">
-              <input type="text" class="form-control" placeholder="Dias" ng-model="solicitudNecesidad.dias"
-                ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
-                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
-            </div>
-          </div>
-        </div>
+                  </div>
+                  <label class="col-sm-1 control-label">{{"MESES" | translate}}</label>
+                  <div class="col-sm-3">
+                    <input type="text" class="form-control" placeholder="Meses" ng-model="solicitudNecesidad.meses"
+                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                  </div>
 
-        <!--Avances-->
-        <ng-form name="avances" class="form-group" ng-if="solicitudNecesidad.forms.Avances">
-          <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(avances)">{{"AVANCES"
+                  <label class="col-sm-1 control-label">{{"DIAS" | translate}}</label>
+                  <div class="col-sm-3">
+                    <input type="text" class="form-control" placeholder="Dias" ng-model="solicitudNecesidad.dias"
+                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label>*En caso de que tenga duración, especificarla</label>
+              </div>
+
+              <!--Avances-->
+              <ng-form name="avances" class="form-group" ng-if="solicitudNecesidad.forms.Avances">
+                <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(avances)">{{"AVANCES"
             | translate}} <span class="fa fa-plus pull-right" ng-show="responsables.open"></span> <span
-              class="fa fa-minus pull-right" ng-show="!avances.open"></span></legend>
-          <div class="panel-body row">
-            <div class="col-md-3"></div>
-            <lista-avances class="col-md-6" data="solicitudNecesidad.avance"></lista-avances>
-            <div class="col-md-3"></div>
-          </div>
-        </ng-form>
+                    class="fa fa-minus pull-right" ng-show="!avances.open"></span></legend>
+                <div class="panel-body row">
+                  <div class="col-md-3"></div>
+                  <lista-avances class="col-md-6" data="solicitudNecesidad.avance"></lista-avances>
+                  <div class="col-md-3"></div>
+                </div>
+              </ng-form>
+            </div>
 
-        <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
-          <md-step label="Responsables" md-complete="solicitudNecesidad.SeccionesFormulario.general.completo"
-            ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
-            <md-content md-dynamic-height style="overflow: hidden;">
-              <!-- Responsables -->
-              <ng-form id="f_responsables" name="responsables" class="form-group"
-                ng-if="solicitudNecesidad.forms.Responsables">
-                <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(responsables)">{{"RESPONSABLES"
+            <!-- Responsables -->
+            <ng-form id="f_responsables" name="responsables" class="form-group"
+              ng-if="solicitudNecesidad.forms.Responsables">
+              <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(responsables)">{{"RESPONSABLES"
                         | translate}} <span class="fa fa-plus pull-right" ng-show="responsables.open"></span> <span
-                    class="fa fa-minus pull-right" ng-show="!responsables.open"></span></legend>
+                  class="fa fa-minus pull-right" ng-show="!responsables.open"></span></legend>
 
-                <div class="panel-body" ng-hide="responsables.open">
-                  <!-- DEP SOLICITANTE ANTERIOR -->
-                  <!-- <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
+              <div class="panel-body" ng-hide="responsables.open">
+                <!-- DEP SOLICITANTE ANTERIOR -->
+                <!-- <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
                     <label class="control-label">{{'DEPENDENCIA_SOLICITANTE' | translate}}</label>
                     <span class="form-control">{{solicitudNecesidad.dependencia_solicitante.Nombre}}</span>
                   </div>
@@ -113,310 +132,308 @@
                       {{solicitudNecesidad.persona_solicitante.PrimerApellido}}
                       {{solicitudNecesidad.persona_solicitante.SegundoApellido}}</span>
                   </div> -->
-                  <!-- DEP SOLICITANTE NEW -->
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
-                    <label for="dep_solicitante" class="control-label">{{"DEPENDENCIA_SOLICITANTE" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <select class="form-control" ng-model="solicitudNecesidad.dependencia_solicitante"
-                      ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
-                      <option value="" disabled selected>{{"SELECCIONAR" | translate}}
-                        {{"DEPENDENCIA_SOLICITANTE" | translate}}</option>
-                    </select>
-                  </div>
+                <!-- DEP SOLICITANTE NEW -->
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaSolicitante">
+                  <label for="dep_solicitante" class="control-label">{{"DEPENDENCIA_SOLICITANTE" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <select class="form-control" ng-model="solicitudNecesidad.dependencia_solicitante"
+                    ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
+                    <option value="" disabled selected>{{"SELECCIONAR" | translate}}
+                      {{"DEPENDENCIA_SOLICITANTE" | translate}}</option>
+                  </select>
+                </div>
 
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.JefeDependenciaDestino">
-                    <label for="jefe_solicitante"
-                      class="control-label">{{"JEFE_DEPENDENCIA_SOLICITANTE" | translate}}</label>
-                    <span class="form-control">{{solicitudNecesidad.jefe_solicitante.PrimerNombre}}
-                      {{solicitudNecesidad.jefe_solicitante.SegundoNombre}}
-                      {{solicitudNecesidad.jefe_solicitante.PrimerApellido}}
-                      {{solicitudNecesidad.jefe_solicitante.SegundoApellido}}</span>
-                  </div>
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.JefeDependenciaDestino">
+                  <label for="jefe_solicitante"
+                    class="control-label">{{"JEFE_DEPENDENCIA_SOLICITANTE" | translate}}</label>
+                  <span class="form-control">{{solicitudNecesidad.jefe_solicitante.PrimerNombre}}
+                    {{solicitudNecesidad.jefe_solicitante.SegundoNombre}}
+                    {{solicitudNecesidad.jefe_solicitante.PrimerApellido}}
+                    {{solicitudNecesidad.jefe_solicitante.SegundoApellido}}</span>
+                </div>
 
-                  <!-- DEPENDENCIA DESTINO -->
+                <!-- DEPENDENCIA DESTINO -->
 
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaDestino">
-                    <label for="dep_destino" class="control-label">{{"DEPENDENCIA_DESTINO" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <select class="form-control" ng-model="solicitudNecesidad.dependencia_destino"
-                      ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
-                      <option value="" disabled selected>{{"SELECCIONAR" | translate}}
-                        {{"DEPENDENCIA_DESTINO" | translate}}</option>
-                    </select>
-                  </div>
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.DependenciaDestino">
+                  <label for="dep_destino" class="control-label">{{"DEPENDENCIA_DESTINO" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <select class="form-control" ng-model="solicitudNecesidad.dependencia_destino"
+                    ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
+                    <option value="" disabled selected>{{"SELECCIONAR" | translate}}
+                      {{"DEPENDENCIA_DESTINO" | translate}}</option>
+                  </select>
+                </div>
 
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.JefeDependenciaDestino">
-                    <label for="jefe_solicitante"
-                      class="control-label">{{"JEFE_DEPENDENCIA_DESTINO" | translate}}</label>
-                    <span class="form-control">{{solicitudNecesidad.jefe_destino.PrimerNombre}}
-                      {{solicitudNecesidad.jefe_destino.SegundoNombre}}
-                      {{solicitudNecesidad.jefe_destino.PrimerApellido}}
-                      {{solicitudNecesidad.jefe_destino.SegundoApellido}}</span>
-                  </div>
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.JefeDependenciaDestino">
+                  <label for="jefe_solicitante" class="control-label">{{"JEFE_DEPENDENCIA_DESTINO" | translate}}</label>
+                  <span class="form-control">{{solicitudNecesidad.jefe_destino.PrimerNombre}}
+                    {{solicitudNecesidad.jefe_destino.SegundoNombre}}
+                    {{solicitudNecesidad.jefe_destino.PrimerApellido}}
+                    {{solicitudNecesidad.jefe_destino.SegundoApellido}}</span>
+                </div>
 
-                  <div class="col-md-12" ng-if="solicitudNecesidad.fields.General.Supervisor">
-                    <label for="supervisor" class="control-label">{{"SUPERVISOR" | translate}}</label>
-                    <select class="form-control" ng-model="solicitudNecesidad.necesidad.Supervisor"
-                      ng-options="sup.Id*1 as sup.Cargo for sup in solicitudNecesidad.persona_data">
-                      <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"SUPERVISOR" | translate}}
-                      </option>
-                    </select>
-                  </div>
+                <div class="col-md-12" ng-if="solicitudNecesidad.fields.General.Supervisor">
+                  <label for="supervisor" class="control-label">{{"SUPERVISOR" | translate}}</label>
+                  <select class="form-control" ng-model="solicitudNecesidad.necesidad.Supervisor"
+                    ng-options="sup.Id*1 as sup.Cargo for sup in solicitudNecesidad.persona_data">
+                    <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"SUPERVISOR" | translate}}
+                    </option>
+                  </select>
+                </div>
 
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.RolOrdenadorGasto">
-                    <label for="ordenador_gasto" class="control-label">{{"ROL" | translate}} {{"ORDENADOR_GASTO" |
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.RolOrdenadorGasto">
+                  <label for="ordenador_gasto" class="control-label">{{"ROL" | translate}} {{"ORDENADOR_GASTO" |
                             translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <select class="form-control" ng-model="solicitudNecesidad.rol_ordenador_gasto"
-                      ng-options="ord.DependenciaId as ord.Cargo for ord in solicitudNecesidad.ordenador_gasto_data"
-                      required>
-                      <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"ROL" | translate}}
-                        {{"ORDENADOR_GASTO" | translate}}</option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.OrdenadorGasto">
-                    <label for="rol_ordenador_gasto" class="control-label">{{"ORDENADOR_GASTO" | translate}}</label>
-                    <span class="form-control">{{solicitudNecesidad.ordenador_gasto.PrimerNombre}}
-                      {{solicitudNecesidad.ordenador_gasto.SegundoNombre}}
-                      {{solicitudNecesidad.ordenador_gasto.PrimerApellido}}
-                      {{solicitudNecesidad.ordenador_gasto.SegundoApellido}}</span>
-                  </div>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <select class="form-control" ng-model="solicitudNecesidad.rol_ordenador_gasto"
+                    ng-options="ord.DependenciaId as ord.Cargo for ord in solicitudNecesidad.ordenador_gasto_data"
+                    required>
+                    <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"ROL" | translate}}
+                      {{"ORDENADOR_GASTO" | translate}}</option>
+                  </select>
                 </div>
-              </ng-form>
 
-              <!--  General -->
-              <ng-form id="f_general" name="general" class="form-group" ng-if="solicitudNecesidad.forms.General">
-                <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(general)">{{"GENERAL"
-                            | translate}}
-                  <span class="fa fa-plus pull-right" ng-show="general.open"></span> <span
-                    class="fa fa-minus pull-right" ng-show="!general.open"></span>
-                </legend>
-
-                <div class="panel-body" ng-hide="general.open">
-
-                  <div class="col-md-12 form-group">
-                    <label class=" control-label">{{"TIPO_FINANCIACION" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <select class="form-control" ng-model="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad"
-                      ng-options="tipof.Nombre for tipof in solicitudNecesidad.tipo_financiacion_data track by tipof.Id"
-                      required>
-                      <option value="" disabled selected>{{"SELECCIONAR" | translate}}
-                        {{"TIPO_FINANCIACION" | translate}}</option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-6" ng-show="solicitudNecesidad.fields.General.PlanAnualAdquisiciones">
-                    <label class="control-label">{{"PLAN_ANUAL_ADQUISICIONES" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <select class="form-control" ng-model="solicitudNecesidad.necesidad.PlanAnualAdquisiciones"
-                      ng-options="pa.Id as pa.Nombre for pa  in solicitudNecesidad.planes_anuales" required>
-                      <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" |
-                                  translate}}</option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.UnidadEjecutora">
-                    <label class="control-label">{{"UNIDAD_EJECUTORA" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <select class="form-control" ng-model="solicitudNecesidad.necesidad.UnidadEjecutora"
-                      ng-options="ue.Id as ue.Nombre for ue in solicitudNecesidad.unidad_ejecutora_data" required>
-                      <option value="" disabled selected>{{"SELECCIONAR" | translate}}
-                        {{"UNIDAD_EJECUTORA" | translate}}</option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.ObjetoContractual.ObjetoContrato">
-                    <label for="objeto" class="control-label">{{"OBJETO_CONTRATO" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <textarea type="text" class="form-control" rows="6" maxlength="800"
-                      ng-model="solicitudNecesidad.necesidad.Objeto" placeholder="Objeto de Contrato"
-                      required></textarea>
-                  </div>
-
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.ObjetoContractual.JustificacionContrato">
-                    <label for="justificacion" class="control-label">{{"JUSTIFICACION_CONTRATO" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <textarea type="text" class="form-control" rows="6" maxlength="600"
-                      ng-model="solicitudNecesidad.necesidad.Justificacion" placeholder="Justificación de Contrato"
-                      required></textarea>
-                  </div>
-
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.EstudioMercado"
-                    ng-class="{ 'has-error' : solicitudform.estudio_mercados.$invalid && !solicitudform.estudio_mercados.$pristine }">
-                    <label for="estudio_mercados" class="control-label">{{"ESTUDIO_MERCADO" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <textarea name="estudio_mercados" type="text" class="form-control" maxlength="600"
-                      ng-model="solicitudNecesidad.necesidad.EstudioMercado" placeholder="Estudio de Mercado" rows="6"
-                      required></textarea>
-                  </div>
-                  <div class="alert alert-danger"
-                    ng-show="userForm.estudio_mercados.$invalid && !userForm.estudio_mercados.$pristine" role="alert">
-                    <strong>Error!</strong> Campo requerido
-                  </div>
-
-                  <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.AnalisisRiesgo">
-                    <label for="analisis_riesgos" class="control-label">{{"ANALISIS_RIESGOS" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <textarea type="text" class="form-control" maxlength="600"
-                      ng-model="solicitudNecesidad.necesidad.AnalisisRiesgo" placeholder="Análisis de riesgos" rows="6"
-                      required></textarea>
-                  </div>
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.OrdenadorGasto">
+                  <label for="rol_ordenador_gasto" class="control-label">{{"ORDENADOR_GASTO" | translate}}</label>
+                  <span class="form-control">{{solicitudNecesidad.ordenador_gasto.PrimerNombre}}
+                    {{solicitudNecesidad.ordenador_gasto.SegundoNombre}}
+                    {{solicitudNecesidad.ordenador_gasto.PrimerApellido}}
+                    {{solicitudNecesidad.ordenador_gasto.SegundoApellido}}</span>
                 </div>
-              </ng-form>
-
-              <div style="text-align:center;">
-                <button type="button" class="btn btn-primary btn-outline"
-                  ng-click="solicitudNecesidad.CambiarForm('financiacion');">
-                  {{"SIGUIENTE" | translate}}</button>
               </div>
+            </ng-form>
 
-            </md-content>
-          </md-step>
-          <md-step label="Financiación" md-complete="solicitudNecesidad.SeccionesFormulario.financiacion.completo"
-            ng-disabled="!solicitudNecesidad.SeccionesFormulario.financiacion.activo">
-            <md-content>
-              <!-- financiacion, se muestra solo si se completo general y si la unidad ejecutora esta seleccionada -->
-              <ng-form id="f_financiacion" name="financiacion" class="form-group"
-                ng-if="solicitudNecesidad.forms.General && solicitudNecesidad.necesidad.UnidadEjecutora!=undefined">
-                <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(financiacion)">{{"FINANCIACION" |
+            <!--  General -->
+            <ng-form id="f_general" name="general" class="form-group" ng-if="solicitudNecesidad.forms.General">
+              <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(general)">{{"GENERAL"
+                            | translate}}
+                <span class="fa fa-plus pull-right" ng-show="general.open"></span> <span class="fa fa-minus pull-right"
+                  ng-show="!general.open"></span>
+              </legend>
+
+              <div class="panel-body" ng-hide="general.open">
+
+                <div class="col-md-12 form-group">
+                  <label class=" control-label">{{"TIPO_FINANCIACION" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <select class="form-control" ng-model="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad"
+                    ng-options="tipof.Nombre for tipof in solicitudNecesidad.tipo_financiacion_data track by tipof.Id"
+                    required>
+                    <option value="" disabled selected>{{"SELECCIONAR" | translate}}
+                      {{"TIPO_FINANCIACION" | translate}}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6" ng-show="solicitudNecesidad.fields.General.PlanAnualAdquisiciones">
+                  <label class="control-label">{{"PLAN_ANUAL_ADQUISICIONES" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <select class="form-control" ng-model="solicitudNecesidad.necesidad.PlanAnualAdquisiciones"
+                    ng-options="pa.Id as pa.Nombre for pa  in solicitudNecesidad.planes_anuales" required>
+                    <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" |
+                                  translate}}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.UnidadEjecutora">
+                  <label class="control-label">{{"UNIDAD_EJECUTORA" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <select class="form-control" ng-model="solicitudNecesidad.necesidad.UnidadEjecutora"
+                    ng-options="ue.Id as ue.Nombre for ue in solicitudNecesidad.unidad_ejecutora_data" required>
+                    <option value="" disabled selected>{{"SELECCIONAR" | translate}}
+                      {{"UNIDAD_EJECUTORA" | translate}}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.ObjetoContractual.ObjetoContrato">
+                  <label for="objeto" class="control-label">{{"OBJETO_CONTRATO" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <textarea type="text" class="form-control" rows="6" maxlength="800"
+                    ng-model="solicitudNecesidad.necesidad.Objeto" placeholder="Objeto de Contrato" required></textarea>
+                </div>
+
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.ObjetoContractual.JustificacionContrato">
+                  <label for="justificacion" class="control-label">{{"JUSTIFICACION_CONTRATO" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <textarea type="text" class="form-control" rows="6" maxlength="600"
+                    ng-model="solicitudNecesidad.necesidad.Justificacion" placeholder="Justificación de Contrato"
+                    required></textarea>
+                </div>
+
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.EstudioMercado"
+                  ng-class="{ 'has-error' : solicitudform.estudio_mercados.$invalid && !solicitudform.estudio_mercados.$pristine }">
+                  <label for="estudio_mercados" class="control-label">{{"ESTUDIO_MERCADO" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <textarea name="estudio_mercados" type="text" class="form-control" maxlength="600"
+                    ng-model="solicitudNecesidad.necesidad.EstudioMercado" placeholder="Estudio de Mercado" rows="6"
+                    required></textarea>
+                </div>
+                <div class="alert alert-danger"
+                  ng-show="userForm.estudio_mercados.$invalid && !userForm.estudio_mercados.$pristine" role="alert">
+                  <strong>Error!</strong> Campo requerido
+                </div>
+
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.AnalisisRiesgo">
+                  <label for="analisis_riesgos" class="control-label">{{"ANALISIS_RIESGOS" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <textarea type="text" class="form-control" maxlength="600"
+                    ng-model="solicitudNecesidad.necesidad.AnalisisRiesgo" placeholder="Análisis de riesgos" rows="6"
+                    required></textarea>
+                </div>
+              </div>
+            </ng-form>
+
+            <div style="text-align:center;">
+              <button type="button" class="btn btn-primary btn-outline"
+                ng-click="solicitudNecesidad.CambiarForm('financiacion');">
+                {{"SIGUIENTE" | translate}}</button>
+            </div>
+
+          </md-content>
+        </md-step>
+        <md-step label="Financiación" md-complete="solicitudNecesidad.SeccionesFormulario.financiacion.completo"
+          ng-disabled="!solicitudNecesidad.SeccionesFormulario.financiacion.activo">
+          <md-content>
+            <!-- financiacion, se muestra solo si se completo general y si la unidad ejecutora esta seleccionada -->
+            <ng-form id="f_financiacion" name="financiacion" class="form-group"
+              ng-if="solicitudNecesidad.forms.General && solicitudNecesidad.necesidad.UnidadEjecutora!=undefined">
+              <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(financiacion)">{{"FINANCIACION" |
                           translate}}<span class="fa fa-plus pull-right" ng-show="financiacion.open"></span> <span
-                    class="fa fa-minus pull-right" ng-show="!financiacion.open"></span></legend>
+                  class="fa fa-minus pull-right" ng-show="!financiacion.open"></span></legend>
 
-                <div class="panel-body" ng-hide="financiacion.open">
+              <div class="panel-body" ng-hide="financiacion.open">
 
-                  <div class="form-group" ng-show="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad!=undefined">
-                    <label class=" control-label">{{"SELECCIONAR" | translate}} {{"APROPIACIONES" | translate}}</label>
+                <div class="form-group" ng-show="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad!=undefined">
+                  <label class=" control-label">{{"SELECCIONAR" | translate}} {{"APROPIACIONES" | translate}}</label>
 
-                    <div>
-                      <div class="form-group" ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre">
-                        <lista-apropiaciones vigencia=solicitudNecesidad.vigencia
-                          tipo="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre=='Inversion'?'3-3':'3-1'"
-                          apropiacion="solicitudNecesidad.apro"
-                          unidadejecutora=solicitudNecesidad.necesidad.UnidadEjecutora
-                          tipofinanciacion=solicitudNecesidad.necesidad.TipoFinanciacionNecesidad selhijos="true">
-                        </lista-apropiaciones>
-                        <div style="text-align:center;">
-                          <button type="button" class="btn btn-success btn-outline"
-                            ng-click="solicitudNecesidad.agregar_ffapropiacion(solicitudNecesidad.apro)">
-                            {{"AGREGAR" | translate}}
-                          </button>
-                        </div>
-                      </div>
-
-
-                      <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
-                        <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
-                          ng-click="solicitudNecesidad.eliminarRubro(ap)" aria-label="Left Align">
-                          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  <div>
+                    <div class="form-group" ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre">
+                      <lista-apropiaciones vigencia=solicitudNecesidad.vigencia
+                        tipo="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre=='Inversion'?'3-3':'3-1'"
+                        apropiacion="solicitudNecesidad.apro"
+                        unidadejecutora=solicitudNecesidad.necesidad.UnidadEjecutora
+                        tipofinanciacion=solicitudNecesidad.necesidad.TipoFinanciacionNecesidad selhijos="true">
+                      </lista-apropiaciones>
+                      <div style="text-align:center;">
+                        <button type="button" class="btn btn-success btn-outline"
+                          ng-click="solicitudNecesidad.agregar_ffapropiacion(solicitudNecesidad.apro)">
+                          {{"AGREGAR" | translate}}
                         </button>
-
-                        <h3><span class="text-success">Apropiacion: {{$index+1}}.</span> {{ap.Codigo}}
-                          {{ap.Apropiacion.Nombre}}</h3>
-                        <br>
-                        <div class="row">
-                          <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
-                          <table>
-                            <th class="text-info col-md-4">{{"VALOR_SOLICITADO" | translate}}</th>
-                            <th class="col-md-8">
-                              <div class="money">{{solicitudNecesidad.meta_necesidad.MontoPorMeta | currency}}</div>
-                            </th>
-                          </table>
-
-                          <metas-actividades apropiacion="ap.Apropiacion" actividades="ap.Apropiacion.meta.actividades"
-                            meta="ap.Apropiacion.meta">
-                          </metas-actividades>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Apropiacion.fuentes"
-                              dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
-                            </fuentes-apropiacion>
-                          </div>
-
-                          <ul class="list-group col-md-6">
-                            <li class="list-group-item">
-
-                              <label
-                                class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
-                            <li class="list-group-item" ng-repeat="fu in ap.Apropiacion.fuentes">
-                              <label class="text-warning">{{"FUENTE" | translate}} {{fu.Descripcion}}</label>
-                              <br>
-                              <label class="text-warning">{{"VALOR_SOLICITADO" | translate}}</label>
-                              <input class="money" type="text"
-                                ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
-                                ng-model="fu.MontoParcial" ui-money-mask="0">
-                              <br>
-                            </li>
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-md-6">
-                            <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Apropiacion.productos"
-                              initProductoapropiacion="ap.initProductos"></productos-apropiacion>
-                          </div>
-                          <ul class="list-group col-md-6">
-                            <li class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
-                              <label class="text-warning col-md-8">Valor Asignado a {{prod.Nombre}}</label>
-                              <input class="col-md-4 money" type="text"
-                                ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
-                                ng-model="prod.MontoParcial" ui-money-mask="0">
-                              <br>
-                            </li>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <div class="container-fluid">
-                          <table>
-                            <th class="text-info col-md-4">{{"TOTAL_FINANCIACION" | translate}}</th>
-                            <th class="col-md-8">
-                              <div class="money">{{solicitudNecesidad.f_valor | currency}}</div>
-                            </th>
-                          </table>
-                        </div>
-                        <br>
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"VALOR_TOTAL" | translate}}
-                            {{"ESPECIFICACIONES" | translate}}</label>
-                          {{solicitudNecesidad.valorTotalEspecificaciones | currency}}</div>
-
                       </div>
                     </div>
 
+
+                    <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
+                      <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
+                        ng-click="solicitudNecesidad.eliminarRubro(ap)" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                      </button>
+
+                      <h3><span class="text-success">Apropiacion: {{$index+1}}.</span> {{ap.Codigo}}
+                        {{ap.Apropiacion.Nombre}}</h3>
+                      <br>
+                      <div class="row">
+                        <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
+                        <table>
+                          <th class="text-info col-md-4">{{"VALOR_SOLICITADO" | translate}}</th>
+                          <th class="col-md-8">
+                            <div class="money">{{solicitudNecesidad.meta_necesidad.MontoPorMeta | currency}}</div>
+                          </th>
+                        </table>
+
+                        <metas-actividades apropiacion="ap.Apropiacion" actividades="ap.Apropiacion.meta.actividades"
+                          meta="ap.Apropiacion.meta">
+                        </metas-actividades>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Apropiacion.fuentes"
+                            dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
+                          </fuentes-apropiacion>
+                        </div>
+
+                        <ul class="list-group col-md-6">
+                          <li class="list-group-item">
+
+                            <label
+                              class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
+                          <li class="list-group-item" ng-repeat="fu in ap.Apropiacion.fuentes">
+                            <label class="text-warning">{{"FUENTE" | translate}} {{fu.Descripcion}}</label>
+                            <br>
+                            <label class="text-warning">{{"VALOR_SOLICITADO" | translate}}</label>
+                            <input class="money" type="text"
+                              ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
+                              ng-model="fu.MontoParcial" ui-money-mask="0">
+                            <br>
+                          </li>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Apropiacion.productos"
+                            initProductoapropiacion="ap.initProductos"></productos-apropiacion>
+                        </div>
+                        <ul class="list-group col-md-6">
+                          <li class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
+                            <label class="text-warning col-md-8">Valor Asignado a {{prod.Nombre}}</label>
+                            <input class="col-md-4 money" type="text"
+                              ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
+                              ng-model="prod.MontoParcial" ui-money-mask="0">
+                            <br>
+                          </li>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="container-fluid">
+                        <table>
+                          <th class="text-info col-md-4">{{"TOTAL_FINANCIACION" | translate}}</th>
+                          <th class="col-md-8">
+                            <div class="money">{{solicitudNecesidad.f_valor | currency}}</div>
+                          </th>
+                        </table>
+                      </div>
+                      <br>
+                      <div ng-show="solicitudNecesidad.MostrarTotalEspc"><label> {{"VALOR_TOTAL" | translate}}
+                          {{"ESPECIFICACIONES" | translate}}</label>
+                        {{solicitudNecesidad.valorTotalEspecificaciones | currency}}</div>
+
+                    </div>
                   </div>
+
                 </div>
-              </ng-form>
-              <div style="text-align:center;">
-                <button type="button" class="btn btn-primary btn-outline"
-                  ng-click="solicitudNecesidad.CambiarForm('general');">
-                  {{"ATRAS" | translate}}</button>
-                <button type="button" class="btn btn-primary btn-outline"
-                  ng-click="solicitudNecesidad.CambiarForm('legal');">
-                  {{"SIGUIENTE" | translate}}</button>
               </div>
+            </ng-form>
+            <div style="text-align:center;">
+              <button type="button" class="btn btn-primary btn-outline"
+                ng-click="solicitudNecesidad.CambiarForm('general');">
+                {{"ATRAS" | translate}}</button>
+              <button type="button" class="btn btn-primary btn-outline"
+                ng-click="solicitudNecesidad.CambiarForm('legal');">
+                {{"SIGUIENTE" | translate}}</button>
+            </div>
 
-            </md-content>
+          </md-content>
 
-          </md-step>
-          <md-step label="Marco Legal" md-complete="solicitudNecesidad.SeccionesFormulario.legal.completo"
-            ng-disabled="!solicitudNecesidad.SeccionesFormulario.legal.activo">
-            <md-content>
-              <!-- Marco legal -->
-              <ng-form id="f_legal" name="marcoLegal" class="form-group" ng-if="solicitudNecesidad.forms.MarcoLegal">
-                <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(marcoLegal)">
-                  {{"MARCO_LEGAL" | translate}}<span class="fa fa-plus pull-right" ng-show="marcoLegal.open"></span>
-                  <span class="fa fa-minus pull-right" ng-show="!marcoLegal.open"></span></legend>
-                <div ng-bind-html="solicitudNecesidad.MarcoLegalNecesidadText" ng-show="!marcoLegal.open"
-                  style="text-align: justify">
-                </div>
-                <div class="panel-body" ng-hide="marcoLegal.open">
-                  <lista-documentos-legales class="col-md-12" documentos="solicitudNecesidad.documentos">
-                  </lista-documentos-legales>
-                  <!-- <div class="col-md-6 form-group">
+        </md-step>
+        <md-step label="Marco Legal" md-complete="solicitudNecesidad.SeccionesFormulario.legal.completo"
+          ng-disabled="!solicitudNecesidad.SeccionesFormulario.legal.activo">
+          <md-content>
+            <!-- Marco legal -->
+            <ng-form id="f_legal" name="marcoLegal" class="form-group" ng-if="solicitudNecesidad.forms.MarcoLegal">
+              <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(marcoLegal)">
+                {{"MARCO_LEGAL" | translate}}<span class="fa fa-plus pull-right" ng-show="marcoLegal.open"></span>
+                <span class="fa fa-minus pull-right" ng-show="!marcoLegal.open"></span></legend>
+              <div ng-bind-html="solicitudNecesidad.MarcoLegalNecesidadText" ng-show="!marcoLegal.open"
+                style="text-align: justify">
+              </div>
+              <div class="panel-body" ng-hide="marcoLegal.open">
+                <lista-documentos-legales class="col-md-12" documentos="solicitudNecesidad.documentos">
+                </lista-documentos-legales>
+                <!-- <div class="col-md-6 form-group">
                 <h4>{{"DOCUMENTOS" | translate}}</h4>
                 <ul class="list-group">
                   <li class="list-group-item" ng-repeat="doc in solicitudNecesidad.documentos track by $index">
@@ -427,88 +444,94 @@
               </div> -->
 
 
-                </div>
-
-              </ng-form>
-              <div style="text-align:center;">
-                <button type="button" class="btn btn-primary btn-outline"
-                  ng-click="solicitudNecesidad.CambiarForm('financiacion');">
-                  {{"ATRAS" | translate}}</button>
-                <button type="button" class="btn btn-primary btn-outline"
-                  ng-click="solicitudNecesidad.CambiarForm('contratacion');">
-                  {{"SIGUIENTE" | translate}}</button>
               </div>
 
-            </md-content>
+            </ng-form>
+            <div style="text-align:center;">
+              <button type="button" class="btn btn-primary btn-outline"
+                ng-click="solicitudNecesidad.CambiarForm('financiacion');">
+                {{"ATRAS" | translate}}</button>
+              <button type="button" class="btn btn-primary btn-outline"
+                ng-click="solicitudNecesidad.CambiarForm('contratacion');">
+                {{"SIGUIENTE" | translate}}</button>
+            </div>
 
-          </md-step>
-          <md-step label="Clase de Contratación"
-            md-complete="solicitudNecesidad.SeccionesFormulario.contratacion.completo"
-            ng-disabled="!solicitudNecesidad.SeccionesFormulario.contratacion.activo">
-            <md-content>
-              <!-- Especificaciones -->
-              <ng-form name="especificaciones" class="form-group" ng-if="solicitudNecesidad.forms.Especificaciones">
-                <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(especificaciones)">{{"ESPECIFICACIONES"
+          </md-content>
+
+        </md-step>
+        <md-step label="Clase de Contratación"
+          md-complete="solicitudNecesidad.SeccionesFormulario.contratacion.completo"
+          ng-disabled="!solicitudNecesidad.SeccionesFormulario.contratacion.activo">
+          <md-content>
+            <!-- Especificaciones -->
+            <ng-form name="especificaciones" class="form-group" ng-if="solicitudNecesidad.forms.Especificaciones">
+              <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(especificaciones)">{{"ESPECIFICACIONES"
                         | translate}}<span class="fa fa-plus pull-right" ng-show="especificaciones.open"></span> <span
-                    class="fa fa-minus pull-right" ng-show="!especificaciones.open"></span></legend>
-                <div class="panel-body" ng-hide="especificaciones.open">
+                  class="fa fa-minus pull-right" ng-show="!especificaciones.open"></span></legend>
+              <div class="panel-body" ng-hide="especificaciones.open">
 
-                  <div class="col-md-12">
-                    <label class=" control-label">{{ "CLASE_CONTRATACION" | translate}}</label>
-                    <small>*{{"OBLIGATORIO" | translate}}</small>
-                    <!-- Filtra tipo necesidad no aplica Tipo necesidad == 3 -->
-                    <select class="form-control" ng-model="solicitudNecesidad.necesidad.TipoContratoNecesidad"
-                      ng-options="tipoc as tipoc.Nombre for tipoc in solicitudNecesidad.tipo_contrato_data | filter:{Id :'!3'} track by tipoc.Id "
-                      required>
-                      <option value="TODO" disabled selected>{{"SELECCIONAR" | translate}} {{"TIPO_CONTRATO_NECESIDAD" |
+                <div class="col-md-12">
+                  <label class=" control-label">{{ "CLASE_CONTRATACION" | translate}}</label>
+                  <small>*{{"OBLIGATORIO" | translate}}</small>
+                  <!-- Filtra tipo necesidad no aplica Tipo necesidad == 3 -->
+                  <select class="form-control" ng-model="solicitudNecesidad.necesidad.TipoContratoNecesidad"
+                    ng-options="tipoc as tipoc.Nombre for tipoc in solicitudNecesidad.tipo_contrato_data | filter:{Id :'!3'} track by tipoc.Id "
+                    required>
+                    <option value="TODO" disabled selected>{{"SELECCIONAR" | translate}} {{"TIPO_CONTRATO_NECESIDAD" |
                               translate}}</option>
+                  </select>
+                </div>
+
+                <!-- Tipo contrato necesidad === (servicio || Compra y Servicio)-->
+                <div
+                  ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
+
+                  <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
+                    <label for="perfil" class="control-label">{{"PERFIL" | translate}}</label>
+                    <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.Perfil"
+                      ng-options="parames.Id as parames.ValorParametro for parames in solicitudNecesidad.parametro_estandar_data">
+                      <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"PERFIL" | translate}}
+                      </option>
                     </select>
                   </div>
 
-                  <!-- Tipo contrato necesidad === (servicio || Compra y Servicio)-->
-                  <div
-                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
+                  <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
+                    <label class=" control-label">{{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</label>
+                    <select class="form-control" ng-model="solicitudNecesidad.nucleoarea"
+                      ng-options="nucleoa.Id as nucleoa.Nombre for nucleoa in solicitudNecesidad.nucleo_area_data">
+                      <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
+                        {{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</option>
+                    </select>
+                  </div>
 
-                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
-                      <label for="perfil" class="control-label">{{"PERFIL" | translate}}</label>
-                      <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.Perfil"
-                        ng-options="parames.Id as parames.ValorParametro for parames in solicitudNecesidad.parametro_estandar_data">
-                        <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"PERFIL" | translate}}
-                        </option>
-                      </select>
+                  <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
+                    <!-- ng-show="solicitudNecesidad.nucleoarea!=undefined" -->
+                    <label class="control-label">{{"NUCLEO_CONOCIMIENTO" | translate}}</label>
+                    <select class="form-control"
+                      ng-model="solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento"
+                      ng-options="nucleoc.Id*1 as nucleoc.Nombre for nucleoc in solicitudNecesidad.nucleo_conocimiento_data">
+                      <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
+                        {{"NUCLEO_CONOCIMIENTO" | translate}}</option>
+                    </select>
+                  </div>
+
+
+                  <div class="col-md-6"
+                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
+                    <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
+                    <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidadPC.codigo"
+                      ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
+                      <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
+                        {{"SERVICIO" | translate}}</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="col-md-6">
+                      <label class="control-label">Valor Servicio</label>
+                      <input type="text" class="form-control" ng-model="solicitudNecesidad.servicio_valor"
+                        ui-money-mask="0">
                     </div>
-
-                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
-                      <label class=" control-label">{{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</label>
-                      <select class="form-control" ng-model="solicitudNecesidad.nucleoarea"
-                        ng-options="nucleoa.Id as nucleoa.Nombre for nucleoa in solicitudNecesidad.nucleo_area_data">
-                        <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
-                          {{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</option>
-                      </select>
-                    </div>
-
-                    <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===2">
-                      <!-- ng-show="solicitudNecesidad.nucleoarea!=undefined" -->
-                      <label class="control-label">{{"NUCLEO_CONOCIMIENTO" | translate}}</label>
-                      <select class="form-control"
-                        ng-model="solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento"
-                        ng-options="nucleoc.Id*1 as nucleoc.Nombre for nucleoc in solicitudNecesidad.nucleo_conocimiento_data">
-                        <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
-                          {{"NUCLEO_CONOCIMIENTO" | translate}}</option>
-                      </select>
-                    </div>
-
-
-                    <div class="col-md-6"
-                      ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===5">
-                      <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
-                      <select class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidadPC.codigo"
-                        ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
-                        <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
-                          {{"SERVICIO" | translate}}</option>
-                      </select>
-                    </div>
-
                     <div class="col-md-6">
                       <div class="col-md-6">
                         <label class="control-label">Valor Servicio</label>
@@ -520,68 +543,69 @@
                         <input type="text" class="form-control" ng-model="solicitudNecesidad.f_valor" ui-money-mask="0"
                           disabled>
                       </div>
-
                     </div>
-                    <!-- 
+
+                  </div>
+                  <!-- 
                     <div class="col-md-6">
                       <label class="control-label">{{"CANTIDAD" | translate}}</label>
                       <input class="form-control" ng-model="solicitudNecesidad.detalle_servicio_necesidad.Cantidad"
                         placeholder="Cantidad" ui-number-mask="0">
                     </div> -->
 
-                    <div class="col-md-12">
-                      <label for="objeto" class="control-label">{{"ACTIVIDADES_ESPECIFICAS" | translate}}</label>
-                      <div>
-                        <ul class="list-group">
-                          <li class="list-group-item row" ng-repeat="actesp in solicitudNecesidad.ActividadEspecifica">
-                            <label class="col-md-11"><span class="text-info">{{$index+1}}.
-                              </span>{{actesp.Descripcion}}</label>
-                            <div class="col-md-1 text-right">
-                              <button type="button" class="btn btn-danger"
-                                ng-click="solicitudNecesidad.eliminarActividad(actesp)" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                              </button>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                      <textarea type="text" class="form-control" rows="6" ng-model="solicitudNecesidad.actividad_esp"
-                        placeholder="Descripcion actividad"></textarea>
+                  <div class="col-md-12">
+                    <label for="objeto" class="control-label">{{"ACTIVIDADES_ESPECIFICAS" | translate}}</label>
+                    <div>
+                      <ul class="list-group">
+                        <li class="list-group-item row" ng-repeat="actesp in solicitudNecesidad.ActividadEspecifica">
+                          <label class="col-md-11"><span class="text-info">{{$index+1}}.
+                            </span>{{actesp.Descripcion}}</label>
+                          <div class="col-md-1 text-right">
+                            <button type="button" class="btn btn-danger"
+                              ng-click="solicitudNecesidad.eliminarActividad(actesp)" aria-label="Left Align">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
-                    <div class="col-md-12">
-                      <div style="text-align: center">
-                        <button type="button" class="btn btn-primary btn-outline"
-                          ng-click="solicitudNecesidad.actividad_esp!=undefined && solicitudNecesidad.agregarActEsp(solicitudNecesidad.actividad_esp);solicitudNecesidad.actividad_esp=undefined">{{"AGREGAR"
+                    <textarea type="text" class="form-control" rows="6" ng-model="solicitudNecesidad.actividad_esp"
+                      placeholder="Descripcion actividad"></textarea>
+                  </div>
+                  <div class="col-md-12">
+                    <div style="text-align: center">
+                      <button type="button" class="btn btn-primary btn-outline"
+                        ng-click="solicitudNecesidad.actividad_esp!=undefined && solicitudNecesidad.agregarActEsp(solicitudNecesidad.actividad_esp);solicitudNecesidad.actividad_esp=undefined">{{"AGREGAR"
                                 | translate}}</button>
-                      </div>
-                      <br>
                     </div>
-
-                    <!-- Actividades economicas -->
-                    <div class="col-md-12">
-                      <div class="col-md-6">
-                        <lista-actividades-economicas actividades="solicitudNecesidad.actividades_economicas"
-                          id_actividades="solicitudNecesidad.actividades_economicas_id"></lista-actividades-economicas>
-                      </div>
-                      <div class="col-md-6">
-                        <label for="objeto" class="control-label">{{"ACTIVIDADES_ECONOMICAS" | translate}}</label>
-                        <ul class="list-group">
-                          <li class="list-group-item" ng-repeat="act in solicitudNecesidad.actividades_economicas">
-                            <label><span class="text-info">{{$index+1}}. </span>{{act.Codigo}} - {{act.Nombre}}</label>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                    <br>
                   </div>
 
-                  <!--Revisar con nueva estructura Arka -->
-                  <!-- Tipo contrato necesidad === (compra || Compra y Servicio || Servicio)-->
-                  <div class="form-group"
-                    ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
-                    <div class="col-md-12">
-                      <lista-subgrupos-catalogos productos="solicitudNecesidad.productos"></lista-subgrupos-catalogos>
+                  <!-- Actividades economicas -->
+                  <div class="col-md-12">
+                    <div class="col-md-6">
+                      <lista-actividades-economicas actividades="solicitudNecesidad.actividades_economicas"
+                        id_actividades="solicitudNecesidad.actividades_economicas_id"></lista-actividades-economicas>
                     </div>
-                    <h4>{{"ELEMENTOS" | translate}}</h4>
+                    <div class="col-md-6">
+                      <label for="objeto" class="control-label">{{"ACTIVIDADES_ECONOMICAS" | translate}}</label>
+                      <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="act in solicitudNecesidad.actividades_economicas">
+                          <label><span class="text-info">{{$index+1}}. </span>{{act.Codigo}} - {{act.Nombre}}</label>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!--Revisar con nueva estructura Arka -->
+                <!-- Tipo contrato necesidad === (compra || Compra y Servicio || Servicio)-->
+                <div class="form-group"
+                  ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+                  <div class="col-md-12">
+                    <lista-subgrupos-catalogos productos="solicitudNecesidad.productos"></lista-subgrupos-catalogos>
+                  </div>
+                  <h4>{{"ELEMENTOS" | translate}}</h4>
 
                     <div class="container-flex">
                       <div class="row">
@@ -612,7 +636,6 @@
                           </div>
                         </div>
                       </div>
-
                     </div>
 
                     <ng-form name="prodDiv" ng-repeat="pro in solicitudNecesidad.productos">
@@ -737,24 +760,30 @@
 
               </ng-form>
 
-              <fieldset>
-                <div style="text-align: center">
-                  <button type="button" class="btn btn-success btn-outline"
-                    ng-click="solicitudNecesidad.submitForm(solicitudform)">
-                    {{'REGISTRAR' | translate }}</button>
-                </div>
-              </fieldset>
+            <fieldset>
+              <div style="text-align: center">
+                <button type="button" class="btn btn-success btn-outline"
+                  ng-click="solicitudNecesidad.submitForm(solicitudform)">
+                  {{'REGISTRAR' | translate }}</button>
+                <button type="button" class="btn btn-primary btn-outline"
+                  ng-click="solicitudNecesidad.CambiarForm('legal');">
+                  {{"ATRAS" | translate}}</button>
+              </div>
+            </fieldset>
+
+            <div style="text-align:center;">
+
+          </md-content>
       </form>
-      <div style="text-align:center;">
-        <button type="button" class="btn btn-primary btn-outline" ng-click="solicitudNecesidad.CambiarForm('legal');">
-          {{"ATRAS" | translate}}</button>
 
-        </md-content>
+      </md-step>
 
+    </md-steppers>
 
-        </md-step>
+  </div>
+</div>
+</div>
 
-        </md-steppers>
 
 
 
