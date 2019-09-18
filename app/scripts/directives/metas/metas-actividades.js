@@ -14,8 +14,8 @@ angular.module('contractualClienteApp')
         apropiacion: '=',
         actividades: '=',
         meta : '=',
-        dependencia_destino: '=',
-        dependencia_solicitante: '='
+        dependenciasolicitante: '=',
+        dependenciadestino: '='
       },
 
 
@@ -58,7 +58,6 @@ angular.module('contractualClienteApp')
         };
 
         self.cargarMetas = function () {
-          console.info($scope.dependencia_solicitante , $scope.dependencia_destino)
           metasRequest.get('2019').then(
             function (res) {
               var tempmetas = res.data.metas.actividades; // falta un filter por rubro
@@ -99,9 +98,20 @@ angular.module('contractualClienteApp')
           }).then(function () {
             // Se inicializa el grid api para seleccionar
             self.gridOptions.data=self.gridOptions.data.filter(function(m){
-             return (m.meta_id === self.meta); 
+             return (m.meta_id === self.meta) && (m.dependencia === $scope.dependenciasolicitante.toString() || m.dependencia === $scope.dependenciadestino.toString() ); 
             });
-            self.gridApi.grid.modifyRows(self.gridOptions.data);
+            if(self.gridOptions.data.length > 0){
+              self.gridApi.grid.modifyRows(self.gridOptions.data);
+            }else{
+              swal({
+                title: '¡No hay Actividades!',
+                type: 'error',
+                text: 'Las dependencias no están asociadas a la meta seleccionada . Por favor seleccione otra meta',
+                showCloseButton: true,
+                confirmButtonText: "CERRAR"
+            });
+            }
+            
           });
         }
 
@@ -111,7 +121,6 @@ angular.module('contractualClienteApp')
         $scope.$watch('actividades', function () {
           $scope.actividades ? $scope.actividades.forEach(function (act) {
             var tmp = self.gridOptions.data.filter(function (e) { return e.Id !== act.Id })
-            console.info(tmp);
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
