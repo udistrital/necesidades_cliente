@@ -7,7 +7,7 @@
  * # apropiaciones/listaApropiaciones
  */
 angular.module('contractualClienteApp')
-    .directive('listaApropiaciones', function ( planCuentasRequest, $translate) {
+    .directive('listaApropiaciones', function (planCuentasRequest, $translate) {
         return {
             restrict: 'E',
             scope: {
@@ -78,26 +78,31 @@ angular.module('contractualClienteApp')
 
                 $scope.$watchGroup(['unidadejecutora', 'tipofinanciacion'], function () {
                     if ($scope.unidadejecutora !== undefined && $scope.tipofinanciacion !== undefined) {
+                        // UD inversion
                         if ($scope.unidadejecutora === 1 && $scope.tipofinanciacion.Id === 1) {
-                            $scope.tipo = "3-3";
+                            $scope.tipo = "3-03";
+                        // UD funcionamiento
                         } else if ($scope.unidadejecutora === 1 && $scope.tipofinanciacion.Id === 2) {
-                            $scope.tipo = "3-1";
+                            $scope.tipo = "3-01";
+                        // IDEXUD inversion, no existen
                         } else if ($scope.unidadejecutora === 2 && $scope.tipofinanciacion.Id === 1) {
-                            $scope.tipo = "3-0-0";
+                            $scope.tipo = "XYZ";
+                        // IDEXUD funcionamiento
                         } else if ($scope.unidadejecutora === 2 && $scope.tipofinanciacion.Id === 2) {
-                            $scope.tipo = "3-0";
+                            $scope.tipo = "3-00-991";
                         }
                         self.actualiza_rubros();
-                        if ($scope.tipo !== "3-0-0") {
-
-                        }
                     }
                 }, true);
 
 
                 self.actualiza_rubros = function () {
-                    planCuentasRequest.get("arbol_rubro_apropiacion/get_hojas/"+ $scope.unidadejecutora +"/"+ $scope.vigencia ).then(function (response) {
+                    planCuentasRequest.get("arbol_rubro_apropiacion/get_hojas/" + $scope.unidadejecutora + "/" + $scope.vigencia).then(function (response) {
                         if (response.data.Body !== null) {
+                            response.data.Body = response.data.Body.filter(function (a) {
+                                // funcion para filtrar rubros por codigo 
+                                return a.Codigo.startsWith($scope.tipo);
+                            });
                             self.gridOptions.data = response.data.Body .sort(function (a, b) {
                                 if (a.Codigo < b.Codigo) { return -1; }
                                 if (a.Codigo > b.Codigo) { return 1; }

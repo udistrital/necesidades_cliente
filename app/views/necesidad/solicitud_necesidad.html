@@ -329,7 +329,7 @@
                       <h3><span class="text-success">Apropiacion: {{$index+1}}.</span> {{ap.Codigo}}
                         {{ap.Apropiacion.Nombre}}</h3>
                       <br>
-                      <div class="row">
+                      <div class="row" ng-show="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre==='Inversión'">
                         <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
                         <table>
                           <th class="text-info col-md-4">{{"VALOR_SOLICITADO" | translate}}</th>

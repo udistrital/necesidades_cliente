@@ -131,7 +131,7 @@ angular.module('contractualClienteApp')
 
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
             self.f_apropiacion = trNecesidad[1];
-            trNecesidad=trNecesidad[0]
+            trNecesidad=trNecesidad[0];
             self.necesidad = trNecesidad.Necesidad;
             // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
             // self.detalle_servicio_necesidad.Cantidad = 1;
@@ -787,12 +787,20 @@ angular.module('contractualClienteApp')
                 administrativaRequest.put("tr_necesidad", self.IdNecesidad, self.tr_necesidad).then(NecesidadHandle("put"));
             } else {
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
+                // validacion de financiacion vs especificaciones
+                var especificaciones_valido = false;
+                switch(self.necesidad.TipoContratoNecesidad.Id) {
+                    case 1:
+                        especificaciones_valido = self.f_valor===self.valorTotalEspecificaciones
+                    case 2:
+                        especificaciones_valido = self.f_valor===self.servicio_valor;
+                    case 4:
+                        especificaciones_valido = self.f_valor===(self.valorTotalEspecificaciones+self.servicio_valor) ; 
+                    case 5:
+                        especificaciones_valido = self.f_valor===self.servicio_valor;
+                }
 
-                if(self.f_valor===self.valorTotalEspecificaciones && self.necesidad.TipoContratoNecesidad.Id === 1 ){
-                    administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
-                        NecesidadHandle(res, 'post')
-                    });
-                }else if(self.f_valor===(self.valorTotalEspecificaciones+self.servicio_valor) && self.necesidad.TipoContratoNecesidad.Id === 4){
+                if( especificaciones_valido ){
                     administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
                         NecesidadHandle(res, 'post')
                     });
