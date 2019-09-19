@@ -180,7 +180,7 @@ angular.module('contractualClienteApp')
 
     self.initNecesidad = function (IdNecesidad) {
       var trNecesidad = {};
-      var trNecesidadPC = {};
+      var trNecesidadPC = [];
       if (IdNecesidad) {
         return Promise.all([administrativaRequest.get('necesidad', $.param({
           query: 'Id:' + IdNecesidad
