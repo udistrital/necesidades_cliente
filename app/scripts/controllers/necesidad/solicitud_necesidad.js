@@ -341,6 +341,11 @@ angular.module('contractualClienteApp')
             self.CambiarTipoNecesidad(TipoNecesidad);
         });
 
+        $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora','solicitudNecesidad.necesidad.TipoFinanciacionNecesidad'], function(){
+            // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
+            self.f_apropiacion = [];
+        })
+
         necesidadService.getAllDependencias().then(function (Dependencias) {
             self.dependencia_data = Dependencias;
         });
@@ -351,21 +356,67 @@ angular.module('contractualClienteApp')
             order: "asc",
         })).then(function (response) {
             self.ordenador_gasto_data = response.data;
+        }).catch(function (err) {
+            //solucion cuestonablemente provisional  porque el servicio core no responde en json
+            console.info("error obteniendo lista ordenadores gasto", err);
+            self.ordenador_gasto_data = [
+                {
+                  Id: 7,
+                  Cargo: 'Decano Facultad Ciencias y Educación',
+                  DependenciaId: 17
+                },
+                {
+                  Id: 10,
+                  Cargo: 'Decano Facultad de Artes',
+                  DependenciaId: 35
+                },
+                {
+                  Id: 8,
+                  Cargo: 'Decano Facultad de Medio Ambiente',
+                  DependenciaId: 65
+                },
+                {
+                  Id: 6,
+                  Cargo: 'Decano Facultad Ingeniería',
+                  DependenciaId: 14
+                },
+                {
+                  Id: 9,
+                  Cargo: 'Decano Facultad Tecnológica',
+                  DependenciaId: 66
+                },
+                {
+                  Id: 4,
+                  Cargo: 'Director Centro de Investigaciones y Desarrollo Científico',
+                  DependenciaId: 43
+                },
+                {
+                  Id: 11,
+                  Cargo: 'Director IDEXUD',
+                  DependenciaId: 12
+                },
+                {
+                  Id: 3,
+                  Cargo: 'Rector',
+                  DependenciaId: 7
+                },
+                {
+                  Id: 5,
+                  Cargo: 'Secretario General',
+                  DependenciaId: 9
+                },
+                {
+                  Id: 1,
+                  Cargo: 'Vicerrector Académico',
+                  DependenciaId: 8
+                },
+                {
+                  Id: 2,
+                  Cargo: 'Vicerrector Administrativo y Financiero',
+                  DependenciaId: 15
+                }
+              ]
         });
-
-        // oikosRequest.get('dependencia', $.param({
-        //     query: 'Id:122',
-        //     limit: -1
-        // })).then(function (response) {
-        //     
-        // });
-
-        // agoraRequest.get('informacion_persona_natural', $.param({
-        //     query: 'Id:5220482',
-        //     limit: -1
-        // })).then(function (response) {
-        //     self.persona_solicitante = response.data[0];
-        // });
 
 
         //TODO: cambio de identificacion en financiera a oikos (7,12, etc)
