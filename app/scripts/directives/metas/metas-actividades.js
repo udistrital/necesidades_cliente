@@ -97,20 +97,35 @@ angular.module('contractualClienteApp')
             self.gridOptions.data = response.data.metas.actividades;
           }).then(function () {
             // Se inicializa el grid api para seleccionar
-            self.gridOptions.data=self.gridOptions.data.filter(function(m){
-             return (m.meta_id === self.meta) && (m.dependencia === $scope.dependenciasolicitante.toString() || m.dependencia === $scope.dependenciadestino.toString() ); 
-            });
-            if(self.gridOptions.data.length > 0){
+            if($scope.dependenciasolicitante !== undefined && $scope.dependenciadestino !== undefined){
+              self.gridOptions.data=self.gridOptions.data.filter(function(m){
+                return (m.meta_id === self.meta) && (m.dependencia === $scope.dependenciasolicitante.toString() || m.dependencia === $scope.dependenciadestino.toString() ); 
+               });
+               if(self.gridOptions.data.length > 0){
+                 self.gridApi.grid.modifyRows(self.gridOptions.data);
+               }else{
+                 swal({
+                   title: '¡No hay Actividades!',
+                   type: 'error',
+                   text: 'Las dependencias no están asociadas a la meta seleccionada . Por favor seleccione otra meta',
+                   showCloseButton: true,
+                   confirmButtonText: "CERRAR"
+               });
+               
+
+               }
+            } else {
+              self.gridOptions.data=[];
               self.gridApi.grid.modifyRows(self.gridOptions.data);
-            }else{
               swal({
-                title: '¡No hay Actividades!',
+                title: '¡No hay Dependencias Seleccionadas!',
                 type: 'error',
-                text: 'Las dependencias no están asociadas a la meta seleccionada . Por favor seleccione otra meta',
+                text: 'Las dependencias no han sido seleccionadas',
                 showCloseButton: true,
                 confirmButtonText: "CERRAR"
             });
             }
+
             
           });
         }

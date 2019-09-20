@@ -730,7 +730,7 @@ angular.module('contractualClienteApp')
                     }
                 }),
                 detalleServicio : (self.necesidad.TipoContratoNecesidad.Id === 4 || self.necesidad.TipoContratoNecesidad.Id === 5) ? {
-                    valor:  self.f_valor || 0,
+                    valor:  self.f_valor + self.servicio_valor || 0,
                     codigo: self.detalle_servicio_necesidadPC.codigo+"" || "",
                     descripcion: ""
                 } : {}
@@ -840,18 +840,31 @@ angular.module('contractualClienteApp')
                 self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
                 // validacion de financiacion vs especificaciones
                 var especificaciones_valido = false;
+
+                if(self.necesidad.TipoNecesidad.Id===6){
+                    especificaciones_valido = true;
+                    return ;
+                }else{
+
+                
                 switch(self.necesidad.TipoContratoNecesidad.Id) {
                     case 1:
                         especificaciones_valido = self.f_valor===self.valorTotalEspecificaciones
+                        break;
                     case 2:
                         especificaciones_valido = self.f_valor===self.servicio_valor;
+                        break;
                     case 4:
                         especificaciones_valido = self.f_valor===(self.valorTotalEspecificaciones+self.servicio_valor) ; 
+                        break;
                     case 5:
                         especificaciones_valido = self.f_valor===self.servicio_valor;
+                        break;
                 }
 
-                if( especificaciones_valido ){
+                console.info(self.necesidad.TipoContratoNecesidad.Id , " Valor : " , self.f_valor ,"Servicio", self.servicio_valor,"Especificaciones ", self.valorTotalEspecificaciones , "Result " + especificaciones_valido);
+
+                if( especificaciones_valido){
                     administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
                         NecesidadHandle(res, 'post')
                     });
@@ -866,6 +879,7 @@ angular.module('contractualClienteApp')
                 }
 
             }
+        }
         };
 
         self.ValidarFinanciacion = function () {
@@ -875,9 +889,15 @@ angular.module('contractualClienteApp')
                 var v_act = 0;
                 var v_productos = 0;
                 ap.Apropiacion.fuentes ? ap.Apropiacion.fuentes.forEach(function (e) { v_fuentes += e.MontoParcial; }) : _;
-                ap.Apropiacion.meta.actividades ? ap.Apropiacion.meta.actividades.forEach(function (e) { v_act += e.MontoParcial; }) : _;
+                ap.Apropiacion.meta ? ap.Apropiacion.meta.actividades.forEach(function (e) { v_act += e.MontoParcial; }) : _;
                 ap.Apropiacion.productos ? ap.Apropiacion.productos.forEach(function (e) { v_productos += e.MontoParcial }) : _;
-                fin_valid = fin_valid && (v_fuentes===v_act && v_act=== v_productos);
+                console.info(self.necesidad.TipoFinanciacionNecesidad.Nombre);
+                if(self.necesidad.TipoFinanciacionNecesidad.Nombre==='Inversión'){ 
+                    fin_valid = fin_valid && (v_fuentes===v_act && v_act=== v_productos);
+                }else{
+                    fin_valid = fin_valid && (v_fuentes===v_productos);
+                }
+                
             });
             !fin_valid ? swal({
                 title: 'Valores de financiacion errados',
@@ -961,6 +981,7 @@ angular.module('contractualClienteApp')
                 case 'general':
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
+                    console.info(document.getElementById("f_financiacion").classList.contains('ng-valid') ,"ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA" ,self.ValidarFinanciacion())
                     return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine') && self.ValidarFinanciacion();
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
