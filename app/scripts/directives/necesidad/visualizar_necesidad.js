@@ -77,12 +77,16 @@ angular.module('contractualClienteApp')
                             self.tipoContrato = responseMongo.data.Body[0].tipoContrato;
                             
                             
+                            if (self.tipoContrato && self.tipoContrato !== 0 ) {
+                                agoraRequest.get('tipo_contrato', $.param({
+                                    query: "Id:" + self.tipoContrato,
+                                })).then(function (responseADM) {
+                                    self.v_necesidad.TipoContrato = responseADM;
+                                }).catch(function (err) {
+                                    console.info(err)
+                                });
+                            }
 
-                            agoraRequest.get('tipo_contrato', $.param({
-                                query: "Id:" + self.tipoContrato,
-                            })).then(function (responseADM) {
-                                self.v_necesidad.TipoContrato = responseADM;
-                            });
 
                             self.ff_apropiacion.forEach(function (fuente) {
                                 planCuentasRequest.get('fuente_financiamiento/' + fuente.codigo).then(function (fuenteData) {
