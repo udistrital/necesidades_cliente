@@ -69,6 +69,7 @@ angular.module('contractualClienteApp')
                         planCuentasRequest.get('necesidades', $.param({
                             query: "idAdministrativa:" + self.v_necesidad.Id,
                         })).then(function (responseMongo) {
+                            console.info(responseMongo);
                             self.metaId = responseMongo.data.Body[0].apropiaciones[0].metas[0].codigo;
                             self.actividadesMongo = responseMongo.data.Body[0].apropiaciones[0].metas[0].actividades;
                             self.codAp = responseMongo.data.Body[0].apropiaciones[0].codigo;
@@ -77,12 +78,17 @@ angular.module('contractualClienteApp')
                             self.tipoContrato = responseMongo.data.Body[0].tipoContrato;
                             
                             
+                            if (self.tipoContrato && self.tipoContrato !== 0 ) {
+                                agoraRequest.get('tipo_contrato', $.param({
+                                    query: "Id:" + self.tipoContrato,
+                                })).then(function (responseADM) {
+                                    self.v_necesidad.TipoContrato = responseADM;
+                                    console.info(self.v_necesidad.TipoContrato , "Imma here");
+                                }).catch(function (err) {
+                                    console.info(err)
+                                });
+                            }
 
-                            agoraRequest.get('tipo_contrato', $.param({
-                                query: "Id:" + self.tipoContrato,
-                            })).then(function (responseADM) {
-                                self.v_necesidad.TipoContrato = responseADM;
-                            });
 
                             self.ff_apropiacion.forEach(function (fuente) {
                                 planCuentasRequest.get('fuente_financiamiento/' + fuente.codigo).then(function (fuenteData) {
@@ -111,20 +117,29 @@ angular.module('contractualClienteApp')
                         metasRequest.get('2019').then(function (responsePA) {
                             self.metasObj = [];
                             self.meta = '';
+                            console.info(responsePA);
                             self.actividadesMongo.forEach(function (actividad) {
                                 for (var index = 0; index < responsePA.data.metas.actividades.length; index++) {
-                                    if (actividad.codigo === responsePA.data.metas.actividades[index].actividad_id) {
+                                    if (actividad.codigo === responsePA.data.metas.actividades[index].actividad_id && responsePA.data.metas.actividades[index].dependencia==="122") {
                                         self.metasObj.push(
                                             {
                                                 Meta: responsePA.data.metas.actividades[index].meta,
                                                 Codigo: actividad.codigo,
                                                 Nombre: responsePA.data.metas.actividades[index].actividad,
-                                                Valor: actividad.valor
+                                                Valor: actividad.valor,
+                                                Dependencia: responsePA.data.metas.actividades[index].dependencia
                                             }
+
+                                            // self.metasObj.filter(function(el){
+                                            //     return {el.Dependencia === }
+                                            // })
+
+                                        
 
                                         );
                                     }
                                     self.meta = responsePA.data.metas.actividades[index].meta;
+                                    console.info(self.metasObj.length)
                                 }
                             });
                         });
@@ -142,6 +157,7 @@ angular.module('contractualClienteApp')
                             fields: "JefeDependenciaSolicitante,JefeDependenciaDestino,OrdenadorGasto"
                         })).then(function (response) {
                             self.dependencias = response.data[0];
+                            console.info(self.dependencias);
 
                             coreRequest.get('jefe_dependencia', $.param({
                                 query: 'Id:' + response.data[0].JefeDependenciaSolicitante

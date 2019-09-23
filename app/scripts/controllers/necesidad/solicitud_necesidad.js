@@ -17,7 +17,7 @@ angular.module('contractualClienteApp')
         self.documentos = [];
         self.avance = undefined;
         self.formuIncompleto = true;
-        
+
 
         self.meta = undefined;
         self.meta_necesidad = {
@@ -131,11 +131,11 @@ angular.module('contractualClienteApp')
 
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
             self.f_apropiacion = trNecesidad[1];
-            trNecesidad=trNecesidad[0];
+            trNecesidad = trNecesidad[0];
             self.necesidad = trNecesidad.Necesidad;
             // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
             // self.detalle_servicio_necesidad.Cantidad = 1;
-            self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica;
+            self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica || [];
 
             if (self.necesidad.TipoContratoNecesidad.Id === 2) {
                 self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
@@ -341,7 +341,7 @@ angular.module('contractualClienteApp')
             self.CambiarTipoNecesidad(TipoNecesidad);
         });
 
-        $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora','solicitudNecesidad.necesidad.TipoFinanciacionNecesidad'], function(){
+        $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora', 'solicitudNecesidad.necesidad.TipoFinanciacionNecesidad'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
             self.f_apropiacion = [];
         })
@@ -361,78 +361,67 @@ angular.module('contractualClienteApp')
             console.info("error obteniendo lista ordenadores gasto", err);
             self.ordenador_gasto_data = [
                 {
-                  Id: 7,
-                  Cargo: 'Decano Facultad Ciencias y Educación',
-                  DependenciaId: 17
+                    Id: 7,
+                    Cargo: 'Decano Facultad Ciencias y Educación',
+                    DependenciaId: 17
                 },
                 {
-                  Id: 10,
-                  Cargo: 'Decano Facultad de Artes',
-                  DependenciaId: 35
+                    Id: 10,
+                    Cargo: 'Decano Facultad de Artes',
+                    DependenciaId: 35
                 },
                 {
-                  Id: 8,
-                  Cargo: 'Decano Facultad de Medio Ambiente',
-                  DependenciaId: 65
+                    Id: 8,
+                    Cargo: 'Decano Facultad de Medio Ambiente',
+                    DependenciaId: 65
                 },
                 {
-                  Id: 6,
-                  Cargo: 'Decano Facultad Ingeniería',
-                  DependenciaId: 14
+                    Id: 6,
+                    Cargo: 'Decano Facultad Ingeniería',
+                    DependenciaId: 14
                 },
                 {
-                  Id: 9,
-                  Cargo: 'Decano Facultad Tecnológica',
-                  DependenciaId: 66
+                    Id: 9,
+                    Cargo: 'Decano Facultad Tecnológica',
+                    DependenciaId: 66
                 },
                 {
-                  Id: 4,
-                  Cargo: 'Director Centro de Investigaciones y Desarrollo Científico',
-                  DependenciaId: 43
+                    Id: 4,
+                    Cargo: 'Director Centro de Investigaciones y Desarrollo Científico',
+                    DependenciaId: 43
                 },
                 {
-                  Id: 11,
-                  Cargo: 'Director IDEXUD',
-                  DependenciaId: 12
+                    Id: 11,
+                    Cargo: 'Director IDEXUD',
+                    DependenciaId: 12
                 },
                 {
-                  Id: 3,
-                  Cargo: 'Rector',
-                  DependenciaId: 7
+                    Id: 3,
+                    Cargo: 'Rector',
+                    DependenciaId: 7
                 },
                 {
-                  Id: 5,
-                  Cargo: 'Secretario General',
-                  DependenciaId: 9
+                    Id: 5,
+                    Cargo: 'Secretario General',
+                    DependenciaId: 9
                 },
                 {
-                  Id: 1,
-                  Cargo: 'Vicerrector Académico',
-                  DependenciaId: 8
+                    Id: 1,
+                    Cargo: 'Vicerrector Académico',
+                    DependenciaId: 8
                 },
                 {
-                  Id: 2,
-                  Cargo: 'Vicerrector Administrativo y Financiero',
-                  DependenciaId: 15
+                    Id: 2,
+                    Cargo: 'Vicerrector Administrativo y Financiero',
+                    DependenciaId: 15
                 }
-              ]
+            ]
         });
 
 
-        //TODO: cambio de identificacion en financiera a oikos (7,12, etc)
-        //oikosRequest.get('dependencia', $.param({
-        financieraRequest.get('unidad_ejecutora', $.param({
-            limit: -1,
-            sortby: "Nombre",
-            order: "asc",
-        })).then(function (response) {
+        //TODO: usar el servicio de unidad ejecutora cuando exista
 
-            //self.unidad_ejecutora_data = response.data.filter(function(d) {return (d.Id === 7 || d.Id === 12)}); //TODO: usar query:Id__in:(7,12) con la sistaxis correcta si beego tiene soporte
-            self.unidad_ejecutora_data = response.data;
-        }).catch(function (e) {
-            self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }]; //PRovisional esta asquerosidad :) 
-
-        });
+        self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }]; //PRovisional esta asquerosidad :) 
 
 
         administrativaRequest.get('tipo_necesidad', $.param({
@@ -462,7 +451,7 @@ angular.module('contractualClienteApp')
             sortby: "PrimerNombre",
             order: "asc",
         })).then(function (response) {
-            self.persona_data = response.data.filter(function(p){
+            self.persona_data = response.data.filter(function (p) {
                 return p.Cargo !== "";
             });
         });
@@ -572,13 +561,24 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('solicitudNecesidad.f_apropiacion', function () {
             self.f_valor = 0;
+
             for (var i = 0; i < self.f_apropiacion.length; i++) {
                 self.f_apropiacion[i].MontoPorApropiacion = 0;
-                if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
-                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
-                        self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
+                if(self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'){
+                    if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
+                        for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
+                            self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
+                        }
                     }
                 }
+                if(self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
+                    if (self.f_apropiacion[i].Apropiacion.fuentes !== undefined && self.f_apropiacion[i].Apropiacion.productos !== undefined) {
+                        for (var k = 0; k < self.f_apropiacion[i].Apropiacion.fuentes.length; k++) {
+                            self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.fuentes[k].MontoParcial;
+                        }
+                    }
+                }
+
                 self.f_valor += self.f_apropiacion[i].MontoPorApropiacion;
             }
         }, true);
@@ -670,7 +670,7 @@ angular.module('contractualClienteApp')
                         });
                     }
                 });
-            
+
             ;
             self.necesidad.Valor = self.f_valor;
             self.necesidad.ModalidadSeleccion = {
@@ -694,13 +694,14 @@ angular.module('contractualClienteApp')
                 ProductosNecesidad: self.productos_apropiaciones
             };
 
-    
+
             self.necesidad_plancuentas = {
                 apropiaciones: self.f_apropiacion.map(function (ap) {
                     return {
                         codigo: ap.Apropiacion.Codigo,
 
-                        metas: [{
+
+                        metas: self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión' ? [{
                             codigo: ap.Apropiacion.meta.actividades[0].meta_id || 0,
                             actividades: ap.Apropiacion.meta.actividades.map(function (a) {
                                 return {
@@ -709,7 +710,7 @@ angular.module('contractualClienteApp')
                                 }
                             })
                         }
-                        ],
+                        ] : [],
 
                         fuentes: ap.Apropiacion.fuentes.map(function (f) {
                             return {
@@ -729,9 +730,9 @@ angular.module('contractualClienteApp')
 
                     }
                 }),
-                detalleServicio : (self.necesidad.TipoContratoNecesidad.Id === 4 || self.necesidad.TipoContratoNecesidad.Id === 5) ? {
-                    valor:  self.f_valor + self.servicio_valor || 0,
-                    codigo: self.detalle_servicio_necesidadPC.codigo+"" || "",
+                detalleServicio: (self.necesidad.TipoContratoNecesidad.Id === 4 || self.necesidad.TipoContratoNecesidad.Id === 5) ? {
+                    valor: self.f_valor + self.servicio_valor || 0,
+                    codigo: self.detalle_servicio_necesidadPC.codigo + "" || "",
                     descripcion: ""
                 } : {}
             }
@@ -841,45 +842,45 @@ angular.module('contractualClienteApp')
                 // validacion de financiacion vs especificaciones
                 var especificaciones_valido = false;
 
-                if(self.necesidad.TipoNecesidad.Id===6){
+                if (self.necesidad.TipoNecesidad.Id === 6) {
                     especificaciones_valido = true;
-                    return ;
-                }else{
+                    return;
+                } else {
 
-                
-                switch(self.necesidad.TipoContratoNecesidad.Id) {
-                    case 1:
-                        especificaciones_valido = self.f_valor===self.valorTotalEspecificaciones
-                        break;
-                    case 2:
-                        especificaciones_valido = self.f_valor===self.servicio_valor;
-                        break;
-                    case 4:
-                        especificaciones_valido = self.f_valor===(self.valorTotalEspecificaciones+self.servicio_valor) ; 
-                        break;
-                    case 5:
-                        especificaciones_valido = self.f_valor===self.servicio_valor;
-                        break;
+
+                    switch (self.necesidad.TipoContratoNecesidad.Id) {
+                        case 1:
+                            especificaciones_valido = self.f_valor === self.valorTotalEspecificaciones
+                            break;
+                        case 2:
+                            especificaciones_valido = self.f_valor === self.servicio_valor;
+                            break;
+                        case 4:
+                            especificaciones_valido = self.f_valor === (self.valorTotalEspecificaciones + self.servicio_valor);
+                            break;
+                        case 5:
+                            especificaciones_valido = self.f_valor === self.servicio_valor;
+                            break;
+                    }
+
+                    console.info(self.necesidad.TipoContratoNecesidad.Id, " Valor : ", self.f_valor, "Servicio", self.servicio_valor, "Especificaciones ", self.valorTotalEspecificaciones, "Result " + especificaciones_valido);
+
+                    if (especificaciones_valido) {
+                        administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
+                            NecesidadHandle(res, 'post')
+                        });
+                    } else {
+                        swal({
+                            title: 'Valores errados',
+                            type: 'error',
+                            text: 'Por favor, verifique la igualdad de los valores de Financiacion y de Clase de Contratación ',
+                            showCloseButton: true,
+                            confirmButtonText: $translate.instant("CERRAR")
+                        })
+                    }
+
                 }
-
-                console.info(self.necesidad.TipoContratoNecesidad.Id , " Valor : " , self.f_valor ,"Servicio", self.servicio_valor,"Especificaciones ", self.valorTotalEspecificaciones , "Result " + especificaciones_valido);
-
-                if( especificaciones_valido){
-                    administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
-                        NecesidadHandle(res, 'post')
-                    });
-                }else{
-                    swal({
-                        title: 'Valores errados',
-                        type: 'error',
-                        text: 'Por favor, verifique la igualdad de los valores de Financiacion y de Clase de Contratación ' ,
-                        showCloseButton: true,
-                        confirmButtonText: $translate.instant("CERRAR")
-                    })
-                }
-
             }
-        }
         };
 
         self.ValidarFinanciacion = function () {
@@ -892,17 +893,17 @@ angular.module('contractualClienteApp')
                 ap.Apropiacion.meta ? ap.Apropiacion.meta.actividades.forEach(function (e) { v_act += e.MontoParcial; }) : _;
                 ap.Apropiacion.productos ? ap.Apropiacion.productos.forEach(function (e) { v_productos += e.MontoParcial }) : _;
                 console.info(self.necesidad.TipoFinanciacionNecesidad.Nombre);
-                if(self.necesidad.TipoFinanciacionNecesidad.Nombre==='Inversión'){ 
-                    fin_valid = fin_valid && (v_fuentes===v_act && v_act=== v_productos);
-                }else{
-                    fin_valid = fin_valid && (v_fuentes===v_productos);
+                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
+                    fin_valid = fin_valid && (v_fuentes === v_act && v_act === v_productos);
+                } else {
+                    fin_valid = fin_valid && (v_fuentes === v_productos);
                 }
-                
+
             });
             !fin_valid ? swal({
                 title: 'Valores de financiacion errados',
                 type: 'error',
-                text: 'Por favor, verifique la igualdad de los valores de financiacion ' ,
+                text: 'Por favor, verifique la igualdad de los valores de financiacion ',
                 showCloseButton: true,
                 confirmButtonText: $translate.instant("CERRAR")
             }) : swal({
@@ -981,7 +982,7 @@ angular.module('contractualClienteApp')
                 case 'general':
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
-                    console.info(document.getElementById("f_financiacion").classList.contains('ng-valid') ,"ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA" ,self.ValidarFinanciacion())
+                    console.info(document.getElementById("f_financiacion").classList.contains('ng-valid'), "ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA", self.ValidarFinanciacion())
                     return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine') && self.ValidarFinanciacion();
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');

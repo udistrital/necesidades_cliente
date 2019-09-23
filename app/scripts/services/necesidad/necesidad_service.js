@@ -61,6 +61,7 @@ angular.module('contractualClienteApp')
           }))
         }).then(function (response) {
           out.Persona = response.data[0];
+          console.info(out);
           resolve(out);
         }).catch(function (error) {
           reject(error);
@@ -142,12 +143,13 @@ angular.module('contractualClienteApp')
                   var tempmetas;
                   metasRequest.get('2019').then(
                     function (res) {
+                      
                       tempmetas = res.data.metas.actividades;
                       item.Apropiacion.meta.actividades = ap.metas[0].actividades.map(function (act) {
                         return tempmetas.filter(function(m){
                           return (m.meta_id === ap.metas[0].codigo)&&(m.actividad_id === act.codigo)
                         })[0] || null; 
-                      })      
+                      }) ;
                     }
                   ).catch(function(err){
                     console.info(err)
