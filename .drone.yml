@@ -2,7 +2,7 @@ kind: pipeline
 name: cliente_deploy
 
 steps: 
-  - name: buildA1
+  - name: nodeBuild
     image: node:10.7.0
     commands:
      - npm install -g grunt-cli bower
