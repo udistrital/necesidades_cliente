@@ -1,14 +1,8 @@
-workspace:
-  base: /go
-  path: src/github.com/udistrital/${DRONE_REPO##udistrital/}
-  when:
-      branch: [master, test]
-      event: [push, pull_request]
+kind: pipeline
+name: cliente_deploy
 
-pipeline:
-
-  # build and test the go program
-  nodejs:
+steps:
+  - name: buildA1
     image: node:10.7.0
     commands:
      - npm install -g grunt-cli bower
@@ -16,48 +10,67 @@ pipeline:
      - npm install
      - bower install --allow-root
      - grunt build
-
     when:
-      branch: [master, test]
-      event: [push, pull_request]
+      branch:
+      - master
+      - test
+      event:
+      - push
+      - pull_request
 
-  # upload app.zip to s3 bucket for CodePipline
-  publish_s3:
+  - name: publish-s3-test
     image: plugins/s3
-    secrets: [ aws_access_key_id, aws_secret_access_key ]
-    region: "us-east-1"
-    bucket: "cliente-pruebas"
-    source: dist/**/*
-    target: /pruebas${DRONE_REPO_NAME%%_cliente}.portaloas.udistrital.edu.co
-    strip_prefix: dist/
+    settings:
+      bucket: cliente-pruebas
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      region: us-east-1
+      source: dist/**/*
+      target: /pruebas${DRONE_REPO_NAME%%_cliente}.portaloas.udistrital.edu.co
+      strip_prefix: dist/
     when:
-      branch: test
-      event: [push, pull_request]
+      branch:
+      - test
+      event:
+      - push
 
-  # upload app.zip to s3 bucket for CodePipline
-  publish_s3:
+  - name: publish-s3-master
     image: plugins/s3
-    secrets: [ aws_access_key_id, aws_secret_access_key ]
-    region: "us-east-1"
-    bucket: "cliente-pruebas"
-    source: dist/**/*
-    target: /${DRONE_REPO_NAME%%_cliente}.portaloas.udistrital.edu.co
-    strip_prefix: dist/
+    settings:
+      bucket: cliente-pruebas
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      region: us-east-1
+      source: dist/**/*
+      target: /${DRONE_REPO_NAME%%_cliente}.portaloas.udistrital.edu.co
+      strip_prefix: dist/
     when:
-      branch: master
-      event: [push, pull_request]
+      branch:
+      - master
+      event:
+      - push
 
-  NotifyTelegram:
+  - name: NotifyTelegram
     image: appleboy/drone-telegram
-    secrets: [ telegram_token, telegram_to ]
-    format: html
-    message: >
-      {{#success build.status}} With Drone 1.0
+    settings:
+      token:
+        from_secret: telegram_token
+      to:
+        from_secret: telegram_to
+      format: html
+      message: >
+        {{#success build.status}} With Drone 1.0
           <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">SUCCESS</a>
-          <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a><code> By:{{commit.author}}</code>
+          <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
+          <code> By:{{commit.author}}</code>
         {{else}}
           <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">FAILURE</a>
-          <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a><code> By:{{commit.author}}</code>
+          <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
+          <code> By:{{commit.author}}</code>
         {{/success}}
     when:
       branch:
@@ -66,6 +79,3 @@ pipeline:
       status:
       - failure
       - success
-      event:
-      - push
-      - pull_request
