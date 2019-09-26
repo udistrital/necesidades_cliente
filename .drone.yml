@@ -2,7 +2,7 @@ kind: pipeline
 name: cliente_deploy
 
 steps: 
-  - name: buildA1
+  - name: buildNode
     image: node:10.7.0
     commands:
      - npm install -g grunt-cli bower
@@ -16,8 +16,9 @@ steps:
       - test
       event:
       - push
+      - pull_request
 
-  - name: publish-s3-test  
+  - name: publish-s3-test
     image: plugins/s3
     settings:
       bucket: cliente-pruebas
@@ -35,7 +36,7 @@ steps:
       event:
       - push
 
-  - name: publish-s3-master  
+  - name: publish-s3-master
     image: plugins/s3
     settings:
       bucket: cliente-pruebas
@@ -62,8 +63,8 @@ steps:
         from_secret: telegram_to
       format: html
       message: >
-        {{#success build.status}}
-          <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">SUCCESS</a> 
+        {{#success build.status}} With Drone 1.0
+          <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">SUCCESS</a>
           <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
           <code> By:{{commit.author}}</code>
         {{else}}
