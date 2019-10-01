@@ -18,7 +18,7 @@ angular.module('contractualClienteApp')
                 tipoContrato: '='
             },
             templateUrl: 'views/directives/necesidad/visualizar_necesidad.html',
-            controller: function (financieraRequest, metasRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, planCuentasRequest, $scope) {
+            controller: function (financieraRequest, metasRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreAmazonRequest, adminMidRequest, planCuentasRequest, $scope) {
                 var self = this;
                 self.verJustificacion = false;
                 self.justificaciones_rechazo = [];
@@ -69,7 +69,7 @@ angular.module('contractualClienteApp')
                         planCuentasRequest.get('necesidades', $.param({
                             query: "idAdministrativa:" + self.v_necesidad.Id,
                         })).then(function (responseMongo) {
-                            console.info(responseMongo);
+                            // console.info(responseMongo);
                             self.metaId = responseMongo.data.Body[0].apropiaciones[0].metas[0].codigo;
                             self.actividadesMongo = responseMongo.data.Body[0].apropiaciones[0].metas[0].actividades;
                             self.codAp = responseMongo.data.Body[0].apropiaciones[0].codigo;
@@ -83,7 +83,6 @@ angular.module('contractualClienteApp')
                                     query: "Id:" + self.tipoContrato,
                                 })).then(function (responseADM) {
                                     self.v_necesidad.TipoContrato = responseADM;
-                                    console.info(self.v_necesidad.TipoContrato , "Imma here");
                                 }).catch(function (err) {
                                     console.info(err)
                                 });
@@ -117,7 +116,7 @@ angular.module('contractualClienteApp')
                         metasRequest.get('2019').then(function (responsePA) {
                             self.metasObj = [];
                             self.meta = '';
-                            console.info(responsePA);
+                            // console.info(responsePA);
                             self.actividadesMongo.forEach(function (actividad) {
                                 for (var index = 0; index < responsePA.data.metas.actividades.length; index++) {
                                     if (actividad.codigo === responsePA.data.metas.actividades[index].actividad_id && responsePA.data.metas.actividades[index].dependencia==="122") {
@@ -139,7 +138,7 @@ angular.module('contractualClienteApp')
                                         );
                                     }
                                     self.meta = responsePA.data.metas.actividades[index].meta;
-                                    console.info(self.metasObj.length)
+                                    // console.info(self.metasObj.length)
                                 }
                             });
                         });
@@ -157,9 +156,9 @@ angular.module('contractualClienteApp')
                             fields: "JefeDependenciaSolicitante,JefeDependenciaDestino,OrdenadorGasto"
                         })).then(function (response) {
                             self.dependencias = response.data[0];
-                            console.info(self.dependencias);
+                            // console.info(self.dependencias);
 
-                            coreRequest.get('jefe_dependencia', $.param({
+                            coreAmazonRequest.get('jefe_dependencia', $.param({
                                 query: 'Id:' + response.data[0].JefeDependenciaSolicitante
                             })).then(function (response) {
                                 agoraRequest.get('informacion_persona_natural', $.param({
@@ -174,7 +173,7 @@ angular.module('contractualClienteApp')
                                 }); response.data[0].OrdenadorGasto
                             });
 
-                            coreRequest.get('jefe_dependencia', $.param({
+                            coreAmazonRequest.get('jefe_dependencia', $.param({
                                 query: 'Id:' + response.data[0].JefeDependenciaDestino
                             })).then(function (response) {
                                 agoraRequest.get('informacion_persona_natural', $.param({

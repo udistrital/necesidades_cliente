@@ -8,7 +8,7 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function (administrativaRequest, planCuentasRequest, metasRequest, coreRequest, agoraRequest, oikosRequest, financieraRequest) {
+  .service('necesidadService', function (administrativaRequest, planCuentasRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
@@ -49,7 +49,7 @@ angular.module('contractualClienteApp')
           reject(out);
         }
 
-        coreRequest.get('jefe_dependencia', $.param({
+        coreAmazonRequest.get('jefe_dependencia', $.param({
           query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia) + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
           limit: -1,
         })).then(function (response) {
@@ -61,7 +61,7 @@ angular.module('contractualClienteApp')
           }))
         }).then(function (response) {
           out.Persona = response.data[0];
-          console.info(out);
+          // console.info(out);
           resolve(out);
         }).catch(function (error) {
           reject(error);
@@ -152,7 +152,7 @@ angular.module('contractualClienteApp')
                       }) ;
                     }
                   ).catch(function(err){
-                    console.info(err)
+                    // console.info(err)
                   });
 
 
@@ -235,20 +235,20 @@ angular.module('contractualClienteApp')
               }).then(function (response) {
                 trNecesidad.DependenciaNecesidad = response.data[0];
 
-                return coreRequest.get('jefe_dependencia', $.param({
+                return coreAmazonRequest.get('jefe_dependencia', $.param({
                   query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaDestino + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
                   limit: -1,
                 }))
               }).then(function (response) {
                 trNecesidad.DependenciaNecesidadDestino = response.data[0].DependenciaId;
-                return coreRequest.get('jefe_dependencia', $.param({
+                return coreAmazonRequest.get('jefe_dependencia', $.param({
                   query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaSolicitante + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
                   limit: -1,
                 }))
               }).then(function (response) {
                 trNecesidad.DependenciaNecesidadSolicitante = response.data[0].DependenciaId;
 
-                return coreRequest.get('jefe_dependencia', $.param({
+                return coreAmazonRequest.get('jefe_dependencia', $.param({
                   query: "TerceroId:" + trNecesidad.DependenciaNecesidad.OrdenadorGasto + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
                   limit: -1
                 }))
