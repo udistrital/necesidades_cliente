@@ -16,6 +16,7 @@ angular.module('contractualClienteApp')
             AprobarNecesidad: true,
             RechazarNecesidad: true,
             EditarNecesidad: true,
+            SolicitarCDP: true,
         };
 
         self.modalidadSel = {};
@@ -294,12 +295,29 @@ angular.module('contractualClienteApp')
         self.solicitar_cdp = function () {
             self.sol_cdp = {};
             self.sol_cdp.Necesidad = self.g_necesidad;
-            administrativaRequest.post("solicitud_disponibilidad", self.sol_cdp).then(function (response) {
+            var sol_cdp_pc=    {
+                consecutivo: 16,
+                entidad: self.g_necesidad.UnidadEjecutora,
+                centroGestor: 1,
+                necesidad: self.g_necesidad.Id,
+                vigencia: self.g_necesidad.Vigencia,
+                fechaRegistro: new Date().toISOString(),
+                estado: 1,
+                justificacionRechazo: "",
+                infoCdp: null,
+                activo: true,
+                fechaCreacion: new Date().toISOString(),
+                fechaModificacion: new Date().toISOString(),
+              };
+            
+            Promise.all([administrativaRequest.post("solicitud_disponibilidad", self.sol_cdp),planCuentasRequest.post("solicitudesCDP",sol_cdp_pc)]).then(
+                function (response) {
                 self.alerta = "";
-                for (var i = 1; i < response.data.length; i += 1) {
-                    self.alerta = self.alerta + response.data[i] + "\n";
+                for (var i = 1; i < response[0].data.length; i += 1) {
+                    self.alerta = self.alerta + response[0].data[i] + "\n";
                 }
-                swal("", self.alerta, response.data[0]);
+                swal("", self.alerta, response[0].data[0]);
+                swal("", self.alerta, response[1].data);
                 self.cargarDatosNecesidades(self.offset, self.query);
                 self.necesidad = undefined;
                 $("#myModal").modal("hide");

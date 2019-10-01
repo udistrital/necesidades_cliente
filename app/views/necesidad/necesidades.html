@@ -21,7 +21,8 @@
   <div class="modal-content col-md-10 col-md-offset-1" style="margin-top: 5%">
 
     <div class="modal-body" ng-if="necesidades.g_necesidad!=undefined">
-      <visualizar-necesidad vigencia="necesidades.vigencia" numero="necesidades.numero_el" estado="necesidades.g_necesidad.EstadoNecesidad" modalidadSel="necesidades.modalidadSel" tipoContrato="necesidades.tipoContrato"/>
+      <visualizar-necesidad vigencia="necesidades.vigencia" numero="necesidades.numero_el" estado="necesidades.g_necesidad.EstadoNecesidad" modalidadSel="necesidades.modalidadSel" tipoContrato="necesidades.tipoContrato">
+      </visualizar-necesidad>
       <div class="col-md-12" ng-show="necesidades.g_necesidad.EstadoNecesidad.Id===1">
           <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
           <div class="col-md-12">
