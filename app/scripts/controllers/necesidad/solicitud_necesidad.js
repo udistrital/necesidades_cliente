@@ -9,7 +9,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, oikosRequest, parametrosGobiernoRequest, financieraRequest, coreRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, parametrosGobiernoRequest, coreAmazonRequest,$translate, $routeParams, necesidadService) {
         var self = this;
 
         self.IdNecesidad = $routeParams.IdNecesidad;
@@ -297,7 +297,7 @@ angular.module('contractualClienteApp')
             }
         };
 
-        // coreRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, $.param({ query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') })).then(function (response) {
+        // coreAmazonRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, $.param({ query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') })).then(function (response) {
         //     self.dependencia_solicitante_data = response.data;
         // });
 
@@ -350,7 +350,7 @@ angular.module('contractualClienteApp')
             self.dependencia_data = Dependencias;
         });
 
-        coreRequest.get('ordenador_gasto', $.param({
+        coreAmazonRequest.get('ordenador_gasto', $.param({
             limit: -1,
             sortby: "Cargo",
             order: "asc",
@@ -863,7 +863,7 @@ angular.module('contractualClienteApp')
                             break;
                     }
 
-                    console.info(self.necesidad.TipoContratoNecesidad.Id, " Valor : ", self.f_valor, "Servicio", self.servicio_valor, "Especificaciones ", self.valorTotalEspecificaciones, "Result " + especificaciones_valido);
+                    // console.info(self.necesidad.TipoContratoNecesidad.Id, " Valor : ", self.f_valor, "Servicio", self.servicio_valor, "Especificaciones ", self.valorTotalEspecificaciones, "Result " + especificaciones_valido);
 
                     if (especificaciones_valido) {
                         administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
@@ -892,7 +892,7 @@ angular.module('contractualClienteApp')
                 ap.Apropiacion.fuentes ? ap.Apropiacion.fuentes.forEach(function (e) { v_fuentes += e.MontoParcial; }) : _;
                 ap.Apropiacion.meta ? ap.Apropiacion.meta.actividades.forEach(function (e) { v_act += e.MontoParcial; }) : _;
                 ap.Apropiacion.productos ? ap.Apropiacion.productos.forEach(function (e) { v_productos += e.MontoParcial }) : _;
-                console.info(self.necesidad.TipoFinanciacionNecesidad.Nombre);
+                // console.info(self.necesidad.TipoFinanciacionNecesidad.Nombre);
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
                     fin_valid = fin_valid && (v_fuentes === v_act && v_act === v_productos);
                 } else {
@@ -982,7 +982,7 @@ angular.module('contractualClienteApp')
                 case 'general':
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
-                    console.info(document.getElementById("f_financiacion").classList.contains('ng-valid'), "ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA", self.ValidarFinanciacion())
+                    // console.info(document.getElementById("f_financiacion").classList.contains('ng-valid'), "ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA", self.ValidarFinanciacion())
                     return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine') && self.ValidarFinanciacion();
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
