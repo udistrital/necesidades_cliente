@@ -907,9 +907,9 @@ angular.module('contractualClienteApp')
                 showCloseButton: true,
                 confirmButtonText: $translate.instant("CERRAR")
             }) : swal({
-                title: 'Financiacion OK',
+                title: 'Financiación OK',
                 type: 'success',
-                text: 'Valores de financiacion en igualdad',
+                text: 'Valores de financiación en igualdad',
                 showCloseButton: true,
                 confirmButtonText: $translate.instant("CERRAR")
             });
@@ -982,7 +982,7 @@ angular.module('contractualClienteApp')
                 case 'general':
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
-                    // console.info(document.getElementById("f_financiacion").classList.contains('ng-valid'), "ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA", self.ValidarFinanciacion())
+                    //  (document.getElementById("f_financiacion").classList.contains('ng-valid'), "ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA", self.ValidarFinanciacion())
                     return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine') && self.ValidarFinanciacion();
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
