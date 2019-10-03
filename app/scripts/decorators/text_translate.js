@@ -129,7 +129,7 @@ var text_es = {
     VALOR_SOLICITADO: "Valor Solicitado",
     TOTAL_FINANCIACION: "Total Financiación",
     OBLIGATORIO: "Campo requerido",
-    PRECIO_MAS_IVA: "Valor + IVA",
+    PRECIO_MAS_IVA: "Valor Unitario + IVA",
     NO_NECESIDAD: "No. elaboración necesidad",
     //lista_documentos_legales
     MARCO_LEGAL: "Marco Legal",
@@ -181,6 +181,7 @@ var text_es = {
     CONTRATO: "Contrato",
     VIGENCIA_CONTRATO: "Vigencia contrato",
     FUENTE: "Fuente de Financiamiento",
+    PRODUCTO: "Producto",
     SOLICITUD_PERSONAS: "Contratos para solicitud del registro presupuestal",
     VIGENCIA_ACTUAL: "Vigencia Actual ",
     VIGENCIA_SELECCIONADA: "Vigencia Seleccionada ",

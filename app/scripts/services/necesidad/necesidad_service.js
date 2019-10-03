@@ -61,7 +61,6 @@ angular.module('contractualClienteApp')
           }))
         }).then(function (response) {
           out.Persona = response.data[0];
-          // console.info(out);
           resolve(out);
         }).catch(function (error) {
           reject(error);
@@ -184,15 +183,17 @@ angular.module('contractualClienteApp')
       var trNecesidad = {};
       var trNecesidadPC = [];
       if (IdNecesidad) {
-        return Promise.all([administrativaRequest.get('necesidad', $.param({
-          query: 'Id:' + IdNecesidad
-        })),
+        return Promise.all([administrativaRequest.get('necesidad'),
           planCuentasRequest.get('necesidades', $.param({
             query: "idAdministrativa:" + IdNecesidad
           }))]).then(function (response) {
              var responseMongo=response[1].data.Body[0] || {};
             response = response[0];
-            trNecesidad.Necesidad = response.data[0];
+            trNecesidad.Necesidad = response.data.filter(
+              function (e) {
+                return e.Id+""===IdNecesidad+"";
+              }
+            )[0];
             trNecesidadPC = self.getFinanciacion(responseMongo, trNecesidad.Necesidad.Vigencia, trNecesidad.Necesidad.UnidadEjecutora);
             return new Promise(function (resolve, reject) {
               if (trNecesidad.Necesidad.TipoContratoNecesidad.Id === 5) { // Tipo Servicio
@@ -215,25 +216,24 @@ angular.module('contractualClienteApp')
                   resolve("OK");
                 });
               } else {
+                
                 resolve("Ok");
               }
             }).then(function (response) {
-
-              /*     return adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + IdNecesidad).then(function (response) {
-                    trNecesidad.Ffapropiacion = response.data;
-       */
-
                 return administrativaRequest.get('marco_legal_necesidad', $.param({
                   query: 'Necesidad:' + IdNecesidad
                 }))
               .then(function (response) {
                 trNecesidad.MarcoLegalNecesidad = response.data;
-
+                
                 return administrativaRequest.get('dependencia_necesidad', $.param({
                   query: 'Necesidad:' + IdNecesidad
                 }))
               }).then(function (response) {
                 trNecesidad.DependenciaNecesidad = response.data[0];
+                
+
+                
 
                 return coreAmazonRequest.get('jefe_dependencia', $.param({
                   query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaDestino + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
@@ -254,6 +254,10 @@ angular.module('contractualClienteApp')
                 }))
               }).then(function (response) {
                 trNecesidad.RolOrdenadorGasto = response.data[0].DependenciaId;
+                return new Promise(function (resolve, reject) {
+                  resolve([trNecesidad,trNecesidadPC]);
+                });
+              }).catch(function (err) {
                 return new Promise(function (resolve, reject) {
                   resolve([trNecesidad,trNecesidadPC]);
                 });
