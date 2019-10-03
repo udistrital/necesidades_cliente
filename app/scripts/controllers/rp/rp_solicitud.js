@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('RpSolicitudCtrl', function(coreRequest, gridOptionsService, resolucion, $window, contrato, disponibilidad, administrativaRequest, amazonAdministrativaRequest, $scope, financieraRequest, financieraMidRequest, $translate) {
+    .controller('RpSolicitudCtrl', function(coreAmazonRequest, gridOptionsService, resolucion, $window, contrato, disponibilidad, administrativaRequest, amazonAdministrativaRequest, $scope, financieraRequest, financieraMidRequest, $translate) {
         var self = this;
 
         $scope.rubroVacio = false;
@@ -188,7 +188,7 @@ angular.module('contractualClienteApp')
             JefeDependenciaSolicitante: 18
         };
 
-        coreRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, '').then(function(response) {
+        coreAmazonRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, '').then(function(response) {
             self.dependencia_solicitante_data = response.data;
         });
 
