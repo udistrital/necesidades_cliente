@@ -63,7 +63,7 @@ angular.module('contractualClienteApp')
           out.Persona = response.data[0];
           resolve(out);
         }).catch(function (error) {
-          reject(error);
+          // console.error(error);
         });
       });
     };
