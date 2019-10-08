@@ -356,10 +356,8 @@
                             <label
                               class="text-info">{{"VALOR_SOLICITADO" | translate}}</label>{{ap.MontoPorApropiacion | currency}}
                           <li class="list-group-item" ng-repeat="fu in ap.Apropiacion.fuentes">
-                            <label class="text-warning">{{"FUENTE" | translate}} {{fu.Descripcion}}</label>
-                            <br>
-                            <label class="text-warning">{{"VALOR_SOLICITADO" | translate}}</label>
-                            <input class="money" type="text"
+                            <label class="text-warning col-md-8">{{"FUENTE" | translate}}: {{fu.Nombre}}</label>
+                            <input class="col-md-4 money" type="text"
                               ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
                               ng-model="fu.MontoParcial" ui-money-mask="0">
                             <br>
@@ -406,7 +404,7 @@
                 </div>
               </div>
             </ng-form>
-            <div style="text-align:center;">
+            <div ng-if="solicitudNecesidad.necesidad.TipoNecesidad.Id!==6" style="text-align:center;">
               <button type="button" class="btn btn-primary btn-outline"
                 ng-click="solicitudNecesidad.CambiarForm('general');">
                 {{"ATRAS" | translate}}</button>
@@ -415,10 +413,21 @@
                 {{"SIGUIENTE" | translate}}</button>
             </div>
 
+            <fieldset ng-if="solicitudNecesidad.necesidad.TipoNecesidad.Id===6">
+              <div style="text-align: center">
+                <button type="button" class="btn btn-success btn-outline"
+                  ng-click="solicitudNecesidad.submitForm(solicitudform)">
+                  {{'REGISTRAR' | translate }}</button>
+                <button type="button" class="btn btn-primary btn-outline"
+                  ng-click="solicitudNecesidad.CambiarForm('general');">
+                  {{"ATRAS" | translate}}</button>
+              </div>
+            </fieldset>
+
           </md-content>
 
         </md-step>
-        <md-step label="Marco Legal" md-complete="solicitudNecesidad.SeccionesFormulario.legal.completo"
+        <md-step ng-if='solicitudNecesidad.necesidad.TipoNecesidad.Id!==6' label="Marco Legal" md-complete="solicitudNecesidad.SeccionesFormulario.legal.completo"
           ng-disabled="!solicitudNecesidad.SeccionesFormulario.legal.activo">
           <md-content>
             <!-- Marco legal -->
@@ -446,7 +455,7 @@
               </div>
 
             </ng-form>
-            <div ng-if="solicitudNecesidad.necesidad.TipoNecesidad.Id!==6"style="text-align:center;">
+            <div style="text-align:center;">
               <button type="button" class="btn btn-primary btn-outline"
                 ng-click="solicitudNecesidad.CambiarForm('financiacion');">
                 {{"ATRAS" | translate}}</button>
@@ -457,16 +466,6 @@
 
           </md-content>
 
-          <fieldset ng-if="solicitudNecesidad.necesidad.TipoNecesidad.Id===6">
-            <div style="text-align: center">
-              <button type="button" class="btn btn-success btn-outline"
-                ng-click="solicitudNecesidad.submitForm(solicitudform)">
-                {{'REGISTRAR' | translate }}</button>
-              <button type="button" class="btn btn-primary btn-outline"
-                ng-click="solicitudNecesidad.CambiarForm('financiacion');">
-                {{"ATRAS" | translate}}</button>
-            </div>
-          </fieldset>
 
         </md-step>
 

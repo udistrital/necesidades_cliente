@@ -37,20 +37,22 @@ angular.module('contractualClienteApp')
             cellTooltip: function (row) {
               return row.entity.Nombre
             }
-          },
-          {
-            field: 'ValorOriginal',
-            displayName: $translate.instant('VALOR'),
-            cellFilter: 'currency',
-            headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
-            cellClass: function (row, col) {
-              return 'money'
-            },
-            cellTooltip: function (row) {
-              return row.entity.Nombre
-            },
-            width: '40%'
-          }]
+          }
+          // ,
+          // {
+          //   field: 'ValorOriginal',
+          //   displayName: $translate.instant('VALOR'),
+          //   cellFilter: 'currency',
+          //   headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
+          //   cellClass: function (row, col) {
+          //     return 'money'
+          //   },
+          //   cellTooltip: function (row) {
+          //     return row.entity.Nombre
+          //   },
+          //   width: '40%'
+          // }
+        ]
         }
 
         self.gridOptions.onRegisterApi = function (gridApi) {
