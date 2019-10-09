@@ -79,7 +79,10 @@ angular.module('contractualClienteApp')
                                 Subtotal: 0,
                                 Valor: 0,
                                 ValorIVA: 0,
-                                preciomasIVA: 0
+                                preciomasIVA: 0,
+                                Iva: 0,
+                                Elemento: "",
+                                Cantidad: 0
                             }
                         }) : $scope.productos = self.gridApi.selection.getSelectedRows();
                     });
