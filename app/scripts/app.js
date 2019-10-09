@@ -86,7 +86,7 @@ angular
             },
             'response': function(response) {
                 // do something on success
-                console.log(response.headers());
+                // console.log(response.headers());
                 return response;
             },
             responseError: function(err){
@@ -95,8 +95,8 @@ angular
         };
     })
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
-        cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
-        cfpLoadingBarProvider.spinnerTemplate = '<div class="loading-div"><div><span class="fa loading-spinner"></div><div class="fa sub-loading-div">Por favor espere, cargando...</div></div>';
+        // cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
+        // cfpLoadingBarProvider.spinnerTemplate = '<div class="loading-div"><div><span class="fa loading-spinner"></div><div class="fa sub-loading-div">Por favor espere, cargando...</div></div>';
     }])
     .config(function ($mdDateLocaleProvider) {
         $mdDateLocaleProvider.formatDate = function (date) {
