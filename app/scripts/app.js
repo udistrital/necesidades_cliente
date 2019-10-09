@@ -11,13 +11,13 @@
  */
 angular
     .module('contractualClienteApp', [
+        'ngRoute',
         'afOAuth2',
         'angular-loading-bar',
         'ngAnimate',
         'ngCookies',
         'ngMessages',
         'ngResource',
-        'ngRoute',
         'treeControl',
         'ngMaterial',
         'ui.grid',
