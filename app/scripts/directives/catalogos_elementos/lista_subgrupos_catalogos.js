@@ -70,7 +70,7 @@ angular.module('contractualClienteApp')
                 self.gridOptions.onRegisterApi = function (gridApi) {
                     self.gridApi = gridApi;
                     gridApi.selection.on.rowSelectionChanged($scope, function () {
-                        $scope.productos = self.gridApi.selection.getSelectedRows().map(function (e) {
+                        $scope.productos.length===0 ? $scope.productos = self.gridApi.selection.getSelectedRows().map(function (e) {
                             return {
                                 $$hashKey: e.$$hashKey,
                                 ElementoCodigo: e.ElementoCodigo,
@@ -81,12 +81,13 @@ angular.module('contractualClienteApp')
                                 ValorIVA: 0,
                                 preciomasIVA: 0
                             }
-                        });
+                        }) : $scope.productos = self.gridApi.selection.getSelectedRows();
                     });
+
                 };
 
                 $scope.$watch('productos', function () {
-                    if ($scope.productos.length === 0) {
+                    if ($scope.productos.length === 0 || $scope.productos===[]) {
                         self.gridApi.selection.clearSelectedRows();
                     }
                 }, true);
