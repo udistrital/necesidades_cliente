@@ -50,6 +50,7 @@ angular.module('contractualClienteApp')
         self.productos = [];
         self.f_valor = 0;
         self.servicio_valor = 0;
+        self.valor_compra_servicio = 0;
         self.meta_valor = 0;
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
@@ -592,6 +593,10 @@ angular.module('contractualClienteApp')
             }
         }, true);
 
+        $scope.$watch('solicitudNecesidad.servicio_valor', function () {
+            self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
+        }, true)
+
 
         $scope.$watch('solicitudNecesidad.productos', function () {
             self.valorTotalEspecificaciones = 0;
@@ -612,6 +617,7 @@ angular.module('contractualClienteApp')
                 self.valorIVA += (producto.Valor * (producto.Iva / 100));
             });
             self.valorTotalEspecificaciones = self.valorIVA + self.subtotalEspecificaciones;
+            self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
 
         }, true);
 
@@ -853,10 +859,10 @@ angular.module('contractualClienteApp')
 
                 if (self.necesidad.TipoNecesidad.Id === 6) {
                     especificaciones_valido = true;
-                    self.ValidarFinanciacion() ? 
-                    administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
-                        NecesidadHandle(res, 'post')
-                    }): _;
+                    self.ValidarFinanciacion() ?
+                        administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
+                            NecesidadHandle(res, 'post')
+                        }) : _;
                     return;
                 } else {
 
@@ -897,7 +903,7 @@ angular.module('contractualClienteApp')
         };
 
         self.ValidarFinanciacion = function () {
-            var fin_valid = self.f_apropiacion.length>0;
+            var fin_valid = self.f_apropiacion.length > 0;
             self.f_apropiacion.forEach(function (ap) {
                 var v_fuentes = 0;
                 var v_act = 0;
