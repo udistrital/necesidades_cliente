@@ -11,13 +11,13 @@
  */
 angular
     .module('contractualClienteApp', [
+        'afOAuth2',
         'angular-loading-bar',
         'ngAnimate',
         'ngCookies',
         'ngMessages',
         'ngResource',
         'ngRoute',
-        'afOAuth2',
         'treeControl',
         'ngMaterial',
         'ui.grid',
@@ -69,7 +69,7 @@ angular
     .run(function (amMoment) {
         amMoment.changeLocale('es');
     })
-    .factory('httpRequestInterceptor', function () {
+    .factory('httpRequestInterceptor', function ($q) {
         return {
             request: function (config) {
 
@@ -80,14 +80,23 @@ angular
 
                 return config;
             },
+            'requestError': function(rejection) {
+                // do something on error
+                return $q.reject(rejection);
+            },
+            'response': function(response) {
+                // do something on success
+                console.log(response.headers());
+                return response;
+            },
             responseError: function(err){
                 return err;
             }
         };
     })
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
-        // cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
-        // cfpLoadingBarProvider.spinnerTemplate = '<div class="loading-div"><div><span class="fa loading-spinner"></div><div class="fa sub-loading-div">Por favor espere, cargando...</div></div>';
+        cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
+        cfpLoadingBarProvider.spinnerTemplate = '<div class="loading-div"><div><span class="fa loading-spinner"></div><div class="fa sub-loading-div">Por favor espere, cargando...</div></div>';
     }])
     .config(function ($mdDateLocaleProvider) {
         $mdDateLocaleProvider.formatDate = function (date) {
