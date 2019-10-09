@@ -58,7 +58,7 @@ angular.module('contractualClienteApp')
                         width: '40%'
                     },
                     {
-                        field: 'ApropiacionInicial',
+                        field: 'ValorActual',
                         displayName: $translate.instant('VALOR'),
                         cellFilter: 'currency',
                         // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',

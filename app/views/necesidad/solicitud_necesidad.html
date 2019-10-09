@@ -359,7 +359,7 @@
                             <label class="text-warning col-md-8">{{"FUENTE" | translate}}: {{fu.Nombre}}</label>
                             <input class="col-md-4 money" type="text"
                               ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
-                              ng-model="fu.MontoParcial" ui-money-mask="0">
+                              ng-model="fu.MontoParcial" ui-money-mask="2">
                             <br>
                           </li>
                           </li>
@@ -376,7 +376,7 @@
                             <label class="text-warning col-md-8">{{"PRODUCTO" | translate}}: {{prod.Nombre}}</label>
                             <input class="col-md-4 money" type="text"
                               ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
-                              ng-model="prod.MontoParcial" ui-money-mask="0">
+                              ng-model="prod.MontoParcial" ui-money-mask="2">
                             <br>
                           </li>
                           </li>
@@ -540,12 +540,12 @@
                     <div class="col-md-6">
                       <label class="control-label">Valor Servicio</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.servicio_valor"
-                        ui-money-mask="0">
+                        ui-money-mask="2">
                     </div>
 
                     <div ng-show="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4" class="col-md-6">
                       <label class="control-label">Valor Compra + Servicio</label>
-                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.f_valor" ui-money-mask="0"
+                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.f_valor" ui-money-mask="2"
                         disabled>
                     </div>
                   </div>
@@ -688,12 +688,12 @@
                             <div class="col-md-4">
                               <label class=" control-label">{{"VALOR_UNITARIO" | translate}}</label>
                               <input class="form-control" ng-init="pro.Valor = 0" ng-model="pro.Valor;"
-                                placeholder="Valor Unitario" ui-money-mask="0" required>
+                                placeholder="Valor Unitario" ui-money-mask="2" required>
                             </div>
 
                             <div class="col-md-4">
                               <label class=" control-label">{{"IVA" | translate}} %</label>
-                              <select class="form-control" ng-model="pro.Iva"
+                              <select class="form-control" ng-init="pro.Iva = 0" ng-model="pro.Iva"
                                 ng-options="iva.Valor as iva.Valor for iva in solicitudNecesidad.iva_data" required>
                                 <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"IVA" | translate}}
                                   %
@@ -707,19 +707,19 @@
                           <div class="col-md-12">
                             <div class="col-md-4">
                               <label class=" control-label">{{"VALOR_IVA" | translate}}</label>
-                              <input class="form-control" ng-model="pro.ValorIVA" placeholder="valor_con_iva"
-                                ui-money-mask="0" readonly>
+                              <input class="form-control" ng-init="pro.ValorIVA = 0" ng-model="pro.ValorIVA" placeholder="valor_con_iva"
+                                ui-money-mask="2" readonly>
                             </div>
 
                             <div class="col-md-4">
                               <label class=" control-label">{{"PRECIO_MAS_IVA" | translate}}</label>
-                              <input class="form-control" ng-model="pro.preciomasIVA" placeholder="valor_con_iva"
-                                ui-money-mask="0" readonly>
+                              <input class="form-control" ng-init="pro.preciomasIVA = 0" ng-model="pro.preciomasIVA" placeholder="valor_con_iva"
+                                ui-money-mask="2" readonly>
                             </div>
 
                             <div class="col-md-4">
                               <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
-                              <input class="form-control" ng-model="pro.Subtotal" placeholder="Total" ui-money-mask="0"
+                              <input class="form-control" ng-init="pro.Subtotal= 0" ng-model="pro.Subtotal" placeholder="Total" ui-money-mask="2"
                                 readonly>
 
                             </div>
