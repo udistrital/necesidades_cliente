@@ -1,4 +1,3 @@
-<br>
 <div class="panel panel-default col-md-6">
     <div class="panel-heading">
         {{"METAS" | translate}} {{"Y" | translate}} {{"ACTIVIDADES_META" | translate}}
@@ -35,21 +34,25 @@
 </div>
 
 <div class="panel panel-default col-md-6">
-    <div class="row" ng-repeat="actividad in d_metasActividades.actividades">
-        <div class="col-sm-8 col-form-label">
-            <p>{{ actividad.actividad}}</p>
+    <div class="panel-heading container-fluid">
+        <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"META" | translate}}:</div>
+        <div class="col-sm-8 money">
+            {{d_metasActividades.MontoPorMeta | currency}}
         </div>
-        <div class="col-sm-4">
+    </div>
+    <div class="panel-body container-fluid">
+        <div class="list-group-item" ng-repeat="actividad in d_metasActividades.actividades">
+            <div class="col-md-8"><text>{{ actividad.actividad}}</text></div>
             <input class="money" type="text"
                 ng-init="actividad.MontoParcial = actividad.MontoParcial ? actividad.MontoParcial : 0"
                 ng-model="actividad.MontoParcial" ui-money-mask="2">
+            <br>
         </div>
-
     </div>
-</div>
 
 
-<div>
+
+
 
 
 </div>

@@ -574,6 +574,8 @@ angular.module('contractualClienteApp')
 
             for (var i = 0; i < self.f_apropiacion.length; i++) {
                 self.f_apropiacion[i].MontoPorApropiacion = 0;
+                self.f_apropiacion[i].MontoFuentes = 0;
+                self.f_apropiacion[i].MontoProductos = 0;
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
                     if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
                         for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
@@ -581,12 +583,19 @@ angular.module('contractualClienteApp')
                         }
                     }
                 }
-                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
-                    if (self.f_apropiacion[i].Apropiacion.fuentes !== undefined && self.f_apropiacion[i].Apropiacion.productos !== undefined) {
-                        for (var k = 0; k < self.f_apropiacion[i].Apropiacion.fuentes.length; k++) {
-                            self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.fuentes[k].MontoParcial;
-                        }
+                if (self.f_apropiacion[i].Apropiacion.fuentes !== undefined) {
+                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.fuentes.length; k++) {
+                        self.f_apropiacion[i].MontoFuentes += self.f_apropiacion[i].Apropiacion.fuentes[k].MontoParcial;
                     }
+                }
+                if (self.f_apropiacion[i].Apropiacion.productos !== undefined) {
+                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.productos.length; k++) {
+                        self.f_apropiacion[i].MontoProductos += self.f_apropiacion[i].Apropiacion.productos[k].MontoParcial;
+                    }
+                }
+
+                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
+                    self.f_apropiacion[i].MontoPorApropiacion = self.f_apropiacion[i].MontoFuentes;
                 }
 
                 self.f_valor += self.f_apropiacion[i].MontoPorApropiacion;
@@ -754,8 +763,9 @@ angular.module('contractualClienteApp')
 
 
             var NecesidadHandle = function (response, type) {
+
                 self.alerta_necesidad = response.data;
-                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id && (self.f_valor === self.valorTotalEspecificaciones + self.servicio_valor)) {
+                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id) {
                     if (type === "post") {
                         self.necesidad_plancuentas.IdAdministrativa = self.alerta_necesidad.Body.Necesidad.Id;
                         planCuentasRequest.post('necesidades', self.necesidad_plancuentas).then(
@@ -763,34 +773,27 @@ angular.module('contractualClienteApp')
                             }
                         ).catch(function (err) {
                         });
+
                     }
                     if (type === "put") {
+                        planCuentasRequest.put('necesidades', self.necesidad_plancuentas._id, self.necesidad_plancuentas).then(
+                            function (res) {
+                            }
+                        ).catch(function (err) {
+                        });
 
                     }
                 }
-
-                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && (self.f_valor !== self.valorTotalEspecificaciones + self.servicio_valor)) {
+        
+                if ((response.status > 300 || self.alerta_necesidad.Type !== "success")) {
                     swal({
-                        title: '',
+                        title: 'Error Registro Necesidad',
                         type: 'error',
                         text: self.alerta_necesidad,
                         showCloseButton: true,
                         confirmButtonText: $translate.instant("CERRAR")
                     });
                     return;
-                }
-                if (self.alerta_necesidad.Type === "error" && typeof (self.alerta_necesidad.Body) === "string") {
-                    swal({
-                        title: '',
-                        type: 'error',
-                        text: self.alerta_necesidad.Body,
-                        showCloseButton: true,
-                        confirmButtonText: $translate.instant("CERRAR")
-                    });
-                    return;
-                }
-                if (typeof (self.alerta_necesidad) === "string") {
-                    self.alerta_necesidad = { Type: "success" };
                 }
 
 
