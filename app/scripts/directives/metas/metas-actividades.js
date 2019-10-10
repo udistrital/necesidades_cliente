@@ -24,6 +24,7 @@ angular.module('contractualClienteApp')
         var self = this;
         self.actividades = $scope.actividades;
         self.meta = undefined;
+        self.MontoPorMeta=0;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
           paginationPageSize: null,
@@ -74,6 +75,15 @@ angular.module('contractualClienteApp')
             self.cargarMetas();
           }
         });
+
+        $scope.$watch('d_metasActividades.actividades', function () {
+          self.MontoPorMeta=0;
+          if (self.actividades !== undefined) {
+            self.actividades.forEach(function(act){
+              self.MontoPorMeta+=act.MontoParcial;
+            })
+          }
+        },true);
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){

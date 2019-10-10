@@ -574,6 +574,8 @@ angular.module('contractualClienteApp')
 
             for (var i = 0; i < self.f_apropiacion.length; i++) {
                 self.f_apropiacion[i].MontoPorApropiacion = 0;
+                self.f_apropiacion[i].MontoFuentes = 0;
+                self.f_apropiacion[i].MontoProductos = 0;
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
                     if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
                         for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
@@ -581,12 +583,19 @@ angular.module('contractualClienteApp')
                         }
                     }
                 }
-                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
-                    if (self.f_apropiacion[i].Apropiacion.fuentes !== undefined && self.f_apropiacion[i].Apropiacion.productos !== undefined) {
-                        for (var k = 0; k < self.f_apropiacion[i].Apropiacion.fuentes.length; k++) {
-                            self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.fuentes[k].MontoParcial;
-                        }
+                if (self.f_apropiacion[i].Apropiacion.fuentes !== undefined) {
+                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.fuentes.length; k++) {
+                        self.f_apropiacion[i].MontoFuentes += self.f_apropiacion[i].Apropiacion.fuentes[k].MontoParcial;
                     }
+                }
+                if (self.f_apropiacion[i].Apropiacion.productos !== undefined) {
+                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.productos.length; k++) {
+                        self.f_apropiacion[i].MontoProductos += self.f_apropiacion[i].Apropiacion.productos[k].MontoParcial;
+                    }
+                }
+
+                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
+                    self.f_apropiacion[i].MontoPorApropiacion = self.f_apropiacion[i].MontoFuentes;
                 }
 
                 self.f_valor += self.f_apropiacion[i].MontoPorApropiacion;
