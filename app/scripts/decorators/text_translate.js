@@ -181,6 +181,7 @@ var text_es = {
     CONTRATO: "Contrato",
     VIGENCIA_CONTRATO: "Vigencia contrato",
     FUENTE: "Fuente de Financiamiento",
+    FUENTES: "Fuentes de Financiamiento",
     PRODUCTO: "Producto",
     SOLICITUD_PERSONAS: "Contratos para solicitud del registro presupuestal",
     VIGENCIA_ACTUAL: "Vigencia Actual ",
