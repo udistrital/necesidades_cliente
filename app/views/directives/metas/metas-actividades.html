@@ -40,6 +40,7 @@
             <p>{{ actividad.actividad}}</p>
         </div>
         <div class="col-sm-4">
+            <label>Valor Actividad</label>
             <input class="money" type="text"
                 ng-init="actividad.MontoParcial = actividad.MontoParcial ? actividad.MontoParcial : 0"
                 ng-model="actividad.MontoParcial" ui-money-mask="2">
