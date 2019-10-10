@@ -550,18 +550,26 @@
                   </div>
 
                   <div class="col-md-6">
-                    <div class="col-md-6">
-                      <label class="control-label">Valor Servicio</label>
-                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.servicio_valor"
-                        ui-money-mask="2">
-                    </div>
-
-                    <div ng-show="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4" class="col-md-6">
-                      <label class="control-label">Valor Compra + Servicio</label>
-                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.valor_compra_servicio"
-                        ui-money-mask="2" disabled>
-                    </div>
+                    <div class="col-md-4">
+                    <label class="control-label">Valor Servicio</label>
+                    <input type="text" class="form-control money" ng-model="solicitudNecesidad.servicio_valor"
+                      ui-money-mask="2">
                   </div>
+
+                  <div class="col-md-4">
+                    <label class="control-label">Valor Financiación</label>
+                    <input type="text" class="form-control money" ng-model="solicitudNecesidad.f_valor"
+                      ui-money-mask="2" disabled>
+                  </div>
+
+                  <div ng-show="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4" class="col-md-4">
+                    <label class="control-label">Valor Compra + Servicio</label>
+                    <input type="text" class="form-control money" ng-model="solicitudNecesidad.valor_compra_servicio"
+                      ui-money-mask="2" disabled>
+                  </div>
+
+                  
+                </div>
 
 
                   <div class="col-md-12">
