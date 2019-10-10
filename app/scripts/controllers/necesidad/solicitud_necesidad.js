@@ -763,8 +763,9 @@ angular.module('contractualClienteApp')
 
 
             var NecesidadHandle = function (response, type) {
+
                 self.alerta_necesidad = response.data;
-                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id && (self.f_valor === self.valorTotalEspecificaciones + self.servicio_valor)) {
+                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id) {
                     if (type === "post") {
                         self.necesidad_plancuentas.IdAdministrativa = self.alerta_necesidad.Body.Necesidad.Id;
                         planCuentasRequest.post('necesidades', self.necesidad_plancuentas).then(
@@ -772,34 +773,27 @@ angular.module('contractualClienteApp')
                             }
                         ).catch(function (err) {
                         });
+
                     }
                     if (type === "put") {
+                        planCuentasRequest.put('necesidades', self.necesidad_plancuentas._id, self.necesidad_plancuentas).then(
+                            function (res) {
+                            }
+                        ).catch(function (err) {
+                        });
 
                     }
                 }
-
-                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && (self.f_valor !== self.valorTotalEspecificaciones + self.servicio_valor)) {
+        
+                if ((response.status > 300 || self.alerta_necesidad.Type !== "success")) {
                     swal({
-                        title: '',
+                        title: 'Error Registro Necesidad',
                         type: 'error',
                         text: self.alerta_necesidad,
                         showCloseButton: true,
                         confirmButtonText: $translate.instant("CERRAR")
                     });
                     return;
-                }
-                if (self.alerta_necesidad.Type === "error" && typeof (self.alerta_necesidad.Body) === "string") {
-                    swal({
-                        title: '',
-                        type: 'error',
-                        text: self.alerta_necesidad.Body,
-                        showCloseButton: true,
-                        confirmButtonText: $translate.instant("CERRAR")
-                    });
-                    return;
-                }
-                if (typeof (self.alerta_necesidad) === "string") {
-                    self.alerta_necesidad = { Type: "success" };
                 }
 
 
