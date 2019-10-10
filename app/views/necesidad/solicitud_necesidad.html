@@ -551,25 +551,25 @@
 
                   <div class="col-md-6">
                     <div class="col-md-4">
-                    <label class="control-label">Valor Servicio</label>
-                    <input type="text" class="form-control money" ng-model="solicitudNecesidad.servicio_valor"
-                      ui-money-mask="2">
-                  </div>
+                      <label class="control-label">Valor Servicio</label>
+                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.servicio_valor"
+                        ui-money-mask="2">
+                    </div>
 
-                  <div class="col-md-4">
-                    <label class="control-label">Valor Financiación</label>
-                    <input type="text" class="form-control money" ng-model="solicitudNecesidad.f_valor"
-                      ui-money-mask="2" disabled>
-                  </div>
+                    <div class="col-md-4">
+                      <label class="control-label">Valor Financiación</label>
+                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.f_valor"
+                        ui-money-mask="2" disabled>
+                    </div>
 
-                  <div ng-show="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4" class="col-md-4">
-                    <label class="control-label">Valor Compra + Servicio</label>
-                    <input type="text" class="form-control money" ng-model="solicitudNecesidad.valor_compra_servicio"
-                      ui-money-mask="2" disabled>
-                  </div>
+                    <div ng-show="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4" class="col-md-4">
+                      <label class="control-label">Valor Compra + Servicio</label>
+                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.valor_compra_servicio"
+                        ui-money-mask="2" disabled>
+                    </div>
 
-                  
-                </div>
+
+                  </div>
 
 
                   <div class="col-md-12">
@@ -631,37 +631,8 @@
                   </div>
                   <h4>{{"ELEMENTOS" | translate}}</h4>
 
-                  <div class="container-flex">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc">
-                          <table>
-                            <th class="col-md-3">{{"SUBTOTAL" | translate}}</th>
-                            <th class="col-md-9 money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}
-                            </th>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc">
-                          <table>
-                            <th class="col-md-3">{{"IVA" | translate}} </th>
-                            <th class="col-md-9 money">{{solicitudNecesidad.valorIVA | currency}}</th>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div ng-show="solicitudNecesidad.MostrarTotalEspc">
-                          <table>
-                            <th class="col-md-3">{{"VALOR_TOTAL" | translate}}</th>
-                            <th class="col-md-9 money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}
-                            </th>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              
+
+
                   <ng-form name="prodDiv" ng-repeat="pro in solicitudNecesidad.productos">
                     <div class="col-md-6">
                       <div class="panel panel-default">
@@ -779,6 +750,47 @@
                       </div>
                     </div>
                   </ng-form>
+                  <div class="panel panel-default col-md-12">
+                    <table class="table table-bordered">
+                      <thead class="thead-dark">
+                        <th>N°</th>
+                        <th>Nombre</th>
+                        <th>{{"UNIDAD_MEDIDA" | translate}}</th>
+                        <th>{{"CANTIDAD" | translate}}</th>
+                        <th>{{"VALOR_UNITARIO" | translate}}</th>
+                        <th>{{"IVA" | translate}} %</th>
+                        <th>{{"SUBTOTAL" | translate}}</th>
+                        <th>{{"VALOR_IVA" | translate}}</th>
+                        <th>{{"PRECIO_MAS_IVA" | translate}}</th>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="pro in solicitudNecesidad.productos">
+                          <td>{{pro.i=$index+1}}</td>
+                          <td>{{pro.ElementoNombre}}</td>
+                          <td>{{pro.Unidad}}</td>
+                          <td>{{pro.Cantidad}}</td>
+                          <td class="money">{{pro.Valor | currency}}</td>
+                          <td class="money">{{pro.Iva}}%</td>
+                          <td class="money">{{pro.Subtotal | currency}}</td>
+                          <td class="money">{{pro.ValorIVA | currency}}</td>
+                          <td class="money">{{pro.preciomasIVA | currency}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table class="table table-bordered" ng-show="solicitudNecesidad.MostrarTotalEspc">
+                      <thead>
+                        <th>{{"SUBTOTAL" | translate}}</th>
+                        <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}
+                        </th>
+                        <th>{{"IVA" | translate}} </th>
+                        <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
+                        <th>{{"VALOR_TOTAL" | translate}}</th>
+                        <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}
+                        </th>
+                      </thead>
+                    </table>
+                  </div>
+
                 </div>
               </div>
 
