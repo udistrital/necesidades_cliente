@@ -11,12 +11,12 @@ angular.module('contractualClienteApp')
         return {
             restrict: 'E',
             scope: {
-                productos: '=?'
+                producto_catalogo: '=ngModel'
             },
             templateUrl: 'views/directives/catalogos_elementos/lista_subgrupos_catalogos.html',
             controller: function ($scope) {
                 var self = this;
-                $scope.productos = [];
+                $scope.producto_catalogo = {};
                 self.gridOptions = {
                     paginationPageSizes: [5, 10, 15],
                     paginationPageSize: 5,
@@ -28,6 +28,7 @@ angular.module('contractualClienteApp')
                     useExternalPagination: false,
                     enableSelectAll: false,
                     enablePaginationControls: true,
+                    multiSelect: false,
                     columnDefs: [{
                         field: 'ElementoCodigo',
                         displayName: $translate.instant('CODIGO'),
@@ -69,22 +70,8 @@ angular.module('contractualClienteApp')
                 self.loadData();
                 self.gridOptions.onRegisterApi = function (gridApi) {
                     self.gridApi = gridApi;
-                    gridApi.selection.on.rowSelectionChanged($scope, function () {
-                        $scope.productos.length===0 ? $scope.productos = self.gridApi.selection.getSelectedRows().map(function (e) {
-                            return {
-                                $$hashKey: e.$$hashKey,
-                                ElementoCodigo: e.ElementoCodigo,
-                                ElementoNombre: e.ElementoNombre,
-                                Id: e.Id,
-                                Subtotal: 0,
-                                Valor: 0,
-                                ValorIVA: 0,
-                                preciomasIVA: 0,
-                                Iva: 0,
-                                Elemento: "",
-                                Cantidad: 0
-                            }
-                        }) : $scope.productos = self.gridApi.selection.getSelectedRows();
+                    self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                        $scope.producto_catalogo = row.entity;
                     });
 
                 };
