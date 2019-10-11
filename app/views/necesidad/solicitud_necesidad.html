@@ -148,6 +148,8 @@
                     {{solicitudNecesidad.jefe_solicitante.SegundoNombre}}
                     {{solicitudNecesidad.jefe_solicitante.PrimerApellido}}
                     {{solicitudNecesidad.jefe_solicitante.SegundoApellido}}</span>
+
+
                 </div>
 
                 <!-- DEPENDENCIA DESTINO -->
@@ -170,11 +172,20 @@
                     {{solicitudNecesidad.jefe_destino.SegundoApellido}}</span>
                 </div>
 
-                <div class="col-md-12" ng-if="solicitudNecesidad.fields.General.Supervisor">
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.Supervisor">
                   <label for="supervisor" class="control-label">{{"SUPERVISOR" | translate}}</label>
                   <select class="form-control" ng-model="solicitudNecesidad.necesidad.Supervisor"
                     ng-options="sup.Id*1 as ( sup.Cargo + ' '  + sup.PrimerNombre+ ' '  + sup.SegundoNombre + ' '  + sup.PrimerApellido + ' '  + sup.SegundoApellido ) for sup in solicitudNecesidad.persona_data">
                     <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"SUPERVISOR" | translate}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.Supervisor">
+                  <label for="interventor" class="control-label">{{"INTERVENTOR" | translate}}</label>
+                  <select class="form-control" ng-model="solicitudNecesidad.necesidad.Interventor"
+                    ng-options="inter.Id*1 as (inter.PrimerNombre+ ' '  + inter.SegundoNombre + ' '  + inter.PrimerApellido + ' '  + inter.SegundoApellido ) for inter in solicitudNecesidad.interventor_data">
+                    <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"INTERVENTOR" | translate}}
                     </option>
                   </select>
                 </div>
@@ -326,7 +337,7 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                       </button>
 
-                      <h3><span class="text-success">Apropiacion: {{$index+1}}.</span> {{ap.Codigo}}
+                      <h3><span class="text-success">Rubro: {{$index+1}}.</span> {{ap.Codigo}}
                         {{ap.Apropiacion.Nombre}}</h3>
                       <br>
                       <div class="row"

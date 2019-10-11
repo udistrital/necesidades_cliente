@@ -28,6 +28,7 @@ angular.module('contractualClienteApp')
         self.actividades = undefined;
         self.apSelected = false;
         self.apSelectedOb = undefined;
+        self.jefes_dep_data = undefined;
 
 
         self.fecha_actual = new Date();
@@ -455,14 +456,28 @@ angular.module('contractualClienteApp')
             self.unidad_data = response.data;
         });
 
-        //Temporal viene dado por un servicio de javier
+
+        coreAmazonRequest.get('jefe_dependencia', $.param({
+            limit: -1,
+            query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') 
+        })).then(function (responseJD) {
+            self.jefes_dep_data = responseJD;
+
+        });
+        // Se traen los jefes de dependencia actuales 
         agoraRequest.get('informacion_persona_natural', $.param({
             limit: -1,
-            sortby: "PrimerNombre",
-            order: "asc",
         })).then(function (response) {
+            let arrJD = [];
+            self.interventor_data = response.data;
             self.persona_data = response.data.filter(function (p) {
-                return p.Cargo !== "";
+                self.jefes_dep_data.data.forEach(function(i){
+                    if(p.Id == i.TerceroId){
+                        arrJD.push(p);
+                    }
+
+                })
+                return arrJD ;
             });
         });
 
@@ -784,7 +799,7 @@ angular.module('contractualClienteApp')
 
                     }
                 }
-        
+
                 if ((response.status > 300 || self.alerta_necesidad.Type !== "success")) {
                     swal({
                         title: 'Error Registro Necesidad',
