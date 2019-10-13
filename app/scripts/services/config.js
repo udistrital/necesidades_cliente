@@ -115,7 +115,7 @@ var conf_local2 = {
     //CORE_AMAZON_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/",
     CORE_AMAZON_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8106/v1/",
     PARAMETROS_GOBIERNO_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/",
-    PLAN_CUENTAS_SERVICE: "http://10.20.2.126:8082/v1/",
+    PLAN_CUENTAS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8203/v1/",
     METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/",
@@ -144,14 +144,12 @@ var conf_local = {
     CONFIGURACION_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/configuracion_crud_api/v1/",
     CORE_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/core_api/v1/",
     CORE_AMAZON_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/core_amazon_crud/v1/",
-    PARAMETROS_GOBIERNO_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/",
-    PLAN_CUENTAS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8203/v1/",
-    FINANCIERA_MID_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8089/v1/",
+    PARAMETROS_GOBIERNO_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros_gobierno/v1/",
+    PLAN_CUENTAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mongo_crud/v1/",
     FINANCIERA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/financiera_crud_api/v1/",
     METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/",
-    ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
     CONTRATO_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services/contratoSuscritoProxyService/", // NO ESTA URL EN PREPROD
     TOKEN: {
         AUTORIZATION_URL: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize",
@@ -169,6 +167,6 @@ var conf_local = {
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        GENERAL: conf_local2,
+        GENERAL: conf_test,
     });
 

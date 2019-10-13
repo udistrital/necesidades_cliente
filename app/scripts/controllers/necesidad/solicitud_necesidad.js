@@ -1027,6 +1027,11 @@ angular.module('contractualClienteApp')
                     break;
             }
         };
+
+        $scope.$watch('solicitudNecesidad.FormularioSeleccionado',function(){
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }, true)
+
         self.ValidarSeccion = function (form) {
             var n = self.solicitudNecesidad;
             switch (form) {
