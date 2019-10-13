@@ -162,7 +162,6 @@ angular.module('contractualClienteApp')
 
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     self.necesidad = row.entity;
-                    // console.info(row.entity)
                     necesidadService.initNecesidad(row.entity.Id)
                 });
             }
@@ -185,7 +184,6 @@ angular.module('contractualClienteApp')
                 order: "desc",
                 query: query.join(",")
             }, true));
-            console.info(req.$$state.value);
             // req.data.forEach(function(n){
             //   if(n.UnidadEjecutora === 1){
             //             n.UniE= "Rector";
@@ -193,7 +191,6 @@ angular.module('contractualClienteApp')
             //             n.UniE= "Convenios";
             //         }
             // });
-            // console.info(req.data);
 
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
@@ -216,7 +213,7 @@ angular.module('contractualClienteApp')
 
             self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
             self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
-            self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidad.Id && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidad.Id && self.buttons.EditarNecesidad;
+            self.verBotonEditarNecesidad = (necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidad.Id || necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidad.Id) && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidad.Id && self.buttons.EditarNecesidad;
             self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidad.Id && self.buttons.SolicitarCDP;
 
             $("#myModal").modal();
