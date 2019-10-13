@@ -312,7 +312,7 @@
               <div class="panel-body" ng-hide="financiacion.open">
 
                 <div class="form-group" ng-show="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad!=undefined">
-                  <label class=" control-label">{{"SELECCIONAR" | translate}} {{"APROPIACIONES" | translate}}</label>
+                  <label class=" control-label">{{"SELECCIONAR" | translate}} {{"RUBROS" | translate}}</label>
 
                   <div>
                     <div class="form-group" ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre">
@@ -698,7 +698,7 @@
                             <div class="col-md-4">
                               <label class=" control-label">{{"IVA" | translate}} %</label>
                               <select class="form-control" ng-init="pro.Iva = 0" ng-model="pro.Iva"
-                                ng-options="iva.Valor as iva.Valor for iva in solicitudNecesidad.iva_data" required>
+                                ng-options="iva.Tarifa as iva.Tarifa for iva in solicitudNecesidad.iva_data" required>
                                 <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"IVA" | translate}}
                                   %
                                 </option>

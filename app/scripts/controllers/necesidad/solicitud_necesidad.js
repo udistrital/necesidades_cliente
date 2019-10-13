@@ -72,7 +72,7 @@ angular.module('contractualClienteApp')
         };
 
         self.iva_data = {
-            iva1: {
+          /*   iva1: {
                 Id: 1,
                 Valor: 16,
             },
@@ -83,7 +83,7 @@ angular.module('contractualClienteApp')
             iva3: {
                 Id: 3,
                 Valor: 0,
-            }
+            } */
         };
 
 
@@ -333,6 +333,14 @@ angular.module('contractualClienteApp')
         })).then(function (response) {
             self.nucleo_area_data = response.data;
         });
+
+        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({ 
+            limit: -1,
+            query: 'Activo:true'
+        })).then(function (response) {
+            self.iva_data = response.data;
+        });
+
 
         $scope.$watch('solicitudNecesidad.nucleoarea', function () {
             self.nucleoarea ?

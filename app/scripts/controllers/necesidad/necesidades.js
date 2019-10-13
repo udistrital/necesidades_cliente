@@ -21,11 +21,19 @@ angular.module('contractualClienteApp')
 
         self.modalidadSel = {};
         self.TipoContrato = {};
+        self.unidadE = "";
+        self.unidadE = self.unidad_ejecutora_data.filter(function(a){
+            if(a.Id === row.entity.UnidadEjecutora){
+                return a.Nombre;
+            }
+        });
 
         //permisos de los buttons segun el rol
         /*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
                     self.buttons = data;
                 }); */
+
+        self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }];
 
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
@@ -82,7 +90,7 @@ angular.module('contractualClienteApp')
                 displayName: $translate.instant('UNIDAD_EJECUTORA'),
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.UnidadEjecutora;
+                    return self.unidadE[0].Nombre;
                 },
                 width: '15%'
             },
@@ -171,7 +179,7 @@ angular.module('contractualClienteApp')
 
             self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
             self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
-            self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidad.Id && self.buttons.EditarNecesidad;
+            self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidad.Id && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidad.Id && self.buttons.EditarNecesidad;
             self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidad.Id && self.buttons.SolicitarCDP;
 
             $("#myModal").modal();
@@ -295,7 +303,7 @@ angular.module('contractualClienteApp')
         self.solicitar_cdp = function () {
             self.sol_cdp = {};
             self.sol_cdp.Necesidad = self.g_necesidad;
-            var sol_cdp_pc=    {
+            var sol_cdp_pc = {
                 consecutivo: 16,
                 entidad: self.g_necesidad.UnidadEjecutora,
                 centroGestor: 1,
@@ -308,20 +316,20 @@ angular.module('contractualClienteApp')
                 activo: true,
                 fechaCreacion: new Date().toISOString(),
                 fechaModificacion: new Date().toISOString(),
-              };
-            
-            Promise.all([administrativaRequest.post("solicitud_disponibilidad", self.sol_cdp),planCuentasRequest.post("solicitudesCDP",sol_cdp_pc)]).then(
+            };
+
+            Promise.all([administrativaRequest.post("solicitud_disponibilidad", self.sol_cdp), planCuentasRequest.post("solicitudesCDP", sol_cdp_pc)]).then(
                 function (response) {
-                self.alerta = "";
-                for (var i = 1; i < response[0].data.length; i += 1) {
-                    self.alerta = self.alerta + response[0].data[i] + "\n";
-                }
-                swal("", self.alerta, response[0].data[0]);
-                swal("", self.alerta, response[1].data);
-                self.cargarDatosNecesidades(self.offset, self.query);
-                self.necesidad = undefined;
-                $("#myModal").modal("hide");
-            });
+                    self.alerta = "";
+                    for (var i = 1; i < response[0].data.length; i += 1) {
+                        self.alerta = self.alerta + response[0].data[i] + "\n";
+                    }
+                    swal("", self.alerta, response[0].data[0]);
+                    swal("", self.alerta, response[1].data);
+                    self.cargarDatosNecesidades(self.offset, self.query);
+                    self.necesidad = undefined;
+                    $("#myModal").modal("hide");
+                });
         };
 
         $scope.crearPDF = function (row) {
