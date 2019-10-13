@@ -21,12 +21,12 @@ angular.module('contractualClienteApp')
 
         self.modalidadSel = {};
         self.TipoContrato = {};
-        self.unidadE = "";
-        self.unidadE = self.unidad_ejecutora_data.filter(function(a){
-            if(a.Id === row.entity.UnidadEjecutora){
-                return a.Nombre;
-            }
-        });
+        // self.unidadE = "";
+        // self.unidadE = self.unidad_ejecutora_data.filter(function(a){
+        //     if(a.Id === row.entity.UnidadEjecutora){
+        //         return a.Nombre;
+        //     }
+        // });
 
         //permisos de los buttons segun el rol
         /*         rolesService.buttons('NecesidadesCtrl', rolesService.roles()).then(function (data) {
@@ -35,6 +35,16 @@ angular.module('contractualClienteApp')
 
         self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }];
 
+        self.buscarUE = function(idUE) {
+            self.unidad_ejecutora_data.filter(function(e){
+                if (idUE === e.Id){
+                    return e.Nombre;
+                }else{
+                    return "Rector"
+                }
+                
+            })
+        }
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
             paginationPageSize: 10,
@@ -55,7 +65,17 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.NumeroElaboracion;
                 },
-                width: '15%'
+                width: '5%'
+            },
+            {
+                field: 'Id',
+                displayName: $translate.instant('NECESIDAD_NO'),
+                type: 'number',
+                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+                cellTooltip: function (row) {
+                    return row.entity.Id;
+                },
+                width: '10%'
             },
             {
                 field: 'Vigencia',
@@ -86,12 +106,20 @@ angular.module('contractualClienteApp')
             //     width: '25%'
             // },
             {
-                field: 'UnidadEjecutora',
+                field: "self.buscarUE(1)",
                 displayName: $translate.instant('UNIDAD_EJECUTORA'),
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return self.unidadE[0].Nombre;
+                    if(row.entity.UnidadEjecutora === 1){
+                        return "Rector";
+                    } else{ 
+                        return "Convenios";
+                    }
+                    
                 },
+                filter: { 
+                    options: [{ UnidadEjecutora: 1, Nombre: 'Rector' }, { UnidadEjecutora: 2, Nombre: 'Convenios' }]     // custom attribute that goes with custom directive above 
+                  }, 
                 width: '15%'
             },
             {
@@ -129,7 +157,6 @@ angular.module('contractualClienteApp')
             ],
             onRegisterApi: function (gridApi) {
                 self.gridApi = gridApi;
-
                 self.gridApi = gridApiService.pagination(self.gridApi, self.cargarDatosNecesidades, $scope);
                 self.gridApi = gridApiService.filter(self.gridApi, self.cargarDatosNecesidades, $scope);
 
@@ -158,6 +185,16 @@ angular.module('contractualClienteApp')
                 order: "desc",
                 query: query.join(",")
             }, true));
+            console.info(req.$$state.value);
+            // req.data.forEach(function(n){
+            //   if(n.UnidadEjecutora === 1){
+            //             n.UniE= "Rector";
+            //         } else{ 
+            //             n.UniE= "Convenios";
+            //         }
+            // });
+            // console.info(req.data);
+
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
         };
