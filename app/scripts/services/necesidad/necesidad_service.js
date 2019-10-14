@@ -8,7 +8,7 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function (administrativaRequest, planCuentasRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
+  .service('necesidadService', function (administrativaRequest, planCuentasRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest, $translate,) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
@@ -115,7 +115,33 @@ angular.module('contractualClienteApp')
       return map;
     }
 
-   
+    self.getAlertaFinanciacion = function (codigoRubro) {
+      return {
+        fuentesMayorQueRubro: {
+          title: 'Error Valor Fuentes Rubro '+codigoRubro,
+          type: 'error',
+          text: 'Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo del rubro.',
+          showCloseButton: true,
+          confirmButtonText: $translate.instant("CERRAR")
+        },
+        metasMayorQueProducto: {
+          title: 'Error Valor Metas y actividades Rubro '+codigoRubro,
+          type: 'error',
+          text: 'Verifique los valores de metas y actividades, la suma no puede superar el valor de los productos.',
+          showCloseButton: true,
+          confirmButtonText: $translate.instant("CERRAR")
+        },
+        productosDiferenteAFuentes: {
+          title: 'Error Valor Productos Rubro '+codigoRubro,
+          type: 'error',
+          text: 'Verifique los valores de productos, la suma debe ser igual a la suma de las fuentes.',
+          showCloseButton: true,
+          confirmButtonText: $translate.instant("CERRAR")
+        }
+      }
+    }
+
+
 
     self.getParametroEstandar = function () {
       return agoraRequest.get('parametro_estandar', $.param({
@@ -127,54 +153,56 @@ angular.module('contractualClienteApp')
     self.getFinanciacion = function (necesidad_pc, vigencia, unidadejecutora) {
       var response = []
       if (Array.isArray(necesidad_pc.apropiaciones)) {
-          necesidad_pc.apropiaciones.forEach(function(ap){
-            planCuentasRequest.get('arbol_rubro_apropiacion/'+ap.codigo+'/'+vigencia+'/'+unidadejecutora).
+        necesidad_pc.apropiaciones.forEach(function (ap) {
+          planCuentasRequest.get('arbol_rubro_apropiacion/' + ap.codigo + '/' + vigencia + '/' + unidadejecutora).
             then(
               function (res_apr) {
-                var item = {Apropiacion: _.merge(res_apr.data.Body,
-                  { 
-                    meta: {
-                      actividades: []
-                    },
-                    fuentes: [],
-                    productos: []
-                  })}
-                  var tempmetas;
-                  metasRequest.get('2019').then(
-                    function (res) {
-                      
-                      tempmetas = res.data.metas.actividades;
-                      item.Apropiacion.meta.actividades = ap.metas[0].actividades.map(function (act) {
-                        return tempmetas.filter(function(m){
-                          return (m.meta_id === ap.metas[0].codigo)&&(m.actividad_id === act.codigo)
-                        })[0] || null; 
-                      }) ;
-                    }
-                  ).catch(function(err){
-                    // console.info(err)
-                  });
+                var item = {
+                  Apropiacion: _.merge(res_apr.data.Body,
+                    {
+                      meta: {
+                        actividades: []
+                      },
+                      fuentes: [],
+                      productos: []
+                    })
+                }
+                var tempmetas;
+                metasRequest.get('2019').then(
+                  function (res) {
+
+                    tempmetas = res.data.metas.actividades;
+                    item.Apropiacion.meta.actividades = ap.metas[0].actividades.map(function (act) {
+                      return tempmetas.filter(function (m) {
+                        return (m.meta_id === ap.metas[0].codigo) && (m.actividad_id === act.codigo)
+                      })[0] || null;
+                    });
+                  }
+                ).catch(function (err) {
+                  // console.info(err)
+                });
 
 
                 ap.fuentes.forEach(function (fuente) {
-                  planCuentasRequest.get('fuente_financiamiento/'+fuente.codigo)
-                  .then(
-                    function (res_fuente) {
-                      item.Apropiacion.fuentes.push(_.merge(res_fuente.data.Body,{MontoParcial: fuente.valor}))
-                    } 
-                  )
+                  planCuentasRequest.get('fuente_financiamiento/' + fuente.codigo)
+                    .then(
+                      function (res_fuente) {
+                        item.Apropiacion.fuentes.push(_.merge(res_fuente.data.Body, { MontoParcial: fuente.valor }))
+                      }
+                    )
                 })
                 ap.metas.forEach(function (producto) {
-                  planCuentasRequest.get('producto/'+producto._id)
-                  .then(
-                    function (res_prod) {
-                      item.Apropiacion.productos.push(_.merge(res_prod.data.Body,{MontoParcial: producto.valor}))
-                    } 
-                  )
+                  planCuentasRequest.get('producto/' + producto._id)
+                    .then(
+                      function (res_prod) {
+                        item.Apropiacion.productos.push(_.merge(res_prod.data.Body, { MontoParcial: producto.valor }))
+                      }
+                    )
                 })
                 response.push(item)
               }
             )
-          })
+        })
       }
       return response
     }
@@ -184,56 +212,56 @@ angular.module('contractualClienteApp')
       var trNecesidadPC = [];
       if (IdNecesidad) {
         return Promise.all([administrativaRequest.get('necesidad'),
-          planCuentasRequest.get('necesidades', $.param({
-            query: "idAdministrativa:" + IdNecesidad
-          }))]).then(function (response) {
-             var responseMongo=response[1].data.Body[0] || {};
-            response = response[0];
-            trNecesidad.Necesidad = response.data.filter(
-              function (e) {
-                return e.Id+""===IdNecesidad+"";
-              }
-            )[0];
-            trNecesidadPC = self.getFinanciacion(responseMongo, trNecesidad.Necesidad.Vigencia, trNecesidad.Necesidad.UnidadEjecutora);
-            return new Promise(function (resolve, reject) {
-              if (trNecesidad.Necesidad.TipoContratoNecesidad.Id === 5) { // Tipo Servicio
-                administrativaRequest.get('detalle_servicio_necesidad', $.param({
-                  query: 'Necesidad:' + IdNecesidad
-                })).then(function (response) {
-                  trNecesidad.DetalleServicioNecesidad = response.data[0];
+        planCuentasRequest.get('necesidades', $.param({
+          query: "idAdministrativa:" + IdNecesidad
+        }))]).then(function (response) {
+          var responseMongo = response[1].data.Body[0] || {};
+          response = response[0];
+          trNecesidad.Necesidad = response.data.filter(
+            function (e) {
+              return e.Id + "" === IdNecesidad + "";
+            }
+          )[0];
+          trNecesidadPC = self.getFinanciacion(responseMongo, trNecesidad.Necesidad.Vigencia, trNecesidad.Necesidad.UnidadEjecutora);
+          return new Promise(function (resolve, reject) {
+            if (trNecesidad.Necesidad.TipoContratoNecesidad.Id === 5) { // Tipo Servicio
+              administrativaRequest.get('detalle_servicio_necesidad', $.param({
+                query: 'Necesidad:' + IdNecesidad
+              })).then(function (response) {
+                trNecesidad.DetalleServicioNecesidad = response.data[0];
 
-                  return administrativaRequest.get('actividad_especifica', $.param({
-                    query: 'Necesidad:' + IdNecesidad
-                  }))
-                }).then(function (response) {
-                  trNecesidad.ActividadEspecifica = response.data;
-
-                  return administrativaRequest.get('actividad_economica_necesidad', $.param({
-                    query: 'Necesidad:' + IdNecesidad
-                  }))
-                }).then(function (response) {
-                  trNecesidad.ActividadEconomicaNecesidad = response.data;
-                  resolve("OK");
-                });
-              } else {
-                
-                resolve("Ok");
-              }
-            }).then(function (response) {
-                return administrativaRequest.get('marco_legal_necesidad', $.param({
+                return administrativaRequest.get('actividad_especifica', $.param({
                   query: 'Necesidad:' + IdNecesidad
                 }))
+              }).then(function (response) {
+                trNecesidad.ActividadEspecifica = response.data;
+
+                return administrativaRequest.get('actividad_economica_necesidad', $.param({
+                  query: 'Necesidad:' + IdNecesidad
+                }))
+              }).then(function (response) {
+                trNecesidad.ActividadEconomicaNecesidad = response.data;
+                resolve("OK");
+              });
+            } else {
+
+              resolve("Ok");
+            }
+          }).then(function (response) {
+            return administrativaRequest.get('marco_legal_necesidad', $.param({
+              query: 'Necesidad:' + IdNecesidad
+            }))
               .then(function (response) {
                 trNecesidad.MarcoLegalNecesidad = response.data;
-                
+
                 return administrativaRequest.get('dependencia_necesidad', $.param({
                   query: 'Necesidad:' + IdNecesidad
                 }))
               }).then(function (response) {
                 trNecesidad.DependenciaNecesidad = response.data[0];
-                
 
-                
+
+
 
                 return coreAmazonRequest.get('jefe_dependencia', $.param({
                   query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaDestino + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
@@ -255,15 +283,15 @@ angular.module('contractualClienteApp')
               }).then(function (response) {
                 trNecesidad.RolOrdenadorGasto = response.data[0].DependenciaId;
                 return new Promise(function (resolve, reject) {
-                  resolve([trNecesidad,trNecesidadPC]);
+                  resolve([trNecesidad, trNecesidadPC]);
                 });
               }).catch(function (err) {
                 return new Promise(function (resolve, reject) {
-                  resolve([trNecesidad,trNecesidadPC]);
+                  resolve([trNecesidad, trNecesidadPC]);
                 });
               });
-            });
           });
+        });
 
 
       } else {
@@ -284,7 +312,7 @@ angular.module('contractualClienteApp')
         });
 
         return new Promise(function (resolve, reject) {
-          resolve([trNecesidad,trNecesidadPC]);
+          resolve([trNecesidad, trNecesidadPC]);
         });
       }
 

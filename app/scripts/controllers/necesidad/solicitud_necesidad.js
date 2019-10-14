@@ -73,18 +73,18 @@ angular.module('contractualClienteApp')
         };
 
         self.iva_data = {
-          /*   iva1: {
-                Id: 1,
-                Valor: 16,
-            },
-            iva2: {
-                Id: 2,
-                Valor: 19,
-            },
-            iva3: {
-                Id: 3,
-                Valor: 0,
-            } */
+            /*   iva1: {
+                  Id: 1,
+                  Valor: 16,
+              },
+              iva2: {
+                  Id: 2,
+                  Valor: 19,
+              },
+              iva3: {
+                  Id: 3,
+                  Valor: 0,
+              } */
         };
 
 
@@ -333,7 +333,7 @@ angular.module('contractualClienteApp')
             self.nucleo_area_data = response.data;
         });
 
-        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({ 
+        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
             limit: -1,
             query: 'Activo:true'
         })).then(function (response) {
@@ -609,10 +609,17 @@ angular.module('contractualClienteApp')
                 self.f_apropiacion[i].MontoPorApropiacion = 0;
                 self.f_apropiacion[i].MontoFuentes = 0;
                 self.f_apropiacion[i].MontoProductos = 0;
+                self.f_apropiacion[i].MontoMeta = 0;
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
                     if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
                         for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
                             self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
+                            self.f_apropiacion[i].MontoMeta += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
+                        }
+                    }
+                    if (self.f_apropiacion[i].Apropiacion.productos !== undefined) {
+                        for (var k = 0; k < self.f_apropiacion[i].Apropiacion.productos.length; k++) {
+                            self.f_apropiacion[i].MontoProductos += self.f_apropiacion[i].Apropiacion.productos[k].MontoParcial;
                         }
                     }
                 }
@@ -621,11 +628,7 @@ angular.module('contractualClienteApp')
                         self.f_apropiacion[i].MontoFuentes += self.f_apropiacion[i].Apropiacion.fuentes[k].MontoParcial;
                     }
                 }
-                if (self.f_apropiacion[i].Apropiacion.productos !== undefined) {
-                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.productos.length; k++) {
-                        self.f_apropiacion[i].MontoProductos += self.f_apropiacion[i].Apropiacion.productos[k].MontoParcial;
-                    }
-                }
+
 
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
                     self.f_apropiacion[i].MontoPorApropiacion = self.f_apropiacion[i].MontoFuentes;
@@ -937,27 +940,21 @@ angular.module('contractualClienteApp')
         self.ValidarFinanciacion = function () {
             var fin_valid = self.f_apropiacion.length > 0;
             self.f_apropiacion.forEach(function (ap) {
-                var v_fuentes = 0;
-                var v_act = 0;
-                var v_productos = 0;
-                ap.Apropiacion.fuentes ? ap.Apropiacion.fuentes.forEach(function (e) { v_fuentes += e.MontoParcial; }) : _;
-                ap.Apropiacion.meta ? ap.Apropiacion.meta.actividades.forEach(function (e) { v_act += e.MontoParcial; }) : _;
-                ap.Apropiacion.productos ? ap.Apropiacion.productos.forEach(function (e) { v_productos += e.MontoParcial }) : _;
+                var v_fuentes = ap.MontoFuentes;
                 // console.info(self.necesidad.TipoFinanciacionNecesidad.Nombre);
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
-                    fin_valid = fin_valid && (v_fuentes === v_act && v_act === v_productos);
+                    var v_act = ap.MontoMeta;
+                    var v_productos = ap.MontoProductos;
+                    v_fuentes!==v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).productosDiferenteAFuentes) : _;
+                    v_act>v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).metasMayorQueProducto) : _;
+                    fin_valid = fin_valid &&(v_fuentes === v_act && v_act === v_productos)&&ap.MontoFuentes<=ap.Apropiacion.ValorActual;
                 } else {
-                    fin_valid = fin_valid && (v_fuentes === v_productos);
+                    fin_valid = fin_valid && ap.MontoFuentes<=ap.Apropiacion.ValorActual;
                 }
+                ap.MontoFuentes>ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
             });
-            !fin_valid ? swal({
-                title: 'Valores de financiacion errados',
-                type: 'error',
-                text: 'Por favor, verifique la igualdad de los valores de financiacion ',
-                showCloseButton: true,
-                confirmButtonText: $translate.instant("CERRAR")
-            }) : swal({
+            !fin_valid ? _ : swal({
                 title: 'Financiación OK',
                 type: 'success',
                 text: 'Valores de financiación en igualdad',
@@ -1012,7 +1009,7 @@ angular.module('contractualClienteApp')
                         self.FormularioSeleccionado = 2;
                     }
                     else {
-                        self.AlertSeccion('Financiación');
+                        // self.AlertSeccion('Financiación');
                     }
                     break;
                 case 'contratacion':
@@ -1028,7 +1025,7 @@ angular.module('contractualClienteApp')
             }
         };
 
-        $scope.$watch('solicitudNecesidad.FormularioSeleccionado',function(){
+        $scope.$watch('solicitudNecesidad.FormularioSeleccionado', function () {
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }, true)
 
@@ -1038,8 +1035,8 @@ angular.module('contractualClienteApp')
                 case 'general':
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
-                    //  (document.getElementById("f_financiacion").classList.contains('ng-valid'), "ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA", self.ValidarFinanciacion())
-                    return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine') && self.ValidarFinanciacion();
+                    var val=self.ValidarFinanciacion()
+                    return val&&document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine'); 
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
                 case 'contratacion':
