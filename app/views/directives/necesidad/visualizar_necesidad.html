@@ -18,12 +18,12 @@
   <div class="panel-body">
     <div class="text-info pull-right text-right">
       <cite class=""> {{vigencia|| '-'}}</cite><br>
-      <cite class=""> {{d_visualizarNecesidad.v_necesidad.Numero || '-'}}</cite><br>
+      <cite ng-show="estado === d_visualizarNecesidad.estados.aprobada" class=""> {{d_visualizarNecesidad.v_necesidad.Numero || '-'}}</cite><br>
       <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===7" class=""> {{d_visualizarNecesidad.solicitud_disponibilidad.Numero || '-'}}</cite>
     </div>
     <div class="text-info pull-right">
       <cite class="">{{"VIGENCIA" | translate}}: </cite><br>
-      <cite class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}: </cite><br>
+      <cite ng-show="estado === d_visualizarNecesidad.estados.aprobada"  class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}: </cite><br>
       <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===7" class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}: </cite>
     </div>
 
@@ -79,7 +79,7 @@
             <li ng-repeat='f in inv.Fuentes'>
               {{f.InfoFuente[0].Nombre}} <strong>{{"Monto" | translate}}:</strong> {{f.MontoParcial | currency}}
             </li>
-            <br><strong ng-if="inv.Productos.length">{{"PRODUCTOS" | translate}}</strong>
+            <br ng-if="d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'"><strong ng-if="inv.Productos.length">{{"PRODUCTOS" | translate}}</strong>
             <li ng-repeat='p in inv.Productos'>
               <strong>{{p.ProductoRubroInfo[0].Producto.Nombre}}:</strong>
               {{p.ProductoRubroInfo[0].Producto.Descripcion}}
@@ -97,7 +97,7 @@
                 </ul>
               </p>
 
-              <p> <strong>Productos</strong>
+              <p ng-if="d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'"> <strong>Productos</strong>
                 <ul>
                   <li ng-repeat='p in d_visualizarNecesidad.productosInfo'>
                     {{p.data.Body.Nombre}} <strong>{{"Monto" | translate}}:</strong> {{p.data.Body.Monto | currency}}
@@ -105,9 +105,9 @@
                 </ul>
               </p>
 
-              <p> <br><strong>{{"META" | translate}}</strong> <br>
+              <p ng-if="d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'"> <br><strong>{{"META" | translate}}</strong> <br>
                 {{ d_visualizarNecesidad.meta | uppercase}} 
-                <table class="table text-justify" style=" width:100%">
+                <table ng-if="d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'" class="table text-justify" style=" width:100%">
                   <tr>
                     <th>Actividad</th>
                     <th>Valor</th>

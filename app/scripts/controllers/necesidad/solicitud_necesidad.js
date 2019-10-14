@@ -28,6 +28,8 @@ angular.module('contractualClienteApp')
         self.actividades = undefined;
         self.apSelected = false;
         self.apSelectedOb = undefined;
+        self.jefes_dep_data = undefined;
+        self.producto_catalogo = {};
 
 
         self.fecha_actual = new Date();
@@ -71,7 +73,7 @@ angular.module('contractualClienteApp')
         };
 
         self.iva_data = {
-            iva1: {
+          /*   iva1: {
                 Id: 1,
                 Valor: 16,
             },
@@ -82,7 +84,7 @@ angular.module('contractualClienteApp')
             iva3: {
                 Id: 3,
                 Valor: 0,
-            }
+            } */
         };
 
 
@@ -298,10 +300,8 @@ angular.module('contractualClienteApp')
         self.validar_formu = function (form) {
             if (form.$invalid) {
                 swal(alertInfo);
-                form.open = false;
                 return false;
             } else {
-                form.open = !form.open;
                 return true;
             }
         };
@@ -332,6 +332,14 @@ angular.module('contractualClienteApp')
         })).then(function (response) {
             self.nucleo_area_data = response.data;
         });
+
+        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({ 
+            limit: -1,
+            query: 'Activo:true'
+        })).then(function (response) {
+            self.iva_data = response.data;
+        });
+
 
         $scope.$watch('solicitudNecesidad.nucleoarea', function () {
             self.nucleoarea ?
@@ -455,14 +463,28 @@ angular.module('contractualClienteApp')
             self.unidad_data = response.data;
         });
 
-        //Temporal viene dado por un servicio de javier
+
+        coreAmazonRequest.get('jefe_dependencia', $.param({
+            limit: -1,
+            query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD')
+        })).then(function (responseJD) {
+            self.jefes_dep_data = responseJD;
+
+        });
+        // Se traen los jefes de dependencia actuales 
         agoraRequest.get('informacion_persona_natural', $.param({
             limit: -1,
-            sortby: "PrimerNombre",
-            order: "asc",
         })).then(function (response) {
+            let arrJD = [];
+            self.interventor_data = response.data;
             self.persona_data = response.data.filter(function (p) {
-                return p.Cargo !== "";
+                self.jefes_dep_data.data.forEach(function (i) {
+                    if (p.Id == i.TerceroId) {
+                        arrJD.push(p);
+                    }
+
+                })
+                return arrJD;
             });
         });
 
@@ -542,7 +564,18 @@ angular.module('contractualClienteApp')
             Actividades: self.actividades,
             MontoPorMeta: 0
         };
-
+        self.addProductoCatalogo = function () {
+            self.productos.filter(function (e) {
+                return e.Id === self.producto_catalogo.Id;
+            }).length > 0 || !self.producto_catalogo.Id ?
+                swal({
+                    type: 'error',
+                    title: 'El producto ya fue agregado',
+                    showConfirmButton: true,
+                }) :
+                self.productos.push(self.producto_catalogo);
+            self.producto_catalogo = {};
+        }
 
         self.eliminarRubro = function (rubro) {
             for (var i = 0; i < self.f_apropiacion.length; i += 1) {
@@ -606,19 +639,16 @@ angular.module('contractualClienteApp')
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true)
 
+        $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
+            self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
+            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100)) || 0;
+            self.producto_catalogo.preciomasIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100)) + self.producto_catalogo.Valor || 0;
+        }, true)
 
         $scope.$watch('solicitudNecesidad.productos', function () {
             self.valorTotalEspecificaciones = 0;
             self.subtotalEspecificaciones = 0;
             self.valorIVA = 0;
-
-            self.productos.forEach(function (pro) {
-                pro.Subtotal = (pro.Valor * pro.Cantidad) || 0;
-                pro.ValorIVA = (pro.Valor * (pro.Iva / 100)) || 0;
-                pro.preciomasIVA = (pro.Valor * (pro.Iva / 100)) + pro.Valor || 0;
-            });
-
-
             self.productos.forEach(function (producto) {
                 self.subtotalEspecificaciones += (producto.Valor * producto.Cantidad);
             });
@@ -627,7 +657,6 @@ angular.module('contractualClienteApp')
             });
             self.valorTotalEspecificaciones = self.valorIVA + self.subtotalEspecificaciones;
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
-
         }, true);
 
         $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad', function () {
@@ -784,7 +813,7 @@ angular.module('contractualClienteApp')
 
                     }
                 }
-        
+
                 if ((response.status > 300 || self.alerta_necesidad.Type !== "success")) {
                     swal({
                         title: 'Error Registro Necesidad',
@@ -998,6 +1027,11 @@ angular.module('contractualClienteApp')
                     break;
             }
         };
+
+        $scope.$watch('solicitudNecesidad.FormularioSeleccionado',function(){
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }, true)
+
         self.ValidarSeccion = function (form) {
             var n = self.solicitudNecesidad;
             switch (form) {
