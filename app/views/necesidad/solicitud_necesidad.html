@@ -767,10 +767,10 @@
                     </div>
                   </ng-form>
                   <div class="panel panel-default col-md-12">
-                    <table class="table table-bordered">
-                      <thead class="thead-dark">
-                        <th>N°</th>
-                        <th>Nombre</th>
+                    <table class="table table-bordered tablaDetalle">
+                      <thead class="bg-primary">
+                        <th>{{"NUM_ITEM" | translate }}</th>
+                        <th>{{"NOMBRE" | translate }}</th>
                         <th>{{"UNIDAD_MEDIDA" | translate}}</th>
                         <th>{{"CANTIDAD" | translate}}</th>
                         <th>{{"VALOR_UNITARIO" | translate}}</th>
@@ -791,19 +791,20 @@
                           <td class="money">{{pro.Subtotal | currency}}</td>
                           <td class="money">{{pro.ValorIVA | currency}}</td>
                           <td class="money">{{pro.preciomasIVA | currency}}</td>
-                          <td><span ng-click="solicitudNecesidad.productos.splice($index,1)"
+                          <td class="accionTDetalle"><span ng-click="solicitudNecesidad.productos.splice($index,1)"
                               class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
                         </tr>
                       </tbody>
                     </table>
-                    <table class="table table-bordered" ng-show="solicitudNecesidad.MostrarTotalEspc">
+
+                    <table class="table table-bordered tablaDetalle" ng-show="solicitudNecesidad.MostrarTotalEspc">
                       <thead>
-                        <th>{{"SUBTOTAL" | translate}}</th>
+                        <th class="bg-info">{{"SUBTOTAL" | translate}}</th>
                         <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}
                         </th>
-                        <th>{{"IVA" | translate}} </th>
+                        <th class="bg-info">{{"IVA" | translate}} </th>
                         <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
-                        <th>{{"VALOR_TOTAL" | translate}}</th>
+                        <th class="bg-info">{{"VALOR_TOTAL" | translate}}</th>
                         <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}
                         </th>
                       </thead>

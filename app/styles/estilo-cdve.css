@@ -18,3 +18,20 @@
 	float: left;
 	width: 33.333333%;
 }
+
+.tablaDetalle{
+    border-collapse: collapse;
+}
+
+.tablaDetalle {
+  border: 1px solid black;
+}
+
+.accionTDetalle {
+  text-align: center; 
+  vertical-align: middle;
+}
+
+.tablaDetalle, .tablaDetalle td{
+  border-color: black;
+}

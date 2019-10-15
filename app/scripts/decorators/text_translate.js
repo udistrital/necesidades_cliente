@@ -119,6 +119,8 @@ var text_es = {
     ELEMENTOS: "Elementos",
     ELEMENTO: "Elemento",
     UNIDAD_MEDIDA: "Unidad de Medida",
+    NUM_ITEM: "N°",
+    NOMBRE: "Nombre",
     VALOR_UNITARIO: "Valor Unitario",
     IVA: "IVA",
     VALOR_IVA: "Valor IVA",
@@ -819,7 +821,7 @@ var text_es = {
     TEXT_DEPEN: "-- Elija la dependencia a la que pertenece --",
     ACC: "ACCIONES",
     EDITAR: "EDITAR",
-    ELIMINAR: "ELIMINAR REGISTRO",
+    ELIMINAR: "Eliminar registro",
 
 
     //Módulo aprobación documentos
