@@ -475,7 +475,7 @@ angular.module('contractualClienteApp')
         agoraRequest.get('informacion_persona_natural', $.param({
             limit: -1,
         })).then(function (response) {
-            let arrJD = [];
+            var arrJD = [];
             self.interventor_data = response.data;
             self.persona_data = response.data.filter(function (p) {
                 self.jefes_dep_data.data.forEach(function (i) {
