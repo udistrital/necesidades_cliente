@@ -116,7 +116,7 @@ angular.module('contractualClienteApp')
                         metasRequest.get('2019').then(function (responsePA) {
                             self.metasObj = [];
                             self.meta = '';
-                            // console.info(responsePA);
+
                             self.actividadesMongo.forEach(function (actividad) {
                                 for (var index = 0; index < responsePA.data.metas.actividades.length; index++) {
                                     if (actividad.codigo === responsePA.data.metas.actividades[index].actividad_id && responsePA.data.metas.actividades[index].dependencia==="122") {

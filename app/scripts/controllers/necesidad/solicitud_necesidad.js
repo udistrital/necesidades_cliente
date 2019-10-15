@@ -28,6 +28,8 @@ angular.module('contractualClienteApp')
         self.actividades = undefined;
         self.apSelected = false;
         self.apSelectedOb = undefined;
+        self.jefes_dep_data = undefined;
+        self.producto_catalogo = {};
 
 
         self.fecha_actual = new Date();
@@ -71,18 +73,18 @@ angular.module('contractualClienteApp')
         };
 
         self.iva_data = {
-            iva1: {
-                Id: 1,
-                Valor: 16,
-            },
-            iva2: {
-                Id: 2,
-                Valor: 19,
-            },
-            iva3: {
-                Id: 3,
-                Valor: 0,
-            }
+            /*   iva1: {
+                  Id: 1,
+                  Valor: 16,
+              },
+              iva2: {
+                  Id: 2,
+                  Valor: 19,
+              },
+              iva3: {
+                  Id: 3,
+                  Valor: 0,
+              } */
         };
 
 
@@ -298,10 +300,8 @@ angular.module('contractualClienteApp')
         self.validar_formu = function (form) {
             if (form.$invalid) {
                 swal(alertInfo);
-                form.open = false;
                 return false;
             } else {
-                form.open = !form.open;
                 return true;
             }
         };
@@ -332,6 +332,14 @@ angular.module('contractualClienteApp')
         })).then(function (response) {
             self.nucleo_area_data = response.data;
         });
+
+        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
+            limit: -1,
+            query: 'Activo:true'
+        })).then(function (response) {
+            self.iva_data = response.data;
+        });
+
 
         $scope.$watch('solicitudNecesidad.nucleoarea', function () {
             self.nucleoarea ?
@@ -455,14 +463,28 @@ angular.module('contractualClienteApp')
             self.unidad_data = response.data;
         });
 
-        //Temporal viene dado por un servicio de javier
+
+        coreAmazonRequest.get('jefe_dependencia', $.param({
+            limit: -1,
+            query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD')
+        })).then(function (responseJD) {
+            self.jefes_dep_data = responseJD;
+
+        });
+        // Se traen los jefes de dependencia actuales 
         agoraRequest.get('informacion_persona_natural', $.param({
             limit: -1,
-            sortby: "PrimerNombre",
-            order: "asc",
         })).then(function (response) {
+            let arrJD = [];
+            self.interventor_data = response.data;
             self.persona_data = response.data.filter(function (p) {
-                return p.Cargo !== "";
+                self.jefes_dep_data.data.forEach(function (i) {
+                    if (p.Id == i.TerceroId) {
+                        arrJD.push(p);
+                    }
+
+                })
+                return arrJD;
             });
         });
 
@@ -542,7 +564,18 @@ angular.module('contractualClienteApp')
             Actividades: self.actividades,
             MontoPorMeta: 0
         };
-
+        self.addProductoCatalogo = function () {
+            self.productos.filter(function (e) {
+                return e.Id === self.producto_catalogo.Id;
+            }).length > 0 || !self.producto_catalogo.Id ?
+                swal({
+                    type: 'error',
+                    title: 'El producto ya fue agregado',
+                    showConfirmButton: true,
+                }) :
+                self.productos.push(self.producto_catalogo);
+            self.producto_catalogo = {};
+        }
 
         self.eliminarRubro = function (rubro) {
             for (var i = 0; i < self.f_apropiacion.length; i += 1) {
@@ -576,10 +609,17 @@ angular.module('contractualClienteApp')
                 self.f_apropiacion[i].MontoPorApropiacion = 0;
                 self.f_apropiacion[i].MontoFuentes = 0;
                 self.f_apropiacion[i].MontoProductos = 0;
+                self.f_apropiacion[i].MontoMeta = 0;
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
                     if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
                         for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
                             self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
+                            self.f_apropiacion[i].MontoMeta += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
+                        }
+                    }
+                    if (self.f_apropiacion[i].Apropiacion.productos !== undefined) {
+                        for (var k = 0; k < self.f_apropiacion[i].Apropiacion.productos.length; k++) {
+                            self.f_apropiacion[i].MontoProductos += self.f_apropiacion[i].Apropiacion.productos[k].MontoParcial;
                         }
                     }
                 }
@@ -588,11 +628,7 @@ angular.module('contractualClienteApp')
                         self.f_apropiacion[i].MontoFuentes += self.f_apropiacion[i].Apropiacion.fuentes[k].MontoParcial;
                     }
                 }
-                if (self.f_apropiacion[i].Apropiacion.productos !== undefined) {
-                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.productos.length; k++) {
-                        self.f_apropiacion[i].MontoProductos += self.f_apropiacion[i].Apropiacion.productos[k].MontoParcial;
-                    }
-                }
+
 
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
                     self.f_apropiacion[i].MontoPorApropiacion = self.f_apropiacion[i].MontoFuentes;
@@ -606,19 +642,16 @@ angular.module('contractualClienteApp')
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true)
 
+        $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
+            self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
+            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100)) || 0;
+            self.producto_catalogo.preciomasIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100)) + self.producto_catalogo.Valor || 0;
+        }, true)
 
         $scope.$watch('solicitudNecesidad.productos', function () {
             self.valorTotalEspecificaciones = 0;
             self.subtotalEspecificaciones = 0;
             self.valorIVA = 0;
-
-            self.productos.forEach(function (pro) {
-                pro.Subtotal = (pro.Valor * pro.Cantidad) || 0;
-                pro.ValorIVA = (pro.Valor * (pro.Iva / 100)) || 0;
-                pro.preciomasIVA = (pro.Valor * (pro.Iva / 100)) + pro.Valor || 0;
-            });
-
-
             self.productos.forEach(function (producto) {
                 self.subtotalEspecificaciones += (producto.Valor * producto.Cantidad);
             });
@@ -627,7 +660,6 @@ angular.module('contractualClienteApp')
             });
             self.valorTotalEspecificaciones = self.valorIVA + self.subtotalEspecificaciones;
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
-
         }, true);
 
         $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad', function () {
@@ -784,7 +816,7 @@ angular.module('contractualClienteApp')
 
                     }
                 }
-        
+
                 if ((response.status > 300 || self.alerta_necesidad.Type !== "success")) {
                     swal({
                         title: 'Error Registro Necesidad',
@@ -908,27 +940,21 @@ angular.module('contractualClienteApp')
         self.ValidarFinanciacion = function () {
             var fin_valid = self.f_apropiacion.length > 0;
             self.f_apropiacion.forEach(function (ap) {
-                var v_fuentes = 0;
-                var v_act = 0;
-                var v_productos = 0;
-                ap.Apropiacion.fuentes ? ap.Apropiacion.fuentes.forEach(function (e) { v_fuentes += e.MontoParcial; }) : _;
-                ap.Apropiacion.meta ? ap.Apropiacion.meta.actividades.forEach(function (e) { v_act += e.MontoParcial; }) : _;
-                ap.Apropiacion.productos ? ap.Apropiacion.productos.forEach(function (e) { v_productos += e.MontoParcial }) : _;
+                var v_fuentes = ap.MontoFuentes;
                 // console.info(self.necesidad.TipoFinanciacionNecesidad.Nombre);
                 if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
-                    fin_valid = fin_valid && (v_fuentes === v_act && v_act === v_productos);
+                    var v_act = ap.MontoMeta;
+                    var v_productos = ap.MontoProductos;
+                    v_fuentes!==v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).productosDiferenteAFuentes) : _;
+                    v_act>v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).metasMayorQueProducto) : _;
+                    fin_valid = fin_valid &&(v_fuentes === v_act && v_act === v_productos)&&ap.MontoFuentes<=ap.Apropiacion.ValorActual;
                 } else {
-                    fin_valid = fin_valid && (v_fuentes === v_productos);
+                    fin_valid = fin_valid && ap.MontoFuentes<=ap.Apropiacion.ValorActual;
                 }
+                ap.MontoFuentes>ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
             });
-            !fin_valid ? swal({
-                title: 'Valores de financiacion errados',
-                type: 'error',
-                text: 'Por favor, verifique la igualdad de los valores de financiacion ',
-                showCloseButton: true,
-                confirmButtonText: $translate.instant("CERRAR")
-            }) : swal({
+            !fin_valid ? _ : swal({
                 title: 'Financiación OK',
                 type: 'success',
                 text: 'Valores de financiación en igualdad',
@@ -983,7 +1009,7 @@ angular.module('contractualClienteApp')
                         self.FormularioSeleccionado = 2;
                     }
                     else {
-                        self.AlertSeccion('Financiación');
+                        // self.AlertSeccion('Financiación');
                     }
                     break;
                 case 'contratacion':
@@ -998,14 +1024,19 @@ angular.module('contractualClienteApp')
                     break;
             }
         };
+
+        $scope.$watch('solicitudNecesidad.FormularioSeleccionado', function () {
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }, true)
+
         self.ValidarSeccion = function (form) {
             var n = self.solicitudNecesidad;
             switch (form) {
                 case 'general':
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
-                    //  (document.getElementById("f_financiacion").classList.contains('ng-valid'), "ALfa", !document.getElementById("f_financiacion").classList.contains('ng-pristine'), "AFA", self.ValidarFinanciacion())
-                    return document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine') && self.ValidarFinanciacion();
+                    var val=self.ValidarFinanciacion()
+                    return val&&document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine'); 
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
                 case 'contratacion':
