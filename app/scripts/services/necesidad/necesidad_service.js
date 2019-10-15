@@ -8,7 +8,7 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function (administrativaRequest, planCuentasRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest, $translate,) {
+  .service('necesidadService', function ($translate,administrativaRequest, planCuentasRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
