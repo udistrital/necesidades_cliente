@@ -76,16 +76,6 @@ angular.module('contractualClienteApp')
 
                 };
 
-                $scope.$watch('productos', function () {
-                    if ($scope.productos.length === 0 || $scope.productos===[]) {
-                        self.gridApi.selection.clearSelectedRows();
-                    }
-                }, true);
-
-
-
-
-
             },
             controllerAs: 'd_listaSubgruposCatalogos'
         };

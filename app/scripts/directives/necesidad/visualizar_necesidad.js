@@ -109,6 +109,7 @@ angular.module('contractualClienteApp')
                         planCuentasRequest.get('arbol_rubro_apropiacion/get_hojas/' + '1/' + $scope.vigencia, $.param({
                             query: "Codigo:" + self.codAp,
                         })).then(function (apropiacionData) {
+                            console.info(apropiacionData)
                             self.nombreAp = apropiacionData.data.Body[0].Nombre;
 
                         });
