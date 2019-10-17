@@ -644,8 +644,8 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
-            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100)) || 0;
-            self.producto_catalogo.preciomasIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100)) + self.producto_catalogo.Valor || 0;
+            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100))* self.producto_catalogo.Cantidad || 0;
+            self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
         }, true)
 
         $scope.$watch('solicitudNecesidad.productos', function () {

@@ -132,7 +132,7 @@ var text_es = {
     VALOR_SOLICITADO: "Valor Solicitado",
     TOTAL_FINANCIACION: "Total Financiación",
     OBLIGATORIO: "Campo requerido",
-    PRECIO_MAS_IVA: "Valor Unitario + IVA",
+    PRECIO_MAS_IVA: "Valor Total",
     NO_NECESIDAD: "No. elaboración necesidad",
     //lista_documentos_legales
     MARCO_LEGAL: "Marco Legal",

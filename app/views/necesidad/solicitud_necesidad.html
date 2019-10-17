@@ -378,7 +378,8 @@
 
                       </div>
 
-                      <div  ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre==='Inversión'" class="row">
+                      <div ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre==='Inversión'"
+                        class="row">
                         <div class="col-md-6">
                           <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Apropiacion.productos"
                             initProductoapropiacion="ap.initProductos"></productos-apropiacion>
@@ -696,7 +697,8 @@
 
                             <div class="col-md-4">
                               <label class=" control-label">{{"IVA" | translate}} %</label>
-                              <select class="form-control" ng-init="pro.Iva = 0" ng-model="solicitudNecesidad.producto_catalogo.Iva"
+                              <select class="form-control" ng-init="pro.Iva = 0"
+                                ng-model="solicitudNecesidad.producto_catalogo.Iva"
                                 ng-options="iva.Tarifa as iva.Tarifa for iva in solicitudNecesidad.iva_data" required>
                                 <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"IVA" | translate}}
                                   %
@@ -715,17 +717,16 @@
                             </div>
 
                             <div class="col-md-4">
+                              <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
+                              <input class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Subtotal"
+                                placeholder="Total" ui-money-mask="2" readonly>
+                            </div>
+                            <div class="col-md-4">
                               <label class=" control-label">{{"PRECIO_MAS_IVA" | translate}}</label>
                               <input class="form-control" ng-model="solicitudNecesidad.producto_catalogo.preciomasIVA"
                                 placeholder="valor_con_iva" ui-money-mask="2" readonly>
                             </div>
 
-                            <div class="col-md-4">
-                              <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
-                              <input class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Subtotal"
-                                placeholder="Total" ui-money-mask="2" readonly>
-
-                            </div>
                           </div>
 
                           <div class="col-md-12">
@@ -774,8 +775,8 @@
                         <th>{{"UNIDAD_MEDIDA" | translate}}</th>
                         <th>{{"CANTIDAD" | translate}}</th>
                         <th>{{"VALOR_UNITARIO" | translate}}</th>
-                        <th>{{"IVA" | translate}} %</th>
                         <th>{{"SUBTOTAL" | translate}}</th>
+                        <th>{{"IVA" | translate}} %</th>
                         <th>{{"VALOR_IVA" | translate}}</th>
                         <th>{{"PRECIO_MAS_IVA" | translate}}</th>
                         <th>{{"ELIMINAR" | translate}}</th>
@@ -787,8 +788,8 @@
                           <td>{{pro.Unidad}}</td>
                           <td>{{pro.Cantidad}}</td>
                           <td class="money">{{pro.Valor | currency}}</td>
-                          <td class="money">{{pro.Iva}}%</td>
                           <td class="money">{{pro.Subtotal | currency}}</td>
+                          <td class="money">{{pro.Iva}}%</td>
                           <td class="money">{{pro.ValorIVA | currency}}</td>
                           <td class="money">{{pro.preciomasIVA | currency}}</td>
                           <td class="accionTDetalle"><span ng-click="solicitudNecesidad.productos.splice($index,1)"
@@ -800,14 +801,16 @@
                     <table class="table table-bordered tablaDetalle" ng-show="solicitudNecesidad.MostrarTotalEspc">
                       <thead>
                         <th class="bg-info">{{"SUBTOTAL" | translate}}</th>
-                        <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}
-                        </th>
                         <th class="bg-info">{{"IVA" | translate}} </th>
-                        <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
                         <th class="bg-info">{{"VALOR_TOTAL" | translate}}</th>
-                        <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}
-                        </th>
                       </thead>
+                      <tbody>
+                        <tr>
+                          <td class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}</td>
+                          <td class="money">{{solicitudNecesidad.valorIVA | currency}}</td>
+                          <td class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</td>
+                        </tr>
+                      </tbody>
                     </table>
                   </div>
 
