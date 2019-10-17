@@ -171,17 +171,40 @@
                     {{solicitudNecesidad.jefe_destino.PrimerApellido}}
                     {{solicitudNecesidad.jefe_destino.SegundoApellido}}</span>
                 </div>
-
-                <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.Supervisor">
-                  <label for="supervisor" class="control-label">{{"SUPERVISOR" | translate}}</label>
-                  <select class="form-control" ng-model="solicitudNecesidad.necesidad.Supervisor"
-                    ng-options="sup.Id*1 as ( sup.Cargo + ' '  + sup.PrimerNombre+ ' '  + sup.SegundoNombre + ' '  + sup.PrimerApellido + ' '  + sup.SegundoApellido ) for sup in solicitudNecesidad.persona_data">
-                    <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"SUPERVISOR" | translate}}
-                    </option>
-                  </select>
+                <!-- seleccionar si es supervisor o interventor -->
+                <div class="col-md-12" ng-if="solicitudNecesidad.fields.General.Supervisor">
+                  <label class="radio-inline">
+                    <input type="radio" ng-value="true" ng-model="solicitudNecesidad.tipoInterventor" required>
+                    {{"INTERVENTOR" | translate}}
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" ng-value="false" ng-model="solicitudNecesidad.tipoInterventor" required>
+                    {{"SUPERVISOR" | translate}}
+                  </label>
                 </div>
+                <!-- supervisor -->
+                <div ng-if="!solicitudNecesidad.tipoInterventor">
+                  <div class="col-md-6" >
+                    <label for="supervisor" class="control-label">{{"DEPENDENCIA_SUPERVISOR" | translate}}</label>
+                    <small>*{{"OBLIGATORIO" | translate}}</small>
+                    <select class="form-control" ng-model="solicitudNecesidad.dependencia_supervisor"
+                      ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
+                      <option value="" disabled selected>{{"SELECCIONAR" | translate}}
+                        {{"DEPENDENCIA_SUPERVISOR" | translate}}</option>
+                    </select>
+                  </div>
 
-                <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.Supervisor">
+                  <div class="col-md-6">
+                    <label for="supervisor"
+                      class="control-label">{{"JEFE_DEPENDENCIA_SUPERVISOR" | translate}}</label>
+                    <span class="form-control">{{solicitudNecesidad.supervisor.PrimerNombre}}
+                      {{solicitudNecesidad.supervisor.SegundoNombre}}
+                      {{solicitudNecesidad.supervisor.PrimerApellido}}
+                      {{solicitudNecesidad.supervisor.SegundoApellido}}</span>
+                  </div>
+                </div>
+                <!-- interventor -->
+                <div  class="col-md-12" ng-if="solicitudNecesidad.tipoInterventor">
                   <label for="interventor" class="control-label">{{"INTERVENTOR" | translate}}</label>
                   <select class="form-control" ng-model="solicitudNecesidad.necesidad.Interventor"
                     ng-options="inter.Id*1 as (inter.PrimerNombre+ ' '  + inter.SegundoNombre + ' '  + inter.PrimerApellido + ' '  + inter.SegundoApellido ) for inter in solicitudNecesidad.interventor_data">
@@ -189,7 +212,9 @@
                     </option>
                   </select>
                 </div>
-
+                
+                
+                <!-- ordenador gasto -->
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.Responsables.RolOrdenadorGasto">
                   <label for="ordenador_gasto" class="control-label">{{"ROL" | translate}} {{"ORDENADOR_GASTO" |
                             translate}}</label>
@@ -560,8 +585,16 @@
                         {{"SERVICIO" | translate}}</option>
                     </select>
                   </div>
+                  <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id!==4">
+                    <div>
+                      <label class="control-label">Valor Servicio</label>
+                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.f_valor"
+                        ui-money-mask="2" disabled>
+                    </div>
+                  </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-6" ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4">
+
                     <div class="col-md-4">
                       <label class="control-label">Valor Servicio</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.servicio_valor"
@@ -574,7 +607,7 @@
                         ui-money-mask="2" disabled>
                     </div>
 
-                    <div ng-show="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4" class="col-md-4">
+                    <div class="col-md-4">
                       <label class="control-label">Valor Compra + Servicio</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.valor_compra_servicio"
                         ui-money-mask="2" disabled>
@@ -670,7 +703,7 @@
                               <select
                                 ng-if="solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===1 || solicitudNecesidad.necesidad.TipoContratoNecesidad.Id===4"
                                 class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Unidad"
-                                ng-options="unidad.Id as unidad.Unidad for unidad in solicitudNecesidad.unidad_data"
+                                ng-options="unidad as unidad.Unidad for unidad in solicitudNecesidad.unidad_data"
                                 required>
                                 <option value="" disabled selected>{{"SELECCIONAR" | translate}}
                                   {{"UNIDAD_MEDIDA" | translate}}</option>
@@ -699,7 +732,8 @@
                               <label class=" control-label">{{"IVA" | translate}} %</label>
                               <select class="form-control" ng-init="pro.Iva = 0"
                                 ng-model="solicitudNecesidad.producto_catalogo.Iva"
-                                ng-options="iva.Tarifa as iva.Tarifa for iva in solicitudNecesidad.iva_data" required>
+                                ng-options="iva.Id as iva.ImpuestoId.CodigoAbreviacion+' '+iva.Tarifa for iva in solicitudNecesidad.iva_data"
+                                required>
                                 <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"IVA" | translate}}
                                   %
                                 </option>
@@ -785,7 +819,7 @@
                         <tr ng-repeat="pro in solicitudNecesidad.productos track by pro.Id">
                           <td>{{$index+1}}</td>
                           <td>{{pro.ElementoNombre}}</td>
-                          <td>{{pro.Unidad}}</td>
+                          <td>{{pro.Unidad.Unidad | lowercase}}</td>
                           <td>{{pro.Cantidad}}</td>
                           <td class="money">{{pro.Valor | currency}}</td>
                           <td class="money">{{pro.Subtotal | currency}}</td>
@@ -797,20 +831,22 @@
                         </tr>
                       </tbody>
                     </table>
-
+                    <br>
                     <table class="table table-bordered tablaDetalle" ng-show="solicitudNecesidad.MostrarTotalEspc">
                       <thead>
-                        <th class="bg-info">{{"SUBTOTAL" | translate}}</th>
-                        <th class="bg-info">{{"IVA" | translate}} </th>
-                        <th class="bg-info">{{"VALOR_TOTAL" | translate}}</th>
-                      </thead>
-                      <tbody>
                         <tr>
-                          <td class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}</td>
-                          <td class="money">{{solicitudNecesidad.valorIVA | currency}}</td>
-                          <td class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</td>
+                          <th class="bg-info col-md-4">{{"SUBTOTAL" | translate}}</th>
+                          <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}</th>
                         </tr>
-                      </tbody>
+                        <tr>
+                          <th class="bg-info col-md-4">{{"IVA" | translate}} </th>
+                          <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
+                        </tr>
+                        <tr>
+                          <th class="bg-info col-md-4">{{"VALOR_TOTAL" | translate}}</th>
+                          <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</th>
+                        </tr>
+                      </thead>
                     </table>
                   </div>
 

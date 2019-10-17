@@ -83,6 +83,8 @@ var text_es = {
     JEFE_DEPENDENCIA_SOLICITANTE: "Jefe Dependencia Solicitante",
     DEPENDENCIA_DESTINO: "Dependencia Destino",
     JEFE_DEPENDENCIA_DESTINO: "Jefe Dependencia Destino",
+    DEPENDENCIA_SUPERVISOR: "Dependencia Supervisor",
+    JEFE_DEPENDENCIA_SUPERVISOR: "Jefe Dependencia Supervisor",
     ROL: "Rol",
     ORDENADOR_GASTO: "Ordenador del Gasto",
     GENERAL: "General",

@@ -59,6 +59,7 @@ angular.module('contractualClienteApp')
         self.subtotalEspecificaciones = 0;
         self.valorIVA = 0;
         self.FormularioSeleccionado = 0;
+        self.tipoInterventor = false;
 
 
         self.planes_anuales = [{
@@ -70,21 +71,6 @@ angular.module('contractualClienteApp')
             duracion: [true, false, false, undefined],
             unico_pago: [true, true, false, undefined],
             agotar_presupuesto: [true, false, true, undefined]
-        };
-
-        self.iva_data = {
-            /*   iva1: {
-                  Id: 1,
-                  Valor: 16,
-              },
-              iva2: {
-                  Id: 2,
-                  Valor: 19,
-              },
-              iva3: {
-                  Id: 3,
-                  Valor: 0,
-              } */
         };
 
 
@@ -211,6 +197,16 @@ angular.module('contractualClienteApp')
                     necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
                         self.jefe_destino = JD.Persona;
                         self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
+                    }).catch(function (err) {
+                    }) : _;
+            }, true);
+
+            $scope.$watch('solicitudNecesidad.dependencia_supervisor', function () {
+                self.supervisor = null;
+                self.dependencia_supervisor ?
+                    necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
+                        self.supervisor = JD.Persona;
+                        self.dep_ned.supervisor = JD.JefeDependencia.Id;
                     }).catch(function (err) {
                     }) : _;
             }, true);
@@ -656,7 +652,7 @@ angular.module('contractualClienteApp')
                 self.subtotalEspecificaciones += (producto.Valor * producto.Cantidad);
             });
             self.productos.forEach(function (producto) {
-                self.valorIVA += (producto.Valor * (producto.Iva / 100));
+                self.valorIVA += (producto.Valor * (producto.Iva / 100))* producto.Cantidad;
             });
             self.valorTotalEspecificaciones = self.valorIVA + self.subtotalEspecificaciones;
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
