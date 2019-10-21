@@ -45,6 +45,7 @@ angular.module('contractualClienteApp')
                         query: "NumeroElaboracion:" + $scope.numero + ",Vigencia:" + $scope.vigencia
                     })).then(function (response) {
                         self.v_necesidad = response.data[0];
+                        console.info(self.v_necesidad);
                         if (self.verJustificacion) {
                             administrativaRequest.get('necesidad_rechazada', $.param({
                                 query: "Necesidad:" + response.data[0].Id,
