@@ -38,20 +38,20 @@ angular.module('contractualClienteApp')
               return row.entity.Nombre
             }
           }
-          // ,
-          // {
-          //   field: 'ValorOriginal',
-          //   displayName: $translate.instant('VALOR'),
-          //   cellFilter: 'currency',
-          //   headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
-          //   cellClass: function (row, col) {
-          //     return 'money'
-          //   },
-          //   cellTooltip: function (row) {
-          //     return row.entity.Nombre
-          //   },
-          //   width: '40%'
-          // }
+          ,
+          {
+            field: 'ValorActual',
+            displayName: $translate.instant('VALOR'),
+            cellFilter: 'currency',
+            headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
+            cellClass: function (row, col) {
+              return 'money'
+            },
+            cellTooltip: function (row) {
+              return row.entity.ValorActual || 0;
+            },
+            width: '40%'
+          }
         ]
         }
 

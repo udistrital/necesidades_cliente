@@ -83,6 +83,8 @@ var text_es = {
     JEFE_DEPENDENCIA_SOLICITANTE: "Jefe Dependencia Solicitante",
     DEPENDENCIA_DESTINO: "Dependencia Destino",
     JEFE_DEPENDENCIA_DESTINO: "Jefe Dependencia Destino",
+    DEPENDENCIA_SUPERVISOR: "Dependencia Supervisor",
+    JEFE_DEPENDENCIA_SUPERVISOR: "Jefe Dependencia Supervisor",
     ROL: "Rol",
     ORDENADOR_GASTO: "Ordenador del Gasto",
     GENERAL: "General",
@@ -119,6 +121,8 @@ var text_es = {
     ELEMENTOS: "Elementos",
     ELEMENTO: "Elemento",
     UNIDAD_MEDIDA: "Unidad de Medida",
+    NUM_ITEM: "N°",
+    NOMBRE: "Nombre",
     VALOR_UNITARIO: "Valor Unitario",
     IVA: "IVA",
     VALOR_IVA: "Valor IVA",
@@ -130,7 +134,7 @@ var text_es = {
     VALOR_SOLICITADO: "Valor Solicitado",
     TOTAL_FINANCIACION: "Total Financiación",
     OBLIGATORIO: "Campo requerido",
-    PRECIO_MAS_IVA: "Valor Unitario + IVA",
+    PRECIO_MAS_IVA: "Valor Total",
     NO_NECESIDAD: "No. elaboración necesidad",
     //lista_documentos_legales
     MARCO_LEGAL: "Marco Legal",
@@ -819,7 +823,7 @@ var text_es = {
     TEXT_DEPEN: "-- Elija la dependencia a la que pertenece --",
     ACC: "ACCIONES",
     EDITAR: "EDITAR",
-    ELIMINAR: "ELIMINAR REGISTRO",
+    ELIMINAR: "Eliminar registro",
 
 
     //Módulo aprobación documentos
