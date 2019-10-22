@@ -7,7 +7,7 @@
  * # marcoLegal/listaDocumentosLegales
  */
 angular.module('contractualClienteApp')
-  .directive('listaDocumentosLegales', function (administrativaRequest, $translate) {
+  .directive('listaDocumentosLegales', function (administrativaRequest, $translate, necesidadesCrudRequest) {
     return {
       restrict: 'E',
       scope: {
@@ -63,7 +63,7 @@ angular.module('contractualClienteApp')
         };
 
         self.loadDocumentos = function () {
-          administrativaRequest.get('marco_legal', 'limit=0').then(function (response) {
+          necesidadesCrudRequest.get('marco_legal', 'limit=0').then(function (response) {
             // se filtra para que no cargue documentos vacios porque hay un bug en el API que crea documentos vacios
             self.gridOptions.data = response.data.filter(function (documento) { return (documento.Enlace !== "" && documento.NombreDocumento != "") });
           }).then(function () {
@@ -102,7 +102,7 @@ angular.module('contractualClienteApp')
         };
 
         self.AniadirDocumento = function () {
-          administrativaRequest.post("marco_legal", self.obj_documento).then(function () {
+          necesidadesCrudRequest.post("marco_legal", self.obj_documento).then(function () {
             self.obj_documento = {
               NombreDocumento: '',
               Enlace: ''

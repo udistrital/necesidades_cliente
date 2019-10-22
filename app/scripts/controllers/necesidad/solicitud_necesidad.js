@@ -9,11 +9,11 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
         var self = this;
 
         self.IdNecesidad = $routeParams.IdNecesidad;
-
+        self.iva_data = undefined;
         self.documentos = [];
         self.avance = undefined;
         self.formuIncompleto = true;
@@ -497,7 +497,7 @@ angular.module('contractualClienteApp')
             self.modalidad_data = response.data;
         });
 
-        administrativaRequest.get('tipo_financiacion_necesidad', $.param({
+        necesidadesCrudRequest.get('tipo_financiacion_necesidad', $.param({
             limit: -1
         })).then(function (response) {
             self.tipo_financiacion_data = response.data;
@@ -640,7 +640,17 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
-            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100))* self.producto_catalogo.Cantidad || 0;
+            var tIva = [];
+            if(self.iva_data!= undefined){
+                tIva = self.iva_data.filter(function(iva){
+                    if (iva.Id === self.producto_catalogo.Iva) {return iva.Tarifa };
+                })
+            }
+
+            if(tIva[0]!= undefined){
+                self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
+            }
+            //self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
             self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
         }, true)
 

@@ -122,7 +122,7 @@ var conf_local2 = {
     PARAMETROS_GOBIERNO_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/",
     PLAN_CUENTAS_MID_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8204/v1/",
     PLAN_CUENTAS_MONGO_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8203/v1/",
-    NECESIDADES_CRUD_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8201/v1/",
+    NECESIDADES_CRUD_SERVICE: "http://localhost:8201/v1/",
     METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/",
@@ -177,6 +177,6 @@ var conf_local = {
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        GENERAL: conf_local,
+        GENERAL: conf_local2,
     });
 
