@@ -45,7 +45,6 @@ angular.module('contractualClienteApp')
                         query: "NumeroElaboracion:" + $scope.numero + ",Vigencia:" + $scope.vigencia
                     })).then(function (response) {
                         self.v_necesidad = response.data[0];
-                        console.info(self.v_necesidad);
                         if (self.verJustificacion) {
                             administrativaRequest.get('necesidad_rechazada', $.param({
                                 query: "Necesidad:" + response.data[0].Id,
@@ -70,7 +69,7 @@ angular.module('contractualClienteApp')
                         planCuentasRequest.get('necesidades', $.param({
                             query: "idAdministrativa:" + self.v_necesidad.Id,
                         })).then(function (responseMongo) {
-                            // console.info(responseMongo);
+
                             self.metaId = responseMongo.data.Body[0].apropiaciones[0].metas[0].codigo;
                             self.actividadesMongo = responseMongo.data.Body[0].apropiaciones[0].metas[0].actividades;
                             self.codAp = responseMongo.data.Body[0].apropiaciones[0].codigo;
@@ -85,7 +84,7 @@ angular.module('contractualClienteApp')
                                 })).then(function (responseADM) {
                                     self.v_necesidad.TipoContrato = responseADM;
                                 }).catch(function (err) {
-                                    console.info(err)
+
                                 });
                             }
 
@@ -139,7 +138,7 @@ angular.module('contractualClienteApp')
                                         );
                                     }
                                     self.meta = responsePA.data.metas.actividades[index].meta;
-                                    // console.info(self.metasObj.length)
+
                                 }
                             });
                         });
@@ -157,8 +156,6 @@ angular.module('contractualClienteApp')
                             fields: "JefeDependenciaSolicitante,JefeDependenciaDestino,OrdenadorGasto"
                         })).then(function (response) {
                             self.dependencias = response.data[0];
-                            // console.info(self.dependencias);
-
                             coreAmazonRequest.get('jefe_dependencia', $.param({
                                 query: 'Id:' + response.data[0].JefeDependenciaSolicitante
                             })).then(function (response) {
