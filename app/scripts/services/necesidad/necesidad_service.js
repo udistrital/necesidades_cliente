@@ -179,7 +179,7 @@ angular.module('contractualClienteApp')
                     });
                   }
                 ).catch(function (err) {
-                  // console.info(err)
+
                 });
 
 

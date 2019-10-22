@@ -92,7 +92,6 @@ angular.module('contractualClienteApp')
           $scope.$watch('fuenteapropiacion', function () {
             $scope.fuenteapropiacion ? $scope.fuenteapropiacion.forEach(function (act) {
               var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo !== act.Codigo })
-              // console.info(tmp);
               if (tmp.length > 0) {
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }

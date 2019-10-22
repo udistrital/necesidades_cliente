@@ -823,7 +823,7 @@
                           <td>{{pro.Cantidad}}</td>
                           <td class="money">{{pro.Valor | currency}}</td>
                           <td class="money">{{pro.Subtotal | currency}}</td>
-                          <td class="money">{{((pro.ValorIVA * pro.Cantidad) / pro.Valor)}}%</td>
+                          <td class="money">{{((pro.ValorIVA / pro.Subtotal)*100)}}%</td>
                           <td class="money">{{pro.ValorIVA | currency}}</td>
                           <td class="money">{{pro.preciomasIVA | currency}}</td>
                           <td class="accionTDetalle"><span ng-click="solicitudNecesidad.productos.splice($index,1)"
