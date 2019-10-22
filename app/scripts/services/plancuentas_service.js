@@ -11,7 +11,7 @@ angular.module('planCuentasService',[])
   .service('planCuentasRequest', function ($http, $q, token_service, CONF) {
     // Service logic
     // ...
-    var path = CONF.GENERAL.PLAN_CUENTAS_SERVICE;
+    var path = CONF.GENERAL.PLAN_CUENTAS_MONGO_SERVICE;
     // Public API here
     var cancelSearch; //defer object
     return {

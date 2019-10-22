@@ -18,13 +18,13 @@
   <div class="panel-body">
     <div class="text-info pull-right text-right">
       <cite class=""> {{vigencia|| '-'}}</cite><br>
-      <cite ng-show="estado === d_visualizarNecesidad.estados.aprobada" class=""> {{d_visualizarNecesidad.v_necesidad.Numero || '-'}}</cite><br>
-      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===7" class=""> {{d_visualizarNecesidad.solicitud_disponibilidad.Numero || '-'}}</cite>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7" class=""> {{d_visualizarNecesidad.v_necesidad.Numero || '-'}}</cite><br>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7" class=""> {{d_visualizarNecesidad.solicitud_disponibilidad.Numero || '-'}}</cite>
     </div>
     <div class="text-info pull-right">
       <cite class="">{{"VIGENCIA" | translate}}: </cite><br>
-      <cite ng-show="estado === d_visualizarNecesidad.estados.aprobada"  class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}: </cite><br>
-      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id===7" class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}: </cite>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7"  class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}: </cite><br>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7" class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}: </cite>
     </div>
 
 
