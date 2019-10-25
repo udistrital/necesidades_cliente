@@ -599,6 +599,7 @@ angular.module('contractualClienteApp')
                     title: 'El producto ya fue agregado',
                     showConfirmButton: true,
                 }) :
+                console.info(self.prod)
                 self.productos.push(self.producto_catalogo);
             self.producto_catalogo = {};
             self.producto_catalogo.RequisitosMinimos = [];

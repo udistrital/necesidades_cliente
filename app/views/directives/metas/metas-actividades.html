@@ -49,8 +49,15 @@
             <br>
         </div>
     </div>
-
-
+    <button type="button" class="btn btn-success" ng-click="">Agregar Fuente de financiamiento</button>
+    <div class="panel-body container-fluid">
+        <div class="list-group-item" ng-repeat="fuenteF in d_metasActividades.fuentes">
+                <select></select>
+                <input class="money" ui-money-mask="2" type="text">
+                <button type="button" class="btn btn-primary"  ng-click="">Confirmar</button>
+        </div>
+       
+    </div>
 
 
 
