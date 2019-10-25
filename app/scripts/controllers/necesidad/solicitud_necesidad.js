@@ -438,18 +438,21 @@ angular.module('contractualClienteApp')
         self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }]; //PRovisional esta asquerosidad :) 
 
 
-        administrativaRequest.get('tipo_necesidad', $.param({
-            limit: -1,
-            sortby: "NumeroOrden",
-            order: "asc",
+        necesidadesCrudRequest.get('tipo_necesidad', $.param({
+            limit: -1
         })).then(function (response) {
             self.tipo_necesidad_data = response.data;
-            //ocultar terporalmente funcionalidad no implementada
-            //TODO: implementar la demas funcionalidad
-            // var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
-            var tmpSet = [1, 6];
-            self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
+
         });
+
+        necesidadesCrudRequest.get('tipo_duracion_necesidad', $.param({
+            limit: -1
+        })).then(function (response) {
+            console.info(response);
+            self.tipo_duracion_necesidad_data = response.data;
+           // console.info(self.tipo_duracion_necesidad_data);
+        });
+
 
         agoraRequest.get('unidad', $.param({
             limit: -1,
@@ -755,6 +758,34 @@ angular.module('contractualClienteApp')
                 DetalleServicioNecesidad: self.detalle_servicio_necesidad,
                 ProductosNecesidad: self.productos_apropiaciones
             };
+
+            // self.tr_necesidadObj = {
+            //     Necesidad: ,
+            //     DiasDuracion: ,
+            //     EstadoNecesidadId: ,
+            //     EstudioMercado: ,
+            //     Justificacion: ,
+            //     JustificacionRechazo: ,
+            //     ModalidadSeleccionId: ,
+            //     Objeto: ,
+            //     PlanAnualAdquisicionesId: ,
+            //     TipoContratoId: ,
+            //     TipoContratoNecesidadId: ,
+            //     TipoDuracionNecesidadId: ,
+            //     TipoFinanciacionNecesidadId: ,
+            //     TipoNecesidadId: ,
+            //     Valor: ,
+            //     Vigencia: ,
+            //     DetalleServicioNecesidad: ,
+            //     DetallePrestacionServicioNecesidad: ,
+            //     ProductosCatalogoNecesidad: ,
+            //     MarcoLegalNecesidad: ,
+            //     ActividadEspecificaNecesidad: ,
+            //     ActividadEconomicaNecesidad: ,
+            //     Rubros: ,
+            //     Productos: ,
+            //     Metas: ,
+            // }
 
 
             self.necesidad_plancuentas = {

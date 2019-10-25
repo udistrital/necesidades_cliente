@@ -46,12 +46,18 @@
                   </legend>
                 </div>
                 <div>
-                  <label class="radio-inline">
-                    <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial" value="duracion"
+                  <label class="radio-inline" ng-repeat="tipo in solicitudNecesidad.tipo_duracion_necesidad_data">
+                    <!-- <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial" value="duracion"
                       ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"DURACION"
-            | translate}}
+            | translate}} -->
+
+            <input type="radio" ng-value="{{tipo.Id}}"
+                        ng-model="solicitudNecesidad.DuracionEspecial"
+                        value="duracion"
+                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>
+                      {{tipo.Nombre}}
                   </label>
-                  <label class="radio-inline">
+                  <!-- <label class="radio-inline">
                     <input name="Duracion" type="radio" ng-model="solicitudNecesidad.DuracionEspecial"
                       value="unico_pago"
                       ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"UNICO_PAGO"
@@ -62,7 +68,7 @@
                       value="agotar_presupuesto"
                       ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)" required>{{"HASTA_AGOTAR_PRESUPUESTO"
             | translate}}
-                  </label>
+                  </label> -->
                 </div>
               </ng-form>
 
