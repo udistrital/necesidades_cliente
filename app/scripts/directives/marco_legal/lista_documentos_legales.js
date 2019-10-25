@@ -51,7 +51,7 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.documentos = self.gridApi.selection.getSelectedRows();
+            $scope.documentos = self.gridApi.selection.getSelectedRows().map(function(ml){ return {MarcoLegalId : ml}});
           });
 
         };
