@@ -506,9 +506,9 @@ angular.module('contractualClienteApp')
             self.tipo_financiacion_data = response.data;
         });
 
-        administrativaRequest.get('tipo_contrato_necesidad', $.param({
+        necesidadesCrudRequest.get('tipo_contrato_necesidad', $.param({
             limit: -1,
-            query: 'Estado:true'
+            query: 'Activo:true'
         })).then(function (response) {
             self.tipo_contrato_data = response.data;
         });
