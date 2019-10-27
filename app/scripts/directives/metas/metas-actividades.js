@@ -115,9 +115,9 @@ angular.module('contractualClienteApp')
                  self.gridApi.grid.modifyRows(self.gridOptions.data);
                }else{
                  swal({
-                   title: '¡No hay Actividades!',
+                   title: '¡No hay actividades!',
                    type: 'error',
-                   text: 'Las dependencias no están asociadas a la meta seleccionada . Por favor seleccione otra meta',
+                   text: 'Las dependencias no están asociadas a la meta seleccionada.Por favor seleccione otra meta',
                    showCloseButton: true,
                    confirmButtonText: "CERRAR"
                });

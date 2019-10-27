@@ -52,7 +52,7 @@ angular.module('contractualClienteApp')
 
         self.fecha_actual = new Date();
         self.Necesidad.Vigencia = self.fecha_actual.getFullYear()+"";
-        
+        self.vigencia = 2020;
         self.deepCopy = function (obj) {
             return JSON.parse(JSON.stringify(obj));
         };
@@ -1021,9 +1021,9 @@ angular.module('contractualClienteApp')
 
             });
             !fin_valid ? _ : swal({
-                title: 'Financiación OK',
+                title: 'Financiación balanceada',
                 type: 'success',
-                text: 'Valores de financiación en igualdad',
+                text: 'Los valores de financiación están en igualdad',
                 showCloseButton: true,
                 confirmButtonText: $translate.instant("CERRAR")
             });
