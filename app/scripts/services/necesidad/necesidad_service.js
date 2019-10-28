@@ -8,7 +8,7 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function ($translate,administrativaRequest, planCuentasRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
+  .service('necesidadService', function ($translate, administrativaRequest, planCuentasRequest, planCuentasMidRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
@@ -118,21 +118,21 @@ angular.module('contractualClienteApp')
     self.getAlertaFinanciacion = function (codigoRubro) {
       return {
         fuentesMayorQueRubro: {
-          title: 'Error Valor Fuentes Rubro '+codigoRubro,
+          title: 'Error Valor Fuentes Rubro ' + codigoRubro,
           type: 'error',
           text: 'Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo del rubro.',
           showCloseButton: true,
           confirmButtonText: $translate.instant("CERRAR")
         },
         metasMayorQueProducto: {
-          title: 'Error Valor Metas y actividades Rubro '+codigoRubro,
+          title: 'Error Valor Metas y actividades Rubro ' + codigoRubro,
           type: 'error',
           text: 'Verifique los valores de metas y actividades, la suma no puede superar el valor de los productos.',
           showCloseButton: true,
           confirmButtonText: $translate.instant("CERRAR")
         },
         productosDiferenteAFuentes: {
-          title: 'Error Valor Productos Rubro '+codigoRubro,
+          title: 'Error Valor Productos Rubro ' + codigoRubro,
           type: 'error',
           text: 'Verifique los valores de productos, la suma debe ser igual a la suma de las fuentes.',
           showCloseButton: true,
@@ -318,6 +318,32 @@ angular.module('contractualClienteApp')
 
 
     };
+
+    //funcion que reemplaza initnecesidad usando plan cuentas mid
+    self.getFullNecesidad = function (idNecesidad) {
+      if (idNecesidad) {
+        return planCuentasMidRequest.get('necesidad/getfullnecesidad/' + idNecesidad)
+      }
+      else {
+        localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
+        console.info(JSON.parse(localStorage.getItem("necesidad")))
+        return new Promise(function (resolve, reject) {
+          // revisar si existen objetos de necesidad guardados en el localstorage para devolverlos
+          resolve({
+            Necesidad: (localStorage.getItem("Necesidad") === null) ? {} : localStorage.getItem("Necesidad"),
+            DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
+            DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
+            ProductosCatalogoNecesidad: (localStorage.getItem("ProductosCatalogoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ProductosCatalogoNecesidad")),
+            MarcoLegalNecesidad: (localStorage.getItem("MarcoLegalNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("MarcoLegalNecesidad")),
+            ActividadEspecificaNecesidad: (localStorage.getItem("ActividadEspecificaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEspecificaNecesidad")),
+            ActividadEconomicaNecesidad: (localStorage.getItem("ActividadEconomicaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEconomicaNecesidad")),
+            Rubros: (localStorage.getItem("Rubros") === null) ? [] : JSON.parse(localStorage.getItem("Rubros"))
+          });
+        });
+      }
+
+    }
+
 
     return self;
   });

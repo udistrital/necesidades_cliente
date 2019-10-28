@@ -144,7 +144,7 @@ angular.module('contractualClienteApp')
             // self.detalle_servicio_necesidad.Cantidad = 1;
             self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica || [];
 
-            if (self.necesidad.TipoContratoNecesidad.Id === 2) {
+            if (self.Necesidad.TipoContratoNecesidadId.Id === 2) {
                 self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
                     return parseInt(d.ActividadEconomica, 10);
                 });
@@ -185,7 +185,6 @@ angular.module('contractualClienteApp')
             $scope.$watch('solicitudNecesidad.Necesidad',function(){
                 //Asi se haria el guardado de objetos en el localstorage para que no se pierda al refrescar
                 localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
-                console.info(JSON.parse(localStorage.getItem("necesidad")))
             }, true)
 
 
@@ -703,8 +702,8 @@ angular.module('contractualClienteApp')
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true);
 
-        $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad', function () {
-            if (self.necesidad && (self.necesidad.TipoContratoNecesidad.Id === 1 || self.necesidad.TipoContratoNecesidad.Id === 4) /* tipo compra o compra y servicio */) {
+        $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
+            if (self.necesidad && (self.Necesidad.TipoContratoNecesidadId.Id === 1 || self.Necesidad.TipoContratoNecesidadId.Id === 4) /* tipo compra o compra y servicio */) {
                 self.MostrarTotalEspc = true;
             } else {
                 self.MostrarTotalEspc = false;
@@ -855,7 +854,7 @@ angular.module('contractualClienteApp')
 
                     }
                 }),
-                detalleServicio: (self.necesidad.TipoContratoNecesidad.Id === 4 || self.necesidad.TipoContratoNecesidad.Id === 5) ? {
+                detalleServicio: (self.Necesidad.TipoContratoNecesidadId.Id === 4 || self.Necesidad.TipoContratoNecesidadId.Id === 5) ? {
                     valor: self.f_valor + self.servicio_valor || 0,
                     codigo: self.detalle_servicio_necesidadPC.codigo + "" || "",
                     descripcion: ""
@@ -971,7 +970,7 @@ angular.module('contractualClienteApp')
                 } else {
 
 
-                    switch (self.necesidad.TipoContratoNecesidad.Id) {
+                    switch (self.Necesidad.TipoContratoNecesidadId.Id) {
                         case 1:
                             especificaciones_valido = self.f_valor === self.valorTotalEspecificaciones
                             break;
@@ -986,7 +985,7 @@ angular.module('contractualClienteApp')
                             break;
                     }
 
-                    // console.info(self.necesidad.TipoContratoNecesidad.Id, " Valor : ", self.f_valor, "Servicio", self.servicio_valor, "Especificaciones ", self.valorTotalEspecificaciones, "Result " + especificaciones_valido);
+                    // console.info(self.Necesidad.TipoContratoNecesidadId.Id, " Valor : ", self.f_valor, "Servicio", self.servicio_valor, "Especificaciones ", self.valorTotalEspecificaciones, "Result " + especificaciones_valido);
 
                     if (especificaciones_valido) {
                         administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
@@ -1053,7 +1052,7 @@ angular.module('contractualClienteApp')
 
             _.merge(self.forms, self.estructura[self.TipoNecesidadType[TipoNecesidad]].forms);
             _.merge(self.fields, self.estructura[self.TipoNecesidadType[TipoNecesidad]]);
-            self.necesidad.TipoContratoNecesidad = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
+            self.Necesidad.TipoContratoNecesidadId = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
         };
         //control avance y retroceso en el formulario
         self.CambiarForm = function (form) {
