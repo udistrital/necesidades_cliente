@@ -52,7 +52,7 @@ angular.module('contractualClienteApp')
 
         self.fecha_actual = new Date();
         self.Necesidad.Vigencia = self.fecha_actual.getFullYear()+"";
-        self.vigencia = 2020;
+        self.vigencia = 2019;
         self.deepCopy = function (obj) {
             return JSON.parse(JSON.stringify(obj));
         };
@@ -144,11 +144,11 @@ angular.module('contractualClienteApp')
             // self.detalle_servicio_necesidad.Cantidad = 1;
             self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica || [];
 
-            if (self.Necesidad.TipoContratoNecesidadId.Id === 2) {
-                self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
-                    return parseInt(d.ActividadEconomica, 10);
-                });
-            }
+            // if (self.Necesidad.TipoContratoNecesidadId.Id === 2) {
+            //     self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
+            //         return parseInt(d.ActividadEconomica, 10);
+            //     });
+            // }
 
             if (trNecesidad.Ffapropiacion) {
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
@@ -932,7 +932,8 @@ angular.module('contractualClienteApp')
 
                 templateAlert = templateAlert + "</table>";
                 swal({
-                    title: '',
+                    title: 'Se ha creado la necesidad exitosamente. ',
+                    text: 'A continuación encontrará el resumen de los datos ingresados.',
                     type: self.alerta_necesidad.Type,
                     width: 800,
                     html: templateAlert,
@@ -993,9 +994,9 @@ angular.module('contractualClienteApp')
                         });
                     } else {
                         swal({
-                            title: 'Valores errados',
+                            title: 'Información incompleta',
                             type: 'error',
-                            text: 'Por favor, verifique la igualdad de los valores de Financiacion y de Clase de Contratación ',
+                            text: 'Verifique que ha ingresado la información pertinente sobre la clase de contratación ',
                             showCloseButton: true,
                             confirmButtonText: $translate.instant("CERRAR")
                         })

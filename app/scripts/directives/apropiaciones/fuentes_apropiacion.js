@@ -61,28 +61,6 @@ angular.module('contractualClienteApp')
             $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows()
           })
         }
-        /*
-                financieraRequest.get('fuente_financiamiento_apropiacion', $.param({
-                  query: "Apropiacion:" + $scope.apropiacion + ",Dependencia:" + $scope.dependenciasolicitante
-                })).then(function (response) {
-                  self.gridOptions.data = response.data;
-                }).then(function (t) {
-                  // Se inicializa el grid api para seleccionar
-                  self.gridApi.grid.modifyRows(self.gridOptions.data);
-
-                  // se observa cambios en idActividades para completar $scope.actividades y seleccionar las respectivas filas en la tabla
-                  $scope.$watch('initFuenteApropiacion', function () {
-                    self.fuenteapropiacion = [];
-                    $scope.initFuenteapropiacion.forEach(function (fuente) {
-                      var tmp = self.gridOptions.data.filter(function (e) { return e.FuenteFinanciamiento.Id == fuente.FuenteFinanciamiento[0].Id })
-                      if (tmp.length > 0) {
-                        tmp[0].MontoParcial = fuente.MontoParcial;
-                        $scope.fuenteapropiacion.push(tmp[0]); //enriquecer actividades
-                        self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-                      }
-                    });
-                  });
-                }); */
 
         planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Codigo).then(function (response) {
           self.gridOptions.data = response.data.Body || [];

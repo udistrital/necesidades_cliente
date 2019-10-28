@@ -46,6 +46,7 @@ angular.module('contractualClienteApp')
                     })).then(function (response) {
                         self.v_necesidad = response.data[0];
                         console.info(self.v_necesidad);
+                        console.info(self.v_necesidad);
                         if (self.verJustificacion) {
                             administrativaRequest.get('necesidad_rechazada', $.param({
                                 query: "Necesidad:" + response.data[0].Id,
@@ -150,6 +151,7 @@ angular.module('contractualClienteApp')
                             self.solicitud_disponibilidad =
                                 (response.data != null && response.data.length > 0) ?
                                     response.data[0] : { Numero: '' };
+                                    console.info(self.solicitud_disponibilidad);
                         });
 
                         administrativaRequest.get('dependencia_necesidad', $.param({

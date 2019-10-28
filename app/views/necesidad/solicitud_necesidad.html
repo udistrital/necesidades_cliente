@@ -327,20 +327,20 @@
           <md-content>
             <!-- financiacion, se muestra solo si se completo general y si la unidad ejecutora esta seleccionada -->
             <ng-form id="f_financiacion" name="financiacion" class="form-group"
-              ng-if="solicitudNecesidad.forms.General && solicitudNecesidad.necesidad.UnidadEjecutora!=undefined">
+              ng-if="solicitudNecesidad.forms.General && solicitudNecesidad.Necesidad.AreaFuncional!=undefined">
               <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(financiacion)">{{"FINANCIACION" |
                           translate}}<span class="fa fa-plus pull-right" ng-show="financiacion.open"></span> <span
                   class="fa fa-minus pull-right" ng-show="!financiacion.open"></span></legend>
 
               <div class="panel-body" ng-hide="financiacion.open">
 
-                <div class="form-group" ng-show="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad!=undefined">
-                  <label class=" control-label">{{"SELECCIONAR" | translate}} {{"RUBROS" | translate}}</label>
+                <div class="form-group" ng-show="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId!=undefined">
+                  <label class=" control-label">{{"SELECCIONAR" | translate}} {{ "RUBROS" | translate}}</label>
 
                   <div>
-                    <div class="form-group" ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre">
+                    <div class="form-group" ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre">
                       <lista-apropiaciones vigencia=solicitudNecesidad.vigencia
-                        tipo="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre=='Inversion'?'3-3':'3-1'"
+                        tipo="solicitudNecesidad.necesidad.TipoFinanciacionNecesidadId.Nombre=='Inversión'?'3-3':'3-1'"
                         apropiacion="solicitudNecesidad.apro"
                         unidadejecutora=solicitudNecesidad.necesidad.UnidadEjecutora
                         tipofinanciacion=solicitudNecesidad.necesidad.TipoFinanciacionNecesidad selhijos="true">
@@ -517,14 +517,13 @@
 
         </md-step>
 
-        <md-step ng-if='solicitudNecesidad.necesidad.TipoNecesidad.Id!==6' label="Clase de Contratación"
+        <md-step ng-if='solicitudNecesidad.necesidad.TipoNecesidad.Id!==6' label="Clase de contratación"
           md-complete="solicitudNecesidad.SeccionesFormulario.contratacion.completo"
           ng-disabled="!solicitudNecesidad.SeccionesFormulario.contratacion.activo">
           <md-content>
             <!-- Especificaciones -->
             <ng-form name="especificaciones" class="form-group" ng-if="solicitudNecesidad.forms.Especificaciones">
-              <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(especificaciones)">{{"ESPECIFICACIONES"
-                        | translate}}<span class="fa fa-plus pull-right" ng-show="especificaciones.open"></span> <span
+              <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(especificaciones)">Clase de contratación<span class="fa fa-plus pull-right" ng-show="especificaciones.open"></span> <span
                   class="fa fa-minus pull-right" ng-show="!especificaciones.open"></span></legend>
               <div class="panel-body" ng-hide="especificaciones.open">
 
@@ -585,7 +584,7 @@
                   </div>
                   <div class="col-md-6" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id!==4">
                     <div>
-                      <label class="control-label">Valor Servicio</label>
+                      <label class="control-label">Valor del servicio</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.f_valor"
                         ui-money-mask="2" disabled>
                     </div>
@@ -594,7 +593,7 @@
                   <div class="col-md-6" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
 
                     <div class="col-md-4">
-                      <label class="control-label">Valor Servicio</label>
+                      <label class="control-label">Valor del servicio</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.DetalleServicioNecesidad.Valor"
                         ui-money-mask="2">
                     </div>
@@ -674,7 +673,7 @@
                     </lista-subgrupos-catalogos>
                   </div>
 
-                  <h4>{{"ELEMENTOS" | translate}}</h4>
+                  <h4>{{"ELEMENTO" | translate}}</h4>
 
 
                   <ng-form name="prodDiv">
@@ -690,7 +689,7 @@
                         <div class="panel-body" ng-show="!prodDiv.open">
                           <div class="col-md-12">
                             <div class="col-md-6">
-                              <label class=" control-label">{{"ELEMENTO" | translate}}</label>
+                              <label class=" control-label">{{"DESCRIPCION" | translate}}</label>
                               <textarea ng-model="solicitudNecesidad.producto_catalogo.Elemento" class="form-control"
                                 maxlength="100" placeholder="Elemento (Descripción)" rows="1" required></textarea>
                             </div>
@@ -786,13 +785,13 @@
                             <div style="text-align: center">
                               <button type="button" class="btn btn-primary btn-outline"
                                 ng-click="solicitudNecesidad.producto_catalogo.RequisitosMinimos.push({Descripcion: solicitudNecesidad.producto_catalogo.requisitomin});solicitudNecesidad.producto_catalogo.requisitomin=''">Agregar
-                                Requisito Mínimo</button>
+                                requisito mínimo</button>
                             </div>
                           </div>
                           <div class="col-md-12 form-group" style="text-align: center">
                             <button type="button" class="btn btn-primary btn-success"
                               ng-click="solicitudNecesidad.validar_formu(prodDiv) ? solicitudNecesidad.addProductoCatalogo() : _ ;">
-                              {{"AGREGAR" | translate}} {{"PRODUCTO" | translate}}</button>
+                              AGREGAR PRODUCTO</button>
                           </div>
                         </div>
 
