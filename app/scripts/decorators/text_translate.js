@@ -51,7 +51,7 @@ var text_es = {
     MENSAJE_INICIAL: "Ahora puede comenzar con el desarrollo ...",
 
     UNIVERSIDAD_NOMBRE: "Universidad Distrital Francisco José de Caldas",
-
+    GUARDAR_B: "GUARDAR",
     CODIGO: "Código",
     //solicitud_necesidad
     ID_AVANCE: "ID Avance",

@@ -115,7 +115,7 @@ angular.module('contractualClienteApp')
 
                         });
 
-                        metasRequest.get('2019').then(function (responsePA) {
+                        metasRequest.get('plan_adquisiciones/2019').then(function (responsePA) {
                             self.metasObj = [];
                             self.meta = '';
 

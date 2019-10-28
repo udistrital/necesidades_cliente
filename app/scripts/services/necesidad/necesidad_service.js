@@ -168,7 +168,7 @@ angular.module('contractualClienteApp')
                     })
                 }
                 var tempmetas;
-                metasRequest.get('2019').then(
+                metasRequest.get('plan_adquisiciones/2019').then(
                   function (res) {
 
                     tempmetas = res.data.metas.actividades;

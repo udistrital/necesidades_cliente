@@ -340,10 +340,10 @@
                   <div>
                     <div class="form-group" ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre">
                       <lista-apropiaciones vigencia=solicitudNecesidad.vigencia
-                        tipo="solicitudNecesidad.necesidad.TipoFinanciacionNecesidadId.Nombre=='Inversión'?'3-3':'3-1'"
+                        tipo="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre=='Inversión'?'3-3':'3-1'"
                         apropiacion="solicitudNecesidad.apro"
-                        unidadejecutora=solicitudNecesidad.necesidad.UnidadEjecutora
-                        tipofinanciacion=solicitudNecesidad.necesidad.TipoFinanciacionNecesidad selhijos="true">
+                        unidadejecutora=solicitudNecesidad.Necesidad.AreaFuncional
+                        tipofinanciacion=solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId selhijos="true">
                       </lista-apropiaciones>
                       <div style="text-align:center;">
                         <button type="button" class="btn btn-success btn-outline"
@@ -364,12 +364,12 @@
                         {{ap.Apropiacion.Nombre}}</h3>
                       <br>
                       <div class="row"
-                        ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre==='Inversión'">
+                        ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Inversión'">
                         <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
 
                         <metas-actividades apropiacion="ap.Apropiacion" actividades="ap.Apropiacion.meta.actividades"
                           meta="ap.Apropiacion.meta" dependenciasolicitante="solicitudNecesidad.dependencia_solicitante"
-                          dependenciadestino="solicitudNecesidad.dependencia_destino">
+                          dependenciadestino="solicitudNecesidad.dependencia_destino" vigencia="solicitudNecesidad.Necesidad.Vigencia">
                         </metas-actividades>
                       </div>
                       <div class="row">
@@ -401,7 +401,7 @@
 
                       </div>
 
-                      <div ng-if="solicitudNecesidad.necesidad.TipoFinanciacionNecesidad.Nombre==='Inversión'"
+                      <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Inversión'"
                         class="row">
                         <div class="col-md-6">
                           <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Apropiacion.productos"
@@ -864,16 +864,11 @@
                   {{"ATRAS" | translate}}</button>
               </div>
             </fieldset>
-
             <div style="text-align:center;">
-
           </md-content>
       </form>
-
       </md-step>
-
     </md-steppers>
-
   </div>
 </div>
 </div>

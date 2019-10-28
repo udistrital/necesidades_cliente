@@ -384,7 +384,7 @@ angular.module('contractualClienteApp')
             self.CambiarTipoNecesidad(TipoNecesidad);
         });
 
-        $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora', 'solicitudNecesidad.necesidad.TipoFinanciacionNecesidad'], function () {
+        $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
             self.f_apropiacion = [];
         })
@@ -640,7 +640,7 @@ angular.module('contractualClienteApp')
                 self.f_apropiacion[i].MontoFuentes = 0;
                 self.f_apropiacion[i].MontoProductos = 0;
                 self.f_apropiacion[i].MontoMeta = 0;
-                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
                     if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
                         for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
                             self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
@@ -660,7 +660,7 @@ angular.module('contractualClienteApp')
                 }
 
 
-                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Funcionamiento') {
                     self.f_apropiacion[i].MontoPorApropiacion = self.f_apropiacion[i].MontoFuentes;
                 }
 
@@ -825,7 +825,7 @@ angular.module('contractualClienteApp')
                         codigo: ap.Apropiacion.Codigo,
 
 
-                        metas: self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión' ? [{
+                        metas: self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión' ? [{
                             codigo: ap.Apropiacion.meta.actividades[0].meta_id || 0,
                             actividades: ap.Apropiacion.meta.actividades.map(function (a) {
                                 return {
@@ -1010,8 +1010,8 @@ angular.module('contractualClienteApp')
             var fin_valid = self.f_apropiacion.length > 0;
             self.f_apropiacion.forEach(function (ap) {
                 var v_fuentes = ap.MontoFuentes;
-                // console.info(self.necesidad.TipoFinanciacionNecesidad.Nombre);
-                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
+                // console.info(self.Necesidad.TipoFinanciacionNecesidadId.Nombre);
+                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
                     var v_act = ap.MontoMeta;
                     var v_productos = ap.MontoProductos;
                     v_fuentes!==v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).productosDiferenteAFuentes) : _;
