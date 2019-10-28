@@ -182,6 +182,12 @@ angular.module('contractualClienteApp')
             self.meses = data.meses;
             self.dias = data.dias;
 
+            $scope.$watch('solicitudNecesidad.Necesidad',function(){
+                //Asi se haria el guardado de objetos en el localstorage para que no se pierda al refrescar
+                localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
+                console.info(JSON.parse(localStorage.getItem("necesidad")))
+            }, true)
+
 
             $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
                 if (!self.detalle_servicio_necesidad) { return; }
@@ -228,14 +234,11 @@ angular.module('contractualClienteApp')
                     necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
                         self.supervisor = JD.Persona;
                         self.dep_ned.supervisor = JD.JefeDependencia.Id;
-                        self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor;
-                        console.info(self.Necesidad , "Aqui estoy");
-
-                        
+                        self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor; 
                     }).catch(function (err) {
                     }) : _;
-                    console.info()
-                    //console.info(self.Necesidad , "Aqui estoy");
+                   
+        
             }, true);
 
 
@@ -244,7 +247,7 @@ angular.module('contractualClienteApp')
                 self.rol_ordenador_gasto ?
                     necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
                         self.ordenador_gasto = JD.Persona;
-                        self.dep_ned.OrdenadorGasto = parseInt(JD.Persona.Id, 10);
+                        self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Persona.Id, 10);
                     }).catch(function (err) {
                     }) : _;
             }, true);
@@ -328,7 +331,7 @@ angular.module('contractualClienteApp')
                 return true;
             }
         };
-
+        
         // coreAmazonRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, $.param({ query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') })).then(function (response) {
         //     self.dependencia_solicitante_data = response.data;
         // });

@@ -43,6 +43,7 @@ angular
         'angularBootstrapFileinput',
         'financieraService',
         'planCuentasService',
+        'planCuentasMidService',
         'metasService',
         'coreService',
         'coreAmazonService',
