@@ -62,7 +62,6 @@ angular.module('contractualClienteApp')
         self.cargarMetas = function () {
           metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(
             function (res) {
-              console.info(res);
               var tempmetas = res.data.metas.actividades; // falta un filter por rubro
               self.metas=[];
               tempmetas.forEach(function(act){
@@ -106,7 +105,6 @@ angular.module('contractualClienteApp')
                 a.fuentes = fuentesact
               });
             });
-            console.info("act",$scope.actividades)
           });
 
         };

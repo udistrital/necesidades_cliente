@@ -401,7 +401,6 @@ angular.module('contractualClienteApp')
             self.ordenador_gasto_data = response.data;
         }).catch(function (err) {
             //solucion cuestonablemente provisional  porque el servicio core no responde en json
-            console.info("error obteniendo lista ordenadores gasto", err);
             self.ordenador_gasto_data = [
                 {
                     Id: 7,
@@ -477,9 +476,7 @@ angular.module('contractualClienteApp')
         necesidadesCrudRequest.get('tipo_duracion_necesidad', $.param({
             limit: -1
         })).then(function (response) {
-            console.info(response);
             self.tipo_duracion_necesidad_data = response.data;
-           // console.info(self.tipo_duracion_necesidad_data);
         });
 
 
@@ -601,7 +598,6 @@ angular.module('contractualClienteApp')
                     title: 'El producto ya fue agregado',
                     showConfirmButton: true,
                 }) :
-                console.info(self.prod)
                 self.productos.push(self.producto_catalogo);
             self.producto_catalogo = {};
             self.producto_catalogo.RequisitosMinimos = [];
