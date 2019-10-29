@@ -982,7 +982,6 @@ angular.module('contractualClienteApp')
                             break;
                     }
 
-                    // console.info(self.Necesidad.TipoContratoNecesidadId.Id, " Valor : ", self.f_valor, "Servicio", self.servicio_valor, "Especificaciones ", self.valorTotalEspecificaciones, "Result " + especificaciones_valido);
 
                     if (especificaciones_valido) {
                         administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
@@ -1006,8 +1005,10 @@ angular.module('contractualClienteApp')
             var fin_valid = self.f_apropiacion.length > 0;
             self.f_apropiacion.forEach(function (ap) {
                 var v_fuentes = ap.MontoFuentes;
+
                 // console.info(self.Necesidad.TipoFinanciacionNecesidadId.Nombre);
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
+
                     var v_act = ap.MontoMeta;
                     var v_productos = ap.MontoProductos;
                     v_fuentes!==v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).productosDiferenteAFuentes) : _;
