@@ -600,3 +600,7 @@ table.dataTable thead .sorting:after {
 textarea {
   resize: none;
 }
+
+.titleNecesidad {
+  color: #8ae7d3;
+}

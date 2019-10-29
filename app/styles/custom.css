@@ -29,3 +29,7 @@ vertical-align: middle;
 .tablaDetalle, .tablaDetalle td{
 border-color: black;
 }
+
+.titleNecesidad {
+  color: #8ae7d3;
+}

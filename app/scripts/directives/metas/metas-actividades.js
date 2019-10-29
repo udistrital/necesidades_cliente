@@ -15,7 +15,8 @@ angular.module('contractualClienteApp')
         actividades: '=',
         meta : '=',
         dependenciasolicitante: '=',
-        dependenciadestino: '='
+        dependenciadestino: '=',
+        vigencia: '='
       },
 
 
@@ -59,7 +60,7 @@ angular.module('contractualClienteApp')
         };
 
         self.cargarMetas = function () {
-          metasRequest.get('2019').then(
+          metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(
             function (res) {
               var tempmetas = res.data.metas.actividades; // falta un filter por rubro
               self.metas=[];
@@ -97,14 +98,25 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.actividades = self.gridApi.selection.getSelectedRows();
+            $scope.actividades = self.gridApi.selection.getSelectedRows()
+            $scope.actividades.forEach(function(a){
+              self.getFuentesActividad($scope.vigencia,a.dependencia,a.rubro,a.actividad_id).then(function(res){
+                var fuentesact = res.data.fuentes.fuentes_actividad ? res.data.fuentes.fuentes_actividad : [] ;
+                a.fuentes = fuentesact
+              });
+            });
           });
 
         };
-
+        self.getFuentesActividad = function(vigencia, dependencia, rubro, actividadid){
+          return  metasRequest.get('plan_adquisiciones_fuentes_financiamiento/'+vigencia+'/'+dependencia+'/'+rubro+'/'+actividadid)
+        }
+        
+ 
         self.loadActividades = function () {
-          metasRequest.get('2019').then(function (response) {
-            self.gridOptions.data = response.data.metas.actividades;
+          metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(function (response) {
+            self.gridOptions.data = response.data.metas.actividades
+
           }).then(function () {
             // Se inicializa el grid api para seleccionar
             if($scope.dependenciasolicitante !== undefined && $scope.dependenciadestino !== undefined){
@@ -115,9 +127,9 @@ angular.module('contractualClienteApp')
                  self.gridApi.grid.modifyRows(self.gridOptions.data);
                }else{
                  swal({
-                   title: '¡No hay Actividades!',
+                   title: '¡No hay actividades!',
                    type: 'error',
-                   text: 'Las dependencias no están asociadas a la meta seleccionada . Por favor seleccione otra meta',
+                   text: 'Las dependencias no están asociadas a la meta seleccionada.Por favor seleccione otra meta',
                    showCloseButton: true,
                    confirmButtonText: "CERRAR"
                });
@@ -141,6 +153,9 @@ angular.module('contractualClienteApp')
         }
 
 
+        self.loadFuentesFinanciamiento = function(){
+          metasRequest.get('plan_adquisiciones_fuentes_financiamiento/2019/122/388/1.2')
+        }
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
