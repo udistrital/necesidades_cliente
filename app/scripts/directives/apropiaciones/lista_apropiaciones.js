@@ -97,9 +97,7 @@ angular.module('contractualClienteApp')
 
 
                 self.actualiza_rubros = function () {
-                    console.info("entre a actualziar rubros");
                     planCuentasRequest.get("arbol_rubro_apropiacion/get_hojas/" + $scope.unidadejecutora + "/" + $scope.vigencia).then(function (response) {
-                        console.info("hola",response);
                         if (response.data.Body !== null) {
                             response.data.Body = response.data.Body.filter(function (a) {
                                 // funcion para filtrar rubros por codigo 
