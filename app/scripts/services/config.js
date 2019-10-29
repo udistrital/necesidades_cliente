@@ -58,7 +58,7 @@ var conf_test = {
     PLAN_CUENTAS_MID_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mid/v1/',
     PLAN_CUENTAS_MONGO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mongo_crud/v1/',
     NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/",
-    METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
+    METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/oikos_crud_api/v1/",
     ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
@@ -89,7 +89,7 @@ var conf_presentacion = {
     PLAN_CUENTAS_MID_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mid/v1/",
     PLAN_CUENTAS_MONGO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mongo_crud/v1/',
     NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/",
-    METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
+    METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/",
     ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
@@ -121,8 +121,8 @@ var conf_local2 = {
     PARAMETROS_GOBIERNO_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/",
     PLAN_CUENTAS_MID_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8204/v1/",
     PLAN_CUENTAS_MONGO_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8203/v1/",
-    NECESIDADES_CRUD_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8201/v1/",
-    METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
+    NECESIDADES_CRUD_SERVICE: "http://localhost:8201/v1/",
+    METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/",
     ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
@@ -155,7 +155,7 @@ var conf_local = {
     PLAN_CUENTAS_MONGO_SERVICE: 'https://autenticacion.udistrital.edu.co/apioas/plan_cuentas_mongo_crud/v1/',
     NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/", //
     FINANCIERA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/financiera_crud_api/v1/",
-    METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/plan_adquisiciones/",
+    METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/",
     MODELS_SERVICE: "scripts/models/",
     OIKOS_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/",
     CONTRATO_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services/contratoSuscritoProxyService/", // NO ESTA URL EN PREPROD

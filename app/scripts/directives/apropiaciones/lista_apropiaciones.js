@@ -59,7 +59,7 @@ angular.module('contractualClienteApp')
                     },
                     {
                         field: 'ValorActual',
-                        displayName: $translate.instant('VALOR'),
+                        displayName: $translate.instant('VALOR_U'),
                         cellFilter: 'currency',
                         // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',

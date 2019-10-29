@@ -9,15 +9,32 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, $scope, $sce, $http, $filter, $window, agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
         var self = this;
 
         self.IdNecesidad = $routeParams.IdNecesidad;
-
+        self.iva_data = undefined;
         self.documentos = [];
         self.avance = undefined;
         self.formuIncompleto = true;
+        self.Necesidad= {
+            DependenciaNecesidadId: {
+                InterventorId: undefined,
+                JefeDepDestinoId: undefined, 
+                JefeDepSolicitanteId: undefined ,
+                SupervisorId: undefined
+              },
+        };
 
+        self.DetalleServicioNecesidad = {
+        };
+
+        self.DetallePrestacionServicioNecesidad= {
+        };
+
+        self.ActividadEspecificaNecesidad = [];
+        self.MarcoLegalNecesidad = [];
+    
 
         self.meta = undefined;
         self.meta_necesidad = {
@@ -30,11 +47,12 @@ angular.module('contractualClienteApp')
         self.apSelectedOb = undefined;
         self.jefes_dep_data = undefined;
         self.producto_catalogo = {};
+        self.producto_catalogo.RequisitosMinimos=[];
 
 
         self.fecha_actual = new Date();
-        self.vigencia = self.fecha_actual.getFullYear();
-
+        self.Necesidad.Vigencia = self.fecha_actual.getFullYear()+"";
+        self.vigencia = 2019;
         self.deepCopy = function (obj) {
             return JSON.parse(JSON.stringify(obj));
         };
@@ -96,8 +114,8 @@ angular.module('contractualClienteApp')
 
         // El tipo de solicitud de contrato
         self.duracionEspecialFunc = function (especial) {
-            self.necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
-
+            //self.necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
+            self.Necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
             var s = self.duracionEspecialMap[especial];
             if (!s) { return; }
 
@@ -126,11 +144,11 @@ angular.module('contractualClienteApp')
             // self.detalle_servicio_necesidad.Cantidad = 1;
             self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica || [];
 
-            if (self.necesidad.TipoContratoNecesidad.Id === 2) {
-                self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
-                    return parseInt(d.ActividadEconomica, 10);
-                });
-            }
+            // if (self.Necesidad.TipoContratoNecesidadId.Id === 2) {
+            //     self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
+            //         return parseInt(d.ActividadEconomica, 10);
+            //     });
+            // }
 
             if (trNecesidad.Ffapropiacion) {
                 self.f_apropiaciones = trNecesidad.Ffapropiacion;
@@ -164,6 +182,11 @@ angular.module('contractualClienteApp')
             self.meses = data.meses;
             self.dias = data.dias;
 
+            $scope.$watch('solicitudNecesidad.Necesidad',function(){
+                //Asi se haria el guardado de objetos en el localstorage para que no se pierda al refrescar
+                localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
+            }, true)
+
 
             $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
                 if (!self.detalle_servicio_necesidad) { return; }
@@ -185,7 +208,8 @@ angular.module('contractualClienteApp')
                 self.dependencia_solicitante ?
                     necesidadService.getJefeDependencia(self.dependencia_solicitante).then(function (JD) {
                         self.jefe_solicitante = JD.Persona;
-                        self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id;
+                        self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId = JD.JefeDependencia.Id;
+                        // self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id; OLD
                     }).catch(function (err) {
                     }) : _;
             }, true);
@@ -197,8 +221,10 @@ angular.module('contractualClienteApp')
                     necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
                         self.jefe_destino = JD.Persona;
                         self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
+                        self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = self.dep_ned.JefeDependenciaDestino;
                     }).catch(function (err) {
                     }) : _;
+                    
             }, true);
 
             $scope.$watch('solicitudNecesidad.dependencia_supervisor', function () {
@@ -207,8 +233,11 @@ angular.module('contractualClienteApp')
                     necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
                         self.supervisor = JD.Persona;
                         self.dep_ned.supervisor = JD.JefeDependencia.Id;
+                        self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor; 
                     }).catch(function (err) {
                     }) : _;
+                   
+        
             }, true);
 
 
@@ -217,7 +246,7 @@ angular.module('contractualClienteApp')
                 self.rol_ordenador_gasto ?
                     necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
                         self.ordenador_gasto = JD.Persona;
-                        self.dep_ned.OrdenadorGasto = parseInt(JD.Persona.Id, 10);
+                        self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Persona.Id, 10);
                     }).catch(function (err) {
                     }) : _;
             }, true);
@@ -301,7 +330,7 @@ angular.module('contractualClienteApp')
                 return true;
             }
         };
-
+        
         // coreAmazonRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, $.param({ query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') })).then(function (response) {
         //     self.dependencia_solicitante_data = response.data;
         // });
@@ -355,7 +384,7 @@ angular.module('contractualClienteApp')
             self.CambiarTipoNecesidad(TipoNecesidad);
         });
 
-        $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora', 'solicitudNecesidad.necesidad.TipoFinanciacionNecesidad'], function () {
+        $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
             self.f_apropiacion = [];
         })
@@ -372,7 +401,6 @@ angular.module('contractualClienteApp')
             self.ordenador_gasto_data = response.data;
         }).catch(function (err) {
             //solucion cuestonablemente provisional  porque el servicio core no responde en json
-            console.info("error obteniendo lista ordenadores gasto", err);
             self.ordenador_gasto_data = [
                 {
                     Id: 7,
@@ -438,18 +466,19 @@ angular.module('contractualClienteApp')
         self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }]; //PRovisional esta asquerosidad :) 
 
 
-        administrativaRequest.get('tipo_necesidad', $.param({
-            limit: -1,
-            sortby: "NumeroOrden",
-            order: "asc",
+        necesidadesCrudRequest.get('tipo_necesidad', $.param({
+            limit: -1
         })).then(function (response) {
             self.tipo_necesidad_data = response.data;
-            //ocultar terporalmente funcionalidad no implementada
-            //TODO: implementar la demas funcionalidad
-            // var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
-            var tmpSet = [1, 6];
-            self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return tmpSet.includes(tn.Id) })
+
         });
+
+        necesidadesCrudRequest.get('tipo_duracion_necesidad', $.param({
+            limit: -1
+        })).then(function (response) {
+            self.tipo_duracion_necesidad_data = response.data;
+        });
+
 
         agoraRequest.get('unidad', $.param({
             limit: -1,
@@ -497,15 +526,15 @@ angular.module('contractualClienteApp')
             self.modalidad_data = response.data;
         });
 
-        administrativaRequest.get('tipo_financiacion_necesidad', $.param({
+        necesidadesCrudRequest.get('tipo_financiacion_necesidad', $.param({
             limit: -1
         })).then(function (response) {
             self.tipo_financiacion_data = response.data;
         });
 
-        administrativaRequest.get('tipo_contrato_necesidad', $.param({
+        necesidadesCrudRequest.get('tipo_contrato_necesidad', $.param({
             limit: -1,
-            query: 'Estado:true'
+            query: 'Activo:true'
         })).then(function (response) {
             self.tipo_contrato_data = response.data;
         });
@@ -571,6 +600,7 @@ angular.module('contractualClienteApp')
                 }) :
                 self.productos.push(self.producto_catalogo);
             self.producto_catalogo = {};
+            self.producto_catalogo.RequisitosMinimos = [];
         }
 
         self.eliminarRubro = function (rubro) {
@@ -606,7 +636,7 @@ angular.module('contractualClienteApp')
                 self.f_apropiacion[i].MontoFuentes = 0;
                 self.f_apropiacion[i].MontoProductos = 0;
                 self.f_apropiacion[i].MontoMeta = 0;
-                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
                     if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
                         for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
                             self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
@@ -626,7 +656,7 @@ angular.module('contractualClienteApp')
                 }
 
 
-                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Funcionamiento') {
                     self.f_apropiacion[i].MontoPorApropiacion = self.f_apropiacion[i].MontoFuentes;
                 }
 
@@ -640,7 +670,17 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
-            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Valor * (self.producto_catalogo.Iva / 100))* self.producto_catalogo.Cantidad || 0;
+            var tIva = [];
+            if(self.iva_data!= undefined){
+                tIva = self.iva_data.filter(function(iva){
+                    if (iva.Id === self.producto_catalogo.Iva) {return iva.Tarifa };
+                })
+            }
+
+            if(tIva[0]!= undefined){
+                self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
+            }
+            //self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
             self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
         }, true)
 
@@ -658,8 +698,8 @@ angular.module('contractualClienteApp')
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true);
 
-        $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad', function () {
-            if (self.necesidad && (self.necesidad.TipoContratoNecesidad.Id === 1 || self.necesidad.TipoContratoNecesidad.Id === 4) /* tipo compra o compra y servicio */) {
+        $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
+            if (self.necesidad && (self.Necesidad.TipoContratoNecesidadId.Id === 1 || self.Necesidad.TipoContratoNecesidadId.Id === 4) /* tipo compra o compra y servicio */) {
                 self.MostrarTotalEspc = true;
             } else {
                 self.MostrarTotalEspc = false;
@@ -672,7 +712,7 @@ angular.module('contractualClienteApp')
         self.agregarActEsp = function (actividad) {
             var a = {};
             a.Descripcion = actividad;
-            self.ActividadEspecifica.push(a);
+            self.ActividadEspecificaNecesidad.push(a);
         };
 
         self.quitar_act_esp = function (i) {
@@ -696,8 +736,8 @@ angular.module('contractualClienteApp')
         };
 
         self.crear_solicitud = function () {
-            self.actividades_economicas_id = self.actividades_economicas.map(function (ae) { return { ActividadEconomica: ae.Codigo } });
-            self.marcos_legales = self.documentos.map(function (d) { return { MarcoLegal: d }; });
+            self.ActividadEconomicaNecesidad = self.actividades_economicas.map(function (ae) { return { ActividadEconomicaId: ae.Id } });
+            // self.marcos_legales = self.documentos.map(function (d) { return { MarcoLegalId: d }; });
             self.f_apropiaciones = [];
             self.productos_apropiaciones = [];
             self.f_apropiacion
@@ -746,6 +786,34 @@ angular.module('contractualClienteApp')
                 ProductosNecesidad: self.productos_apropiaciones
             };
 
+            // self.tr_necesidadObj = {
+            //     Necesidad: ,
+            //     DiasDuracion: ,
+            //     EstadoNecesidadId: ,
+            //     EstudioMercado: ,
+            //     Justificacion: ,
+            //     JustificacionRechazo: ,
+            //     ModalidadSeleccionId: ,
+            //     Objeto: ,
+            //     PlanAnualAdquisicionesId: ,
+            //     TipoContratoId: ,
+            //     TipoContratoNecesidadId: ,
+            //     TipoDuracionNecesidadId: ,
+            //     TipoFinanciacionNecesidadId: ,
+            //     TipoNecesidadId: ,
+            //     Valor: ,
+            //     Vigencia: ,
+            //     DetalleServicioNecesidad: ,
+            //     DetallePrestacionServicioNecesidad: ,
+            //     ProductosCatalogoNecesidad: ,
+            //     MarcoLegalNecesidad: ,
+            //     ActividadEspecificaNecesidad: ,
+            //     ActividadEconomicaNecesidad: ,
+            //     Rubros: ,
+            //     Productos: ,
+            //     Metas: ,
+            // }
+
 
             self.necesidad_plancuentas = {
                 apropiaciones: self.f_apropiacion.map(function (ap) {
@@ -753,7 +821,7 @@ angular.module('contractualClienteApp')
                         codigo: ap.Apropiacion.Codigo,
 
 
-                        metas: self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión' ? [{
+                        metas: self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión' ? [{
                             codigo: ap.Apropiacion.meta.actividades[0].meta_id || 0,
                             actividades: ap.Apropiacion.meta.actividades.map(function (a) {
                                 return {
@@ -782,7 +850,7 @@ angular.module('contractualClienteApp')
 
                     }
                 }),
-                detalleServicio: (self.necesidad.TipoContratoNecesidad.Id === 4 || self.necesidad.TipoContratoNecesidad.Id === 5) ? {
+                detalleServicio: (self.Necesidad.TipoContratoNecesidadId.Id === 4 || self.Necesidad.TipoContratoNecesidadId.Id === 5) ? {
                     valor: self.f_valor + self.servicio_valor || 0,
                     codigo: self.detalle_servicio_necesidadPC.codigo + "" || "",
                     descripcion: ""
@@ -860,7 +928,8 @@ angular.module('contractualClienteApp')
 
                 templateAlert = templateAlert + "</table>";
                 swal({
-                    title: '',
+                    title: 'Se ha creado la necesidad exitosamente. ',
+                    text: 'A continuación encontrará el resumen de los datos ingresados.',
                     type: self.alerta_necesidad.Type,
                     width: 800,
                     html: templateAlert,
@@ -898,7 +967,7 @@ angular.module('contractualClienteApp')
                 } else {
 
 
-                    switch (self.necesidad.TipoContratoNecesidad.Id) {
+                    switch (self.Necesidad.TipoContratoNecesidadId.Id) {
                         case 1:
                             especificaciones_valido = self.f_valor === self.valorTotalEspecificaciones
                             break;
@@ -913,15 +982,16 @@ angular.module('contractualClienteApp')
                             break;
                     }
 
+
                     if (especificaciones_valido) {
                         administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(function (res) {
                             NecesidadHandle(res, 'post')
                         });
                     } else {
                         swal({
-                            title: 'Valores errados',
+                            title: 'Información incompleta',
                             type: 'error',
-                            text: 'Por favor, verifique la igualdad de los valores de Financiacion y de Clase de Contratación ',
+                            text: 'Verifique que ha ingresado la información pertinente sobre la clase de contratación ',
                             showCloseButton: true,
                             confirmButtonText: $translate.instant("CERRAR")
                         })
@@ -935,7 +1005,10 @@ angular.module('contractualClienteApp')
             var fin_valid = self.f_apropiacion.length > 0;
             self.f_apropiacion.forEach(function (ap) {
                 var v_fuentes = ap.MontoFuentes;
-                if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión') {
+
+                // console.info(self.Necesidad.TipoFinanciacionNecesidadId.Nombre);
+                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
+
                     var v_act = ap.MontoMeta;
                     var v_productos = ap.MontoProductos;
                     v_fuentes!==v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).productosDiferenteAFuentes) : _;
@@ -948,9 +1021,9 @@ angular.module('contractualClienteApp')
 
             });
             !fin_valid ? _ : swal({
-                title: 'Financiación OK',
+                title: 'Financiación balanceada',
                 type: 'success',
-                text: 'Valores de financiación en igualdad',
+                text: 'Los valores de financiación están en igualdad',
                 showCloseButton: true,
                 confirmButtonText: $translate.instant("CERRAR")
             });
@@ -977,7 +1050,7 @@ angular.module('contractualClienteApp')
 
             _.merge(self.forms, self.estructura[self.TipoNecesidadType[TipoNecesidad]].forms);
             _.merge(self.fields, self.estructura[self.TipoNecesidadType[TipoNecesidad]]);
-            self.necesidad.TipoContratoNecesidad = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
+            self.Necesidad.TipoContratoNecesidadId = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
         };
         //control avance y retroceso en el formulario
         self.CambiarForm = function (form) {

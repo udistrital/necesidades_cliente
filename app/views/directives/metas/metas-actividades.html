@@ -4,7 +4,7 @@
     </div>
     <div class="panel-body">
         <p>
-            Seleccione la meta y actividades pertinentes:
+            Seleccione la meta y enseguida las actividades relacionadas.
         </p>
 
         <div>
@@ -42,14 +42,18 @@
     </div>
     <div class="panel-body container-fluid">
         <div class="list-group-item" ng-repeat="actividad in d_metasActividades.actividades">
-            <div class="col-md-8"><text>{{ actividad.actividad}}</text></div>
-            <input class="money" type="text"
+            <div class="col-md-12"><text>{{ actividad.actividad}}</text></div>
+            <!-- <input class="money" type="text"
                 ng-init="actividad.MontoParcial = actividad.MontoParcial ? actividad.MontoParcial : 0"
-                ng-model="actividad.MontoParcial" ui-money-mask="2">
+                ng-model="actividad.MontoParcial" ui-money-mask="2"> -->
+            <div class="col-md-12" ng-repeat="fuente in actividad.fuentes">
+                <label>Fuente de financiamiento: {{fuente.fuente_financiamiento}}</label>
+                <input class="money" type="text" ng-init="fuente.MontoParcial = fuente.MontoParcial ? fuente.MontoParcial : 0"
+                    ng-model="fuente.MontoParcial" ui-money-mask="2">
+            </div>
             <br>
         </div>
     </div>
-
 
 
 

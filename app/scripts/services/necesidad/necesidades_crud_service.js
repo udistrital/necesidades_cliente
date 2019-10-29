@@ -2,18 +2,17 @@
 
 /**
  * @ngdoc service
- * @name administrativaService.administrativaRequest
+ * @name necesidadesCrudService.necesidadesCrudRequest
  * @description
- * # administrativaRequest
- * Factory in the administrativaService.
+ * # necesidadesCrudRequest
+ * Factory in the necesidadesCrudService.
  */
-angular.module('administrativaService', [])
-    .factory('administrativaRequest', function($http, CONF, token_service) {
+angular.module('necesidadesCrudService', [])
+    .factory('necesidadesCrudRequest', function($http, CONF, token_service) {
         // Service logic
         // ...
-        var path = CONF.GENERAL.ADMINISTRATIVA_SERVICE;
+        var path = CONF.GENERAL.NECESIDADES_CRUD_SERVICE;
 
-        
         // Public API here
         return {
             get: function(tabla, params) {

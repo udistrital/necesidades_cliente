@@ -65,7 +65,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.NumeroElaboracion;
                 },
-                width: '5%'
+                width: '10%'
             },
             {
                 field: 'Id',
@@ -85,7 +85,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '15%'
+                width: '5%'
             },
             // {
             //     field: 'Objeto',
@@ -129,7 +129,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidad.Nombre + ".\n" + row.entity.EstadoNecesidad.Descripcion;
                 },
-                width: '15%'
+                width: '20%'
             },
             {
                 field: 'TipoNecesidad.Nombre',
@@ -146,7 +146,7 @@ angular.module('contractualClienteApp')
                 enableSorting: false,
                 displayName: $translate.instant('VER'),
                 cellTemplate: function () {
-                    return '<div class="col-md-3"></div><div class="col-md-2"><a href="" style="border:0; text-align: center; display: inline-block;" type="button" ng-click="grid.appScope.direccionar(row.entity)"><span class="fa fa-eye faa-shake animated-hover"></span></a></div><div class="col-md-2" style="text-align: center; display: inline-block"><a href="" style="border:0" type="button" ng-click="grid.appScope.crearPDF(row.entity)"><span class="fa fa-file-pdf-o faa-shake animated-hover"></span></a></div><div class="col-md-3"></div>';
+                    return '<div class="col-md-3"></div><div class="col-md-2"><a href="" style="border:0; text-align: center; display: inline-block;" type="button" ng-click="grid.appScope.direccionar(row.entity)"><span class="fa fa-check-square faa-shake animated-hover"></span></a></div><div class="col-md-3"></div>';
                 },
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
