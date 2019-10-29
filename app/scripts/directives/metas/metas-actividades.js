@@ -12,8 +12,8 @@ angular.module('contractualClienteApp')
       restrict: 'E',
       scope: {
         apropiacion: '=',
-        actividades: '=',
-        meta : '=',
+        Actividades: '=',
+        Metas : '=',
         dependenciasolicitante: '=',
         dependenciadestino: '=',
         vigencia: '='
@@ -23,7 +23,7 @@ angular.module('contractualClienteApp')
       templateUrl: 'views/directives/metas/metas-actividades.html',
       controller: function ($scope) {
         var self = this;
-        self.actividades = $scope.actividades;
+        self.Actividades = $scope.Actividades;
         self.meta = undefined;
         self.MontoPorMeta=0;
         self.gridOptions = {
@@ -40,7 +40,7 @@ angular.module('contractualClienteApp')
           multiSelect: true,
           columnDefs: [{
             field: 'actividad_id',
-            displayName: 'Id',
+            displayName: 'Código',
             width: '20%',
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
@@ -80,8 +80,8 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('d_metasActividades.actividades', function () {
           self.MontoPorMeta=0;
-          if (self.actividades !== undefined) {
-            self.actividades.forEach(function(act){
+          if (self.Actividades !== undefined) {
+            self.Actividades.forEach(function(act){
               self.MontoPorMeta+=act.MontoParcial;
             })
           }
@@ -89,7 +89,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){
-            $scope.meta = self.meta.Id;
+            $scope.Metas[0] = self.meta.Id;
             self.loadActividades();
           }
 
@@ -99,14 +99,14 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.actividades = self.gridApi.selection.getSelectedRows()
-            $scope.actividades.forEach(function(a){
+            $scope.Actividades = self.gridApi.selection.getSelectedRows()
+            $scope.Actividades.forEach(function(a){
               self.getFuentesActividad($scope.vigencia,a.dependencia,a.rubro,a.actividad_id).then(function(res){
                 var fuentesact = res.data.fuentes.fuentes_actividad ? res.data.fuentes.fuentes_actividad : [] ;
-                a.fuentes = fuentesact
+                a.Fuentes =  a.Fuentes ?  a.Fuentes : fuentesact;
               });
             });
-            console.info("act",$scope.actividades)
+            console.info("act",$scope.Actividades)
           });
 
         };
@@ -161,13 +161,13 @@ angular.module('contractualClienteApp')
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
-          $scope.actividades ? $scope.actividades.forEach(function (act) {
+          $scope.Actividades ? $scope.Actividades.forEach(function (act) {
             var tmp = self.gridOptions.data.filter(function (e) { return e.Id !== act.Id })
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
           }) : _;
-          self.actividades = $scope.actividades;
+          self.Actividades = $scope.Actividades;
         });
 
         $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {

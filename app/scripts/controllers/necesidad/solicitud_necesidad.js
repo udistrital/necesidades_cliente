@@ -61,7 +61,7 @@ angular.module('contractualClienteApp')
 
         self.DuracionEspecial = 'unico_pago';
         self.fecha = new Date();
-        self.f_apropiacion = [];
+        self.Rubros = [];
         self.ActividadEspecifica = [];
         self.especificaciones = [];
         self.requisitos_minimos = [];
@@ -137,7 +137,7 @@ angular.module('contractualClienteApp')
         };
 
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
-            self.f_apropiacion = trNecesidad[1];
+            self.Rubros = trNecesidad[1];
             trNecesidad = trNecesidad[0];
             self.necesidad = trNecesidad.Necesidad;
             // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
@@ -159,7 +159,7 @@ angular.module('contractualClienteApp')
                         element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
                     }
 
-                    self.f_apropiacion.push({
+                    self.Rubros.push({
                         Codigo: element.Codigo,
                         apropiacion: element.Apropiacion,
                         // fuentes: apropiacion.Fuentes,
@@ -386,7 +386,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
-            self.f_apropiacion = [];
+            self.Rubros = [];
         })
 
         necesidadService.getAllDependencias().then(function (Dependencias) {
@@ -564,14 +564,14 @@ angular.module('contractualClienteApp')
             self.apSelectedOb = apropiacion;
             var Fap = {
                 Apropiacion: apropiacion,
-                Codigo: apropiacion.Codigo,
+                RubroId: apropiacion.Codigo,
                 MontoPorApropiacion: 0,
             };
 
-            // Busca si en f_apropiacion ya existe el elemento que intenta agregarse, comparandolo con su id
+            // Busca si en Rubros ya existe el elemento que intenta agregarse, comparandolo con su id
             // si lo que devuelve filter es un arreglo mayor que 0, significa que el elemento a agregar ya existe
             // por lo tanto devuelve un mensaje de alerta
-            if (self.f_apropiacion.filter(function (element) { return element.Codigo === apropiacion.Codigo; }).length > 0) {
+            if (self.Rubros.filter(function (element) { return element.Codigo === apropiacion.Codigo; }).length > 0) {
                 swal(
                     'Apropiación ya agregada',
                     'El rubro: <b>' + Fap.Codigo + ": " + Fap.Apropiacion.Nombre + '</b> ya ha sido agregado',
@@ -580,7 +580,7 @@ angular.module('contractualClienteApp')
                 // Por el contrario, si el tamaño del arreglo que devuelve filter es menor a 0
                 // significa que no encontró ningún elemento que coincida con el id y agrega el objeto al arreglo
             } else {
-                self.f_apropiacion.push(Fap);
+                self.Rubros.push(Fap);
             }
 
         };
@@ -608,9 +608,9 @@ angular.module('contractualClienteApp')
         }
 
         self.eliminarRubro = function (rubro) {
-            for (var i = 0; i < self.f_apropiacion.length; i += 1) {
-                if (self.f_apropiacion[i] === rubro) {
-                    self.f_apropiacion.splice(i, 1);
+            for (var i = 0; i < self.Rubros.length; i += 1) {
+                if (self.Rubros[i] === rubro) {
+                    self.Rubros.splice(i, 1);
                 }
             }
 
@@ -632,39 +632,39 @@ angular.module('contractualClienteApp')
             }
         };
 
-        $scope.$watch('solicitudNecesidad.f_apropiacion', function () {
+        $scope.$watch('solicitudNecesidad.Rubros', function () {
             self.f_valor = 0;
 
-            for (var i = 0; i < self.f_apropiacion.length; i++) {
-                self.f_apropiacion[i].MontoPorApropiacion = 0;
-                self.f_apropiacion[i].MontoFuentes = 0;
-                self.f_apropiacion[i].MontoProductos = 0;
-                self.f_apropiacion[i].MontoMeta = 0;
+            for (var i = 0; i < self.Rubros.length; i++) {
+                self.Rubros[i].MontoPorApropiacion = 0;
+                self.Rubros[i].MontoFuentes = 0;
+                self.Rubros[i].MontoProductos = 0;
+                self.Rubros[i].MontoMeta = 0;
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
-                    if (self.f_apropiacion[i].Apropiacion.meta !== undefined && self.f_apropiacion[i].Apropiacion.meta.actividades !== undefined) {
-                        for (var k = 0; k < self.f_apropiacion[i].Apropiacion.meta.actividades.length; k++) {
-                            self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
-                            self.f_apropiacion[i].MontoMeta += self.f_apropiacion[i].Apropiacion.meta.actividades[k].MontoParcial;
+                    if (self.Rubros[i].Apropiacion.meta !== undefined && self.Rubros[i].Apropiacion.meta.actividades !== undefined) {
+                        for (var k = 0; k < self.Rubros[i].Apropiacion.meta.actividades.length; k++) {
+                            self.Rubros[i].MontoPorApropiacion += self.Rubros[i].Apropiacion.meta.actividades[k].MontoParcial;
+                            self.Rubros[i].MontoMeta += self.Rubros[i].Apropiacion.meta.actividades[k].MontoParcial;
                         }
                     }
-                    if (self.f_apropiacion[i].Apropiacion.productos !== undefined) {
-                        for (var k = 0; k < self.f_apropiacion[i].Apropiacion.productos.length; k++) {
-                            self.f_apropiacion[i].MontoProductos += self.f_apropiacion[i].Apropiacion.productos[k].MontoParcial;
+                    if (self.Rubros[i].Apropiacion.productos !== undefined) {
+                        for (var k = 0; k < self.Rubros[i].Apropiacion.productos.length; k++) {
+                            self.Rubros[i].MontoProductos += self.Rubros[i].Apropiacion.productos[k].MontoParcial;
                         }
                     }
                 }
-                if (self.f_apropiacion[i].Apropiacion.fuentes !== undefined) {
-                    for (var k = 0; k < self.f_apropiacion[i].Apropiacion.fuentes.length; k++) {
-                        self.f_apropiacion[i].MontoFuentes += self.f_apropiacion[i].Apropiacion.fuentes[k].MontoParcial;
+                if (self.Rubros[i].Apropiacion.fuentes !== undefined) {
+                    for (var k = 0; k < self.Rubros[i].Apropiacion.fuentes.length; k++) {
+                        self.Rubros[i].MontoFuentes += self.Rubros[i].Apropiacion.fuentes[k].MontoParcial;
                     }
                 }
 
 
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Funcionamiento') {
-                    self.f_apropiacion[i].MontoPorApropiacion = self.f_apropiacion[i].MontoFuentes;
+                    self.Rubros[i].MontoPorApropiacion = self.Rubros[i].MontoFuentes;
                 }
 
-                self.f_valor += self.f_apropiacion[i].MontoPorApropiacion;
+                self.f_valor += self.Rubros[i].MontoPorApropiacion;
             }
         }, true);
 
@@ -744,7 +744,7 @@ angular.module('contractualClienteApp')
             // self.marcos_legales = self.documentos.map(function (d) { return { MarcoLegalId: d }; });
             self.f_apropiaciones = [];
             self.productos_apropiaciones = [];
-            self.f_apropiacion
+            self.Rubros
                 .filter(function (fap) { return fap.fuentes !== undefined; })
                 .forEach(function (fap) {
                     fap.fuentes.forEach(function (fuente) {
@@ -820,7 +820,7 @@ angular.module('contractualClienteApp')
 
 
             self.necesidad_plancuentas = {
-                apropiaciones: self.f_apropiacion.map(function (ap) {
+                apropiaciones: self.Rubros.map(function (ap) {
                     return {
                         codigo: ap.Apropiacion.Codigo,
 
@@ -1007,8 +1007,8 @@ angular.module('contractualClienteApp')
         };
 
         self.ValidarFinanciacion = function () {
-            var fin_valid = self.f_apropiacion.length > 0;
-            self.f_apropiacion.forEach(function (ap) {
+            var fin_valid = self.Rubros.length > 0;
+            self.Rubros.forEach(function (ap) {
                 var v_fuentes = ap.MontoFuentes;
                 // console.info(self.Necesidad.TipoFinanciacionNecesidadId.Nombre);
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
