@@ -12,8 +12,7 @@ angular.module('contractualClienteApp')
       restrict: 'E',
       scope: {
         apropiacion: '=',
-        actividades: '=',
-        meta : '=',
+        metas : '=',
         dependenciasolicitante: '=',
         dependenciadestino: '=',
         vigencia: '='
@@ -89,7 +88,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){
-            $scope.meta = self.meta.Id;
+            $scope.metas = [{metaId:self.meta}];
             self.loadActividades();
           }
 
@@ -99,14 +98,14 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.actividades = self.gridApi.selection.getSelectedRows()
-            $scope.actividades.forEach(function(a){
+            self.actividades = self.gridApi.selection.getSelectedRows()
+            self.actividades.forEach(function(a){
               self.getFuentesActividad($scope.vigencia,a.dependencia,a.rubro,a.actividad_id).then(function(res){
                 var fuentesact = res.data.fuentes.fuentes_actividad ? res.data.fuentes.fuentes_actividad : [] ;
                 a.Fuentes =  a.Fuentes ?  a.Fuentes : fuentesact;
               });
             });
-            console.info("act",$scope.actividades)
+            $scope.metas[0].actividades = self.actividades;
           });
 
         };
