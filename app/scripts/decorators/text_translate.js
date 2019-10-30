@@ -161,6 +161,7 @@ var text_es = {
     GESTION_NECESIDADES: "Gestión de necesidades",
     NUMERO_ELABORACION_NECESIDAD: "No. de elaboración",
     NUMERO_NECESIDAD_COMPACTO: "No. de Necesidad",
+    NUMERO_SOLICITUD_COMPACTO: "No. de solicitud",
     NUMERO_SOLICITUD_NECESIDAD: "No. de Solicitud CDP",
     LISTA_NECESIDADES: "Lista de Necesidades",
     NECESIDAD_RECHAZADA: "La necesidad ha sido Rechazada!",

@@ -7,13 +7,19 @@
         ng-if="solicitudNecesidad.necesidad.NumeroElaboracion">#{{solicitudNecesidad.necesidad.NumeroElaboracion}}</span>
     </h1>
   </div>
-<!-- <pre>{{ solicitudNecesidad.Necesidad | json}}
+<pre>{{ solicitudNecesidad.Necesidad | json}}
   {{ solicitudNecesidad.DetalleServicioNecesidad | json }}
-  lalalal
+  
   {{ solicitudNecesidad.documentos | json}}
 
+  {{ solicitudNecesidad.Rubros | json}}
+
   {{solicitudNecesidad.productos | json}}
-</pre> -->
+
+  {{solicitudNecesidad.DetalleServicioNecesidad | json}}
+  {{solicitudNecesidad.ActividadEconomicaNecesidad | json}}
+  
+</pre>
 
   <div class="panel-body">
     <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
@@ -354,7 +360,7 @@
                     </div>
 
 
-                    <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.f_apropiacion">
+                    <div class="panel panel-body col-md-12" ng-repeat="ap in solicitudNecesidad.Rubros">
                       <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
                         ng-click="solicitudNecesidad.eliminarRubro(ap)" aria-label="Left Align">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -367,20 +373,20 @@
                         ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Inversión'">
                         <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
 
-                        <metas-actividades apropiacion="ap.Apropiacion" actividades="ap.Apropiacion.meta.actividades"
-                          meta="ap.Apropiacion.meta" dependenciasolicitante="solicitudNecesidad.dependencia_solicitante"
+                        <metas-actividades apropiacion="ap.Apropiacion" 
+                          metas="ap.metas" dependenciasolicitante="solicitudNecesidad.dependencia_solicitante"
                           dependenciadestino="solicitudNecesidad.dependencia_destino" vigencia="solicitudNecesidad.Necesidad.Vigencia">
                         </metas-actividades>
                       </div>
                       <div class="row">
-                        <div class="col-md-6">
+                        <div  class="col-md-6"   ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Funcionamiento'">
                           <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Apropiacion.fuentes"
                             dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
                           </fuentes-apropiacion>
                         </div>
 
 
-                        <div class="panel panel-default col-md-6">
+                        <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Funcionamiento'" class="panel panel-default col-md-6">
                           <div class="panel-heading container-fluid">
                             <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"FUENTES" | translate}}:</div>
                             <div class="col-sm-8 money">
@@ -403,25 +409,19 @@
 
                       <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Inversión'"
                         class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6" >
                           <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Apropiacion.productos"
                             initProductoapropiacion="ap.initProductos"></productos-apropiacion>
                         </div>
 
 
                         <div class="panel panel-default col-md-6">
-                          <div class="panel-heading container-fluid">
-                            <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"PRODUCTOS" | translate}}:</div>
-                            <div class="col-sm-8 money">
-                              {{ap.MontoProductos | currency}}
-                            </div>
-                          </div>
                           <div class="panel-body container-fluid">
                             <div class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
                               <label class="text-warning col-md-8">{{"PRODUCTO" | translate}}: {{prod.Nombre}}</label>
-                              <input class="col-md-4 money" type="text"
+                              <!-- <input class="col-md-4 money" type="text"
                                 ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
-                                ng-model="prod.MontoParcial" ui-money-mask="2">
+                                ng-model="prod.MontoParcial" ui-money-mask="2"> -->
                               <br>
                             </div>
                           </div>
@@ -645,7 +645,7 @@
                   <!-- Actividades economicas -->
                   <div class="col-md-12">
                     <div class="col-md-6">
-                      <lista-actividades-economicas actividades="solicitudNecesidad.actividades_economicas"
+                      <lista-actividades-economicas actividades="solicitudNecesidad.ActividadEconomicaNecesidad"
                         id_actividades="solicitudNecesidad.actividades_economicas_id"></lista-actividades-economicas>
                     </div>
                     <div class="col-md-6">
