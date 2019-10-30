@@ -300,7 +300,6 @@
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.EstudioMercado"
                   ng-class="{ 'has-error' : solicitudform.estudio_mercados.$invalid && !solicitudform.estudio_mercados.$pristine }">
                   <label for="estudio_mercados" class="control-label">{{"ESTUDIO_MERCADO" | translate}}</label>
-                  <small>*{{"OBLIGATORIO" | translate}}</small>
                   <textarea name="estudio_mercados" type="text" class="form-control" maxlength="600"
                     ng-model="solicitudNecesidad.Necesidad.EstudioMercado" placeholder="Estudio de Mercado" rows="6"
                     ></textarea>
@@ -312,7 +311,6 @@
 
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.AnalisisRiesgo">
                   <label for="analisis_riesgos" class="control-label">{{"ANALISIS_RIESGOS" | translate}}</label>
-                  <small>*{{"OBLIGATORIO" | translate}}</small>
                   <textarea type="text" class="form-control" maxlength="600"
                     ng-model="solicitudNecesidad.Necesidad.AnalisisRiesgo" placeholder="Análisis de riesgos" rows="6"
                     ></textarea>
