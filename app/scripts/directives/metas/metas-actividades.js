@@ -7,7 +7,7 @@
  * # metasActividades
  */
 angular.module('contractualClienteApp')
-  .directive('metasActividades', function (metasRequest) {
+  .directive('metasActividades', function (metasRequest,$translate) {
     return {
       restrict: 'E',
       scope: {
@@ -81,7 +81,19 @@ angular.module('contractualClienteApp')
           if (self.actividades !== undefined) {
             self.actividades ? self.actividades.forEach(function(act){
               act.Fuentes ? act.Fuentes.forEach(function(f){
-                self.MontoPorMeta+=f.MontoParcial;
+                if(parseFloat(f.MontoParcial)>parseFloat(f.valor_fuente_financiamiento)-parseFloat(f.saldo_comprometido)){
+                  swal({
+                    title: 'Error Valor Fuentes Actividad ' + act.actividad_id,
+                    type: 'error',
+                    text: 'Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo asignado.',
+                    showCloseButton: true,
+                    confirmButtonText: $translate.instant("CERRAR")
+                  });
+                  f.MontoParcial=0;
+                } else {
+                  self.MontoPorMeta+=f.MontoParcial;
+                }
+                
               }) : _;
               
             }) : _;
