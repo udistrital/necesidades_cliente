@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -58,24 +58,35 @@ angular.module('contractualClienteApp')
             enableSelectAll: false,
             multiSelect: false,
             columnDefs: [{
-                field: 'NumeroElaboracion',
-                displayName: $translate.instant('NUMERO_ELABORACION_NECESIDAD'),
+                field: 'ConsecutivoSolicitud',
+                displayName: $translate.instant('NUMERO_SOLICITUD_COMPACTO'),
                 type: 'number',
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.NumeroElaboracion;
+                    return row.entity.ConsecutivoSolicitud;
                 },
-                width: '10%'
+                width: '15%'
+            },
+            {
+                field: 'ConsecutivoNecesidad',
+                displayName: $translate.instant('NUMERO_NECESIDAD_COMPACTO'),
+                type: 'number',
+                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+                cellTooltip: function (row) {
+                    return row.entity.ConsecutivoNecesidad;
+                },
+                width: '15%'
             },
             {
                 field: 'Id',
                 displayName: $translate.instant('NECESIDAD_NO'),
                 type: 'number',
+                visible: false,
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
                     return row.entity.Id;
                 },
-                width: '10%'
+                width: '15%'
             },
             {
                 field: 'Vigencia',
@@ -85,7 +96,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '5%'
+                width: '10%'
             },
             // {
             //     field: 'Objeto',
@@ -105,34 +116,34 @@ angular.module('contractualClienteApp')
             //     },
             //     width: '25%'
             // },
-            {
-                field: "self.buscarUE(1)",
-                displayName: $translate.instant('UNIDAD_EJECUTORA'),
-                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-                cellTooltip: function (row) {
-                    if(row.entity.UnidadEjecutora === 1){
-                        return "Rector";
-                    } else{ 
-                        return "Convenios";
-                    }
+            // {
+            //     field: "self.buscarUE(1)",
+            //     displayName: $translate.instant('UNIDAD_EJECUTORA'),
+            //     headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+            //     cellTooltip: function (row) {
+            //         if(row.entity.UnidadEjecutora === 1){
+            //             return "Rector";
+            //         } else{ 
+            //             return "Convenios";
+            //         }
                     
-                },
-                filter: { 
-                    options: [{ UnidadEjecutora: 1, Nombre: 'Rector' }, { UnidadEjecutora: 2, Nombre: 'Convenios' }]     // custom attribute that goes with custom directive above 
-                  }, 
-                width: '15%'
-            },
+            //     },
+            //     filter: { 
+            //         options: [{ UnidadEjecutora: 1, Nombre: 'Rector' }, { UnidadEjecutora: 2, Nombre: 'Convenios' }]     // custom attribute that goes with custom directive above 
+            //       }, 
+            //     width: '15%'
+            // },
             {
-                field: 'EstadoNecesidad.Nombre',
+                field: 'EstadoNecesidadId.Nombre',
                 displayName: $translate.instant('ESTADO'),
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.EstadoNecesidad.Nombre + ".\n" + row.entity.EstadoNecesidad.Descripcion;
+                    return row.entity.EstadoNecesidadId.Nombre + ".\n" + row.entity.EstadoNecesidadId.Descripcion;
                 },
                 width: '20%'
             },
             {
-                field: 'TipoNecesidad.Nombre',
+                field: 'TipoNecesidadId.Nombre',
                 displayName: $translate.instant('TIPO_NECESIDAD'),
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
@@ -177,13 +188,21 @@ angular.module('contractualClienteApp')
             query = typeof (query) === "string" ? [query] : query;
             query.push("EstadoNecesidad.Nombre__not_in:Borrador");
 
-            var req = administrativaRequest.get('necesidad', $.param({
+            // var req = administrativaRequest.get('necesidad', $.param({
+            //     limit: self.gridOptions.paginationPageSize,
+            //     offset: offset,
+            //     sortby: "Vigencia,NumeroElaboracion",
+            //     order: "desc",
+            //     query: query.join(",")
+            // }, true));
+
+            var req = necesidadesCrudRequest.get('necesidad', $.param({
                 limit: self.gridOptions.paginationPageSize,
                 offset: offset,
-                sortby: "Vigencia,NumeroElaboracion",
-                order: "desc",
-                query: query.join(",")
+                sortby: "Vigencia",
+                order: "desc"
             }, true));
+
             // req.data.forEach(function(n){
             //   if(n.UnidadEjecutora === 1){
             //             n.UniE= "Rector";
