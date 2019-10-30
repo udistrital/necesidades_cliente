@@ -15,6 +15,10 @@
   {{ solicitudNecesidad.Rubros | json}}
 
   {{solicitudNecesidad.productos | json}}
+
+  {{solicitudNecesidad.DetalleServicioNecesidad | json}}
+  {{solicitudNecesidad.ActividadEconomicaNecesidad | json}}
+  
 </pre>
 
   <div class="panel-body">
@@ -641,7 +645,7 @@
                   <!-- Actividades economicas -->
                   <div class="col-md-12">
                     <div class="col-md-6">
-                      <lista-actividades-economicas actividades="solicitudNecesidad.actividades_economicas"
+                      <lista-actividades-economicas actividades="solicitudNecesidad.ActividadEconomicaNecesidad"
                         id_actividades="solicitudNecesidad.actividades_economicas_id"></lista-actividades-economicas>
                     </div>
                     <div class="col-md-6">
