@@ -966,6 +966,7 @@ angular.module('contractualClienteApp')
                 var v_fuentes = ap.MontoFuentes || 0;
                 // console.info(self.Necesidad.TipoFinanciacionNecesidadId.Nombre);
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
+
                     var v_act = ap.MontoMeta;
                     v_act > v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).metasMayorQueProducto) : _;
                     fin_valid = fin_valid && (v_fuentes === v_act && v_act === v_productos) && ap.MontoFuentes <= ap.Apropiacion.ValorActual;

@@ -49,10 +49,20 @@ angular.module('contractualClienteApp')
           {
             field: 'actividad',
             displayName: 'Actividad',
-            width: '80%',
+            width: '50%',
             headerCellClass: $scope.highlightFilteredHeader + ' text-info',
             cellTooltip: function (row) {
               return row.entity.actividad;
+            }
+          },
+          {
+            field: 'valor_actividad',
+            displayName: 'Saldo Actividad',
+            cellFilter: 'currency',
+            width: '30%',
+            headerCellClass: $scope.highlightFilteredHeader + ' text-info',
+            cellTooltip: function (row) {
+              return row.entity.valor_actividad;
             }
           }
           ]
@@ -132,6 +142,7 @@ angular.module('contractualClienteApp')
         self.loadActividades = function () {
           metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(function (response) {
             self.gridOptions.data = response.data.metas.actividades
+            console.info(response.data.metas.actividades);
 
           }).then(function () {
             // Se inicializa el grid api para seleccionar
