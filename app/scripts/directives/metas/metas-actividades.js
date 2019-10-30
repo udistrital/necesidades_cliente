@@ -79,15 +79,19 @@ angular.module('contractualClienteApp')
         $scope.$watch('d_metasActividades.actividades', function () {
           self.MontoPorMeta=0;
           if (self.actividades !== undefined) {
-            self.actividades.forEach(function(act){
-              self.MontoPorMeta+=act.MontoParcial;
-            })
+            self.actividades ? self.actividades.forEach(function(act){
+              act.Fuentes ? act.Fuentes.forEach(function(f){
+                self.MontoPorMeta+=f.MontoParcial;
+              }) : _;
+              
+            }) : _;
           }
+          $scope.metas.length>0 ? $scope.metas[0].MontoPorMeta = self.MontoPorMeta : _ ; 
         },true);
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){
-            $scope.metas = [{metaId:self.meta}];
+            $scope.metas = [{MetaId: parseInt(self.meta)}];
             self.loadActividades();
           }
 
@@ -104,7 +108,7 @@ angular.module('contractualClienteApp')
                 a.Fuentes =  a.Fuentes ?  a.Fuentes : fuentesact;
               });
             });
-            $scope.metas[0].actividades = self.actividades;
+            $scope.metas[0].Actividades = self.actividades;
           });
 
         };

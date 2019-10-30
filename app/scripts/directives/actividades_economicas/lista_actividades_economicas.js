@@ -56,6 +56,7 @@ angular.module('contractualClienteApp')
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             $scope.actividades = self.gridApi.selection.getSelectedRows();
+            $scope.idActividades = $scope.actividades.map(function(e) {return {ActividadEconomicaId : e.Id}})
           });
         };
 
