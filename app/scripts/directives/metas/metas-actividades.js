@@ -12,8 +12,7 @@ angular.module('contractualClienteApp')
       restrict: 'E',
       scope: {
         apropiacion: '=',
-        Actividades: '=',
-        Metas : '=',
+        metas : '=',
         dependenciasolicitante: '=',
         dependenciadestino: '=',
         vigencia: '='
@@ -23,7 +22,7 @@ angular.module('contractualClienteApp')
       templateUrl: 'views/directives/metas/metas-actividades.html',
       controller: function ($scope) {
         var self = this;
-        self.Actividades = $scope.Actividades;
+        self.actividades = $scope.actividades;
         self.meta = undefined;
         self.MontoPorMeta=0;
         self.gridOptions = {
@@ -50,10 +49,20 @@ angular.module('contractualClienteApp')
           {
             field: 'actividad',
             displayName: 'Actividad',
-            width: '80%',
+            width: '50%',
             headerCellClass: $scope.highlightFilteredHeader + ' text-info',
             cellTooltip: function (row) {
               return row.entity.actividad;
+            }
+          },
+          {
+            field: 'valor_actividad',
+            displayName: 'Saldo Actividad',
+            cellFilter: 'currency',
+            width: '30%',
+            headerCellClass: $scope.highlightFilteredHeader + ' text-info',
+            cellTooltip: function (row) {
+              return row.entity.valor_actividad;
             }
           }
           ]
@@ -79,8 +88,8 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('d_metasActividades.actividades', function () {
           self.MontoPorMeta=0;
-          if (self.Actividades !== undefined) {
-            self.Actividades.forEach(function(act){
+          if (self.actividades !== undefined) {
+            self.actividades.forEach(function(act){
               self.MontoPorMeta+=act.MontoParcial;
             })
           }
@@ -88,7 +97,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){
-            $scope.Metas[0] = self.meta.Id;
+            $scope.metas = [{metaId:self.meta}];
             self.loadActividades();
           }
 
@@ -98,14 +107,14 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.Actividades = self.gridApi.selection.getSelectedRows()
-            $scope.Actividades.forEach(function(a){
+            self.actividades = self.gridApi.selection.getSelectedRows()
+            self.actividades.forEach(function(a){
               self.getFuentesActividad($scope.vigencia,a.dependencia,a.rubro,a.actividad_id).then(function(res){
                 var fuentesact = res.data.fuentes.fuentes_actividad ? res.data.fuentes.fuentes_actividad : [] ;
                 a.Fuentes =  a.Fuentes ?  a.Fuentes : fuentesact;
               });
             });
-            console.info("act",$scope.Actividades)
+            $scope.metas[0].actividades = self.actividades;
           });
 
         };
@@ -117,6 +126,7 @@ angular.module('contractualClienteApp')
         self.loadActividades = function () {
           metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(function (response) {
             self.gridOptions.data = response.data.metas.actividades
+            console.info(response.data.metas.actividades);
 
           }).then(function () {
             // Se inicializa el grid api para seleccionar
@@ -160,13 +170,13 @@ angular.module('contractualClienteApp')
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
-          $scope.Actividades ? $scope.Actividades.forEach(function (act) {
+          $scope.actividades ? $scope.actividades.forEach(function (act) {
             var tmp = self.gridOptions.data.filter(function (e) { return e.Id !== act.Id })
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
           }) : _;
-          self.Actividades = $scope.Actividades;
+          self.actividades = $scope.actividades;
         });
 
         $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {

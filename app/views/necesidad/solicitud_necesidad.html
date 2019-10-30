@@ -15,8 +15,8 @@
   {{ solicitudNecesidad.Rubros | json}}
 
   {{solicitudNecesidad.productos | json}}
-</pre> -->
 
+</pre> -->
   <div class="panel-body">
     <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
       <form name="solicitudform" novalidate>
@@ -296,7 +296,6 @@
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.EstudioMercado"
                   ng-class="{ 'has-error' : solicitudform.estudio_mercados.$invalid && !solicitudform.estudio_mercados.$pristine }">
                   <label for="estudio_mercados" class="control-label">{{"ESTUDIO_MERCADO" | translate}}</label>
-                  <small>*{{"OBLIGATORIO" | translate}}</small>
                   <textarea name="estudio_mercados" type="text" class="form-control" maxlength="600"
                     ng-model="solicitudNecesidad.Necesidad.EstudioMercado" placeholder="Estudio de Mercado" rows="6"
                     ></textarea>
@@ -308,7 +307,6 @@
 
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.AnalisisRiesgo">
                   <label for="analisis_riesgos" class="control-label">{{"ANALISIS_RIESGOS" | translate}}</label>
-                  <small>*{{"OBLIGATORIO" | translate}}</small>
                   <textarea type="text" class="form-control" maxlength="600"
                     ng-model="solicitudNecesidad.Necesidad.AnalisisRiesgo" placeholder="Análisis de riesgos" rows="6"
                     ></textarea>
@@ -369,8 +367,8 @@
                         ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Inversión'">
                         <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
 
-                        <metas-actividades apropiacion="ap.Apropiacion" Actividades="ap.Actividades"
-                          Metas="ap.Metas" dependenciasolicitante="solicitudNecesidad.dependencia_solicitante"
+                        <metas-actividades apropiacion="ap.Apropiacion" 
+                          metas="ap.metas" dependenciasolicitante="solicitudNecesidad.dependencia_solicitante"
                           dependenciadestino="solicitudNecesidad.dependencia_destino" vigencia="solicitudNecesidad.Necesidad.Vigencia">
                         </metas-actividades>
                       </div>
@@ -414,7 +412,7 @@
                         <div class="panel panel-default col-md-6">
                           <div class="panel-body container-fluid">
                             <div class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
-                              <label class="text-warning col-md-8">{{"PRODUCTO" | translate}}: {{prod.Nombre}}</label>
+                              <label class="text-warning col-md-8 titleActividad">{{"PRODUCTO" | translate}}: {{prod.Nombre}}</label>
                               <!-- <input class="col-md-4 money" type="text"
                                 ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
                                 ng-model="prod.MontoParcial" ui-money-mask="2"> -->
@@ -641,7 +639,7 @@
                   <!-- Actividades economicas -->
                   <div class="col-md-12">
                     <div class="col-md-6">
-                      <lista-actividades-economicas actividades="solicitudNecesidad.actividades_economicas"
+                      <lista-actividades-economicas actividades="solicitudNecesidad.ActividadEconomicaNecesidad"
                         id_actividades="solicitudNecesidad.actividades_economicas_id"></lista-actividades-economicas>
                     </div>
                     <div class="col-md-6">

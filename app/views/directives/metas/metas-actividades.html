@@ -41,13 +41,22 @@
         </div>
     </div>
     <div class="panel-body container-fluid">
-        <div ng-repeat="actividad in d_metasActividades.Actividades">
+        <div ng-repeat="actividad in d_metasActividades.actividades">
             <div class="col-md-12"><text class="titleActividad">{{actividad.actividad_id}} {{ actividad.actividad}}</text>
                 <div class="col-md-12" ng-repeat="fuente in actividad.Fuentes">
                 
-                        <label>Fuente de financiamiento: {{fuente.fuente_financiamiento}}</label>
-                        <input class="money" type="text" ng-init="fuente.MontoParcial = fuente.MontoParcial ? fuente.MontoParcial : 0"
-                            ng-model="fuente.MontoParcial" ui-money-mask="2">
+                    <div class="col-md-6">
+                            <label>Fuente de financiamiento: {{fuente.fuente_financiamiento}}</label>
+                            <input class="money" type="text" ng-init="fuente.MontoParcial = fuente.MontoParcial ? fuente.MontoParcial : 0"
+                                ng-model="fuente.MontoParcial" ui-money-mask="2">
+                    </div>
+                       <div class="col-md-6">
+                            <label>Saldo Fuente Financiamiento: 
+                                    <input type="text" class="form-control money" placeholder="$49,000,000" ng-model="fuente.valor_fuente_financiamiento"
+                                    ui-money-mask="2" disabled>
+                                    <!-- <span class="money">{{ fuente.valor_fuente_financiamiento | currency }}</span></label> -->
+                       </div>
+                      
                     </div>
             </div>
             <!-- <input class="money" type="text"
