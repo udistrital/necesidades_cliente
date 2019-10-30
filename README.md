@@ -45,7 +45,7 @@ Para crear el build de la aplicación:
 ```
     grunt build
 ```
-El cliente se depliega en el 9000; ya que este cliente no tiene menu ingrese al siguiente link: [Modulo de necesidades](http://0.0.0.0:9000/#/necesidades).
+El cliente se depliega en el 9000; : [Modulo de necesidades](http://0.0.0.0:9000/#/necesidades).
 
 ## Pruebas unitaras
 

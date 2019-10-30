@@ -325,8 +325,8 @@ angular.module('contractualClienteApp')
         return planCuentasMidRequest.get('necesidad/getfullnecesidad/' + idNecesidad)
       }
       else {
-        localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
-        console.info(JSON.parse(localStorage.getItem("necesidad")))
+        // localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
+        // console.info(JSON.parse(localStorage.getItem("necesidad")))
         return new Promise(function (resolve, reject) {
           // revisar si existen objetos de necesidad guardados en el localstorage para devolverlos
           resolve({
