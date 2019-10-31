@@ -366,7 +366,7 @@
                       </div>
                       <div class="row">
                         <div  class="col-md-6"   ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Funcionamiento'">
-                          <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Apropiacion.fuentes"
+                          <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Fuentes"
                             dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
                           </fuentes-apropiacion>
                         </div>
@@ -380,8 +380,8 @@
                             </div>
                           </div>
                           <div class="panel-body container-fluid">
-                            <div class="list-group-item" ng-repeat="fu in ap.Apropiacion.fuentes">
-                              <label class="text-warning col-md-8">{{"FUENTE" | translate}}: {{fu.Nombre}}</label>
+                            <div class="list-group-item" ng-repeat="fu in ap.Fuentes">
+                              <label class="text-warning col-md-8 titleActividad">{{"FUENTE" | translate}}: {{fu.Nombre}}</label>
                               <input class="col-md-4 money" type="text"
                                 ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
                                 ng-model="fu.MontoParcial" ui-money-mask="2">
@@ -563,7 +563,7 @@
                     ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
                     <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
                     <select class="form-control" ng-model="solicitudNecesidad.DetalleServicioNecesidad.Descripcion"
-                      ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
+                      ng-options="tipoServ.ID+'' as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
                       <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
                         {{"SERVICIO" | translate}}</option>
                     </select>
@@ -718,7 +718,7 @@
                                 ng-model="solicitudNecesidad.producto_catalogo.Iva"
                                 ng-options="iva.Id as iva.ImpuestoId.CodigoAbreviacion+' '+iva.Tarifa for iva in solicitudNecesidad.iva_data"
                                 required>
-                                <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"IVA" | translate}}
+                                <option value="iva.Id" disabled selected>{{"SELECCIONAR" | translate}} {{"IVA" | translate}}
                                   %
                                 </option>
                               </select>

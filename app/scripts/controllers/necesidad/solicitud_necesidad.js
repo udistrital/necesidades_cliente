@@ -364,6 +364,7 @@ angular.module('contractualClienteApp')
             query: 'Activo:true'
         })).then(function (response) {
             self.iva_data = response.data;
+            console.info(self.iva_data)
         });
 
 
@@ -603,6 +604,7 @@ angular.module('contractualClienteApp')
                     showConfirmButton: true,
                 }) :
                 self.productos.push(self.producto_catalogo);
+                console.info(self.productos);
             self.producto_catalogo = {};
             self.producto_catalogo.RequisitosMinimos = [];
         }
@@ -654,6 +656,12 @@ angular.module('contractualClienteApp')
 
                 // case Funcionamiento
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Funcionamiento') {
+                    if(self.Rubros[i].Fuentes.length > 0){
+                        for (var index = 0; index < self.Rubros[i].Fuentes.length; index++) {
+                            self.Rubros[i].MontoFuentes += self.Rubros[i].Fuentes[index].MontoParcial;
+                            
+                        }
+                    }
                     self.Rubros[i].MontoPorApropiacion = self.Rubros[i].MontoFuentes;
                 }
 
@@ -675,9 +683,17 @@ angular.module('contractualClienteApp')
             }
 
             if (tIva[0] != undefined) {
-                self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
+                if(tIva[0].Tarifa === 0){
+                    self.producto_catalogo.ValorIVA = 0;
+                    self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal || 0;
+                }else{
+                    self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
+                    self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
+                }
+                
             }
-            self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
+            
+            console.info(self.producto_catalogo.preciomasIVA, "precioIVA" )
         }, true)
 
         $scope.$watch('solicitudNecesidad.productos', function () {
@@ -798,50 +814,6 @@ angular.module('contractualClienteApp')
             }
 
 
-
-            // self.necesidad_plancuentas = {
-            //     apropiaciones: self.Rubros.map(function (ap) {
-            //         return {
-            //             codigo: ap.Apropiacion.Codigo,
-
-
-            //             metas: self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión' ? [{
-            //                 codigo: ap.Apropiacion.meta.actividades[0].meta_id || 0,
-            //                 actividades: ap.Apropiacion.meta.actividades.map(function (a) {
-            //                     return {
-            //                         codigo: a.actividad_id,
-            //                         valor: a.MontoParcial
-            //                     }
-            //                 })
-            //             }
-            //             ] : [],
-
-            //             fuentes: ap.Apropiacion.fuentes.map(function (f) {
-            //                 return {
-            //                     codigo: f.Codigo,
-            //                     valor: f.MontoParcial
-            //                 }
-            //             }),
-
-            //             productos: ap.Apropiacion.productos.map(function (p) {
-            //                 return {
-            //                     _id: p._id,
-            //                     valor: p.MontoParcial,
-            //                 }
-            //             }),
-
-
-
-            //         }
-            //     }),
-            //     detalleServicio: (self.Necesidad.TipoContratoNecesidadId.Id === 4 || self.Necesidad.TipoContratoNecesidadId.Id === 5) ? {
-            //         valor: self.Necesidad.Valor + self.servicio_valor || 0,
-            //         codigo: self.detalle_servicio_necesidadPC.codigo + "" || "",
-            //         descripcion: ""
-            //     } : {}
-            // }
-
-
             var NecesidadHandle = function (response, type) {
                 var templateAlert = "<table class='table table-bordered'><th>" +
                     $translate.instant('UNIDAD_EJECUTORA') + "</th><th>" +
@@ -953,6 +925,7 @@ angular.module('contractualClienteApp')
                             break;
                     }
 
+                    console.info(self.Necesidad.Valor, "Valor N", self.servicio_valor);
 
                     if (especificaciones_valido) {
                         planCuentasMidRequest.post('necesidad/post_full_necesidad/',self.TrNecesidad).then(function(r){
