@@ -8,24 +8,6 @@
     </h1>
   </div>
 
-<pre>{{ solicitudNecesidad.Necesidad | json}}
-  
-  {{ solicitudNecesidad.MarcoLegalNecesidad | json}}
-
-  {{ solicitudNecesidad.Rubros | json}}
-
-  {{solicitudNecesidad.productos | json}}
-
-  {{solicitudNecesidad.DetalleServicioNecesidad | json}}
-
-  {{solicitudNecesidad.DetallePrestacionServicioNecesidad | json}}
-
-  {{solicitudNecesidad.ActividadEspecificaNecesidad | json}}
-
-  {{solicitudNecesidad.actividades_economicas_id | json}}
-  
-</pre>
-
 
   <div class="panel-body">
     <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
@@ -421,7 +403,7 @@
 
                         <div class="panel panel-default col-md-6">
                           <div class="panel-body container-fluid">
-                            <div class="list-group-item" ng-repeat="prod in ap.Apropiacion.productos">
+                            <div class="list-group-item" ng-repeat="prod in ap.Productos">
                               <label class="text-warning col-md-8 titleActividad">{{"PRODUCTO" | translate}}: {{prod.Nombre}}</label>
                               <!-- <input class="col-md-4 money" type="text"
                                 ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
@@ -599,6 +581,7 @@
                     <div class="col-md-4">
                       <label class="control-label">Valor del servicio</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.DetalleServicioNecesidad.Valor"
+                      ng-init="solicitudNecesidad.DetalleServicioNecesidad.Valor = solicitudNecesidad.DetalleServicioNecesidad.Valor ? solicitudNecesidad.DetalleServicioNecesidad.Valor : 0"
                         ui-money-mask="2">
                     </div>
 
@@ -876,6 +859,23 @@
   </div>
 </div>
 </div>
+<pre>{{ solicitudNecesidad.Necesidad | json}}
+  
+  {{ solicitudNecesidad.MarcoLegalNecesidad | json}}
+
+  {{ solicitudNecesidad.Rubros | json}}
+
+  {{solicitudNecesidad.productos | json}}
+
+  {{solicitudNecesidad.DetalleServicioNecesidad | json}}
+
+  {{solicitudNecesidad.DetallePrestacionServicioNecesidad | json}}
+
+  {{solicitudNecesidad.ActividadEspecificaNecesidad | json}}
+
+  {{solicitudNecesidad.actividades_economicas_id | json}}
+  
+</pre>
 
 
 

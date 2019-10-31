@@ -20,7 +20,6 @@ angular.module('contractualClienteApp')
       keys.forEach(function (v, i) {
         self.EstadoNecesidadType[v] = response.data[i];
       });
-      console.info("tp", self.EstadoNecesidadType)
     });
 
     self.calculo_total_dias = function (anos, meses, dias) {

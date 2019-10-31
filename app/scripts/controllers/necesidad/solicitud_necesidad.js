@@ -695,10 +695,24 @@ angular.module('contractualClienteApp')
         }, true);
 
         $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
-            if (self.necesidad && (self.Necesidad.TipoContratoNecesidadId.Id === 1 || self.Necesidad.TipoContratoNecesidadId.Id === 4) /* tipo compra o compra y servicio */) {
+            if (self.Necesidad.TipoContratoNecesidadId && (self.Necesidad.TipoContratoNecesidadId.Id === 1 || self.Necesidad.TipoContratoNecesidadId.Id === 4) /* tipo compra o compra y servicio */) {
                 self.MostrarTotalEspc = true;
             } else {
                 self.MostrarTotalEspc = false;
+            }
+            //prestacion serv
+            if(self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 2){
+                self.servicio_valor=self.Necesidad.Valor;
+                self.DetallePrestacionServicioNecesidad.Cantidad=1;
+            }
+            // serv
+            if(self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 5){
+                self.servicio_valor=self.Necesidad.Valor;
+                self.DetalleServicioNecesidad.Valor=self.Necesidad.Valor;
+            }
+            // compra y serv
+            if(self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 4){
+                self.servicio_valor=self.DetalleServicioNecesidad.Valor;
             }
             self.valorTotalEspecificaciones = 0;
             self.productos = [];
@@ -838,17 +852,17 @@ angular.module('contractualClienteApp')
 
                 self.alerta_necesidad = response.data;
 
-                if ((response.status > 300 || self.alerta_necesidad.Type !== "success")) {
+                if (response.status > 300 ) {
                     swal({
                         title: 'Error Registro Necesidad',
                         type: 'error',
-                        text: self.alerta_necesidad,
+                        text: JSON.stringify(self.alerta_necesidad),
                         showCloseButton: true,
                         confirmButtonText: $translate.instant("CERRAR")
                     });
                     return;
                 }
-                if ((self.alerta_necesidad.Type === "success") && self.alerta_necesidad.Body.Necesidad.Id) {
+                if ((self.alerta_necesidad.status < 300) && self.alerta_necesidad.Body.Necesidad.Id) {
                     if (type === "post") {
 
                     }
@@ -858,14 +872,14 @@ angular.module('contractualClienteApp')
                     }
                 }
 
-                var forEachResponse = function (data) {
-                    if (data.Type === "error") {
+                var forEachResponse = function (response) {
+                    if (response.status > 300) {
                         templateAlert += "<tr class='danger'>";
                     } else {
-                        templateAlert += "<tr class='" + data.Type + "'>";
+                        templateAlert += "<tr class='success'>";
                     }
 
-                    var n = typeof (data.Body) === "object" ? data.Body.Necesidad : self.necesidad;
+                    var n = typeof (response.data) === "object" ? response.data.Necesidad : self.Necesidad;
 
                     templateAlert +=
                         "<td>" + self.unidad_ejecutora_data.filter(function (u) { return u.Id === n.AreaFuncional; })[0].Nombre + "</td>" +
@@ -883,13 +897,13 @@ angular.module('contractualClienteApp')
                 swal({
                     title: 'Se ha creado la necesidad exitosamente. ',
                     text: 'A continuación encontrará el resumen de los datos ingresados.',
-                    type: self.alerta_necesidad.Type,
+                    type: "success",
                     width: 800,
                     html: templateAlert,
                     showCloseButton: true,
                     confirmButtonText: $translate.instant("CERRAR")
                 });
-                if (self.alerta_necesidad.Type === "success") {
+                if (response.status < 300) {
                     $window.location.href = '#/necesidades';
                 }
             };
@@ -964,13 +978,11 @@ angular.module('contractualClienteApp')
             var fin_valid = self.Rubros.length > 0;
             self.Rubros.forEach(function (ap) {
                 var v_fuentes = ap.MontoFuentes || 0;
-                // console.info(self.Necesidad.TipoFinanciacionNecesidadId.Nombre);
+                // CASE INVERSION
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
-
-                    var v_act = ap.MontoMeta;
-                    v_act > v_productos ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).metasMayorQueProducto) : _;
-                    fin_valid = fin_valid && (v_fuentes === v_act && v_act === v_productos) && ap.MontoFuentes <= ap.Apropiacion.ValorActual;
+                    fin_valid = fin_valid  && ap.MontoMeta <= ap.Apropiacion.ValorActual;
                 } else {
+                    //CASE FUNCIONAMIENTO
                     fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual;
                 }
                 ap.MontoFuentes > ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;

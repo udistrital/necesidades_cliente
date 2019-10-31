@@ -142,7 +142,6 @@ angular.module('contractualClienteApp')
         self.loadActividades = function () {
           metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(function (response) {
             self.gridOptions.data = response.data.metas.actividades
-            console.info(response.data.metas.actividades);
 
           }).then(function () {
             // Se inicializa el grid api para seleccionar
