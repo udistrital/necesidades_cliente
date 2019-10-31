@@ -50,7 +50,7 @@ angular.module('contractualClienteApp')
         }
 
         coreAmazonRequest.get('jefe_dependencia', $.param({
-          query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia) + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
+          query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD')),
           limit: -1,
         })).then(function (response) {
           out.JefeDependencia = response.data[0]; //TODO: cambiar el criterio para tomar en cuenta el periodo de validez del jefe
@@ -215,6 +215,7 @@ angular.module('contractualClienteApp')
         planCuentasRequest.get('necesidades', $.param({
           query: "idAdministrativa:" + IdNecesidad
         }))]).then(function (response) {
+          console.log(response)
           var responseMongo = response[1].data.Body[0] || {};
           response = response[0];
           trNecesidad.Necesidad = response.data.filter(
