@@ -331,9 +331,9 @@ angular.module('contractualClienteApp')
         return new Promise(function (resolve, reject) {
           // revisar si existen objetos de necesidad guardados en el localstorage para devolverlos
           resolve({
-            Necesidad: (localStorage.getItem("Necesidad") === null) ? {} : localStorage.getItem("Necesidad"),
-            DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
-            DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
+            Necesidad: (localStorage.getItem("Necesidad") === null) ? { } : JSON.parse(localStorage.getItem("Necesidad")),
+            DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? { } : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
+            DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? { } : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
             ProductosCatalogoNecesidad: (localStorage.getItem("ProductosCatalogoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ProductosCatalogoNecesidad")),
             MarcoLegalNecesidad: (localStorage.getItem("MarcoLegalNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("MarcoLegalNecesidad")),
             ActividadEspecificaNecesidad: (localStorage.getItem("ActividadEspecificaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEspecificaNecesidad")),

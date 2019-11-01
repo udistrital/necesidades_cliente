@@ -92,7 +92,8 @@ angular.module('contractualClienteApp')
             self.actividades ? self.actividades.forEach(function(act){
               act.ActividadId = act.actividad_id;
               act.MetaID = act.meta_id;
-              act.Fuentes ? act.Fuentes.forEach(function(f){
+              act.FuentesActividad ? act.FuentesActividad.forEach(function(f){
+                f.FuenteId=f.fuente_financiamiento;
                 if(parseFloat(f.MontoParcial)>parseFloat(f.valor_fuente_financiamiento)-parseFloat(f.saldo_comprometido)){
                   swal({
                     title: 'Error Valor Fuentes Actividad ' + act.actividad_id,
@@ -129,7 +130,7 @@ angular.module('contractualClienteApp')
             self.actividades.forEach(function(a){
               self.getFuentesActividad($scope.vigencia,a.dependencia,a.rubro,a.actividad_id).then(function(res){
                 var fuentesact = res.data.fuentes.fuentes_actividad ? res.data.fuentes.fuentes_actividad : [] ;
-                a.Fuentes =  a.Fuentes ?  a.Fuentes : fuentesact;
+                a.FuentesActividad =  a.FuentesActividad ?  a.FuentesActividad : fuentesact;
               });
             });
             $scope.metas[0].Actividades = self.actividades;

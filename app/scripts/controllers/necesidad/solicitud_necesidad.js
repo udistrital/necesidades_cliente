@@ -57,7 +57,7 @@ angular.module('contractualClienteApp')
             return JSON.parse(JSON.stringify(obj));
         };
 
-        self.variable = {};
+        self.variable = { };
 
         self.DuracionEspecial = 'unico_pago';
         self.fecha = new Date();
@@ -120,21 +120,40 @@ angular.module('contractualClienteApp')
             if (!s) { return; }
 
             self.ver_duracion_fecha = s[0];
-            self.necesidad.UnicoPago = s[1];
-            self.necesidad.AgotarPresupuesto = s[2];
-            self.necesidad.DiasDuracion = s[3] === undefined ? self.necesidad.DiasDuracion : s[3];
+            // self.necesidad.UnicoPago = s[1];
+            // self.necesidad.AgotarPresupuesto = s[2];
+            // self.necesidad.DiasDuracion = s[3] === undefined ? self.necesidad.DiasDuracion : s[3];
         };
 
         self.duracionEspecialReverse = function () {
-            var test = [self.necesidad.UnicoPago, self.necesidad.AgotarPresupuesto];
-            Object.keys(self.duracionEspecialMap).forEach(function (k) {
-                var v = self.duracionEspecialMap[k].slice(1, 3);
-                if (_.isEqual(test, v)) {
-                    self.DuracionEspecial = k;
-                    self.ver_duracion_fecha = self.duracionEspecialMap[k][0];
-                }
-            });
+
+                    self.ver_duracion_fecha = true
+            
         };
+
+        // necesidadService.getFullNecesidad(self.IdNecesidad).then(function(trNecesidad){
+        //     console.info("llego", trNecesidad)
+        //     self.Necesidad=trNecesidad.Necesidad;
+        //     self.DetalleServicioNecesidad=trNecesidad.DetalleServicioNecesidad;
+        //     self.DetallePrestacionServicioNecesidad=trNecesidad.DetallePrestacionServicioNecesidad;
+        //     self.ProductosCatalogoNecesidad=trNecesidad.ProductosCatalogoNecesidad;
+        //     self.MarcoLegalNecesidad=trNecesidad.MarcoLegalNecesidad;
+        //     self.ActividadEspecificaNecesidad=trNecesidad.ActividadEspecificaNecesidad;
+        //     self.ActividadEconomicaNecesidad=trNecesidad.ActividadEconomicaNecesidad;
+        //     self.Rubros=trNecesidad.Rubros;
+        //     self.duracionEspecialReverse();
+        //     self.dep_ned = trNecesidad.DependenciaSolicitante;
+        //     self.dependencia_destino = trNecesidad.DependenciaDestino;
+        //     self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
+        //     var data = necesidadService.calculo_total_dias_rev(self.Necesidad.DiasDuracion);
+        //     self.anos = data.anos;
+        //     self.meses = data.meses;
+        //     self.dias = data.dias;
+
+
+        // }
+            
+        // );
 
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
             self.Rubros = trNecesidad[1];
@@ -184,8 +203,7 @@ angular.module('contractualClienteApp')
             self.dias = data.dias;
 
             $scope.$watch('solicitudNecesidad.Necesidad', function () {
-                //Asi se haria el guardado de objetos en el localstorage para que no se pierda al refrescar
-                localStorage.setItem("necesidad", JSON.stringify(self.Necesidad));
+                localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
             }, true)
 
 
@@ -252,6 +270,74 @@ angular.module('contractualClienteApp')
                     }) : _;
             }, true);
         });
+
+        // $scope.$watch('solicitudNecesidad.Necesidad', function () {
+        //     localStorage.setItem("Necesidad", self.Necesidad);
+        // }, true)
+
+
+        // $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
+        //     if (!self.detalle_servicio_necesidad) { return; }
+        //     parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+        //         query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
+        //         limit: -1
+        //     })).then(function (response) {
+        //         if (response.data !== null && response.data.lenght > 0) {
+        //             self.nucleoarea = response.data[0].AreaConocimientoId.Id;
+        //         }
+
+        //     }).catch(function (err) {
+        //         console.error(err)
+        //     });
+        // }, true);
+
+        // $scope.$watch('solicitudNecesidad.dependencia_solicitante', function () {
+        //     self.jefe_solicitante = null;
+        //     self.dependencia_solicitante ?
+        //         necesidadService.getJefeDependencia(self.dependencia_solicitante).then(function (JD) {
+        //             self.jefe_solicitante = JD.Persona;
+        //             self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId = JD.JefeDependencia.Id;
+        //             // self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id; OLD
+        //         }).catch(function (err) {
+        //         }) : _;
+        // }, true);
+
+
+        // $scope.$watch('solicitudNecesidad.dependencia_destino', function () {
+        //     self.jefe_destino = null;
+        //     self.dependencia_destino ?
+        //         necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
+        //             self.jefe_destino = JD.Persona;
+        //             self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
+        //             self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = self.dep_ned.JefeDependenciaDestino;
+        //         }).catch(function (err) {
+        //         }) : _;
+
+        // }, true);
+
+        // $scope.$watch('solicitudNecesidad.dependencia_supervisor', function () {
+        //     self.supervisor = null;
+        //     self.dependencia_supervisor ?
+        //         necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
+        //             self.supervisor = JD.Persona;
+        //             self.dep_ned.supervisor = JD.JefeDependencia.Id;
+        //             self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor;
+        //         }).catch(function (err) {
+        //         }) : _;
+
+
+        // }, true);
+
+
+        // $scope.$watch('solicitudNecesidad.rol_ordenador_gasto', function () {
+        //     self.ordenador_gasto = null;
+        //     self.rol_ordenador_gasto ?
+        //         necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
+        //             self.ordenador_gasto = JD.Persona;
+        //             self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Persona.Id, 10);
+        //         }).catch(function (err) {
+        //         }) : _;
+        // }, true);
 
         self.estructura = {
             init: {
@@ -972,7 +1058,7 @@ angular.module('contractualClienteApp')
         }
 
         self.ResetNecesidad = function () {
-            var TipoNecesidad = self.necesidad.TipoNecesidad.Id;
+            var TipoNecesidad = self.Necesidad.TipoNecesidadId.Id;
             necesidadService.initNecesidad().then(function (trNecesidad) {
                 self.necesidad = trNecesidad[0].Necesidad;
                 self.necesidad_plancuentas = trNecesidad[1];
