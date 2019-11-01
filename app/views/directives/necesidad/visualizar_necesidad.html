@@ -108,36 +108,45 @@
                 <ul>
                   <li>{{ rubro.InfoRubro.Codigo }} : {{ rubro.InfoRubro.Nombre }}</li>
                   <!-- Metas -->
-                  <p><strong>Meta</strong> <br>
+                  <br><p><strong>Metas</strong>
                   <ul ng-repeat="meta in rubro.Metas">
-                    <li>{{ meta.MetaId }} </li>
+                    <li><strong>Código:</strong>  {{ meta.InfoMeta.meta_id }}<p>{{ meta.InfoMeta.meta }}</p><hr></li>
                     <!-- Actividades -->
-                    <p><strong>Actividades</strong> <br>
+                    <br><p><strong>Actividades</strong>
                     <ul ng-repeat="act in meta.Actividades">
-                      <li>{{ act.ActividadId }} </li>
+                      <li><strong>Código:</strong>{{ act.InfoActividad.actividad_id }} <p>{{ act.InfoActividad.actividad }}</p></li>
                       <!-- FuentesActividad -->
-                      <p><strong>Fuentes</strong> <br>
-                      <ul ng-repeat="f in act.FuentesActividad">
-                        <li>{{ f.FuenteId }} : {{ f.MontoParcial | currency }}</li>
+                      <br><p><strong>Fuentes de Financiamiento</strong>
+                      <ul ng-repeat="f in act.FuentesActividad" style="list-style: none;">
+                        <li>{{ f.InfoFuente.Nombre }} <p><strong>$Valor:</strong> {{ f.MontoParcial | currency }}</p></li>
                       </ul>
+                      <br>
                     </ul>
+                    <br>
                   </ul>
+                  <br>
                 </ul>
               </div>
           </div>
           <!-- {{d_visualizarNecesidad.codAp}} {{d_visualizarNecesidad.nombreAp}} </p> -->
 
-          <p><strong>Fuentes de Financiamiento</strong>
+          <!-- <p><strong>Fuentes de Financiamiento</strong>
             <ul>
               <li ng-repeat='f in d_visualizarNecesidad.fuentesInfo'>
                 {{f.data.Body.Nombre}}: {{f.data.Body.Monto | currency}}
               </li>
             </ul>
-          </p>
+          </p> -->
 
           <p ng-if="d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'">
-            <strong>Productos</strong>
+            <h3 class="text-info">{{"PRODUCTOS" | translate}}</h3>
+            <p class="text-muted text-justify">
+              {{d_visualizarNecesidad.v_necesidad.AnalisisRiesgo}}
+            </p>
+
+            
             <p> ES DE INVERSIÓN... </p>
+
             <ul>
               <li ng-repeat='p in d_visualizarNecesidad.productosInfo'>
                 {{p.data.Body.Nombre}}: {{p.data.Body.Monto | currency}}
@@ -145,7 +154,7 @@
             </ul>
           </p>
 
-          <p ng-if="d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'">
+          <!-- <p ng-if="d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'">
             <br><strong>{{"META" | translate}}</strong> <br>
             {{ d_visualizarNecesidad.meta | uppercase}}
             <table ng-if="d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre === 'Inversión'"
@@ -160,7 +169,7 @@
               </tr>
             </table>
             </ul>
-          </p>
+          </p> -->
 
         </p>
 
