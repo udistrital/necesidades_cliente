@@ -34,13 +34,17 @@ angular.module('contractualClienteApp')
 
                 $scope.$watch('necesidad', function () {
                     self.cargar_necesidad();
+                    if ($scope.necesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'F') {
+                        self.funcionamiento = true;
+                    } else {
+                        self.funcionamiento = false;
+                    }
                 });
 
                 $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
                     $scope.modalidadSel=self.modalidadSel;
                 }); 
-
-                function get_jefe_dependencia(id_jefe_dependencia, solicitante=true) {
+                function get_jefe_dependencia(id_jefe_dependencia, solicitante) {
                     coreAmazonRequest.get('jefe_dependencia', $.param({
                         query: 'Id:' + id_jefe_dependencia
                     })).then(function (response_jefe_dependencia) {
@@ -58,7 +62,7 @@ angular.module('contractualClienteApp')
                     });
                 }
 
-                function get_dependencia(id_jefe_dependencia, solicitante=true) {
+                function get_dependencia(id_jefe_dependencia, solicitante) {
                     coreAmazonRequest.get('jefe_dependencia', $.param({
                         query: 'Id:' + id_jefe_dependencia
                     })).then(function (response_jefe_dependencia) {
@@ -102,12 +106,10 @@ angular.module('contractualClienteApp')
                 function get_informacion_meta(rubro) {
                     rubro.Metas.forEach(function(meta) {
                         meta.InfoMeta = metas.actividades.find(function(item) {
-                            // return parseInt(item.meta_id === meta.MetaId
                             return item.meta_id === meta.MetaId
                         });
                         meta.Actividades.forEach(function(actividad) {
                            actividad.InfoActividad = metas.actividades.find(function(item) {
-                            //    return (meta.MetaId+"."+actividad.ActividadId) === item.actividad_id
                                return actividad.ActividadId === item.actividad_id
                            });
                            
@@ -125,23 +127,16 @@ angular.module('contractualClienteApp')
                 
 
                 self.cargar_necesidad = function () {
-                    // console.log($scope.necesidad.MarcoLegalNecesidad[0].MarcoLegalId.NombreDocumento);
-                    // console.log($scope.EstudioMercado)
-                    // console.log($scope.AnalisisRiesgo)
-                    // console.log($scope.Justificacion);
-
                     self.marco_legal = $scope.necesidad.MarcoLegalNecesidad;
                     self.v_necesidad = $scope.necesidad.Necesidad;
                     self.rubros = $scope.necesidad.Rubros;
-                    // console.log(self.rubros);
-
-                    //console.log($scope.necesidad.Necesidad.DependenciaNecesidadId);
+                    
 
                     // Jefes de dependencias
-                    get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId);
+                    get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId,true);
                     get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
                     //Información de dependencias
-                    get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId);
+                    get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId,true);
                     get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
                     // Información del ordenador de gasto
                     get_ordenador_gasto($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId);

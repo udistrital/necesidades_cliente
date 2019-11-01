@@ -210,89 +210,90 @@ angular.module('contractualClienteApp')
     self.initNecesidad = function (IdNecesidad) {
       var trNecesidad = {};
       var trNecesidadPC = [];
-      if (IdNecesidad) {
-        return Promise.all([administrativaRequest.get('necesidad'),
-        planCuentasRequest.get('necesidades', $.param({
-          query: "idAdministrativa:" + IdNecesidad
-        }))]).then(function (response) {
-          console.log(response)
-          var responseMongo = response[1].data.Body[0] || {};
-          response = response[0];
-          trNecesidad.Necesidad = response.data.filter(
-            function (e) {
-              return e.Id + "" === IdNecesidad + "";
-            }
-          )[0];
-          trNecesidadPC = self.getFinanciacion(responseMongo, trNecesidad.Necesidad.Vigencia, trNecesidad.Necesidad.UnidadEjecutora);
-          return new Promise(function (resolve, reject) {
-            if (trNecesidad.Necesidad.TipoContratoNecesidad.Id === 5) { // Tipo Servicio
-              administrativaRequest.get('detalle_servicio_necesidad', $.param({
-                query: 'Necesidad:' + IdNecesidad
-              })).then(function (response) {
-                trNecesidad.DetalleServicioNecesidad = response.data[0];
+      var t = false
+      if (IdNecesidad&&t) {
+        // return Promise.all([administrativaRequest.get('necesidad'),
+        // planCuentasRequest.get('necesidades', $.param({
+        //   query: "idAdministrativa:" + IdNecesidad
+        // }))]).then(function (response) {
+        //   console.log(response)
+        //   var responseMongo = response[1].data.Body[0] || {};
+        //   response = response[0];
+        //   trNecesidad.Necesidad = response.data.filter(
+        //     function (e) {
+        //       return e.Id + "" === IdNecesidad + "";
+        //     }
+        //   )[0];
+        //   trNecesidadPC = self.getFinanciacion(responseMongo, trNecesidad.Necesidad.Vigencia, trNecesidad.Necesidad.UnidadEjecutora);
+        //   return new Promise(function (resolve, reject) {
+        //     if (trNecesidad.Necesidad.TipoContratoNecesidad.Id === 5) { // Tipo Servicio
+        //       administrativaRequest.get('detalle_servicio_necesidad', $.param({
+        //         query: 'Necesidad:' + IdNecesidad
+        //       })).then(function (response) {
+        //         trNecesidad.DetalleServicioNecesidad = response.data[0];
 
-                return administrativaRequest.get('actividad_especifica', $.param({
-                  query: 'Necesidad:' + IdNecesidad
-                }))
-              }).then(function (response) {
-                trNecesidad.ActividadEspecifica = response.data;
+        //         return administrativaRequest.get('actividad_especifica', $.param({
+        //           query: 'Necesidad:' + IdNecesidad
+        //         }))
+        //       }).then(function (response) {
+        //         trNecesidad.ActividadEspecifica = response.data;
 
-                return administrativaRequest.get('actividad_economica_necesidad', $.param({
-                  query: 'Necesidad:' + IdNecesidad
-                }))
-              }).then(function (response) {
-                trNecesidad.ActividadEconomicaNecesidad = response.data;
-                resolve("OK");
-              });
-            } else {
+        //         return administrativaRequest.get('actividad_economica_necesidad', $.param({
+        //           query: 'Necesidad:' + IdNecesidad
+        //         }))
+        //       }).then(function (response) {
+        //         trNecesidad.ActividadEconomicaNecesidad = response.data;
+        //         resolve("OK");
+        //       });
+        //     } else {
 
-              resolve("Ok");
-            }
-          }).then(function (response) {
-            return administrativaRequest.get('marco_legal_necesidad', $.param({
-              query: 'Necesidad:' + IdNecesidad
-            }))
-              .then(function (response) {
-                trNecesidad.MarcoLegalNecesidad = response.data;
+        //       resolve("Ok");
+        //     }
+        //   }).then(function (response) {
+        //     return administrativaRequest.get('marco_legal_necesidad', $.param({
+        //       query: 'Necesidad:' + IdNecesidad
+        //     }))
+        //       .then(function (response) {
+        //         trNecesidad.MarcoLegalNecesidad = response.data;
 
-                return administrativaRequest.get('dependencia_necesidad', $.param({
-                  query: 'Necesidad:' + IdNecesidad
-                }))
-              }).then(function (response) {
-                trNecesidad.DependenciaNecesidad = response.data[0];
-
-
+        //         return administrativaRequest.get('dependencia_necesidad', $.param({
+        //           query: 'Necesidad:' + IdNecesidad
+        //         }))
+        //       }).then(function (response) {
+        //         trNecesidad.DependenciaNecesidad = response.data[0];
 
 
-                return coreAmazonRequest.get('jefe_dependencia', $.param({
-                  query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaDestino + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
-                  limit: -1,
-                }))
-              }).then(function (response) {
-                trNecesidad.DependenciaNecesidadDestino = response.data[0].DependenciaId;
-                return coreAmazonRequest.get('jefe_dependencia', $.param({
-                  query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaSolicitante + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
-                  limit: -1,
-                }))
-              }).then(function (response) {
-                trNecesidad.DependenciaNecesidadSolicitante = response.data[0].DependenciaId;
 
-                return coreAmazonRequest.get('jefe_dependencia', $.param({
-                  query: "TerceroId:" + trNecesidad.DependenciaNecesidad.OrdenadorGasto + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
-                  limit: -1
-                }))
-              }).then(function (response) {
-                trNecesidad.RolOrdenadorGasto = response.data[0].DependenciaId;
-                return new Promise(function (resolve, reject) {
-                  resolve([trNecesidad, trNecesidadPC]);
-                });
-              }).catch(function (err) {
-                return new Promise(function (resolve, reject) {
-                  resolve([trNecesidad, trNecesidadPC]);
-                });
-              });
-          });
-        });
+
+        //         return coreAmazonRequest.get('jefe_dependencia', $.param({
+        //           query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaDestino + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
+        //           limit: -1,
+        //         }))
+        //       }).then(function (response) {
+        //         trNecesidad.DependenciaNecesidadDestino = response.data[0].DependenciaId;
+        //         return coreAmazonRequest.get('jefe_dependencia', $.param({
+        //           query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaSolicitante + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
+        //           limit: -1,
+        //         }))
+        //       }).then(function (response) {
+        //         trNecesidad.DependenciaNecesidadSolicitante = response.data[0].DependenciaId;
+
+        //         return coreAmazonRequest.get('jefe_dependencia', $.param({
+        //           query: "TerceroId:" + trNecesidad.DependenciaNecesidad.OrdenadorGasto + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
+        //           limit: -1
+        //         }))
+        //       }).then(function (response) {
+        //         trNecesidad.RolOrdenadorGasto = response.data[0].DependenciaId;
+        //         return new Promise(function (resolve, reject) {
+        //           resolve([trNecesidad, trNecesidadPC]);
+        //         });
+        //       }).catch(function (err) {
+        //         return new Promise(function (resolve, reject) {
+        //           resolve([trNecesidad, trNecesidadPC]);
+        //         });
+        //       });
+        //   });
+        // });
 
 
       } else {
