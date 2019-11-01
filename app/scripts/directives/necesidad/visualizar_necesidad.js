@@ -1,6 +1,6 @@
 'use strict';
 
-import { ConsoleReporter } from "jasmine";
+//import { ConsoleReporter } from "jasmine";
 
 /**
  * @ngdoc directive
@@ -31,7 +31,6 @@ angular.module('contractualClienteApp')
                 var metas = {};
 
                 $scope.$watch('necesidad', function () {
-                    // console.log("cargar_necesidad()",$scope.necesidad)
                     self.cargar_necesidad();
                 });
 
@@ -39,9 +38,9 @@ angular.module('contractualClienteApp')
                     $scope.modalidadSel=self.modalidadSel;
                 }); 
 
-                function get_jefe_dependencia(idJefeDependencia, solicitante=true) {
+                function get_jefe_dependencia(id_jefe_dependencia, solicitante=true) {
                     coreAmazonRequest.get('jefe_dependencia', $.param({
-                        query: 'Id:' + idJefeDependencia
+                        query: 'Id:' + id_jefe_dependencia
                     })).then(function (response_jefe_dependencia) {
                         agoraRequest.get('informacion_persona_natural', $.param({
                             query: 'Id:' + response_jefe_dependencia.data[0].TerceroId
@@ -57,9 +56,9 @@ angular.module('contractualClienteApp')
                     });
                 }
 
-                function get_dependencia(idJefeDependencia, solicitante=true) {
+                function get_dependencia(id_jefe_dependencia, solicitante=true) {
                     coreAmazonRequest.get('jefe_dependencia', $.param({
-                        query: 'Id:' + idJefeDependencia
+                        query: 'Id:' + id_jefe_dependencia
                     })).then(function (response_jefe_dependencia) {
                         oikosRequest.get('dependencia', $.param({
                             query: 'Id:' + response_jefe_dependencia.data[0].DependenciaId
@@ -68,8 +67,8 @@ angular.module('contractualClienteApp')
                                 if (solicitante) {
                                     self.dependencia_solicitante = response_dependencia.data[0];
                                     
-                                    metasRequest.get('plan_adquisiciones/'+$scope.necesidad.Necesidad.Vigencia
-                                        +"/"+response_dependencia.data[0].Id).then(function(response) {
+                                    metasRequest.get('plan_adquisiciones/'+$scope.necesidad.Necesidad.Vigencia+
+                                        "/"+response_dependencia.data[0].Id).then(function(response) {
                                         
                                         if (response.data !== null && response.status === 200) {
                                             metas = response.data.metas;
@@ -84,24 +83,44 @@ angular.module('contractualClienteApp')
                     });
                 }
 
-                function get_ordenador_gasto(idOrdenador) {
+                function get_ordenador_gasto(id_ordenador) {
                     agoraRequest.get('informacion_persona_natural', $.param({
-                        query: 'Id:' + idOrdenador
+                        query: 'Id:' + id_ordenador
                     })).then(function (response) {
-                        if (response.data !== null && response.status === 200) self.ordenador_gasto = response.data[0];
+                        if (response.data !== null && response.status === 200) {
+                            self.ordenador_gasto = response.data[0];
+                        } 
                     });
                 }
 
-                function get_informacion_meta(rubro) {
-                    // console.log(rubro);
-                    // console.log(metas.actividades);
-                    // rubro.Metas.forEach(function(meta) {
-                    //     console.log(meta);
-                    //     // console.log(metas.actividades.find(function(item) {
-                    //     //     return item.meta_id === meta.Id
-                    //     // }))
-                    // });
+                function get_info_fuente(id_fuente, vigencia, unidad_ejecutora) {
+                    return planCuentasRequest.get('fuente_financiamiento/'+id_fuente+'/'+vigencia+'/'+unidad_ejecutora)
                 }
+
+                function get_informacion_meta(rubro) {
+                    rubro.Metas.forEach(function(meta) {
+                        meta.InfoMeta = metas.actividades.find(function(item) {
+                            // return parseInt(item.meta_id === meta.MetaId
+                            return item.meta_id === meta.MetaId
+                        });
+                        meta.Actividades.forEach(function(actividad) {
+                           actividad.InfoActividad = metas.actividades.find(function(item) {
+                            //    return (meta.MetaId+"."+actividad.ActividadId) === item.actividad_id
+                               return actividad.ActividadId === item.actividad_id
+                           });
+                           
+                           actividad.FuentesActividad.forEach(function(fuente) {
+                                get_info_fuente(fuente.FuenteId, $scope.necesidad.Necesidad.Vigencia, $scope.necesidad.Necesidad.AreaFuncional).then(function(response) {
+                                    if (response.data !== null && response.status === 200) {
+                                        fuente.InfoFuente = response.data.Body;
+                                    }
+                                });
+                           });
+                        });
+                    });
+                }
+
+                
 
                 self.cargar_necesidad = function () {
                     // console.log($scope.necesidad.MarcoLegalNecesidad[0].MarcoLegalId.NombreDocumento);
