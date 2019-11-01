@@ -729,7 +729,7 @@ angular.module('contractualClienteApp')
                 self.Rubros[i].MontoProductos = 0;
                 self.Rubros[i].MontoMeta = 0;
                 // calculo valor case inversion
-                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversion') {
                     if (self.Rubros[i].Metas.length > 0 && self.Rubros[i].Metas[0].Actividades) {
                         self.Rubros[i].MontoPorApropiacion += self.Rubros[i].Metas[0].MontoPorMeta;
                     }
@@ -779,7 +779,6 @@ angular.module('contractualClienteApp')
                 
             }
             
-            console.info(self.producto_catalogo.preciomasIVA, "precioIVA" )
         }, true)
 
         $scope.$watch('solicitudNecesidad.productos', function () {
@@ -1038,7 +1037,7 @@ angular.module('contractualClienteApp')
             self.Rubros.forEach(function (ap) {
                 var v_fuentes = ap.MontoFuentes || 0;
                 // CASE INVERSION
-                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversión') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversion') {
                     fin_valid = fin_valid  && ap.MontoMeta <= ap.Apropiacion.ValorActual;
                 } else {
                     //CASE FUNCIONAMIENTO

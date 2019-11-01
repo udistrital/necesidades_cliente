@@ -96,7 +96,7 @@ angular.module('contractualClienteApp')
                 f.FuenteId=f.fuente_financiamiento;
                 if(parseFloat(f.MontoParcial)>parseFloat(f.valor_fuente_financiamiento)-parseFloat(f.saldo_comprometido)){
                   swal({
-                    title: 'Error Valor Fuentes Actividad ' + act.actividad_id,
+                    title: 'Error Valor Fuentes de Financiamiento ' + act.actividad_id,
                     type: 'error',
                     text: 'Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo asignado.',
                     showCloseButton: true,
