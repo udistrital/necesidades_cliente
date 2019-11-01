@@ -44,8 +44,7 @@ angular.module('contractualClienteApp')
                 $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
                     $scope.modalidadSel=self.modalidadSel;
                 }); 
-
-                function get_jefe_dependencia(id_jefe_dependencia, solicitante=true) {
+                function get_jefe_dependencia(id_jefe_dependencia, solicitante) {
                     coreAmazonRequest.get('jefe_dependencia', $.param({
                         query: 'Id:' + id_jefe_dependencia
                     })).then(function (response_jefe_dependencia) {
@@ -63,7 +62,7 @@ angular.module('contractualClienteApp')
                     });
                 }
 
-                function get_dependencia(id_jefe_dependencia, solicitante=true) {
+                function get_dependencia(id_jefe_dependencia, solicitante) {
                     coreAmazonRequest.get('jefe_dependencia', $.param({
                         query: 'Id:' + id_jefe_dependencia
                     })).then(function (response_jefe_dependencia) {
@@ -134,10 +133,10 @@ angular.module('contractualClienteApp')
                     
 
                     // Jefes de dependencias
-                    get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId);
+                    get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId,true);
                     get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
                     //Información de dependencias
-                    get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId);
+                    get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId,true);
                     get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
                     // Información del ordenador de gasto
                     get_ordenador_gasto($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId);

@@ -131,29 +131,21 @@ angular.module('contractualClienteApp')
             
         };
 
-        // necesidadService.getFullNecesidad(self.IdNecesidad).then(function(trNecesidad){
-        //     console.info("llego", trNecesidad)
-        //     self.Necesidad=trNecesidad.Necesidad;
-        //     self.DetalleServicioNecesidad=trNecesidad.DetalleServicioNecesidad;
-        //     self.DetallePrestacionServicioNecesidad=trNecesidad.DetallePrestacionServicioNecesidad;
-        //     self.ProductosCatalogoNecesidad=trNecesidad.ProductosCatalogoNecesidad;
-        //     self.MarcoLegalNecesidad=trNecesidad.MarcoLegalNecesidad;
-        //     self.ActividadEspecificaNecesidad=trNecesidad.ActividadEspecificaNecesidad;
-        //     self.ActividadEconomicaNecesidad=trNecesidad.ActividadEconomicaNecesidad;
-        //     self.Rubros=trNecesidad.Rubros;
-        //     self.duracionEspecialReverse();
-        //     self.dep_ned = trNecesidad.DependenciaSolicitante;
-        //     self.dependencia_destino = trNecesidad.DependenciaDestino;
-        //     self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
-        //     var data = necesidadService.calculo_total_dias_rev(self.Necesidad.DiasDuracion);
-        //     self.anos = data.anos;
-        //     self.meses = data.meses;
-        //     self.dias = data.dias;
+        necesidadService.getFullNecesidad(self.IdNecesidad).then(function(res){
+            var trNecesidad=res.data.Body;
+            console.info("llego", trNecesidad)
+            self.Necesidad=trNecesidad.Necesidad;
+            self.DetalleServicioNecesidad=trNecesidad.DetalleServicioNecesidad;
+            self.DetallePrestacionServicioNecesidad=trNecesidad.DetallePrestacionServicioNecesidad;
+            self.ProductosCatalogoNecesidad=trNecesidad.ProductosCatalogoNecesidad;
+            self.MarcoLegalNecesidad=trNecesidad.MarcoLegalNecesidad;
+            self.ActividadEspecificaNecesidad=trNecesidad.ActividadEspecificaNecesidad;
+            self.ActividadEconomicaNecesidad=trNecesidad.ActividadEconomicaNecesidad;
+            self.Rubros=trNecesidad.Rubros;
 
-
-        // }
+        }
             
-        // );
+        );
 
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
             self.Rubros = trNecesidad[1];
