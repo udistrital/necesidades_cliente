@@ -90,6 +90,8 @@ angular.module('contractualClienteApp')
           self.MontoPorMeta=0;
           if (self.actividades !== undefined) {
             self.actividades ? self.actividades.forEach(function(act){
+              act.ActividadId = act.actividad_id;
+              act.MetaID = act.meta_id;
               act.Fuentes ? act.Fuentes.forEach(function(f){
                 if(parseFloat(f.MontoParcial)>parseFloat(f.valor_fuente_financiamiento)-parseFloat(f.saldo_comprometido)){
                   swal({
@@ -113,7 +115,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){
-            $scope.metas = [{MetaId: parseInt(self.meta)}];
+            $scope.metas = [{MetaId: self.meta}];
             self.loadActividades();
           }
 
