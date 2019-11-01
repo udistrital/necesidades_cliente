@@ -8,11 +8,12 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest,planCuentasMidRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
         self.buttons = {
+            AprobarSolicitud: true,
             AprobarNecesidad: true,
             RechazarNecesidad: true,
             EditarNecesidad: true,
@@ -35,14 +36,14 @@ angular.module('contractualClienteApp')
 
         self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }];
 
-        self.buscarUE = function(idUE) {
-            self.unidad_ejecutora_data.filter(function(e){
-                if (idUE === e.Id){
+        self.buscarUE = function (idUE) {
+            self.unidad_ejecutora_data.filter(function (e) {
+                if (idUE === e.Id) {
                     return e.Nombre;
-                }else{
+                } else {
                     return "Rector"
                 }
-                
+
             })
         }
         self.gridOptions = {
@@ -126,7 +127,7 @@ angular.module('contractualClienteApp')
             //         } else{ 
             //             return "Convenios";
             //         }
-                    
+
             //     },
             //     filter: { 
             //         options: [{ UnidadEjecutora: 1, Nombre: 'Rector' }, { UnidadEjecutora: 2, Nombre: 'Convenios' }]     // custom attribute that goes with custom directive above 
@@ -172,8 +173,8 @@ angular.module('contractualClienteApp')
                 self.gridApi = gridApiService.filter(self.gridApi, self.cargarDatosNecesidades, $scope);
 
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    necesidadService.getFullNecesidad(row.entity.Id).then(function(response) {
-                        if(response.status === 200) {
+                    necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
+                        if (response.status === 200) {
                             self.necesidad = response.data.Body;
                         }
                     });
@@ -205,11 +206,12 @@ angular.module('contractualClienteApp')
         self.cargarDatosNecesidades(self.offset, self.query);
 
         $scope.direccionar = function (necesidad) {
-            necesidadService.getFullNecesidad(necesidad.Id).then(function(response) {
-                if(response.status === 200) {
+            necesidadService.getFullNecesidad(necesidad.Id).then(function (response) {
+                if (response.status === 200) {
                     self.necesidad = response.data.Body;
                 }
-                
+
+
                 self.g_necesidad = necesidad;
                 self.numero_el = necesidad.NumeroElaboracion;
                 self.vigencia = necesidad.Vigencia;
@@ -219,9 +221,10 @@ angular.module('contractualClienteApp')
 
 
                 // validaciones para los botones: (estado) && (permisos rol)
-                var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id]
+                var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id,]
                     .includes(necesidad.EstadoNecesidadId.Id);
 
+                self.verBotonAprobarSolicitud= necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id
                 self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
                 self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
                 self.verBotonEditarNecesidad = (necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id || necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id) && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
@@ -230,6 +233,27 @@ angular.module('contractualClienteApp')
                 $("#myModal").modal();
             });
         };
+
+        self.aprobar_solicitud = function () {
+            var nec_apro = {};
+            var tipoC = {};
+
+
+            necesidadService.getFullNecesidad(self.necesidad.Id).then(function (data) {
+                nec_apro = data.data.Body === undefined ? {} : data.data.Body
+                    nec_apro.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Solicitada;
+                    necesidadesCrudRequest.put('necesidad',self.necesidad.Id,nec_apro).then(function(l){
+                  });
+                  self.cargarDatosNecesidades(self.offset, self.query);
+                          $("#myModal").modal("hide");
+                          self.g_necesidad = undefined;
+                    // nec_apro.ModalidadSeleccion = self.modalidadSel;
+                    // tipoC = self.TipoContrato;
+
+                
+            })
+        };
+
 
         self.aprobar_necesidad = function () {
             var nec_apro = {};
