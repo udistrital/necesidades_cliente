@@ -12,17 +12,17 @@ angular.module('contractualClienteApp')
     .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window, agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
         var self = this;
         //inicializar Necesidad
-        self.Necesidad={
+        self.Necesidad = {
             DependenciaNecesidadId: {
-              InterventorId: undefined,
-              JefeDepDestinoId: undefined,
-              JefeDepSolicitanteId: undefined,
-              SupervisorId: undefined
-          },
-          Vigencia : new Date().getFullYear() + "",
-          Valor : 0,
+                InterventorId: undefined,
+                JefeDepDestinoId: undefined,
+                JefeDepSolicitanteId: undefined,
+                SupervisorId: undefined
+            },
+            Vigencia: new Date().getFullYear() + "",
+            Valor: 0,
 
-          }
+        }
         //inicializar objetos necesidad
         self.DetalleServicioNecesidad = {};
         self.DetallePrestacionServicioNecesidad = {};
@@ -133,7 +133,7 @@ angular.module('contractualClienteApp')
 
         };
 
-        self.recibirNecesidad = function(res) {
+        self.recibirNecesidad = function (res) {
             var trNecesidad;
             res.data ? trNecesidad = res.data.Body : trNecesidad = res;
             console.info("llego", trNecesidad)
@@ -227,10 +227,10 @@ angular.module('contractualClienteApp')
         $scope.$watch('solicitudNecesidad.Rubros', function () {
             localStorage.setItem("Rubros", JSON.stringify(self.Rubros));
         }, true);
-        
-        self.emptyStorage = function() {
-            var keysToRemove = ["Necesidad", "DetalleServicioNecesidad", "DetallePrestacionServicioNecesidad" ,"ProductosCatalogoNecesidad", "MarcoLegalNecesidad", "ActividadEspecificaNecesidad", "ActividadEspecificaNecesidad","ActividadEconomicaNecesidad", "Rubros"];
-            keysToRemove.forEach(function(key){
+
+        self.emptyStorage = function () {
+            var keysToRemove = ["Necesidad", "DetalleServicioNecesidad", "DetallePrestacionServicioNecesidad", "ProductosCatalogoNecesidad", "MarcoLegalNecesidad", "ActividadEspecificaNecesidad", "ActividadEspecificaNecesidad", "ActividadEconomicaNecesidad", "Rubros"];
+            keysToRemove.forEach(function (key) {
                 localStorage.removeItem(key);
             })
         }
@@ -435,7 +435,7 @@ angular.module('contractualClienteApp')
         $scope.$watchGroup(['solicitudNecesidad.Necesidad.AreaFuncional', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
             // self.Necesidad.AreaFuncional&&self.Necesidad.TipoFinanciacionNecesidadId ? self.Rubros = [] : _;
-            console.info(self.Rubros,"se los bajo?")
+            console.info(self.Rubros, "se los bajo?")
         })
 
         necesidadService.getAllDependencias().then(function (Dependencias) {
@@ -652,7 +652,8 @@ angular.module('contractualClienteApp')
                     showConfirmButton: true,
                 }) :
                 self.productos.push(self.producto_catalogo);
-            console.info(self.productos);
+            $("#modalProducto").modal("hide");
+            $(".modal-backdrop").remove();
             self.producto_catalogo = {};
             self.producto_catalogo.RequisitosMinimos = [];
         }
@@ -722,6 +723,9 @@ angular.module('contractualClienteApp')
         }, true)
 
         $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
+            if(self.producto_catalogo.Id && self.producto_catalogo!=={}){
+                $("#modalProducto").modal();
+            }
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
             var tIva = [];
             if (self.iva_data != undefined) {
@@ -1020,11 +1024,11 @@ angular.module('contractualClienteApp')
         }
 
         self.ResetNecesidad = function () {
-            necesidadService.getFullNecesidad().then(function(res){
+            necesidadService.getFullNecesidad().then(function (res) {
                 var TipoNecesidad = self.Necesidad.TipoNecesidadId;
                 self.emptyStorage();
                 self.recibirNecesidad(res);
-                self.Necesidad.TipoNecesidadId=TipoNecesidad;
+                self.Necesidad.TipoNecesidadId = TipoNecesidad;
             });
         };
 
