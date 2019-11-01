@@ -7,7 +7,7 @@
  * # metasActividades
  */
 angular.module('contractualClienteApp')
-  .directive('metasActividades', function (metasRequest) {
+  .directive('metasActividades', function (metasRequest,$translate) {
     return {
       restrict: 'E',
       scope: {
@@ -49,10 +49,20 @@ angular.module('contractualClienteApp')
           {
             field: 'actividad',
             displayName: 'Actividad',
-            width: '80%',
+            width: '50%',
             headerCellClass: $scope.highlightFilteredHeader + ' text-info',
             cellTooltip: function (row) {
               return row.entity.actividad;
+            }
+          },
+          {
+            field: 'valor_actividad',
+            displayName: 'Saldo Actividad',
+            cellFilter: 'currency',
+            width: '30%',
+            headerCellClass: $scope.highlightFilteredHeader + ' text-info',
+            cellTooltip: function (row) {
+              return row.entity.valor_actividad;
             }
           }
           ]
@@ -79,15 +89,33 @@ angular.module('contractualClienteApp')
         $scope.$watch('d_metasActividades.actividades', function () {
           self.MontoPorMeta=0;
           if (self.actividades !== undefined) {
-            self.actividades.forEach(function(act){
-              self.MontoPorMeta+=act.MontoParcial;
-            })
+            self.actividades ? self.actividades.forEach(function(act){
+              act.ActividadId = act.actividad_id;
+              act.MetaID = act.meta_id;
+              act.Fuentes ? act.Fuentes.forEach(function(f){
+                if(parseFloat(f.MontoParcial)>parseFloat(f.valor_fuente_financiamiento)-parseFloat(f.saldo_comprometido)){
+                  swal({
+                    title: 'Error Valor Fuentes Actividad ' + act.actividad_id,
+                    type: 'error',
+                    text: 'Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo asignado.',
+                    showCloseButton: true,
+                    confirmButtonText: $translate.instant("CERRAR")
+                  });
+                  f.MontoParcial=0;
+                } else {
+                  self.MontoPorMeta+=f.MontoParcial;
+                }
+                
+              }) : _;
+              
+            }) : _;
           }
+          $scope.metas.length>0 ? $scope.metas[0].MontoPorMeta = self.MontoPorMeta : _ ; 
         },true);
 
         $scope.$watch('d_metasActividades.meta',function () {
           if(self.meta !== undefined){
-            $scope.metas = [{metaId:self.meta}];
+            $scope.metas = [{MetaId: self.meta}];
             self.loadActividades();
           }
 
@@ -104,7 +132,7 @@ angular.module('contractualClienteApp')
                 a.Fuentes =  a.Fuentes ?  a.Fuentes : fuentesact;
               });
             });
-            $scope.metas[0].actividades = self.actividades;
+            $scope.metas[0].Actividades = self.actividades;
           });
 
         };

@@ -8,15 +8,15 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function ($translate, administrativaRequest, planCuentasRequest, planCuentasMidRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
+  .service('necesidadService', function ($translate, administrativaRequest, planCuentasRequest, necesidadesCrudRequest, planCuentasMidRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
 
 
 
-    administrativaRequest.get('estado_necesidad', $.param({})).then(function (response) {
-      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado"];
+    necesidadesCrudRequest.get('estado_necesidad', $.param({})).then(function (response) {
+      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado","Guardada"];
       keys.forEach(function (v, i) {
         self.EstadoNecesidadType[v] = response.data[i];
       });

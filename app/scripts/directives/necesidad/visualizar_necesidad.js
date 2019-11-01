@@ -1,6 +1,8 @@
 'use strict';
 
+
 //import { ConsoleReporter } from "jasmine";
+
 
 /**
  * @ngdoc directive
