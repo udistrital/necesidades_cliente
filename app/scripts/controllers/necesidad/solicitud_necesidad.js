@@ -11,31 +11,33 @@
 angular.module('contractualClienteApp')
     .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window, agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
         var self = this;
+        //inicializar Necesidad
+        self.Necesidad={
+            DependenciaNecesidadId: {
+              InterventorId: undefined,
+              JefeDepDestinoId: undefined,
+              JefeDepSolicitanteId: undefined,
+              SupervisorId: undefined
+          },
+          Vigencia : new Date().getFullYear() + "",
+          Valor : 0,
+
+          }
+        //inicializar objetos necesidad
+        self.DetalleServicioNecesidad = {};
+        self.DetallePrestacionServicioNecesidad = {};
+        self.ProductosCatalogoNecesidad = [];
+        self.MarcoLegalNecesidad = [];
+        self.ActividadEspecificaNecesidad = [];
+        self.ActividadEconomicaNecesidad = [];
+        self.Rubros = [];
+
 
         self.IdNecesidad = $routeParams.IdNecesidad;
         self.iva_data = undefined;
         self.documentos = [];
         self.avance = undefined;
         self.formuIncompleto = true;
-        self.Necesidad = {
-            DependenciaNecesidadId: {
-                InterventorId: undefined,
-                JefeDepDestinoId: undefined,
-                JefeDepSolicitanteId: undefined,
-                SupervisorId: undefined
-            },
-        };
-
-        self.DetalleServicioNecesidad = {
-        };
-
-        self.DetallePrestacionServicioNecesidad = {
-        };
-
-        self.ActividadEspecificaNecesidad = [];
-        self.MarcoLegalNecesidad = [];
-
-
         self.meta = undefined;
         self.meta_necesidad = {
             Meta: undefined,
@@ -51,24 +53,24 @@ angular.module('contractualClienteApp')
 
 
         self.fecha_actual = new Date();
-        self.Necesidad.Vigencia = self.fecha_actual.getFullYear() + "";
-        self.vigencia = 2019;
+        self.vigencia = "2019";
         self.deepCopy = function (obj) {
             return JSON.parse(JSON.stringify(obj));
         };
+        self.anos = 0;
+        self.meses = 0;
+        self.dias = 0;
 
-        self.variable = { };
+        self.variable = {};
 
         self.DuracionEspecial = 'unico_pago';
         self.fecha = new Date();
-        self.Rubros = [];
         self.ActividadEspecifica = [];
         self.especificaciones = [];
         self.requisitos_minimos = [];
         self.actividades_economicas = [];
         self.actividades_economicas_id = [];
         self.productos = [];
-        self.Necesidad.Valor = 0;
         self.servicio_valor = 0;
         self.valor_compra_servicio = 0;
         self.meta_valor = 0;
@@ -127,24 +129,29 @@ angular.module('contractualClienteApp')
 
         self.duracionEspecialReverse = function () {
 
-                    self.ver_duracion_fecha = true
-            
+            self.ver_duracion_fecha = true
+
         };
 
-        necesidadService.getFullNecesidad(self.IdNecesidad).then(function(res){
-            var trNecesidad=res.data.Body;
+        self.recibirNecesidad = function(res) {
+            var trNecesidad;
+            res.data ? trNecesidad = res.data.Body : trNecesidad = res;
             console.info("llego", trNecesidad)
-            self.Necesidad=trNecesidad.Necesidad;
-            self.DetalleServicioNecesidad=trNecesidad.DetalleServicioNecesidad;
-            self.DetallePrestacionServicioNecesidad=trNecesidad.DetallePrestacionServicioNecesidad;
-            self.ProductosCatalogoNecesidad=trNecesidad.ProductosCatalogoNecesidad;
-            self.MarcoLegalNecesidad=trNecesidad.MarcoLegalNecesidad;
-            self.ActividadEspecificaNecesidad=trNecesidad.ActividadEspecificaNecesidad;
-            self.ActividadEconomicaNecesidad=trNecesidad.ActividadEconomicaNecesidad;
-            self.Rubros=trNecesidad.Rubros;
-
+            self.Necesidad = trNecesidad.Necesidad;
+            self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad;
+            self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad;
+            self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad;
+            self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad;
+            self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad;
+            self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad;
+            self.Rubros = trNecesidad.Rubros;
         }
-            
+
+
+        necesidadService.getFullNecesidad(self.IdNecesidad).then(function (res) {
+            self.recibirNecesidad(res);
+        }
+
         );
 
         necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
@@ -184,152 +191,113 @@ angular.module('contractualClienteApp')
                 });
             }
 
-            self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegal; }) : [];
+            self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
             self.dep_ned = trNecesidad.DependenciaNecesidad;
             self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
             self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
             self.duracionEspecialReverse();
-            var data = necesidadService.calculo_total_dias_rev(self.necesidad.DiasDuracion);
+            var data = necesidadService.calculo_total_dias_rev(self.Necesidad.DiasDuracion);
             self.anos = data.anos;
             self.meses = data.meses;
             self.dias = data.dias;
 
-            $scope.$watch('solicitudNecesidad.Necesidad', function () {
-                localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
-            }, true)
-
-
-            $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
-                if (!self.detalle_servicio_necesidad) { return; }
-                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-                    query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
-                    limit: -1
-                })).then(function (response) {
-                    if (response.data !== null && response.data.lenght > 0) {
-                        self.nucleoarea = response.data[0].AreaConocimientoId.Id;
-                    }
-
-                }).catch(function (err) {
-                    console.error(err)
-                });
-            }, true);
-
-            $scope.$watch('solicitudNecesidad.dependencia_solicitante', function () {
-                self.jefe_solicitante = null;
-                self.dependencia_solicitante ?
-                    necesidadService.getJefeDependencia(self.dependencia_solicitante).then(function (JD) {
-                        self.jefe_solicitante = JD.Persona;
-                        self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId = JD.JefeDependencia.Id;
-                        // self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id; OLD
-                    }).catch(function (err) {
-                    }) : _;
-            }, true);
-
-
-            $scope.$watch('solicitudNecesidad.dependencia_destino', function () {
-                self.jefe_destino = null;
-                self.dependencia_destino ?
-                    necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
-                        self.jefe_destino = JD.Persona;
-                        self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
-                        self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = self.dep_ned.JefeDependenciaDestino;
-                    }).catch(function (err) {
-                    }) : _;
-
-            }, true);
-
-            $scope.$watch('solicitudNecesidad.dependencia_supervisor', function () {
-                self.supervisor = null;
-                self.dependencia_supervisor ?
-                    necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
-                        self.supervisor = JD.Persona;
-                        self.dep_ned.supervisor = JD.JefeDependencia.Id;
-                        self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor;
-                    }).catch(function (err) {
-                    }) : _;
-
-
-            }, true);
-
-
-            $scope.$watch('solicitudNecesidad.rol_ordenador_gasto', function () {
-                self.ordenador_gasto = null;
-                self.rol_ordenador_gasto ?
-                    necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
-                        self.ordenador_gasto = JD.Persona;
-                        self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Persona.Id, 10);
-                    }).catch(function (err) {
-                    }) : _;
-            }, true);
         });
 
-        // $scope.$watch('solicitudNecesidad.Necesidad', function () {
-        //     localStorage.setItem("Necesidad", self.Necesidad);
-        // }, true)
+        $scope.$watch('solicitudNecesidad.Necesidad', function () {
+            localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.DetalleServicioNecesidad', function () {
+            localStorage.setItem("DetalleServicioNecesidad", JSON.stringify(self.DetalleServicioNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.DetallePrestacionServicioNecesidad', function () {
+            localStorage.setItem("DetallePrestacionServicioNecesidad", JSON.stringify(self.DetallePrestacionServicioNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.ProductosCatalogoNecesidad', function () {
+            localStorage.setItem("ProductosCatalogoNecesidad", JSON.stringify(self.ProductosCatalogoNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.MarcoLegalNecesidad', function () {
+            localStorage.setItem("MarcoLegalNecesidad", JSON.stringify(self.MarcoLegalNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.ActividadEspecificaNecesidad', function () {
+            localStorage.setItem("ActividadEspecificaNecesidad", JSON.stringify(self.ActividadEspecificaNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.ActividadEconomicaNecesidad', function () {
+            localStorage.setItem("ActividadEconomicaNecesidad", JSON.stringify(self.ActividadEconomicaNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.Rubros', function () {
+            localStorage.setItem("Rubros", JSON.stringify(self.Rubros));
+        }, true);
+        
+        self.emptyStorage = function() {
+            var keysToRemove = ["Necesidad", "DetalleServicioNecesidad", "DetallePrestacionServicioNecesidad" ,"ProductosCatalogoNecesidad", "MarcoLegalNecesidad", "ActividadEspecificaNecesidad", "ActividadEspecificaNecesidad","ActividadEconomicaNecesidad", "Rubros"];
+            keysToRemove.forEach(function(key){
+                localStorage.removeItem(key);
+            })
+        }
 
 
-        // $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
-        //     if (!self.detalle_servicio_necesidad) { return; }
-        //     parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-        //         query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
-        //         limit: -1
-        //     })).then(function (response) {
-        //         if (response.data !== null && response.data.lenght > 0) {
-        //             self.nucleoarea = response.data[0].AreaConocimientoId.Id;
-        //         }
+        $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
+            if (!self.detalle_servicio_necesidad) { return; }
+            parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+                query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
+                limit: -1
+            })).then(function (response) {
+                if (response.data !== null && response.data.lenght > 0) {
+                    self.nucleoarea = response.data[0].AreaConocimientoId.Id;
+                }
 
-        //     }).catch(function (err) {
-        //         console.error(err)
-        //     });
-        // }, true);
+            }).catch(function (err) {
+                console.error(err)
+            });
+        }, true);
 
-        // $scope.$watch('solicitudNecesidad.dependencia_solicitante', function () {
-        //     self.jefe_solicitante = null;
-        //     self.dependencia_solicitante ?
-        //         necesidadService.getJefeDependencia(self.dependencia_solicitante).then(function (JD) {
-        //             self.jefe_solicitante = JD.Persona;
-        //             self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId = JD.JefeDependencia.Id;
-        //             // self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id; OLD
-        //         }).catch(function (err) {
-        //         }) : _;
-        // }, true);
-
-
-        // $scope.$watch('solicitudNecesidad.dependencia_destino', function () {
-        //     self.jefe_destino = null;
-        //     self.dependencia_destino ?
-        //         necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
-        //             self.jefe_destino = JD.Persona;
-        //             self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
-        //             self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = self.dep_ned.JefeDependenciaDestino;
-        //         }).catch(function (err) {
-        //         }) : _;
-
-        // }, true);
-
-        // $scope.$watch('solicitudNecesidad.dependencia_supervisor', function () {
-        //     self.supervisor = null;
-        //     self.dependencia_supervisor ?
-        //         necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
-        //             self.supervisor = JD.Persona;
-        //             self.dep_ned.supervisor = JD.JefeDependencia.Id;
-        //             self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor;
-        //         }).catch(function (err) {
-        //         }) : _;
+        $scope.$watch('solicitudNecesidad.dependencia_solicitante', function () {
+            self.jefe_solicitante = null;
+            self.dependencia_solicitante ?
+                necesidadService.getJefeDependencia(self.dependencia_solicitante).then(function (JD) {
+                    self.jefe_solicitante = JD.Persona;
+                    self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId = JD.JefeDependencia.Id;
+                    // self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id; OLD
+                }).catch(function (err) {
+                }) : _;
+        }, true);
 
 
-        // }, true);
+        $scope.$watch('solicitudNecesidad.dependencia_destino', function () {
+            self.jefe_destino = null;
+            self.dependencia_destino ?
+                necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
+                    self.jefe_destino = JD.Persona;
+                    self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
+                    self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = self.dep_ned.JefeDependenciaDestino;
+                }).catch(function (err) {
+                }) : _;
+
+        }, true);
+
+        $scope.$watch('solicitudNecesidad.dependencia_supervisor', function () {
+            self.supervisor = null;
+            self.dependencia_supervisor ?
+                necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
+                    self.supervisor = JD.Persona;
+                    self.dep_ned.supervisor = JD.JefeDependencia.Id;
+                    self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor;
+                }).catch(function (err) {
+                }) : _;
 
 
-        // $scope.$watch('solicitudNecesidad.rol_ordenador_gasto', function () {
-        //     self.ordenador_gasto = null;
-        //     self.rol_ordenador_gasto ?
-        //         necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
-        //             self.ordenador_gasto = JD.Persona;
-        //             self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Persona.Id, 10);
-        //         }).catch(function (err) {
-        //         }) : _;
-        // }, true);
+        }, true);
+
+
+        $scope.$watch('solicitudNecesidad.rol_ordenador_gasto', function () {
+            self.ordenador_gasto = null;
+            self.rol_ordenador_gasto ?
+                necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
+                    self.ordenador_gasto = JD.Persona;
+                    self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Persona.Id, 10);
+                }).catch(function (err) {
+                }) : _;
+        }, true);
 
         self.estructura = {
             init: {
@@ -464,9 +432,10 @@ angular.module('contractualClienteApp')
             self.CambiarTipoNecesidad(TipoNecesidad);
         });
 
-        $scope.$watchGroup(['solicitudNecesidad.necesidad.UnidadEjecutora', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
+        $scope.$watchGroup(['solicitudNecesidad.Necesidad.AreaFuncional', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
-            self.Rubros = [];
+            // self.Necesidad.AreaFuncional&&self.Necesidad.TipoFinanciacionNecesidadId ? self.Rubros = [] : _;
+            console.info(self.Rubros,"se los bajo?")
         })
 
         necesidadService.getAllDependencias().then(function (Dependencias) {
@@ -651,10 +620,11 @@ angular.module('contractualClienteApp')
             // Busca si en Rubros ya existe el elemento que intenta agregarse, comparandolo con su id
             // si lo que devuelve filter es un arreglo mayor que 0, significa que el elemento a agregar ya existe
             // por lo tanto devuelve un mensaje de alerta
-            if (self.Rubros.filter(function (element) { return element.Codigo === apropiacion.Codigo; }).length > 0) {
+            if (self.Rubros.filter(function (element) { return element.RubroId === apropiacion.Codigo; }).length > 0) {
+
                 swal(
                     'Apropiación ya agregada',
-                    'El rubro: <b>' + Fap.Codigo + ": " + Fap.Apropiacion.Nombre + '</b> ya ha sido agregado',
+                    'El rubro: <b>' + Fap.RubroId + ": " + Fap.Apropiacion.Nombre + '</b> ya ha sido agregado',
                     'warning'
                 );
                 // Por el contrario, si el tamaño del arreglo que devuelve filter es menor a 0
@@ -682,7 +652,7 @@ angular.module('contractualClienteApp')
                     showConfirmButton: true,
                 }) :
                 self.productos.push(self.producto_catalogo);
-                console.info(self.productos);
+            console.info(self.productos);
             self.producto_catalogo = {};
             self.producto_catalogo.RequisitosMinimos = [];
         }
@@ -734,10 +704,10 @@ angular.module('contractualClienteApp')
 
                 // case Funcionamiento
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Funcionamiento') {
-                    if(self.Rubros[i].Fuentes.length > 0){
+                    if (self.Rubros[i].Fuentes.length > 0) {
                         for (var index = 0; index < self.Rubros[i].Fuentes.length; index++) {
                             self.Rubros[i].MontoFuentes += self.Rubros[i].Fuentes[index].MontoParcial;
-                            
+
                         }
                     }
                     self.Rubros[i].MontoPorApropiacion = self.Rubros[i].MontoFuentes;
@@ -761,16 +731,16 @@ angular.module('contractualClienteApp')
             }
 
             if (tIva[0] != undefined) {
-                if(tIva[0].Tarifa === 0){
+                if (tIva[0].Tarifa === 0) {
                     self.producto_catalogo.ValorIVA = 0;
                     self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal || 0;
-                }else{
+                } else {
                     self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
                     self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
                 }
-                
+
             }
-            
+
         }, true)
 
         $scope.$watch('solicitudNecesidad.productos', function () {
@@ -794,18 +764,19 @@ angular.module('contractualClienteApp')
                 self.MostrarTotalEspc = false;
             }
             //prestacion serv
-            if(self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 2){
-                self.servicio_valor=self.Necesidad.Valor;
-                self.DetallePrestacionServicioNecesidad.Cantidad=1;
+            if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 2) {
+                self.servicio_valor = self.Necesidad.Valor;
+                self.DetallePrestacionServicioNecesidad.Cantidad = 1;
             }
             // serv
-            if(self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 5){
-                self.servicio_valor=self.Necesidad.Valor;
-                self.DetalleServicioNecesidad.Valor=self.Necesidad.Valor;
+            if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 5) {
+                self.servicio_valor = self.Necesidad.Valor;
+                self.DetalleServicioNecesidad.Valor = self.Necesidad.Valor;
             }
             // compra y serv
-            if(self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 4){
-                self.servicio_valor=self.DetalleServicioNecesidad.Valor;
+            if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 4) {
+                self.servicio_valor = self.DetalleServicioNecesidad.Valor;
+                console.info("Deberia ser", self.servicio_valor)
             }
             self.valorTotalEspecificaciones = 0;
             self.productos = [];
@@ -833,7 +804,7 @@ angular.module('contractualClienteApp')
                 ).then(function (event) {
                     var e = angular.element('.ng-invalid-required')[2];
                     e.focus(); // para que enfoque el elemento
-                    e.classList.add("ng-dirty"); //para que se vea rojo
+                    //e.classList.add("ng-dirty"); //para que se vea rojo
                 })
             };
         };
@@ -901,7 +872,7 @@ angular.module('contractualClienteApp')
 
                 self.alerta_necesidad = response.data;
 
-                if (response.status > 300 ) {
+                if (response.status > 300) {
                     swal({
                         title: 'Error Registro Necesidad',
                         type: 'error',
@@ -1005,9 +976,9 @@ angular.module('contractualClienteApp')
                     console.info(self.Necesidad.Valor, "Valor N", self.servicio_valor);
 
                     if (especificaciones_valido) {
-                        planCuentasMidRequest.post('necesidad/post_full_necesidad/',self.TrNecesidad).then(function(r){
+                        planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
                             NecesidadHandle(r);
-                        }).catch(function(e){
+                        }).catch(function (e) {
                             console.info(e)
                         })
                     } else {
@@ -1030,7 +1001,7 @@ angular.module('contractualClienteApp')
                 var v_fuentes = ap.MontoFuentes || 0;
                 // CASE INVERSION
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversion') {
-                    fin_valid = fin_valid  && ap.MontoMeta <= ap.Apropiacion.ValorActual;
+                    fin_valid = fin_valid && ap.MontoMeta <= ap.Apropiacion.ValorActual;
                 } else {
                     //CASE FUNCIONAMIENTO
                     fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual;
@@ -1049,23 +1020,19 @@ angular.module('contractualClienteApp')
         }
 
         self.ResetNecesidad = function () {
-            var TipoNecesidad = self.Necesidad.TipoNecesidadId.Id;
-            necesidadService.initNecesidad().then(function (trNecesidad) {
-                self.necesidad = trNecesidad[0].Necesidad;
-                self.necesidad_plancuentas = trNecesidad[1];
-                self.necesidad.TipoNecesidad = { Id: parseInt(TipoNecesidad, 10) };
-                self.CambiarTipoNecesidad(TipoNecesidad);
+            necesidadService.getFullNecesidad().then(function(res){
+                var TipoNecesidad = self.Necesidad.TipoNecesidadId;
+                self.emptyStorage();
+                self.recibirNecesidad(res);
+                self.Necesidad.TipoNecesidadId=TipoNecesidad;
             });
-
         };
 
         // Control de visualizacion de los campos individuales en el formulario
         self.CambiarTipoNecesidad = function (TipoNecesidad) {
             self.forms = _.merge({}, self.estructura.init.forms);
             self.fields = _.merge({}, self.estructura.init);
-
             self.TipoNecesidadType = ["", "Contratacion", "", "Avances", "", "", "ServiciosPublicos"];
-
             _.merge(self.forms, self.estructura[self.TipoNecesidadType[TipoNecesidad]].forms);
             _.merge(self.fields, self.estructura[self.TipoNecesidadType[TipoNecesidad]]);
             self.Necesidad.TipoContratoNecesidadId = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
