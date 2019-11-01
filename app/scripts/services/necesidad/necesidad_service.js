@@ -330,9 +330,22 @@ angular.module('contractualClienteApp')
         // localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
         // console.info(JSON.parse(localStorage.getItem("necesidad")))
         return new Promise(function (resolve, reject) {
+          //Datos iniciales necesarios
+          var EmptyNecesidad={
+            DependenciaNecesidadId: {
+              InterventorId: undefined,
+              JefeDepDestinoId: undefined,
+              JefeDepSolicitanteId: undefined,
+              SupervisorId: undefined
+          },
+          Vigencia : new Date().getFullYear() + "",
+          Valor : 0,
+          DiasDuracion: 0,
+
+          }
           // revisar si existen objetos de necesidad guardados en el localstorage para devolverlos
           resolve({
-            Necesidad: (localStorage.getItem("Necesidad") === null) ? { } : JSON.parse(localStorage.getItem("Necesidad")),
+            Necesidad: (localStorage.getItem("Necesidad") === null) ? EmptyNecesidad : JSON.parse(localStorage.getItem("Necesidad")),
             DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? { } : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
             DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? { } : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
             ProductosCatalogoNecesidad: (localStorage.getItem("ProductosCatalogoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ProductosCatalogoNecesidad")),
