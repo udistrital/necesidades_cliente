@@ -8,15 +8,15 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function ($translate, administrativaRequest, planCuentasRequest, planCuentasMidRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
+  .service('necesidadService', function ($translate, administrativaRequest, planCuentasRequest, necesidadesCrudRequest, planCuentasMidRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
 
 
 
-    administrativaRequest.get('estado_necesidad', $.param({})).then(function (response) {
-      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado"];
+    necesidadesCrudRequest.get('estado_necesidad', $.param({})).then(function (response) {
+      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado","Guardada"];
       keys.forEach(function (v, i) {
         self.EstadoNecesidadType[v] = response.data[i];
       });
@@ -50,7 +50,7 @@ angular.module('contractualClienteApp')
         }
 
         coreAmazonRequest.get('jefe_dependencia', $.param({
-          query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia) + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
+          query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD')),
           limit: -1,
         })).then(function (response) {
           out.JefeDependencia = response.data[0]; //TODO: cambiar el criterio para tomar en cuenta el periodo de validez del jefe
@@ -215,6 +215,7 @@ angular.module('contractualClienteApp')
         planCuentasRequest.get('necesidades', $.param({
           query: "idAdministrativa:" + IdNecesidad
         }))]).then(function (response) {
+          console.log(response)
           var responseMongo = response[1].data.Body[0] || {};
           response = response[0];
           trNecesidad.Necesidad = response.data.filter(
@@ -330,9 +331,9 @@ angular.module('contractualClienteApp')
         return new Promise(function (resolve, reject) {
           // revisar si existen objetos de necesidad guardados en el localstorage para devolverlos
           resolve({
-            Necesidad: (localStorage.getItem("Necesidad") === null) ? {} : localStorage.getItem("Necesidad"),
-            DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
-            DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
+            Necesidad: (localStorage.getItem("Necesidad") === null) ? { } : JSON.parse(localStorage.getItem("Necesidad")),
+            DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? { } : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
+            DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? { } : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
             ProductosCatalogoNecesidad: (localStorage.getItem("ProductosCatalogoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ProductosCatalogoNecesidad")),
             MarcoLegalNecesidad: (localStorage.getItem("MarcoLegalNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("MarcoLegalNecesidad")),
             ActividadEspecificaNecesidad: (localStorage.getItem("ActividadEspecificaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEspecificaNecesidad")),

@@ -8,11 +8,12 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest,planCuentasMidRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
         self.buttons = {
+            AprobarSolicitud: true,
             AprobarNecesidad: true,
             RechazarNecesidad: true,
             EditarNecesidad: true,
@@ -35,14 +36,14 @@ angular.module('contractualClienteApp')
 
         self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }];
 
-        self.buscarUE = function(idUE) {
-            self.unidad_ejecutora_data.filter(function(e){
-                if (idUE === e.Id){
+        self.buscarUE = function (idUE) {
+            self.unidad_ejecutora_data.filter(function (e) {
+                if (idUE === e.Id) {
                     return e.Nombre;
-                }else{
+                } else {
                     return "Rector"
                 }
-                
+
             })
         }
         self.gridOptions = {
@@ -58,24 +59,35 @@ angular.module('contractualClienteApp')
             enableSelectAll: false,
             multiSelect: false,
             columnDefs: [{
-                field: 'NumeroElaboracion',
-                displayName: $translate.instant('NUMERO_ELABORACION_NECESIDAD'),
+                field: 'ConsecutivoSolicitud',
+                displayName: $translate.instant('NUMERO_SOLICITUD_COMPACTO'),
                 type: 'number',
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.NumeroElaboracion;
+                    return row.entity.ConsecutivoSolicitud;
                 },
-                width: '10%'
+                width: '15%'
+            },
+            {
+                field: 'ConsecutivoNecesidad',
+                displayName: $translate.instant('NUMERO_NECESIDAD_COMPACTO'),
+                type: 'number',
+                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+                cellTooltip: function (row) {
+                    return row.entity.ConsecutivoNecesidad;
+                },
+                width: '15%'
             },
             {
                 field: 'Id',
                 displayName: $translate.instant('NECESIDAD_NO'),
                 type: 'number',
+                visible: false,
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
                     return row.entity.Id;
                 },
-                width: '10%'
+                width: '15%'
             },
             {
                 field: 'Vigencia',
@@ -85,7 +97,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '5%'
+                width: '10%'
             },
             // {
             //     field: 'Objeto',
@@ -105,34 +117,34 @@ angular.module('contractualClienteApp')
             //     },
             //     width: '25%'
             // },
+            // {
+            //     field: "self.buscarUE(1)",
+            //     displayName: $translate.instant('UNIDAD_EJECUTORA'),
+            //     headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+            //     cellTooltip: function (row) {
+            //         if(row.entity.UnidadEjecutora === 1){
+            //             return "Rector";
+            //         } else{ 
+            //             return "Convenios";
+            //         }
+
+            //     },
+            //     filter: { 
+            //         options: [{ UnidadEjecutora: 1, Nombre: 'Rector' }, { UnidadEjecutora: 2, Nombre: 'Convenios' }]     // custom attribute that goes with custom directive above 
+            //       }, 
+            //     width: '15%'
+            // },
             {
-                field: "self.buscarUE(1)",
-                displayName: $translate.instant('UNIDAD_EJECUTORA'),
-                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-                cellTooltip: function (row) {
-                    if(row.entity.UnidadEjecutora === 1){
-                        return "Rector";
-                    } else{ 
-                        return "Convenios";
-                    }
-                    
-                },
-                filter: { 
-                    options: [{ UnidadEjecutora: 1, Nombre: 'Rector' }, { UnidadEjecutora: 2, Nombre: 'Convenios' }]     // custom attribute that goes with custom directive above 
-                  }, 
-                width: '15%'
-            },
-            {
-                field: 'EstadoNecesidad.Nombre',
+                field: 'EstadoNecesidadId.Nombre',
                 displayName: $translate.instant('ESTADO'),
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.EstadoNecesidad.Nombre + ".\n" + row.entity.EstadoNecesidad.Descripcion;
+                    return row.entity.EstadoNecesidadId.Nombre + ".\n" + row.entity.EstadoNecesidadId.Descripcion;
                 },
                 width: '20%'
             },
             {
-                field: 'TipoNecesidad.Nombre',
+                field: 'TipoNecesidadId.Nombre',
                 displayName: $translate.instant('TIPO_NECESIDAD'),
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
@@ -161,8 +173,11 @@ angular.module('contractualClienteApp')
                 self.gridApi = gridApiService.filter(self.gridApi, self.cargarDatosNecesidades, $scope);
 
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    self.necesidad = row.entity;
-                    necesidadService.initNecesidad(row.entity.Id)
+                    necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
+                        if (response.status === 200) {
+                            self.necesidad = response.data.Body;
+                        }
+                    });
                 });
             }
         };
@@ -177,20 +192,12 @@ angular.module('contractualClienteApp')
             query = typeof (query) === "string" ? [query] : query;
             query.push("EstadoNecesidad.Nombre__not_in:Borrador");
 
-            var req = administrativaRequest.get('necesidad', $.param({
+            var req = necesidadesCrudRequest.get('necesidad', $.param({
                 limit: self.gridOptions.paginationPageSize,
                 offset: offset,
-                sortby: "Vigencia,NumeroElaboracion",
-                order: "desc",
-                query: query.join(",")
+                sortby: "Vigencia",
+                order: "desc"
             }, true));
-            // req.data.forEach(function(n){
-            //   if(n.UnidadEjecutora === 1){
-            //             n.UniE= "Rector";
-            //         } else{ 
-            //             n.UniE= "Convenios";
-            //         }
-            // });
 
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
@@ -199,26 +206,54 @@ angular.module('contractualClienteApp')
         self.cargarDatosNecesidades(self.offset, self.query);
 
         $scope.direccionar = function (necesidad) {
-            self.g_necesidad = necesidad;
-            self.numero_el = necesidad.NumeroElaboracion;
-            self.vigencia = necesidad.Vigencia;
-            self.modalidadSel = necesidad.ModalidadSeleccion;
-
-            //para mostrar informacion de rechazo
+            necesidadService.getFullNecesidad(necesidad.Id).then(function (response) {
+                if (response.status === 200) {
+                    self.necesidad = response.data.Body;
+                }
 
 
-            // validaciones para los botones: (estado) && (permisos rol)
-            var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id]
-                .includes(necesidad.EstadoNecesidad.Id);
+                self.g_necesidad = necesidad;
+                self.numero_el = necesidad.NumeroElaboracion;
+                self.vigencia = necesidad.Vigencia;
+                self.modalidadSel = necesidad.ModalidadSeleccion;
 
-            self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
-            self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
-            self.verBotonEditarNecesidad = (necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidad.Id || necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidad.Id) && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidad.Id && self.buttons.EditarNecesidad;
-            self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidad.Id && self.buttons.SolicitarCDP;
+                //para mostrar informacion de rechazo
 
-            $("#myModal").modal();
 
+                // validaciones para los botones: (estado) && (permisos rol)
+                var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id,]
+                    .includes(necesidad.EstadoNecesidadId.Id);
+
+                self.verBotonAprobarSolicitud= necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id
+                self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
+                self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
+                self.verBotonEditarNecesidad = (necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id || necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id) && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
+                self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
+
+                $("#myModal").modal();
+            });
         };
+
+        self.aprobar_solicitud = function () {
+            var nec_apro = {};
+            var tipoC = {};
+
+
+            necesidadService.getFullNecesidad(self.necesidad.Id).then(function (data) {
+                nec_apro = data.data.Body === undefined ? {} : data.data.Body
+                    nec_apro.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Solicitada;
+                    necesidadesCrudRequest.put('necesidad',self.necesidad.Id,nec_apro).then(function(l){
+                  });
+                  self.cargarDatosNecesidades(self.offset, self.query);
+                          $("#myModal").modal("hide");
+                          self.g_necesidad = undefined;
+                    // nec_apro.ModalidadSeleccion = self.modalidadSel;
+                    // tipoC = self.TipoContrato;
+
+                
+            })
+        };
+
 
         self.aprobar_necesidad = function () {
             var nec_apro = {};

@@ -58,18 +58,24 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows()
+            $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows().map(function (e) {
+              return {FuenteId: e.Codigo};
+            });
+
           })
         }
 
-        planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Codigo).then(function (response) {
+
+        planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Apropiacion.Codigo+"/"+ $scope.apropiacion.Apropiacion.Vigencia + "/"+$scope.apropiacion.Apropiacion.UnidadEjecutora ).then(function (response) {
           self.gridOptions.data = response.data.Body || [];
+
           var gridOptData = self.gridOptions.data;
           gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData[0]) : _;
 
           $scope.$watch('fuenteapropiacion', function () {
             $scope.fuenteapropiacion ? $scope.fuenteapropiacion.forEach(function (act) {
               var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo !== act.Codigo })
+
               if (tmp.length > 0) {
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }

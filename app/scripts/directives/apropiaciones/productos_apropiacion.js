@@ -44,6 +44,10 @@ angular.module('contractualClienteApp')
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             $scope.productoapropiacion = self.gridApi.selection.getSelectedRows();
+            $scope.productoapropiacion.forEach(function(p){
+              p.ProductoId=p._id
+              p.MontoParcial=0
+            })
           });
         };
 
