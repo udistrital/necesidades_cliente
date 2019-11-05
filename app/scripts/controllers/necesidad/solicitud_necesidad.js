@@ -137,7 +137,6 @@ angular.module('contractualClienteApp')
             var trNecesidad;
             res.data ? trNecesidad = res.data.Body : trNecesidad = res;
             self.Necesidad = trNecesidad.Necesidad;
-            delete self.Necesidad.DependenciaNecesidadId.Id;
             if (self.Necesidad.DependenciaNecesidadId) {
                 console.info(self.Necesidad.DependenciaNecesidadId) // Cargar las dependencias
                 necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
@@ -254,9 +253,9 @@ angular.module('contractualClienteApp')
             self.jefe_destino = null;
             self.dependencia_destino ?
                 necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
+                    console.info(JD,"camila");
                     self.jefe_destino = JD.Persona;
-                    self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
-                    self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = self.dep_ned.JefeDependenciaDestino;
+                    self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = JD.JefeDependencia.Id;
                 }).catch(function (err) {
                 }) : _;
 
@@ -280,8 +279,9 @@ angular.module('contractualClienteApp')
             self.ordenador_gasto = null;
             self.rol_ordenador_gasto ?
                 necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
+                    console.info(JD)
                     self.ordenador_gasto = JD.Persona;
-                    self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Id, 10);
+                    self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.JefeDependencia.Id, 10);
                 }).catch(function (err) {
                 }) : _;
         }, true);
