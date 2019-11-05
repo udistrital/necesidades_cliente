@@ -16,11 +16,42 @@ angular.module('contractualClienteApp')
 
 
     necesidadesCrudRequest.get('estado_necesidad', $.param({})).then(function (response) {
-      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado","Guardada"];
+      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado", "Guardada"];
       keys.forEach(function (v, i) {
         self.EstadoNecesidadType[v] = response.data[i];
       });
     });
+
+    self.AlertaErrorEspecificaciones = {
+      Compra: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que el valor total de la compra sea igual al valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      CPS: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que el valor ingresado para la prestación de servicio coincida con el valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      CompraServicio: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que la suma del valor del servicio más el total de la compra coincida con el valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      Servicio: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que el valor ingresado para el servicio coincida con el valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      }
+    }
 
     self.calculo_total_dias = function (anos, meses, dias) {
       anos = anos == undefined ? 0 : anos;
@@ -39,6 +70,29 @@ angular.module('contractualClienteApp')
       c %= 30;
       data.dias = c;
       return data;
+    };
+
+    self.get_info_dependencia = function (id_jefe_dependencia) {
+      var out = { jefe_dependencia: {}, persona: {}, dependencia: {} };
+      return new Promise(function (resolve, reject) {
+        if (!id_jefe_dependencia) {
+          reject(out);
+        }
+        coreAmazonRequest.get('jefe_dependencia/' + id_jefe_dependencia).then(function (response_jefe_dependencia) {
+          out.jefe_dependencia = response_jefe_dependencia.data;
+
+          agoraRequest.get('informacion_persona_natural/' + response_jefe_dependencia.data.TerceroId).then(function (response_persona_natural) {
+            out.persona = response_persona_natural.data;
+
+            oikosRequest.get('dependencia', $.param({
+              query: 'Id:' + response_jefe_dependencia.data.DependenciaId
+            })).then(function (response_dependencia) {
+              out.dependencia = response_dependencia.data[0];
+              resolve(out);
+            });
+          });
+        });
+      });
     };
 
     //Obtiene todo el jefe de dependencia demendiendo del id del jefe o la dependencia, si idOrDep es true, se utilizará el id del jefe
@@ -211,7 +265,7 @@ angular.module('contractualClienteApp')
       var trNecesidad = {};
       var trNecesidadPC = [];
       var t = false
-      if (IdNecesidad&&t) {
+      if (IdNecesidad && t) {
         // return Promise.all([administrativaRequest.get('necesidad'),
         // planCuentasRequest.get('necesidades', $.param({
         //   query: "idAdministrativa:" + IdNecesidad
@@ -331,23 +385,23 @@ angular.module('contractualClienteApp')
         // console.info(JSON.parse(localStorage.getItem("necesidad")))
         return new Promise(function (resolve, reject) {
           //Datos iniciales necesarios
-          var EmptyNecesidad={
+          var EmptyNecesidad = {
             DependenciaNecesidadId: {
               InterventorId: undefined,
               JefeDepDestinoId: undefined,
               JefeDepSolicitanteId: undefined,
               SupervisorId: undefined
-          },
-          Vigencia : new Date().getFullYear() + "",
-          Valor : 0,
-          DiasDuracion: 0,
+            },
+            Vigencia: new Date().getFullYear() + "",
+            Valor: 0,
+            DiasDuracion: 0,
 
           }
           // revisar si existen objetos de necesidad guardados en el localstorage para devolverlos
           resolve({
             Necesidad: (localStorage.getItem("Necesidad") === null) ? EmptyNecesidad : JSON.parse(localStorage.getItem("Necesidad")),
-            DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? { } : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
-            DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? { } : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
+            DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
+            DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
             ProductosCatalogoNecesidad: (localStorage.getItem("ProductosCatalogoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ProductosCatalogoNecesidad")),
             MarcoLegalNecesidad: (localStorage.getItem("MarcoLegalNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("MarcoLegalNecesidad")),
             ActividadEspecificaNecesidad: (localStorage.getItem("ActividadEspecificaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEspecificaNecesidad")),

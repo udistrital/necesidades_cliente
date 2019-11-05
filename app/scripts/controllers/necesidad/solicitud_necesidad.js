@@ -965,13 +965,20 @@ angular.module('contractualClienteApp')
                             console.info(e)
                         })
                     } else {
-                        swal({
-                            title: 'Información incompleta',
-                            type: 'error',
-                            text: 'Verifique que ha ingresado la información pertinente sobre la clase de contratación ',
-                            showCloseButton: true,
-                            confirmButtonText: $translate.instant("CERRAR")
-                        })
+                        switch (self.Necesidad.TipoContratoNecesidadId.Id) {
+                            case 1:
+                                swal(necesidadService.AlertaErrorEspecificaciones.Compra)
+                                break;
+                            case 2:
+                                swal(necesidadService.AlertaErrorEspecificaciones.CPS)
+                                break;
+                            case 4:
+                                swal(necesidadService.AlertaErrorEspecificaciones.CompraServicio)
+                                break;
+                            case 5:
+                                swal(necesidadService.AlertaErrorEspecificaciones.Servicio)
+                                break;
+                        }
                     }
 
                 }
