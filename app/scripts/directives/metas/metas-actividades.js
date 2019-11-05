@@ -69,15 +69,18 @@ angular.module('contractualClienteApp')
         };
 
         self.cargarMetas = function () {
-          metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(
-            function (res) {
-              var tempmetas = res.data.metas.actividades; // falta un filter por rubro
-              self.metas=[];
-              tempmetas.forEach(function(act){
-                (self.metas.filter(function(m){ return (m.Id === act.meta_id);}).length === 0) ? self.metas.push({Id: act.meta_id , Nombre: act.meta}) : _ ;
-              })
-            }
-          );
+          if($scope.dependenciadestino!=undefined){
+            metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(
+              function (res) {
+                var tempmetas = res.data.metas.actividades; // falta un filter por rubro
+                self.metas=[];
+                tempmetas.forEach(function(act){
+                  (self.metas.filter(function(m){ return (m.Id === act.meta_id);}).length === 0) ? self.metas.push({Id: act.meta_id , Nombre: act.meta}) : _ ;
+                })
+              }
+            );
+          }
+
         }
 
         $scope.$watch('apropiacion', function () {

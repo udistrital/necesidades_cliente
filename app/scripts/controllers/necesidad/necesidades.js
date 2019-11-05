@@ -174,6 +174,7 @@ angular.module('contractualClienteApp')
 
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
+                        console.info(row.entity.Id);
                         if (response.status === 200) {
                             self.necesidad = response.data.Body;
                         }

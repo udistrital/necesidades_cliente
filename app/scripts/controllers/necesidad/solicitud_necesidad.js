@@ -138,7 +138,22 @@ angular.module('contractualClienteApp')
             res.data ? trNecesidad = res.data.Body : trNecesidad = res;
             self.Necesidad = trNecesidad.Necesidad;
             if (self.Necesidad.DependenciaNecesidadId) {
-                console.info(self.Necesidad.DependenciaNecesidadId)
+                console.info(self.Necesidad.DependenciaNecesidadId) // Cargar las dependencias
+            //     self.dependencia_solicitante=necesidadService.get_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId, true);
+            //     self.dependencia_destino=necesidadService.get_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
+            //     console.info(self.dependencia_solicitante, " La oreja de Van Gogh " , self.dependencia_destino)
+            //    self.rol_ordenador_gasto= necesidadService.get_ordenador_gasto(id_ordenador);
+            //    console.info("Rosas ", self.rol_ordenador_gasto)
+            //     if(self.Necesidad.DependenciaNecesidadId.InterventorId === 0){
+            //         self.tipoInterventor=false;
+            //         self.dependencia_supervisor = self.Necesidad.DependenciaNecesidadId.SupervisorId
+            //     }else{
+            //         self.tipoInterventor=true;
+            //         = self.Necesidad.DependenciaNecesidadId.InterventorId
+                     
+                    
+            //     }
+
             }
             self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad;
             self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad;
@@ -167,55 +182,6 @@ angular.module('contractualClienteApp')
         }
 
         );
-
-        // necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
-        //     self.Rubros = trNecesidad[1];
-        //     trNecesidad = trNecesidad[0];
-        //     self.necesidad = trNecesidad.Necesidad;
-        //     // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
-        //     // self.detalle_servicio_necesidad.Cantidad = 1;
-        //     self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica || [];
-
-        //     // if (self.Necesidad.TipoContratoNecesidadId.Id === 2) {
-        //     //     self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
-        //     //         return parseInt(d.ActividadEconomica, 10);
-        //     //     });
-        //     // }
-
-        //     if (trNecesidad.Ffapropiacion) {
-        //         self.f_apropiaciones = trNecesidad.Ffapropiacion;
-        //         self.f_apropiaciones.forEach(function (element) {
-        //             var cantidadFuentes = element.apropiacion.Fuentes.length;
-
-        //             for (var i = 0; i < cantidadFuentes; i += 1) {
-        //                 element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
-        //             }
-
-        //             self.Rubros.push({
-        //                 Codigo: element.Codigo,
-        //                 apropiacion: element.Apropiacion,
-        //                 // fuentes: apropiacion.Fuentes,
-        //                 initFuentes: apropiacion.Fuentes,
-        //                 Monto: element.Apropiacion.ApropiacionInicial,
-        //                 productos: element.apropiacion.Productos,
-        //                 initProductos: element.Apropiacion.Productos,
-
-        //             });
-
-        //         });
-        //     }
-
-        //     self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
-        //     self.dep_ned = trNecesidad.DependenciaNecesidad;
-        //     self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
-        //     self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
-        //     self.duracionEspecialReverse();
-        //     var data = necesidadService.calculo_total_dias_rev(self.Necesidad.DiasDuracion);
-        //     self.anos = data.anos;
-        //     self.meses = data.meses;
-        //     self.dias = data.dias;
-
-        // });
 
         $scope.$watch('solicitudNecesidad.Necesidad', function () {
             localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
@@ -449,7 +415,6 @@ angular.module('contractualClienteApp')
         $scope.$watchGroup(['solicitudNecesidad.Necesidad.AreaFuncional', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
             // self.Necesidad.AreaFuncional&&self.Necesidad.TipoFinanciacionNecesidadId ? self.Rubros = [] : _;
-            console.info(self.Rubros, "se los bajo?")
         })
 
         necesidadService.getAllDependencias().then(function (Dependencias) {
@@ -682,9 +647,9 @@ angular.module('contractualClienteApp')
         };
 
         self.eliminarRequisito = function (requisito) {
-            for (var i = 0; i < self.requisitos_minimos.length; i += 1) {
-                if (self.requisitos_minimos[i] === requisito) {
-                    self.requisitos_minimos.splice(i, 1);
+            for (var i = 0; i < self.producto_catalogo.RequisitosMinimos.length; i += 1) {
+                if (self.producto_catalogo.RequisitosMinimos[i] === requisito) {
+                    self.producto_catalogo.RequisitosMinimos.splice(i, 1);
                 }
             }
         };
@@ -743,9 +708,7 @@ angular.module('contractualClienteApp')
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
             var tIva = [];
             if (self.iva_data != undefined) {
-                tIva = self.iva_data.filter(function (iva) {
-                    if (iva.Id === self.producto_catalogo.Iva) { return iva.Tarifa };
-                })
+                tIva = self.iva_data.filter(function (iva) {return iva.Id === self.producto_catalogo.Iva;})
             }
 
             if (tIva[0] != undefined) {
