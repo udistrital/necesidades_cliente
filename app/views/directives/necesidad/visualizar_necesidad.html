@@ -2,11 +2,12 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-md-12">
-        <h3 class="titleNecesidad">{{ 'NECESIDAD' | translate }}
-          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7">{{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}
-            {{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>
-          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==1">Nº de Solicitud: {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}
-          {{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>
+          <h3 class="titleNecesidad">
+          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7">{{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}</span>
+          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==3">
+            Solicitud {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}
+          </span>
+          <span>{{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>
           <span class="titleNecesidad pull-right text-info">Estado: {{d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Nombre}}</span>
         </h3>
       </div>
@@ -123,8 +124,9 @@
                   <p><strong>Fuentes de Financiamiento</strong></p>
                   <ul ng-repeat="f in act.FuentesActividad" style="list-style: none;">
                     <li>
-                      <p><strong>Código:</strong> {{f.InfoFuente.Codigo}}</p>
-                      {{ f.InfoFuente.Nombre }} <p><strong>Valor:</strong> {{ f.MontoParcial | currency }}</p>
+                      <p><strong>Código:</strong> {{f.InfoFuente.Codigo}}<br>
+                      {{ f.InfoFuente.Nombre }}<br>
+                      <strong>Valor:</strong> {{ f.MontoParcial | currency }}</p>
                     </li>
                   </ul>
                   <br>
@@ -147,15 +149,18 @@
 
         <!-- Funcionamiento -->
         <div ng-if="d_visualizarNecesidad.funcionamiento">
-          <p><strong> Rubros / Proyecto </strong> <br>
+          <p><strong>Rubros / Proyecto</strong> <br>
             <div ng-repeat="rubro in d_visualizarNecesidad.rubros">
               <ul>
                 <li>{{ rubro.InfoRubro.Codigo }} : {{ rubro.InfoRubro.Nombre }}</li>
                 <br>
                 <p><strong>Fuentes de Financiamiento</strong></p>
                 <ul ng-repeat="fuente in rubro.Fuentes">
-                  <li><strong>Código:</strong> {{ fuente.InfoFuente.Codigo }} <br><strong>Nombre:
-                    </strong>{{ fuente.InfoFuente.Nombre }}</li>
+                  <li>
+                    <strong>Código:</strong>{{fuente.InfoFuente.Codigo}}<br>
+                    <strong>Nombre: </strong>{{ fuente.InfoFuente.Nombre}}<br>
+                    <p><strong>Valor:</strong> {{ fuente.MontoParcial | currency }}</p>
+                  </li>
                 </ul>
               </ul>
             </div>
