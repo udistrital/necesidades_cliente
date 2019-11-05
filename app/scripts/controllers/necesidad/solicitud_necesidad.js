@@ -139,20 +139,26 @@ angular.module('contractualClienteApp')
             self.Necesidad = trNecesidad.Necesidad;
             if (self.Necesidad.DependenciaNecesidadId) {
                 console.info(self.Necesidad.DependenciaNecesidadId) // Cargar las dependencias
-            //     self.dependencia_solicitante=necesidadService.get_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId, true);
-            //     self.dependencia_destino=necesidadService.get_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
-            //     console.info(self.dependencia_solicitante, " La oreja de Van Gogh " , self.dependencia_destino)
-            //    self.rol_ordenador_gasto= necesidadService.get_ordenador_gasto(id_ordenador);
-            //    console.info("Rosas ", self.rol_ordenador_gasto)
-            //     if(self.Necesidad.DependenciaNecesidadId.InterventorId === 0){
-            //         self.tipoInterventor=false;
-            //         self.dependencia_supervisor = self.Necesidad.DependenciaNecesidadId.SupervisorId
-            //     }else{
-            //         self.tipoInterventor=true;
-            //         = self.Necesidad.DependenciaNecesidadId.InterventorId
-                     
-                    
-            //     }
+                necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
+                    self.dependencia_solicitante = response.dependencia.Id;
+                });
+                necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId).then(function (response) {
+                    console.info(response)
+                    self.dependencia_destino = response.dependencia.Id;
+                });
+
+                necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId).then(function(response){
+                    console.info(response)
+                    self.rol_ordenador_gasto = response.dependencia.Id;
+                });
+
+                if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {
+                    self.tipoInterventor = false;
+                    self.dependencia_supervisor = necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId)
+                } else {
+                    self.tipoInterventor = true;
+                    self.dependencia_supervisor = necesidadService.getInfoPersonaNatural(self.Necesidad.DependenciaNecesidadId.InterventorId)
+                }
 
             }
             self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad;
@@ -162,8 +168,8 @@ angular.module('contractualClienteApp')
             self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad;
             self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad;
             self.Rubros = trNecesidad.Rubros;
-            self.Rubros.forEach(function(r) {
-                r.Apropiacion= r.Apropiacion || r.InfoRubro;
+            self.Rubros.forEach(function (r) {
+                r.Apropiacion = r.Apropiacion || r.InfoRubro;
             })
             self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
             self.dep_ned = trNecesidad.DependenciaNecesidad;
@@ -274,7 +280,7 @@ angular.module('contractualClienteApp')
             self.rol_ordenador_gasto ?
                 necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
                     self.ordenador_gasto = JD.Persona;
-                    self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Persona.Id, 10);
+                    self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.Id, 10);
                 }).catch(function (err) {
                 }) : _;
         }, true);
@@ -390,7 +396,6 @@ angular.module('contractualClienteApp')
             query: 'Activo:true'
         })).then(function (response) {
             self.iva_data = response.data;
-            console.info(self.iva_data)
         });
 
 
@@ -702,13 +707,13 @@ angular.module('contractualClienteApp')
         }, true)
 
         $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
-            if(self.producto_catalogo.Id && self.producto_catalogo!=={}){
+            if (self.producto_catalogo.Id && self.producto_catalogo !== {}) {
                 $("#modalProducto").modal();
             }
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
             var tIva = [];
             if (self.iva_data != undefined) {
-                tIva = self.iva_data.filter(function (iva) {return iva.Id === self.producto_catalogo.Iva;})
+                tIva = self.iva_data.filter(function (iva) { return iva.Id === self.producto_catalogo.Iva; })
             }
 
             if (tIva[0] != undefined) {
