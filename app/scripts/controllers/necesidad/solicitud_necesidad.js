@@ -137,6 +137,7 @@ angular.module('contractualClienteApp')
             var trNecesidad;
             res.data ? trNecesidad = res.data.Body : trNecesidad = res;
             self.Necesidad = trNecesidad.Necesidad;
+            delete self.Necesidad.DependenciaNecesidadId.Id;
             if (self.Necesidad.DependenciaNecesidadId) {
                 console.info(self.Necesidad.DependenciaNecesidadId) // Cargar las dependencias
                 necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
