@@ -112,6 +112,8 @@ var text_es = {
     LABEL_SEMANAS_TOTALES: "Semanas Totales",
     LABEL_VALOR_ADICIONAR: "Valor a adicionar",
     TIPO_SERVICIO: "Tipo de servicio",
+    VALOR_SERVICIO: "Valor del servicio",
+    VALOR_COMPRA_SERVICIO: "Valor Compra + Servicio",
     CLASE_CONTRATACION: "Clase de contratación",
     PERFIL: "Perfil",
     EL_TIPO_DE: "el Tipo de",

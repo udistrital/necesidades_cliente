@@ -136,8 +136,10 @@ angular.module('contractualClienteApp')
         self.recibirNecesidad = function (res) {
             var trNecesidad;
             res.data ? trNecesidad = res.data.Body : trNecesidad = res;
-            console.info("llego", trNecesidad)
             self.Necesidad = trNecesidad.Necesidad;
+            if (self.Necesidad.DependenciaNecesidadId) {
+                console.info(self.Necesidad.DependenciaNecesidadId)
+            }
             self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad;
             self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad;
             self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad;
@@ -145,52 +147,9 @@ angular.module('contractualClienteApp')
             self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad;
             self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad;
             self.Rubros = trNecesidad.Rubros;
-        }
-
-
-        necesidadService.getFullNecesidad(self.IdNecesidad).then(function (res) {
-            self.recibirNecesidad(res);
-        }
-
-        );
-
-        necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
-            self.Rubros = trNecesidad[1];
-            trNecesidad = trNecesidad[0];
-            self.necesidad = trNecesidad.Necesidad;
-            // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
-            // self.detalle_servicio_necesidad.Cantidad = 1;
-            self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica || [];
-
-            // if (self.Necesidad.TipoContratoNecesidadId.Id === 2) {
-            //     self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
-            //         return parseInt(d.ActividadEconomica, 10);
-            //     });
-            // }
-
-            if (trNecesidad.Ffapropiacion) {
-                self.f_apropiaciones = trNecesidad.Ffapropiacion;
-                self.f_apropiaciones.forEach(function (element) {
-                    var cantidadFuentes = element.apropiacion.Fuentes.length;
-
-                    for (var i = 0; i < cantidadFuentes; i += 1) {
-                        element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
-                    }
-
-                    self.Rubros.push({
-                        Codigo: element.Codigo,
-                        apropiacion: element.Apropiacion,
-                        // fuentes: apropiacion.Fuentes,
-                        initFuentes: apropiacion.Fuentes,
-                        Monto: element.Apropiacion.ApropiacionInicial,
-                        productos: element.apropiacion.Productos,
-                        initProductos: element.Apropiacion.Productos,
-
-                    });
-
-                });
-            }
-
+            self.Rubros.forEach(function(r) {
+                r.Apropiacion= r.Apropiacion || r.InfoRubro;
+            })
             self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
             self.dep_ned = trNecesidad.DependenciaNecesidad;
             self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
@@ -200,8 +159,63 @@ angular.module('contractualClienteApp')
             self.anos = data.anos;
             self.meses = data.meses;
             self.dias = data.dias;
+        }
 
-        });
+
+        necesidadService.getFullNecesidad(self.IdNecesidad).then(function (res) {
+            self.recibirNecesidad(res);
+        }
+
+        );
+
+        // necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
+        //     self.Rubros = trNecesidad[1];
+        //     trNecesidad = trNecesidad[0];
+        //     self.necesidad = trNecesidad.Necesidad;
+        //     // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
+        //     // self.detalle_servicio_necesidad.Cantidad = 1;
+        //     self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica || [];
+
+        //     // if (self.Necesidad.TipoContratoNecesidadId.Id === 2) {
+        //     //     self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
+        //     //         return parseInt(d.ActividadEconomica, 10);
+        //     //     });
+        //     // }
+
+        //     if (trNecesidad.Ffapropiacion) {
+        //         self.f_apropiaciones = trNecesidad.Ffapropiacion;
+        //         self.f_apropiaciones.forEach(function (element) {
+        //             var cantidadFuentes = element.apropiacion.Fuentes.length;
+
+        //             for (var i = 0; i < cantidadFuentes; i += 1) {
+        //                 element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
+        //             }
+
+        //             self.Rubros.push({
+        //                 Codigo: element.Codigo,
+        //                 apropiacion: element.Apropiacion,
+        //                 // fuentes: apropiacion.Fuentes,
+        //                 initFuentes: apropiacion.Fuentes,
+        //                 Monto: element.Apropiacion.ApropiacionInicial,
+        //                 productos: element.apropiacion.Productos,
+        //                 initProductos: element.Apropiacion.Productos,
+
+        //             });
+
+        //         });
+        //     }
+
+        //     self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
+        //     self.dep_ned = trNecesidad.DependenciaNecesidad;
+        //     self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
+        //     self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
+        //     self.duracionEspecialReverse();
+        //     var data = necesidadService.calculo_total_dias_rev(self.Necesidad.DiasDuracion);
+        //     self.anos = data.anos;
+        //     self.meses = data.meses;
+        //     self.dias = data.dias;
+
+        // });
 
         $scope.$watch('solicitudNecesidad.Necesidad', function () {
             localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
@@ -761,6 +775,10 @@ angular.module('contractualClienteApp')
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true);
 
+        $scope.$watch('solicitudNecesidad.DetalleServicioNecesidad.Valor', function () {
+            self.servicio_valor = self.DetalleServicioNecesidad.Valor;
+        }, true);
+
         $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
             if (self.Necesidad.TipoContratoNecesidadId && (self.Necesidad.TipoContratoNecesidadId.Id === 1 || self.Necesidad.TipoContratoNecesidadId.Id === 4) /* tipo compra o compra y servicio */) {
                 self.MostrarTotalEspc = true;
@@ -780,7 +798,6 @@ angular.module('contractualClienteApp')
             // compra y serv
             if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 4) {
                 self.servicio_valor = self.DetalleServicioNecesidad.Valor;
-                console.info("Deberia ser", self.servicio_valor)
             }
             self.valorTotalEspecificaciones = 0;
             self.productos = [];
@@ -977,7 +994,6 @@ angular.module('contractualClienteApp')
                             break;
                     }
 
-                    console.info(self.Necesidad.Valor, "Valor N", self.servicio_valor);
 
                     if (especificaciones_valido) {
                         planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {

@@ -540,7 +540,7 @@
                     </select>
                   </div>
 
-                  <div class="col-md-6" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===2">
+                  <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===2">
                     <!-- ng-show="solicitudNecesidad.nucleoarea!=undefined" -->
                     <label class="control-label">{{"NUCLEO_CONOCIMIENTO" | translate}}</label>
                     <select class="form-control"
@@ -552,7 +552,7 @@
                   </div>
 
 
-                  <div class="col-md-6"
+                  <div class="col-md-4"
                     ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
                     <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
                     <select class="form-control" ng-model="solicitudNecesidad.DetalleServicioNecesidad.TipoServicioId"
@@ -561,18 +561,18 @@
                         {{"SERVICIO" | translate}}</option>
                     </select>
                   </div>
-                  <div class="col-md-6" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id!==4">
+                  <div class="col-md-8" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id!==4">
                     <div>
-                      <label class="control-label">Valor del servicio</label>
+                      <label class="control-label">{{"VALOR_SERVICIO" | translate}}</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.Necesidad.Valor"
                         ui-money-mask="2" disabled>
                     </div>
                   </div>
 
-                  <div class="col-md-6" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
+                  <div class="col-md-8" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
 
                     <div class="col-md-4">
-                      <label class="control-label">Valor del servicio</label>
+                      <label class="control-label">{{"VALOR_SERVICIO" | translate}}</label>
                       <input type="text" class="form-control money"
                         ng-model="solicitudNecesidad.DetalleServicioNecesidad.Valor"
                         ng-init="solicitudNecesidad.DetalleServicioNecesidad.Valor = solicitudNecesidad.DetalleServicioNecesidad.Valor ? solicitudNecesidad.DetalleServicioNecesidad.Valor : 0"
@@ -580,13 +580,13 @@
                     </div>
 
                     <div class="col-md-4">
-                      <label class="control-label">Valor Financiación</label>
+                      <label class="control-label">{{"TOTAL_FINANCIACION" | translate}}</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.Necesidad.Valor"
                         ui-money-mask="2" disabled>
                     </div>
 
                     <div class="col-md-4">
-                      <label class="control-label">Valor Compra + Servicio</label>
+                      <label class="control-label">{{"VALOR_COMPRA_SERVICIO" | translate}}</label>
                       <input type="text" class="form-control money" ng-model="solicitudNecesidad.valor_compra_servicio"
                         ui-money-mask="2" disabled>
                     </div>
