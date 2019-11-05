@@ -22,6 +22,37 @@ angular.module('contractualClienteApp')
       });
     });
 
+    self.AlertaErrorEspecificaciones = {
+      Compra: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que el valor total de la compra sea igual al valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      CPS: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que el valor ingresado para la prestación de servicio coincida con el valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      CompraServicio: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que la suma del valor del servicio más el total de la compra coincida con el valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      Servicio: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que el valor ingresado para el servicio coincida con el valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      }
+    }
+
     self.calculo_total_dias = function (anos, meses, dias) {
       anos = anos == undefined ? 0 : anos;
       meses = meses == undefined ? 0 : meses;

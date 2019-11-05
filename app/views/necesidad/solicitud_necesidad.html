@@ -4,7 +4,7 @@
 
   <div style="text-align: center">
     <h1 class="page-header text-center">{{"SOLICITUD_NECESIDAD" | translate}} <span
-        ng-if="solicitudNecesidad.necesidad.NumeroElaboracion">#{{solicitudNecesidad.necesidad.NumeroElaboracion}}</span>
+        ng-if="solicitudNecesidad.Necesidad.ConsecutivoSolicitud&&solicitudNecesidad.Necesidad.ConsecutivoSolicitud!=0">#{{solicitudNecesidad.Necesidad.ConsecutivoSolicitud}}</span>
     </h1>
   </div>
 
@@ -88,18 +88,6 @@
                 <label>{{ "NOTA_DURACION_NECESIDAD" | translate }}</label>
               </div>
 
-              <!--Avances-->
-              <ng-form name="avances" class="form-group" ng-if="solicitudNecesidad.forms.Avances">
-                <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(avances)">{{"AVANCES"
-            | translate}} <span class="fa fa-plus pull-right" ng-show="responsables.open"></span> <span
-                    class="fa fa-minus pull-right" ng-show="!avances.open"></span></legend>
-                <div class="panel-body row">
-                  <div class="col-md-3"></div>
-                  <lista-avances class="col-md-6" data="solicitudNecesidad.avance"></lista-avances>
-                  <div class="col-md-3"></div>
-                </div>
-              </ng-form>
-            </div>
 
             <!-- Responsables -->
             <ng-form id="f_responsables" name="responsables" class="form-group"
@@ -831,6 +819,10 @@
                         <tr>
                           <th class="bg-info col-md-4">{{"VALOR_TOTAL" | translate}}</th>
                           <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</th>
+                        </tr>
+                        <tr ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1">
+                          <th class="bg-info col-md-4">{{"TOTAL_FINANCIACION" | translate}}:</th>
+                          <th class="money">{{solicitudNecesidad.Necesidad.Valor | currency}}</th>
                         </tr>
                       </thead>
                     </table>

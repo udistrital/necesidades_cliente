@@ -168,54 +168,7 @@ angular.module('contractualClienteApp')
 
         );
 
-        // necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
-        //     self.Rubros = trNecesidad[1];
-        //     trNecesidad = trNecesidad[0];
-        //     self.necesidad = trNecesidad.Necesidad;
-        //     // self.detalle_servicio_necesidad = trNecesidad.Necesidad.DetalleServicioNecesidad;
-        //     // self.detalle_servicio_necesidad.Cantidad = 1;
-        //     self.ActividadEspecifica = trNecesidad.Necesidad.ActividadEspecifica || [];
 
-        //     // if (self.Necesidad.TipoContratoNecesidadId.Id === 2) {
-        //     //     self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) {
-        //     //         return parseInt(d.ActividadEconomica, 10);
-        //     //     });
-        //     // }
-
-        //     if (trNecesidad.Ffapropiacion) {
-        //         self.f_apropiaciones = trNecesidad.Ffapropiacion;
-        //         self.f_apropiaciones.forEach(function (element) {
-        //             var cantidadFuentes = element.apropiacion.Fuentes.length;
-
-        //             for (var i = 0; i < cantidadFuentes; i += 1) {
-        //                 element.apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
-        //             }
-
-        //             self.Rubros.push({
-        //                 Codigo: element.Codigo,
-        //                 apropiacion: element.Apropiacion,
-        //                 // fuentes: apropiacion.Fuentes,
-        //                 initFuentes: apropiacion.Fuentes,
-        //                 Monto: element.Apropiacion.ApropiacionInicial,
-        //                 productos: element.apropiacion.Productos,
-        //                 initProductos: element.Apropiacion.Productos,
-
-        //             });
-
-        //         });
-        //     }
-
-        //     self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
-        //     self.dep_ned = trNecesidad.DependenciaNecesidad;
-        //     self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
-        //     self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
-        //     self.duracionEspecialReverse();
-        //     var data = necesidadService.calculo_total_dias_rev(self.Necesidad.DiasDuracion);
-        //     self.anos = data.anos;
-        //     self.meses = data.meses;
-        //     self.dias = data.dias;
-
-        // });
 
         $scope.$watch('solicitudNecesidad.Necesidad', function () {
             localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
@@ -1002,13 +955,20 @@ angular.module('contractualClienteApp')
                             console.info(e)
                         })
                     } else {
-                        swal({
-                            title: 'Información incompleta',
-                            type: 'error',
-                            text: 'Verifique que ha ingresado la información pertinente sobre la clase de contratación ',
-                            showCloseButton: true,
-                            confirmButtonText: $translate.instant("CERRAR")
-                        })
+                        switch (self.Necesidad.TipoContratoNecesidadId.Id) {
+                            case 1:
+                                swal(necesidadService.AlertaErrorEspecificaciones.Compra)
+                                break;
+                            case 2:
+                                swal(necesidadService.AlertaErrorEspecificaciones.CPS)
+                                break;
+                            case 4:
+                                swal(necesidadService.AlertaErrorEspecificaciones.CompraServicio)
+                                break;
+                            case 5:
+                                swal(necesidadService.AlertaErrorEspecificaciones.Servicio)
+                                break;
+                        }
                     }
 
                 }
