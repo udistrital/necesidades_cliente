@@ -87,6 +87,7 @@
               <div class="col-md-6">
                 <label>{{ "NOTA_DURACION_NECESIDAD" | translate }}</label>
               </div>
+            </div>
 
 
             <!-- Responsables -->
@@ -544,7 +545,7 @@
                     ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
                     <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
                     <select class="form-control" ng-model="solicitudNecesidad.DetalleServicioNecesidad.TipoServicioId"
-                      ng-options="tipoServ.ID+'' as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
+                      ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios">
                       <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
                         {{"SERVICIO" | translate}}</option>
                     </select>

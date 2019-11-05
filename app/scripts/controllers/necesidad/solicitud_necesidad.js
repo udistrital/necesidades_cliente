@@ -137,6 +137,7 @@ angular.module('contractualClienteApp')
             var trNecesidad;
             res.data ? trNecesidad = res.data.Body : trNecesidad = res;
             self.Necesidad = trNecesidad.Necesidad;
+            delete self.Necesidad.DependenciaNecesidadId.Id;
             if (self.Necesidad.DependenciaNecesidadId) {
                 console.info(self.Necesidad.DependenciaNecesidadId) // Cargar las dependencias
             //     self.dependencia_solicitante=necesidadService.get_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId, true);
@@ -390,7 +391,6 @@ angular.module('contractualClienteApp')
             query: 'Activo:true'
         })).then(function (response) {
             self.iva_data = response.data;
-            console.info(self.iva_data)
         });
 
 
