@@ -43,7 +43,8 @@ angular.module('contractualClienteApp')
 
                 $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
                     $scope.modalidadSel=self.modalidadSel;
-                }); 
+                });
+
                 function get_jefe_dependencia(id_jefe_dependencia, solicitante) {
                     coreAmazonRequest.get('jefe_dependencia', $.param({
                         query: 'Id:' + id_jefe_dependencia
@@ -99,10 +100,6 @@ angular.module('contractualClienteApp')
                     });
                 }
 
-                function get_info_fuente(id_fuente, vigencia, unidad_ejecutora) {
-                    return planCuentasRequest.get('fuente_financiamiento/'+id_fuente+'/'+vigencia+'/'+unidad_ejecutora)
-                }
-
                 function get_informacion_meta(rubro) {
                     rubro.Metas.forEach(function(meta) {
                         meta.InfoMeta = metas.actividades.find(function(item) {
@@ -111,14 +108,6 @@ angular.module('contractualClienteApp')
                         meta.Actividades.forEach(function(actividad) {
                            actividad.InfoActividad = metas.actividades.find(function(item) {
                                return actividad.ActividadId === item.actividad_id
-                           });
-                           
-                           actividad.FuentesActividad.forEach(function(fuente) {
-                                get_info_fuente(fuente.FuenteId, $scope.necesidad.Necesidad.Vigencia, $scope.necesidad.Necesidad.AreaFuncional).then(function(response) {
-                                    if (response.data !== null && response.status === 200) {
-                                        fuente.InfoFuente = response.data.Body;
-                                    }
-                                });
                            });
                         });
                     });
@@ -138,7 +127,11 @@ angular.module('contractualClienteApp')
                     // Información del ordenador de gasto
                     get_ordenador_gasto($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId);
                     
-                    
+                    var x = necesidadService.get_info_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId);
+
+                    x.then(function(response) {
+                        console.log(response);
+                    });
 
                     self.verJustificacion = [
                         necesidadService.EstadoNecesidadType.Anulada.Id,

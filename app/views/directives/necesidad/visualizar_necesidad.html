@@ -22,10 +22,10 @@
       <cite class=""> {{vigencia|| '-'}}</cite><br>
       <cite class=""> {{d_visualizarNecesidad.v_necesidad.FechaSolicitud | date:'dd-MMM-yyyy'}}</cite><br>
       <cite
-        ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7"
-        class=""> {{d_visualizarNecesidad.v_necesidad.Numero || '-'}}</cite><br>
-      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7" class="">
-        {{d_visualizarNecesidad.solicitud_disponibilidad.Numero || '-'}}</cite> <br>
+        ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7"
+        class=""> {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}</cite><br>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7" class="">
+        {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}</cite> <br>
     </div>
 
     <div class="text-info pull-right">
@@ -33,9 +33,9 @@
       <cite class="">{{"FECHA_SOLICITUD" | translate}}: </cite><br>
       <cite
         ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7"
-        class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}: </cite><br>
+        class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}:</cite><br>
       <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7"
-        class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}: </cite><br>
+        class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}:</cite><br>
     </div>
 
     <h3 class="text-info">{{"RESPONSABLES" | translate}}</h3>
@@ -122,7 +122,9 @@
                   <br>
                   <p><strong>Fuentes de Financiamiento</strong></p>
                   <ul ng-repeat="f in act.FuentesActividad" style="list-style: none;">
-                    <li>{{ f.InfoFuente.Nombre }} <p><strong>Valor:</strong> {{ f.MontoParcial | currency }}</p>
+                    <li>
+                      <p><strong>Código:</strong> {{f.InfoFuente.Codigo}}</p>
+                      {{ f.InfoFuente.Nombre }} <p><strong>Valor:</strong> {{ f.MontoParcial | currency }}</p>
                     </li>
                   </ul>
                   <br>
@@ -134,7 +136,7 @@
               <h3 class="text-info">{{"PRODUCTOS" | translate}}</h3>
               <ul>
                 <li ng-repeat='producto in rubro.Productos'>
-                  {{producto.InfoProducto.Nombre}} <p><strong>Valor:</strong> {{producto.MontoParcial | currency}}</p>
+                  {{producto.InfoProducto.Nombre}} <p><strong>
                 </li>
               </ul>
               <br>
@@ -186,17 +188,21 @@
           </li>
         </p>
 
-        <div ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===2 ||  d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===6 || d_visualizarNecesidadId.v_necesidad.EstadoNecesidad.Id===7">
+        <div ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===2 ||  d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===6 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===7">
           <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
           <div class="col-md-12">
-            {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccionId.Id }} -
-            {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccionId.Nombre }}
+            <p class="text-muted text-justify">  
+              {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccionId.Id }} -
+              {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccionId.Nombre }}
+            </p>
           </div>
 
           <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
           <div class="col-md-12">
-            {{ d_visualizarNecesidad.v_necesidad.TipoContratoId.Id}} -
-            {{ d_visualizarNecesidad.v_necesidad.TipoContratoId.TipoContrato}}
+            <p class="text-muted text-justify">
+              {{ d_visualizarNecesidad.v_necesidad.TipoContratoId.Id}} -
+              {{ d_visualizarNecesidad.v_necesidad.TipoContratoId.TipoContrato}}
+            </p>
           </div>
         </div>
 
