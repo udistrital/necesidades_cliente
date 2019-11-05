@@ -124,13 +124,10 @@ angular.module('contractualClienteApp')
                     });
                 }
 
-                
-
                 self.cargar_necesidad = function () {
                     self.marco_legal = $scope.necesidad.MarcoLegalNecesidad;
                     self.v_necesidad = $scope.necesidad.Necesidad;
                     self.rubros = $scope.necesidad.Rubros;
-                    
 
                     // Jefes de dependencias
                     get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId,true);
@@ -148,6 +145,12 @@ angular.module('contractualClienteApp')
                         necesidadService.EstadoNecesidadType.Rechazada.Id,
                         necesidadService.EstadoNecesidadType.Modificada.Id,
                     ].includes($scope.estado.Id);
+
+                    if ($scope.necesidad.Necesidad.TipoContratoId && $scope.necesidad.Necesidad.TipoContratoId !== 0 ) {
+                        agoraRequest.get('tipo_contrato/'+ $scope.necesidad.Necesidad.TipoContratoId,).then(function (response) {
+                            self.v_necesidad.TipoContratoId = response.data;
+                        });
+                    }
 
                     // administrativaRequest.get('necesidad', $.param({
                     //     query: "NumeroElaboracion:" + $scope.numero + ",Vigencia:" + $scope.vigencia

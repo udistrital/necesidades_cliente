@@ -139,6 +139,8 @@ var text_es = {
     OBLIGATORIO: "Campo requerido",
     PRECIO_MAS_IVA: "Valor total",
     NO_NECESIDAD: "No. elaboración necesidad",
+    CDP_SOLICITADO: "CDP Solicitado",
+    CDP_NO_SOLICITADO: "El CDP no pudo ser solicitado",
     //lista_documentos_legales
     MARCO_LEGAL: "Marco Legal",
     NOMBRE_DOCUMENTO: "Nombre del documento",
@@ -842,7 +844,7 @@ var text_es = {
     NAME_CONTR: "NOMBRE CONTRATISTA",
     DOCUMENTO: "DOCUMENTO",
     CAR_SUPER: "CARGO SUPERVISOR",
-
+    
     //Módulo aprobación pago
     TITULO_APRO_PAGO: "APROBACIÓN PAGO",
     NOM_ORDENADOR: "NOMBRE ORDENADOR DEL GASTO",
