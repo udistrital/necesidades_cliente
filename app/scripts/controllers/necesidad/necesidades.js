@@ -288,7 +288,7 @@ angular.module('contractualClienteApp')
                 showCancelButton: true,
                 inputValidator: function (value) {
                     return new Promise(function (resolve, reject) {
-                        if (value) {
+                        if (value && value !== "") {
                             resolve();
                         } else {
                             reject('Por favor indica una justificación!');
