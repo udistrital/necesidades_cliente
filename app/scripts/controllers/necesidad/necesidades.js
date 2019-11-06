@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest,planCuentasMidRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -174,6 +174,7 @@ angular.module('contractualClienteApp')
 
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
+                        // console.info(row.entity.Id);
                         if (response.status === 200) {
                             self.necesidad = response.data.Body;
                         }
@@ -224,10 +225,10 @@ angular.module('contractualClienteApp')
                 var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id,]
                     .includes(necesidad.EstadoNecesidadId.Id);
 
-                self.verBotonAprobarSolicitud= necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id
+                self.verBotonAprobarSolicitud = necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id; // Cuando este Guardada (Borrador)
                 self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
                 self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
-                self.verBotonEditarNecesidad = (necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id || necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id) && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
+                self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
                 self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
 
                 $("#myModal").modal();
@@ -235,58 +236,48 @@ angular.module('contractualClienteApp')
         };
 
         self.aprobar_solicitud = function () {
-            var nec_apro = {};
-            var tipoC = {};
-
-
-            necesidadService.getFullNecesidad(self.necesidad.Id).then(function (data) {
-                nec_apro = data.data.Body === undefined ? {} : data.data.Body
-                    nec_apro.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Solicitada;
-                    necesidadesCrudRequest.put('necesidad',self.necesidad.Id,nec_apro).then(function(l){
-                  });
-                  self.cargarDatosNecesidades(self.offset, self.query);
-                          $("#myModal").modal("hide");
-                          self.g_necesidad = undefined;
-                    // nec_apro.ModalidadSeleccion = self.modalidadSel;
-                    // tipoC = self.TipoContrato;
-
-                
-            })
+            self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Solicitada;
+            necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
+                if (l.data !== undefined) {
+                    swal(
+                        $translate.instant("OK"),
+                        $translate.instant("NECESIDAD_SOLICITADA"),
+                        'success'
+                    );
+                    self.cargarDatosNecesidades(self.offset, self.query);
+                    $("#myModal").modal("hide");
+                } else {
+                    swal(
+                        $translate.instant("ERROR"),
+                        $translate.instant("NECESIDAD_NO_SOLICITADA"),
+                        'error'
+                    );
+                }
+            });
         };
 
 
         self.aprobar_necesidad = function () {
-            var nec_apro = {};
-            var tipoC = {};
-            administrativaRequest.get('necesidad/' + self.g_necesidad.Id
-            ).then(function (response) {
-                nec_apro = response.data === undefined ? {} : response.data;
-                nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Aprobada;
-                nec_apro.ModalidadSeleccion = self.modalidadSel;
-                tipoC = self.TipoContrato;
-                administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function (response) {
-                    planCuentasRequest.get('necesidades', $.param({
-                        query: "idAdministrativa:" + nec_apro.Id,
-                    })).then(function (responseMongo) {
-                        var npc = responseMongo.data.Body[0] || {};
-                        npc.tipoContrato = self.TipoContrato.Id;
-                        planCuentasRequest.put('necesidades', npc._id, npc).then(function (r) {
-                        }).catch(function (err) {
-                            nec_apro.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
-                            administrativaRequest.put('necesidad', nec_apro.Id, nec_apro).then(function (response) {
-                            });
-                        });
-                    });
-                    self.alerta = "";
-                    for (var i = 1; i < response.data.length; i += 1) {
-                        self.alerta = self.alerta + response.data[i] + "\n";
-                    }
-                    swal("", self.alerta, response.data[0]);
+            self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
+            self.necesidad.Necesidad.ModalidadSeleccionId = self.modalidadSel;
+            self.necesidad.Necesidad.TipoContratoId = self.TipoContrato.Id;
 
+            necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
+                if (l.data !== undefined) {
+                    swal(
+                        $translate.instant("OK"),
+                        $translate.instant("NECESIDAD_APROBADA"),
+                        'success'
+                    );
                     self.cargarDatosNecesidades(self.offset, self.query);
                     $("#myModal").modal("hide");
-                    self.g_necesidad = undefined;
-                });
+                } else {
+                    swal(
+                        $translate.instant("ERROR"),
+                        $translate.instant("NECESIDAD_NO_APROBADA"),
+                        'error'
+                    );
+                }
             });
         };
 
@@ -298,7 +289,7 @@ angular.module('contractualClienteApp')
                 showCancelButton: true,
                 inputValidator: function (value) {
                     return new Promise(function (resolve, reject) {
-                        if (value) {
+                        if (value && value !== "") {
                             resolve();
                         } else {
                             reject('Por favor indica una justificación!');
@@ -308,28 +299,28 @@ angular.module('contractualClienteApp')
             }).then(function (text) {
                 nec_rech = {
                     Justificacion: text,
-                    Necesidad: {}
+                    NecesidadId: { Id: self.necesidad.Necesidad.Id },
+                    FechaRechazo: new Date()
                 };
-                return administrativaRequest.get('necesidad/' + self.g_necesidad.Id);
-            }).then(function (response) {
-                nec_rech.Necesidad = response.data;
 
-                if (nec_rech.Necesidad.EstadoNecesidad.Id === necesidadService.EstadoNecesidadType.Solicitada.Id) {
-                    nec_rech.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Rechazada;
-                } else if (nec_rech.Necesidad.EstadoNecesidad.Id === necesidadService.EstadoNecesidadType.Modificada.Id) {
-                    nec_rech.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Anulada;
+            }).then(function (response) {
+                if (self.necesidad.Necesidad.EstadoNecesidadId.Id === necesidadService.EstadoNecesidadType.Solicitada.Id) {
+                    self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Rechazada;
+                } else if (self.necesidad.Necesidad.EstadoNecesidadId.Id === necesidadService.EstadoNecesidadType.Modificada.Id) {
+                    self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Anulada;
                 }
 
-                return administrativaRequest.put('necesidad', nec_rech.Necesidad.Id, nec_rech.Necesidad);
+
             }).then(function () {
-                return administrativaRequest.post('necesidad_rechazada', nec_rech);
+                return necesidadesCrudRequest.post('necesidad_rechazada', nec_rech);
             }).then(function (response) {
-                if (response.data !== undefined) {
+                if (response.status === 200 || response.status === 201) {
                     swal(
                         $translate.instant("OK"),
                         $translate.instant("NECESIDAD_RECHAZADA"),
                         'success'
                     );
+                    necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad);
                 } else {
                     swal(
                         $translate.instant("ERROR"),
@@ -343,7 +334,7 @@ angular.module('contractualClienteApp')
             });
         };
 
-        administrativaRequest.get('modalidad_seleccion', $.param({
+        necesidadesCrudRequest.get('modalidad_seleccion', $.param({
             limit: -1,
             sortby: "NumeroOrden",
             order: "asc",
@@ -370,34 +361,37 @@ angular.module('contractualClienteApp')
         };
 
         self.solicitar_cdp = function () {
-            self.sol_cdp = {};
-            self.sol_cdp.Necesidad = self.g_necesidad;
-            var sol_cdp_pc = {
-                consecutivo: 16,
-                entidad: self.g_necesidad.UnidadEjecutora,
-                centroGestor: 1,
-                necesidad: self.g_necesidad.Id,
-                vigencia: self.g_necesidad.Vigencia,
-                fechaRegistro: new Date().toISOString(),
-                estado: 1,
-                justificacionRechazo: "",
-                infoCdp: null,
-                activo: true,
-                fechaCreacion: new Date().toISOString(),
-                fechaModificacion: new Date().toISOString(),
-            };
-
-            Promise.all([administrativaRequest.post("solicitud_disponibilidad", self.sol_cdp), planCuentasRequest.post("solicitudesCDP", sol_cdp_pc)]).then(
+            planCuentasMidRequest.post("cdp/solicitarCDP", self.necesidad.Necesidad).then(
                 function (response) {
-                    self.alerta = "";
-                    for (var i = 1; i < response[0].data.length; i += 1) {
-                        self.alerta = self.alerta + response[0].data[i] + "\n";
+                    if (response.status === 200 || response.status === 201) {
+                        self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.CdpSolicitado;
+                        necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {
+                            if (resp_nececesidad.status === 200 || resp_nececesidad.status === 201) {
+                                swal(
+                                    $translate.instant("OK"),
+                                    $translate.instant("CDP_SOLICITADO"),
+                                    'success'
+                                );
+                                self.cargarDatosNecesidades(self.offset, self.query);
+                                self.necesidad = undefined;
+                                $("#myModal").modal("hide");
+                            } else {
+                                swal(
+                                    $translate.instant("ERROR"),
+                                    $translate.instant("CDP_NO_SOLICITADO"),
+                                    'error'
+                                );
+                            }
+
+                        })
+                    } else {
+                        swal(
+                            $translate.instant("ERROR"),
+                            $translate.instant("CDP_NO_SOLICITADO"),
+                            'error'
+                        );
                     }
-                    swal("", self.alerta, response[0].data[0]);
-                    swal("", self.alerta, response[1].data);
-                    self.cargarDatosNecesidades(self.offset, self.query);
-                    self.necesidad = undefined;
-                    $("#myModal").modal("hide");
+
                 });
         };
 
