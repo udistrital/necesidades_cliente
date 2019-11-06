@@ -7,12 +7,12 @@
  * # metasActividades
  */
 angular.module('contractualClienteApp')
-  .directive('metasActividades', function (metasRequest,$translate) {
+  .directive('metasActividades', function (metasRequest, $translate) {
     return {
       restrict: 'E',
       scope: {
         apropiacion: '=',
-        metas : '=',
+        metas: '=',
         dependenciasolicitante: '=',
         dependenciadestino: '=',
         vigencia: '='
@@ -24,7 +24,7 @@ angular.module('contractualClienteApp')
         var self = this;
         self.actividades = $scope.actividades;
         self.meta = undefined;
-        self.MontoPorMeta=0;
+        self.MontoPorMeta = 0;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
           paginationPageSize: null,
@@ -69,32 +69,42 @@ angular.module('contractualClienteApp')
         };
 
         self.cargarMetas = function () {
-          metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(
-            function (res) {
-              var tempmetas = res.data.metas.actividades; // falta un filter por rubro
-              self.metas=[];
-              tempmetas.forEach(function(act){
-                (self.metas.filter(function(m){ return (m.Id === act.meta_id);}).length === 0) ? self.metas.push({Id: act.meta_id , Nombre: act.meta}) : _ ;
-              })
-            }
-          );
+
+          if ($scope.dependenciasolicitante) {
+            metasRequest.get('plan_adquisiciones/2019/' + $scope.dependenciasolicitante.toString()).then(
+              function (res) {
+                var tempmetas = res.data.metas.actividades; // falta un filter por rubro
+                self.metas = [];
+
+                tempmetas.forEach(function (act) {
+                  (self.metas.filter(function (m) { return (m.Id === act.meta_id); }).length === 0) ? self.metas.push({ Id: act.meta_id, Nombre: act.meta }) : _;
+                })
+                if ($scope.apropiacion.Metas.length > 0) {
+                  self.meta = $scope.apropiacion.Metas[0].MetaId;
+                }
+              }
+            );
+          }
+
         }
 
-        $scope.$watch('apropiacion', function () {
-          if ($scope.apropiacion !== undefined) {
+
+
+        $scope.$watchGroup(['apropiacion', 'dependenciasolicitante'], function () {
+          if ($scope.apropiacion.Apropiacion !== undefined && $scope.dependenciasolicitante !== undefined) {
             self.cargarMetas();
           }
-        });
+        }, true)
 
         $scope.$watch('d_metasActividades.actividades', function () {
-          self.MontoPorMeta=0;
+          self.MontoPorMeta = 0;
           if (self.actividades !== undefined) {
-            self.actividades ? self.actividades.forEach(function(act){
+            self.actividades ? self.actividades.forEach(function (act) {
               act.ActividadId = act.actividad_id;
               act.MetaID = act.meta_id;
-              act.FuentesActividad ? act.FuentesActividad.forEach(function(f){
-                f.FuenteId=f.fuente_financiamiento;
-                if(parseFloat(f.MontoParcial)>parseFloat(f.valor_fuente_financiamiento)-parseFloat(f.saldo_comprometido)){
+              act.FuentesActividad ? act.FuentesActividad.forEach(function (f) {
+                f.FuenteId = f.fuente_financiamiento;
+                if (parseFloat(f.MontoParcial) > parseFloat(f.valor_fuente_financiamiento) - parseFloat(f.saldo_comprometido)) {
                   swal({
                     title: 'Error Valor Fuentes de Financiamiento ' + act.actividad_id,
                     type: 'error',
@@ -102,71 +112,84 @@ angular.module('contractualClienteApp')
                     showCloseButton: true,
                     confirmButtonText: $translate.instant("CERRAR")
                   });
-                  f.MontoParcial=0;
+                  f.MontoParcial = 0;
                 } else {
-                  self.MontoPorMeta+=f.MontoParcial;
+                  self.MontoPorMeta += f.MontoParcial;
                 }
-                
+
               }) : _;
-              
+
             }) : _;
           }
-          $scope.metas.length>0 ? $scope.metas[0].MontoPorMeta = self.MontoPorMeta : _ ; 
-        },true);
+          $scope.metas.length > 0 ? $scope.metas[0].MontoPorMeta = self.MontoPorMeta : _;
+        }, true);
 
-        $scope.$watch('d_metasActividades.meta',function () {
-          if(self.meta !== undefined){
-            $scope.metas = [{MetaId: self.meta}];
+        $scope.$watch('d_metasActividades.meta', function () {
+          if (self.meta !== undefined) {
+            $scope.metas[0] ? _ : $scope.metas = [{ MetaId: self.meta }];
+            $scope.metas[0].Actividades&&$scope.metas[0].Actividades.length>0 ? _ : $scope.metas = [{ MetaId: self.meta }];
             self.loadActividades();
+
           }
 
         });
 
-        
+
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             self.actividades = self.gridApi.selection.getSelectedRows()
-            self.actividades.forEach(function(a){
-              self.getFuentesActividad($scope.vigencia,a.dependencia,a.rubro,a.actividad_id).then(function(res){
-                var fuentesact = res.data.fuentes.fuentes_actividad ? res.data.fuentes.fuentes_actividad : [] ;
-                a.FuentesActividad =  a.FuentesActividad ?  a.FuentesActividad : fuentesact;
+            self.actividades.forEach(function (a) {
+              self.getFuentesActividad($scope.vigencia, a.dependencia, a.rubro, a.actividad_id).then(function (res) {
+                var fuentesact = res.data.fuentes.fuentes_actividad ? res.data.fuentes.fuentes_actividad : [];
+                a.FuentesActividad = a.FuentesActividad ? a.FuentesActividad : fuentesact;
               });
             });
             $scope.metas[0].Actividades = self.actividades;
           });
 
         };
-        self.getFuentesActividad = function(vigencia, dependencia, rubro, actividadid){
-          return  metasRequest.get('plan_adquisiciones_fuentes_financiamiento/'+vigencia+'/'+dependencia+'/'+rubro+'/'+actividadid)
+        self.getFuentesActividad = function (vigencia, dependencia, rubro, actividadid) {
+          return metasRequest.get('plan_adquisiciones_fuentes_financiamiento/' + vigencia + '/' + dependencia + '/' + rubro + '/' + actividadid)
         }
-        
- 
+
+
         self.loadActividades = function () {
-          metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(function (response) {
-            self.gridOptions.data = response.data.metas.actividades
+          metasRequest.get('plan_adquisiciones/2019/' + $scope.dependenciasolicitante.toString()).then(function (response) {
+            self.gridOptions.data = response.data.metas.actividades;
+            if ($scope.apropiacion.Metas[0].Actividades) {
+              $scope.apropiacion.Metas[0].Actividades.forEach(function (act) {
+                var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id == act.ActividadId })
+                if (tmp.length > 0) {
+                  act = _.merge(act,tmp[0]);
+                  self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+                }
+              });
+              self.actividades = $scope.apropiacion.Metas[0].Actividades;
+
+            }
 
           }).then(function () {
             // Se inicializa el grid api para seleccionar
-            if($scope.dependenciasolicitante !== undefined && $scope.dependenciadestino !== undefined){
-              self.gridOptions.data=self.gridOptions.data.filter(function(m){
-                return (m.meta_id === self.meta) && (m.dependencia === $scope.dependenciasolicitante.toString() || m.dependencia === $scope.dependenciadestino.toString() ); 
-               });
-               if(self.gridOptions.data.length > 0){
-                 self.gridApi.grid.modifyRows(self.gridOptions.data);
-               }else{
-                 swal({
-                   title: '¡No hay actividades!',
-                   type: 'error',
-                   text: 'Las dependencias no están asociadas a la meta seleccionada.Por favor seleccione otra meta',
-                   showCloseButton: true,
-                   confirmButtonText: "CERRAR"
-               });
-               
+            if ($scope.dependenciasolicitante !== undefined && $scope.dependenciadestino !== undefined) {
+              self.gridOptions.data = self.gridOptions.data.filter(function (m) {
+                return (m.meta_id === self.meta) && (m.dependencia === $scope.dependenciasolicitante.toString() || m.dependencia === $scope.dependenciadestino.toString());
+              });
+              if (self.gridOptions.data.length > 0) {
+                self.gridApi.grid.modifyRows(self.gridOptions.data);
+              } else {
+                swal({
+                  title: '¡No hay actividades!',
+                  type: 'error',
+                  text: 'Las dependencias no están asociadas a la meta seleccionada.Por favor seleccione otra meta',
+                  showCloseButton: true,
+                  confirmButtonText: "CERRAR"
+                });
 
-               }
+
+              }
             } else {
-              self.gridOptions.data=[];
+              self.gridOptions.data = [];
               self.gridApi.grid.modifyRows(self.gridOptions.data);
               swal({
                 title: '¡No hay Dependencias Seleccionadas!',
@@ -174,22 +197,22 @@ angular.module('contractualClienteApp')
                 text: 'Las dependencias no han sido seleccionadas',
                 showCloseButton: true,
                 confirmButtonText: "CERRAR"
-            });
+              });
             }
 
-            
+
           });
         }
 
 
-        self.loadFuentesFinanciamiento = function(){
+        self.loadFuentesFinanciamiento = function () {
           metasRequest.get('plan_adquisiciones_fuentes_financiamiento/2019/122/388/1.2')
         }
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
           $scope.actividades ? $scope.actividades.forEach(function (act) {
-            var tmp = self.gridOptions.data.filter(function (e) { return e.Id !== act.Id })
+            var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id !== act.ActividadId })
             if (tmp.length > 0) {
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }

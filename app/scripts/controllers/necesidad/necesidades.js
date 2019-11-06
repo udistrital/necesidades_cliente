@@ -174,6 +174,7 @@ angular.module('contractualClienteApp')
 
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
+                        // console.info(row.entity.Id);
                         if (response.status === 200) {
                             self.necesidad = response.data.Body;
                         }
@@ -227,7 +228,7 @@ angular.module('contractualClienteApp')
                 self.verBotonAprobarSolicitud = necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id; // Cuando este Guardada (Borrador)
                 self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
                 self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
-                self.verBotonEditarNecesidad = (necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id || necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id) && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
+                self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
                 self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
 
                 $("#myModal").modal();
@@ -253,8 +254,6 @@ angular.module('contractualClienteApp')
                     );
                 }
             });
-
-
         };
 
 
@@ -290,7 +289,7 @@ angular.module('contractualClienteApp')
                 showCancelButton: true,
                 inputValidator: function (value) {
                     return new Promise(function (resolve, reject) {
-                        if (value) {
+                        if (value && value !== "") {
                             resolve();
                         } else {
                             reject('Por favor indica una justificación!');
@@ -303,7 +302,6 @@ angular.module('contractualClienteApp')
                     NecesidadId: { Id: self.necesidad.Necesidad.Id },
                     FechaRechazo: new Date()
                 };
-                console.info("Recghazada", nec_rech);
 
             }).then(function (response) {
                 if (self.necesidad.Necesidad.EstadoNecesidadId.Id === necesidadService.EstadoNecesidadType.Solicitada.Id) {
@@ -316,7 +314,6 @@ angular.module('contractualClienteApp')
             }).then(function () {
                 return necesidadesCrudRequest.post('necesidad_rechazada', nec_rech);
             }).then(function (response) {
-                console.info(response, "respuesta jajaj");
                 if (response.status === 200 || response.status === 201) {
                     swal(
                         $translate.instant("OK"),
@@ -368,8 +365,8 @@ angular.module('contractualClienteApp')
                 function (response) {
                     if (response.status === 200 || response.status === 201) {
                         self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.CdpSolicitado;
-                        necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
-                            if (response.status === 200 || response.status === 201) {
+                        necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {
+                            if (resp_nececesidad.status === 200 || resp_nececesidad.status === 201) {
                                 swal(
                                     $translate.instant("OK"),
                                     $translate.instant("CDP_SOLICITADO"),

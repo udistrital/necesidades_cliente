@@ -112,6 +112,8 @@ var text_es = {
     LABEL_SEMANAS_TOTALES: "Semanas Totales",
     LABEL_VALOR_ADICIONAR: "Valor a adicionar",
     TIPO_SERVICIO: "Tipo de servicio",
+    VALOR_SERVICIO: "Valor del servicio",
+    VALOR_COMPRA_SERVICIO: "Valor Compra + Servicio",
     CLASE_CONTRATACION: "Clase de contratación",
     PERFIL: "Perfil",
     EL_TIPO_DE: "el Tipo de",
@@ -139,6 +141,8 @@ var text_es = {
     OBLIGATORIO: "Campo requerido",
     PRECIO_MAS_IVA: "Valor total",
     NO_NECESIDAD: "No. elaboración necesidad",
+    CDP_SOLICITADO: "CDP Solicitado",
+    CDP_NO_SOLICITADO: "El CDP no pudo ser solicitado",
     //lista_documentos_legales
     MARCO_LEGAL: "Marco Legal",
     NOMBRE_DOCUMENTO: "Nombre del documento",
@@ -842,7 +846,7 @@ var text_es = {
     NAME_CONTR: "NOMBRE CONTRATISTA",
     DOCUMENTO: "DOCUMENTO",
     CAR_SUPER: "CARGO SUPERVISOR",
-
+    
     //Módulo aprobación pago
     TITULO_APRO_PAGO: "APROBACIÓN PAGO",
     NOM_ORDENADOR: "NOMBRE ORDENADOR DEL GASTO",
