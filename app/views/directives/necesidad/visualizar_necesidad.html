@@ -3,7 +3,11 @@
     <div class="row">
       <div class="col-md-12">
           <h3 class="titleNecesidad">
-          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7">{{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}</span>
+          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==8 ||
+            d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 ||
+            d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7">
+              {{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}
+          </span>
           <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==3">
             Solicitud {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}
           </span>
