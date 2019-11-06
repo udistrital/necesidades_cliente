@@ -220,9 +220,9 @@
       <div class="col-sm-6" ng-show="d_visualizarNecesidad.verJustificacion">
         <h3 class="text-info">{{"NECESIDAD_JUSTIFICACION_RECHAZO" | translate}}</h3>
 
-        <p class="text-justify" ng-repeat="justificacion_rechazo in d_visualizarNecesidad.justificaciones_rechazo">
+        <p class="text-justify" ng-repeat="justificacion_rechazo in d_visualizarNecesidad.verJustificacion">
           <strong>{{"NECESIDAD_FECHA_RECHAZO" | translate}}:</strong>
-          {{justificacion_rechazo.Fecha | date:'dd/MM/yyyy':'UTC' }} <br>
+          {{justificacion_rechazo.FechaCreacion | date:'dd/MM/yyyy':'UTC' }} <br>
           <strong>{{"NECESIDAD_JUSTIFICACION_DESCRIPCION_RECHAZO" | translate}}:</strong><br>
           {{justificacion_rechazo.Justificacion}}
         </p>
