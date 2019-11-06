@@ -33,11 +33,22 @@ angular.module('contractualClienteApp')
                 var metas = {};
 
                 $scope.$watch('necesidad', function () {
+                    self.verJustificacion = null;
                     self.cargar_necesidad();
                     if ($scope.necesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'F') {
                         self.funcionamiento = true;
                     } else {
                         self.funcionamiento = false;
+                    }
+
+                    if ($scope.necesidad.Necesidad.EstadoNecesidadId.CodigoAbreviacionn === 'R') {
+                        necesidadesCrudRequest.get('necesidad_rechazada', $.param({
+                            query: 'NecesidadId:' + $scope.necesidad.Necesidad.Id
+                        })).then(function(response) {
+                            if(response.data !== null && response.status === 200) {
+                                self.verJustificacion = response.data;
+                            }
+                        });
                     }
                 });
 
@@ -130,14 +141,14 @@ angular.module('contractualClienteApp')
                         self.ordenador_gasto = response.Persona;
                     });
                     
-                    self.verJustificacion = [
-                        necesidadService.EstadoNecesidadType.Anulada.Id,
-                        necesidadService.EstadoNecesidadType.Rechazada.Id,
-                        necesidadService.EstadoNecesidadType.Modificada.Id,
-                    ].includes($scope.estado.Id);
+                    // self.verJustificacion = [
+                    //     necesidadService.EstadoNecesidadType.Anulada.Id,
+                    //     necesidadService.EstadoNecesidadType.Rechazada.Id,
+                    //     necesidadService.EstadoNecesidadType.Modificada.Id,
+                    // ].includes($scope.estado.Id);
 
                     if ($scope.necesidad.Necesidad.TipoContratoId && $scope.necesidad.Necesidad.TipoContratoId !== 0 ) {
-                        agoraRequest.get('tipo_contrato/'+ $scope.necesidad.Necesidad.TipoContratoId,).then(function (response) {
+                        agoraRequest.get('tipo_contrato/'+ $scope.necesidad.Necesidad.TipoContratoId).then(function (response) {
                             self.v_necesidad.TipoContratoId = response.data;
                         });
                     }
