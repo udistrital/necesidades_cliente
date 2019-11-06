@@ -125,17 +125,10 @@ angular.module('contractualClienteApp')
                     get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId,true);
                     get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
                     // Información del ordenador de gasto
-                    console.info($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId);
                     necesidadService.getJefeDependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId, true).then(function(response) {
-                        // console.info(response.data.Persona);
                         self.ordenador_gasto = response.Persona;
                     });
-                    // necesidadService.get_info_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId).then(function(response) {
-                        
-                    // });
-                    // get_ordenador_gasto($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId);
                     
-
                     self.verJustificacion = [
                         necesidadService.EstadoNecesidadType.Anulada.Id,
                         necesidadService.EstadoNecesidadType.Rechazada.Id,
