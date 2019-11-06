@@ -174,7 +174,7 @@ angular.module('contractualClienteApp')
 
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
-                        console.info(row.entity.Id);
+                        // console.info(row.entity.Id);
                         if (response.status === 200) {
                             self.necesidad = response.data.Body;
                         }
@@ -228,7 +228,7 @@ angular.module('contractualClienteApp')
                 self.verBotonAprobarSolicitud = necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id; // Cuando este Guardada (Borrador)
                 self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
                 self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
-                self.verBotonEditarNecesidad = (necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id || necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id) && necesidadService.EstadoNecesidadType.Solicitada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
+                self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
                 self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
 
                 $("#myModal").modal();

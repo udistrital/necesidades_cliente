@@ -158,10 +158,11 @@ angular.module('contractualClienteApp')
                 }
 
             }
-            self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad;
-            self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad;
+            self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad || {};
+            // if(self.DetallePrestacionServicioNecesidad.Valor=)
+            self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad || {};
 
-            self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad;
+            self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad || [];
             parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
                 limit: -1,
                 query: 'Activo:true'
@@ -193,10 +194,10 @@ angular.module('contractualClienteApp')
             });
 
 
-            self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad;
-            self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad;
-            self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad;
-            self.Rubros = trNecesidad.Rubros;
+            self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad || [];
+            self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad || [];
+            self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad || [];
+            self.Rubros = trNecesidad.Rubros || [];
             self.Rubros.forEach(function (r) {
                 r.Apropiacion = r.Apropiacion || r.InfoRubro;
                 r.Productos.forEach(function (p) {
@@ -310,7 +311,6 @@ angular.module('contractualClienteApp')
             self.ordenador_gasto = null;
             self.rol_ordenador_gasto ?
                 necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
-                    console.info(JD)
                     self.ordenador_gasto = JD.Persona;
                     self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.JefeDependencia.Id, 10);
                 }).catch(function (err) {
@@ -948,7 +948,7 @@ angular.module('contractualClienteApp')
                 }
             };
 
-            if (self.IdNecesidad) {
+            if (self.IdNecesidad && self.TrNecesidad.Necesidad.EstadoNecesidadId.Id !== necesidadService.EstadoNecesidadType.Guardada.Id) {
                 if (self.TrNecesidad.Necesidad.EstadoNecesidadId.Id === necesidadService.EstadoNecesidadType.Rechazada.Id) {
                     swal(
                         'Error',
@@ -976,14 +976,13 @@ angular.module('contractualClienteApp')
                     }) : _;
                     return;
                 } else {
-
-
                     switch (self.Necesidad.TipoContratoNecesidadId.Id) {
                         case 1:
-                            especificaciones_valido = self.Necesidad.Valor === self.valorTotalEspecificaciones
+                            especificaciones_valido = self.Necesidad.Valor === self.valorTotalEspecificaciones;
                             break;
                         case 2:
                             especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
+
                             break;
                         case 4:
                             especificaciones_valido = self.Necesidad.Valor === (self.valorTotalEspecificaciones + self.servicio_valor);
@@ -1113,6 +1112,7 @@ angular.module('contractualClienteApp')
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
                     var val = self.ValidarFinanciacion()
+                    if(self.IdNecesidad) { return val;}
                     return val && document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine');
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');

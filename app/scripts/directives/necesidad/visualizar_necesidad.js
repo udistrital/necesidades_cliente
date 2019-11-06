@@ -124,6 +124,7 @@ angular.module('contractualClienteApp')
                     });
                 }
 
+
                 self.cargar_necesidad = function () {
                     self.marco_legal = $scope.necesidad.MarcoLegalNecesidad;
                     self.v_necesidad = $scope.necesidad.Necesidad;
