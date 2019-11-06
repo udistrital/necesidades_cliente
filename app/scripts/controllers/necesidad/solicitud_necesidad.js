@@ -176,21 +176,20 @@ angular.module('contractualClienteApp')
                         sortby: "ElementoCodigo",
                         order: "asc",
                     })).then(function (response) {
-                        prod.ElementoNombre=response.data[0].ElementoNombre;
+                        prod.ElementoNombre = response.data[0].ElementoNombre;
                     });
                     if (self.iva_data != undefined) {
                         var tIva = self.getPorcIVAbyId(prod.IvaId);
                         prod.Subtotal = prod.Cantidad * prod.Valor;
-                        if (tIva[0].Tarifa === 0) {
-                            prod.ValorIVA = 0;
-                            prod.preciomasIVA = prod.Subtotal || 0;
-                        } else {
-                            prod.ValorIVA = (prod.Subtotal * (tIva[0].Tarifa / 100)) || 0;
-                            prod.preciomasIVA = prod.Subtotal + prod.ValorIVA || 0;
-                        }
+                        prod.ValorIVA = (prod.Subtotal * (tIva / 100)) || 0;
+                        prod.preciomasIVA = prod.Subtotal + prod.ValorIVA || 0;
+
 
                     }
                 });
+                var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
+                self.DetalleServicioNecesidad.Total = (self.DetalleServicioNecesidad.Valor * tIva) / 100 + self.DetalleServicioNecesidad.Valor;
+                self.servicio_valor = self.DetalleServicioNecesidad.Total;
             });
 
 
@@ -734,9 +733,9 @@ angular.module('contractualClienteApp')
 
         self.getPorcIVAbyId = function (id) {
             if (self.iva_data != undefined) {
-                return self.iva_data.filter(function (iva) { return iva.Id === id; })
+                return self.iva_data.filter(function (iva) { return iva.Id === id; })[0].Tarifa
             } else {
-                return [];
+                return 0;
             }
         }
 
@@ -746,16 +745,9 @@ angular.module('contractualClienteApp')
             }
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
             var tIva = self.getPorcIVAbyId(self.producto_catalogo.Iva);
-            if (tIva[0] != undefined) {
-                if (tIva[0].Tarifa === 0) {
-                    self.producto_catalogo.ValorIVA = 0;
-                    self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal || 0;
-                } else {
-                    self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
-                    self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
-                }
+            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva / 100)) || 0;
+            self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
 
-            }
 
         }, true)
 
@@ -773,8 +765,10 @@ angular.module('contractualClienteApp')
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true);
 
-        $scope.$watch('solicitudNecesidad.DetalleServicioNecesidad.Valor', function () {
-            self.servicio_valor = self.DetalleServicioNecesidad.Valor;
+        $scope.$watchGroup(['solicitudNecesidad.DetalleServicioNecesidad.Valor','solicitudNecesidad.DetalleServicioNecesidad.IvaId'], function () {
+            var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
+            self.DetalleServicioNecesidad.Total = (self.DetalleServicioNecesidad.Valor * tIva) / 100 + self.DetalleServicioNecesidad.Valor;
+            self.servicio_valor = self.DetalleServicioNecesidad.Total;
         }, true);
 
         $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
@@ -791,7 +785,7 @@ angular.module('contractualClienteApp')
             // serv
             if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 5) {
                 self.servicio_valor = self.Necesidad.Valor;
-                self.DetalleServicioNecesidad.Valor = self.Necesidad.Valor;
+                //self.DetalleServicioNecesidad.Valor = self.Necesidad.Valor;
             }
             // compra y serv
             if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 4) {
@@ -981,6 +975,7 @@ angular.module('contractualClienteApp')
                             especificaciones_valido = self.Necesidad.Valor === self.valorTotalEspecificaciones;
                             break;
                         case 2:
+
                             especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
 
                             break;
@@ -988,6 +983,7 @@ angular.module('contractualClienteApp')
                             especificaciones_valido = self.Necesidad.Valor === (self.valorTotalEspecificaciones + self.servicio_valor);
                             break;
                         case 5:
+                            console.info(self.Necesidad.Valor, "JBALVIM", self.servicio_valor)
                             especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
                             break;
                     }
@@ -1112,7 +1108,7 @@ angular.module('contractualClienteApp')
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
                     var val = self.ValidarFinanciacion()
-                    if(self.IdNecesidad) { return val;}
+                    if (self.IdNecesidad) { return val; }
                     return val && document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine');
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
