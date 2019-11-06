@@ -95,7 +95,7 @@ angular.module('contractualClienteApp')
       });
     };
 
-    //Obtiene todo el jefe de dependencia demendiendo del id del jefe o la dependencia, si idOrDep es true, se utilizará el id del jefe
+    //Obtiene todo el jefe de dependencia teniendo del id del jefe o la dependencia, si idOrDep es true, se utilizará el id del jefe
     self.getJefeDependencia = function (idDependencia, idOrDep) {
       var out = { JefeDependencia: {}, Persona: {} }
       return new Promise(function (resolve, reject) {
