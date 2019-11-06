@@ -137,7 +137,7 @@ angular.module('contractualClienteApp')
                     ].includes($scope.estado.Id);
 
                     if ($scope.necesidad.Necesidad.TipoContratoId && $scope.necesidad.Necesidad.TipoContratoId !== 0 ) {
-                        agoraRequest.get('tipo_contrato/'+ $scope.necesidad.Necesidad.TipoContratoId,).then(function (response) {
+                        agoraRequest.get('tipo_contrato/'+ $scope.necesidad.Necesidad.TipoContratoId).then(function (response) {
                             self.v_necesidad.TipoContratoId = response.data;
                         });
                     }
