@@ -170,6 +170,9 @@ angular.module('contractualClienteApp')
             self.Rubros = trNecesidad.Rubros;
             self.Rubros.forEach(function (r) {
                 r.Apropiacion = r.Apropiacion || r.InfoRubro;
+                r.Productos.forEach(function(p){
+                    p.InfoProducto ? p=_.merge(p,p.InfoProducto): _;
+                })
             })
             self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
             self.dep_ned = trNecesidad.DependenciaNecesidad;

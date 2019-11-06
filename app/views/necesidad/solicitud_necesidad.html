@@ -31,6 +31,7 @@
                     <label class="radio-inline" ng-repeat="tipo in solicitudNecesidad.tipo_necesidad_data">
                       <input type="radio" ng-value="{{tipo.Id}}"
                         ng-model="solicitudNecesidad.Necesidad.TipoNecesidadId.Id"
+                        ng-init="solicitudNecesidad.Necesidad.TipoNecesidadId.Id = solicitudNecesidad.Necesidad.TipoNecesidadId.Id ? solicitudNecesidad.Necesidad.TipoNecesidadId.Id : 1"
                         ng-change="solicitudNecesidad.Necesidad.TipoNecesidadId=tipo;solicitudNecesidad.ResetNecesidad()"
                         required>
                       {{tipo.Nombre}}
@@ -52,6 +53,7 @@
 
                     <input type="radio" ng-value="{{tipo.Id}}"
                       ng-model="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id"
+                      ng-init="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id = solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id ? solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id : 1"
                       ng-change="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId=tipo" required>
                     {{tipo.Nombre}}
                   </label>
