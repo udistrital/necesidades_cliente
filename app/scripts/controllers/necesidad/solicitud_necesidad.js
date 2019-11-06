@@ -138,17 +138,14 @@ angular.module('contractualClienteApp')
             res.data ? trNecesidad = res.data.Body : trNecesidad = res;
             self.Necesidad = trNecesidad.Necesidad;
             if (self.Necesidad.DependenciaNecesidadId) {
-                console.info(self.Necesidad.DependenciaNecesidadId) // Cargar las dependencias
                 necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
                     self.dependencia_solicitante = response.dependencia.Id;
                 });
                 necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId).then(function (response) {
-                    console.info(response)
                     self.dependencia_destino = response.dependencia.Id;
                 });
 
-                necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId).then(function(response){
-                    console.info(response)
+                necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId).then(function (response) {
                     self.rol_ordenador_gasto = response.dependencia.Id;
                 });
 
@@ -163,17 +160,49 @@ angular.module('contractualClienteApp')
             }
             self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad;
             self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad;
+
             self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad;
+            parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
+                limit: -1,
+                query: 'Activo:true'
+            })).then(function (response) {
+                self.iva_data = response.data;
+                self.ProductosCatalogoNecesidad.forEach(function (prod) {
+                    administrativaRequest.get('catalogo_elemento_grupo', $.param({
+                        query: 'Id:' + prod.CatalogoId,
+                        fields: 'Id,ElementoNombre,ElementoCodigo',
+                        limit: -1,
+                        sortby: "ElementoCodigo",
+                        order: "asc",
+                    })).then(function (response) {
+                        prod.ElementoNombre=response.data[0].ElementoNombre;
+                    });
+                    if (self.iva_data != undefined) {
+                        var tIva = self.getPorcIVAbyId(prod.IvaId);
+                        prod.Subtotal = prod.Cantidad * prod.Valor;
+                        if (tIva[0].Tarifa === 0) {
+                            prod.ValorIVA = 0;
+                            prod.preciomasIVA = prod.Subtotal || 0;
+                        } else {
+                            prod.ValorIVA = (prod.Subtotal * (tIva[0].Tarifa / 100)) || 0;
+                            prod.preciomasIVA = prod.Subtotal + prod.ValorIVA || 0;
+                        }
+
+                    }
+                });
+            });
+
+
             self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad;
             self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad;
             self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad;
             self.Rubros = trNecesidad.Rubros;
             self.Rubros.forEach(function (r) {
                 r.Apropiacion = r.Apropiacion || r.InfoRubro;
-                r.Productos.forEach(function(p){
-                    p.InfoProducto ? p=_.merge(p,p.InfoProducto): _;
+                r.Productos.forEach(function (p) {
+                    p.InfoProducto ? p = _.merge(p, p.InfoProducto) : _;
                 })
-            })
+            });
             self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
             self.dep_ned = trNecesidad.DependenciaNecesidad;
             self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
@@ -256,7 +285,6 @@ angular.module('contractualClienteApp')
             self.jefe_destino = null;
             self.dependencia_destino ?
                 necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
-                    console.info(JD,"camila");
                     self.jefe_destino = JD.Persona;
                     self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = JD.JefeDependencia.Id;
                 }).catch(function (err) {
@@ -395,12 +423,6 @@ angular.module('contractualClienteApp')
             self.nucleo_area_data = response.data;
         });
 
-        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
-            limit: -1,
-            query: 'Activo:true'
-        })).then(function (response) {
-            self.iva_data = response.data;
-        });
 
 
         $scope.$watch('solicitudNecesidad.nucleoarea', function () {
@@ -631,15 +653,15 @@ angular.module('contractualClienteApp')
             MontoPorMeta: 0
         };
         self.addProductoCatalogo = function () {
-            self.productos.filter(function (e) {
-                return e.Id === self.producto_catalogo.Id;
-            }).length > 0 || !self.producto_catalogo.Id ?
+            self.ProductosCatalogoNecesidad.filter(function (e) {
+                return e.CatalogoId === self.producto_catalogo.CatalogoId;
+            }).length > 0 || !self.producto_catalogo.CatalogoId ?
                 swal({
                     type: 'error',
                     title: 'El producto ya fue agregado',
                     showConfirmButton: true,
                 }) :
-                self.productos.push(self.producto_catalogo);
+                self.ProductosCatalogoNecesidad.push(self.producto_catalogo);
             $("#modalProducto").modal("hide");
             $(".modal-backdrop").remove();
             self.producto_catalogo = {};
@@ -710,16 +732,20 @@ angular.module('contractualClienteApp')
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true)
 
+        self.getPorcIVAbyId = function (id) {
+            if (self.iva_data != undefined) {
+                return self.iva_data.filter(function (iva) { return iva.Id === id; })
+            } else {
+                return [];
+            }
+        }
+
         $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
-            if (self.producto_catalogo.Id && self.producto_catalogo !== {}) {
+            if (self.producto_catalogo.CatalogoId && self.producto_catalogo !== {}) {
                 $("#modalProducto").modal();
             }
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
-            var tIva = [];
-            if (self.iva_data != undefined) {
-                tIva = self.iva_data.filter(function (iva) { return iva.Id === self.producto_catalogo.Iva; })
-            }
-
+            var tIva = self.getPorcIVAbyId(self.producto_catalogo.Iva);
             if (tIva[0] != undefined) {
                 if (tIva[0].Tarifa === 0) {
                     self.producto_catalogo.ValorIVA = 0;
@@ -733,14 +759,14 @@ angular.module('contractualClienteApp')
 
         }, true)
 
-        $scope.$watch('solicitudNecesidad.productos', function () {
+        $scope.$watch('solicitudNecesidad.ProductosCatalogoNecesidad', function () {
             self.valorTotalEspecificaciones = 0;
             self.subtotalEspecificaciones = 0;
             self.valorIVA = 0;
-            self.productos.forEach(function (producto) {
+            self.ProductosCatalogoNecesidad.forEach(function (producto) {
                 self.subtotalEspecificaciones += producto.Subtotal;
             });
-            self.productos.forEach(function (producto) {
+            self.ProductosCatalogoNecesidad.forEach(function (producto) {
                 self.valorIVA += producto.ValorIVA;
             });
             self.valorTotalEspecificaciones = self.valorIVA + self.subtotalEspecificaciones;
@@ -772,7 +798,7 @@ angular.module('contractualClienteApp')
                 self.servicio_valor = self.DetalleServicioNecesidad.Valor;
             }
             self.valorTotalEspecificaciones = 0;
-            self.productos = [];
+            // self.ProductosCatalogoNecesidad = [];
             self.requisitos_minimos = [];
         }, true);
 
@@ -837,10 +863,10 @@ angular.module('contractualClienteApp')
                 Necesidad: self.Necesidad,
                 DetalleServicioNecesidad: self.DetalleServicioNecesidad,
                 DetallePrestacionServicioNecesidad: self.DetallePrestacionServicioNecesidad,
-                ProductosCatalogoNecesidad: self.productos.map(function (p) {
+                ProductosCatalogoNecesidad: self.ProductosCatalogoNecesidad.map(function (p) {
                     return {
-                        CatalogoId: p.Id,
-                        UnidadId: p.Unidad.Id,
+                        CatalogoId: p.CatalogoId,
+                        UnidadId: p.UnidadId || p.Unidad.Id,
                         IvaId: p.Iva,
                         Cantidad: p.Cantidad,
                         Valor: p.Valor,
@@ -853,6 +879,7 @@ angular.module('contractualClienteApp')
                 Rubros: self.Rubros
 
             }
+            delete self.Necesidad.DependenciaNecesidadId.Id;
 
 
             var NecesidadHandle = function (response, type) {

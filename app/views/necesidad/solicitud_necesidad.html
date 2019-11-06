@@ -793,7 +793,7 @@
                         <th>{{"ELIMINAR" | translate}}</th>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="pro in solicitudNecesidad.productos track by pro.Id">
+                        <tr ng-repeat="pro in solicitudNecesidad.ProductosCatalogoNecesidad track by pro.CatalogoId">
                           <td>{{$index+1}}</td>
                           <td>{{pro.ElementoNombre}}</td>
                           <td>{{pro.Unidad.Unidad | lowercase}}</td>
@@ -803,7 +803,7 @@
                           <td class="money">{{((pro.ValorIVA / pro.Subtotal)*100)}}%</td>
                           <td class="money">{{pro.ValorIVA | currency}}</td>
                           <td class="money">{{pro.preciomasIVA | currency}}</td>
-                          <td class="accionTDetalle"><span ng-click="solicitudNecesidad.productos.splice($index,1)"
+                          <td class="accionTDetalle"><span ng-click="solicitudNecesidad.ProductosCatalogoNecesidad.splice($index,1)"
                               class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
                         </tr>
                       </tbody>
@@ -862,7 +862,7 @@
 
   {{ solicitudNecesidad.Rubros | json}}
 
-  {{solicitudNecesidad.productos | json}}
+  {{solicitudNecesidad.ProductosCatalogoNecesidad | json}}
 
   {{solicitudNecesidad.DetalleServicioNecesidad | json}}
 

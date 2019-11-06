@@ -71,7 +71,7 @@ angular.module('contractualClienteApp')
                 self.gridOptions.onRegisterApi = function (gridApi) {
                     self.gridApi = gridApi;
                     self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                        $scope.producto_catalogo = _.merge(row.entity,{RequisitosMinimos: []});
+                        $scope.producto_catalogo ={CatalogoId: row.entity.Id, ElementoNombre: row.entity.ElementoNombre,RequisitosMinimos: []};
                     });
 
                 };

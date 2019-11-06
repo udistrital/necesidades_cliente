@@ -88,12 +88,7 @@ angular.module('contractualClienteApp')
 
         }
 
-        // $scope.$watch('apropiacion', function () {
-        //   if ($scope.apropiacion !== undefined) {
-        //     console.info($scope.apropiacion, "Apropiacion")
-        //     self.cargarMetas();
-        //   }
-        // });
+
 
         $scope.$watchGroup(['apropiacion', 'dependenciasolicitante'], function () {
           if ($scope.apropiacion.Apropiacion !== undefined && $scope.dependenciasolicitante !== undefined) {
@@ -162,10 +157,8 @@ angular.module('contractualClienteApp')
         self.loadActividades = function () {
           metasRequest.get('plan_adquisiciones/2019/' + $scope.dependenciasolicitante.toString()).then(function (response) {
             self.gridOptions.data = response.data.metas.actividades;
-            console.info($scope.apropiacion)
             if ($scope.apropiacion.Metas[0].Actividades) {
               $scope.apropiacion.Metas[0].Actividades.forEach(function (act) {
-                console.info(act);
                 var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id == act.ActividadId })
                 if (tmp.length > 0) {
                   act = _.merge(act,tmp[0]);
@@ -221,7 +214,6 @@ angular.module('contractualClienteApp')
           $scope.actividades ? $scope.actividades.forEach(function (act) {
             var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id !== act.ActividadId })
             if (tmp.length > 0) {
-              console.info("slecciono", tmp[0])
               self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
             }
           }) : _;
