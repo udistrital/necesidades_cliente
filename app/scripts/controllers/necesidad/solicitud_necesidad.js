@@ -1112,6 +1112,7 @@ angular.module('contractualClienteApp')
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
                     var val = self.ValidarFinanciacion()
+                    if(self.IdNecesidad) { return val;}
                     return val && document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine');
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
