@@ -65,18 +65,18 @@ angular.module('contractualClienteApp')
         })).then(function (t) {
           self.gridOptions.data = productosData;
           var gridOptData = self.gridOptions.data;
-          gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData[0]) : _;
+          gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _;
           
 
           $scope.$watch('initProductoApropiacion', function () {
             self.productoapropiacion = [];
-            $scope.initProductoapropiacion.forEach(function (producto) {
+            $scope.initProductoapropiacion ? $scope.initProductoapropiacion.forEach(function (producto) {
               var tmp = self.gridOptions.data.filter(function (e) { return e._id == producto._id })
               if (tmp.length > 0) {
                 $scope.productoapropiacion.push(tmp[0]); //enriquecer productos
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }
-            });
+            }): _;
           });
         });
 

@@ -221,62 +221,6 @@ angular.module('contractualClienteApp')
       }));
     }
 
-    self.getFinanciacion = function (necesidad_pc, vigencia, unidadejecutora) {
-      var response = []
-      if (Array.isArray(necesidad_pc.apropiaciones)) {
-        necesidad_pc.apropiaciones.forEach(function (ap) {
-          planCuentasRequest.get('arbol_rubro_apropiacion/' + ap.codigo + '/' + vigencia + '/' + unidadejecutora).
-            then(
-              function (res_apr) {
-                var item = {
-                  Apropiacion: _.merge(res_apr.data.Body,
-                    {
-                      meta: {
-                        actividades: []
-                      },
-                      fuentes: [],
-                      productos: []
-                    })
-                }
-                var tempmetas;
-                metasRequest.get('plan_adquisiciones/2019').then(
-                  function (res) {
-
-                    tempmetas = res.data.metas.actividades;
-                    item.Apropiacion.meta.actividades = ap.metas[0].actividades.map(function (act) {
-                      return tempmetas.filter(function (m) {
-                        return (m.meta_id === ap.metas[0].codigo) && (m.actividad_id === act.codigo)
-                      })[0] || null;
-                    });
-                  }
-                ).catch(function (err) {
-
-                });
-
-
-                ap.fuentes.forEach(function (fuente) {
-                  planCuentasRequest.get('fuente_financiamiento/' + fuente.codigo)
-                    .then(
-                      function (res_fuente) {
-                        item.Apropiacion.fuentes.push(_.merge(res_fuente.data.Body, { MontoParcial: fuente.valor }))
-                      }
-                    )
-                })
-                ap.metas.forEach(function (producto) {
-                  planCuentasRequest.get('producto/' + producto._id)
-                    .then(
-                      function (res_prod) {
-                        item.Apropiacion.productos.push(_.merge(res_prod.data.Body, { MontoParcial: producto.valor }))
-                      }
-                    )
-                })
-                response.push(item)
-              }
-            )
-        })
-      }
-      return response
-    }
 
     self.initNecesidad = function (IdNecesidad) {
       var trNecesidad = {};

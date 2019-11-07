@@ -457,17 +457,6 @@
               <div class="panel-body" ng-hide="marcoLegal.open">
                 <lista-documentos-legales class="col-md-12" documentos="solicitudNecesidad.MarcoLegalNecesidad">
                 </lista-documentos-legales>
-                <!-- <div class="col-md-6 form-group">
-                <h4>{{"DOCUMENTOS" | translate}}</h4>
-                <ul class="list-group">
-                  <li class="list-group-item" ng-repeat="doc in solicitudNecesidad.documentos track by $index">
-                    <label><span class="text-info">{{$index+1}}. </span>{{doc.NombreDocumento}}</label>
-                    <a href="{{doc.Enlace}}" class="pull-right">{{"ENLACE" | translate}}</a>
-                  </li>
-                </ul> solicitudNecesidad.aniadirDoc = !solicitudNecesidad.aniadirDoc
-              </div> -->
-
-
               </div>
 
             </ng-form>
@@ -576,309 +565,312 @@
                   </div>
 
 
-                
 
-                <div class="col-md-12">
 
-                  <div class="col-md-4">
-                    <label class="control-label">Subtotal</label>
-                    <input type="text" class="form-control money"
-                      ng-model="solicitudNecesidad.DetalleServicioNecesidad.Valor"
-                      ng-init="solicitudNecesidad.DetalleServicioNecesidad.Valor = solicitudNecesidad.DetalleServicioNecesidad.Valor ? solicitudNecesidad.DetalleServicioNecesidad.Valor : 0"
-                      ui-money-mask="2" disabled>
+                  <div class="col-md-12">
+
+                    <div class="col-md-4">
+                      <label class="control-label">Subtotal</label>
+                      <input type="text" class="form-control money"
+                        ng-model="solicitudNecesidad.DetalleServicioNecesidad.Valor"
+                        ng-init="solicitudNecesidad.DetalleServicioNecesidad.Valor = solicitudNecesidad.DetalleServicioNecesidad.Valor ? solicitudNecesidad.DetalleServicioNecesidad.Valor : 0"
+                        ui-money-mask="2" disabled>
+                    </div>
+
+                    <div class="col-md-4">
+                      <label class="control-label">Total</label>
+                      <input type="text" class="form-control money"
+                        ng-model="solicitudNecesidad.DetalleServicioNecesidad.Total"
+                        ng-init="solicitudNecesidad.DetalleServicioNecesidad.Total = solicitudNecesidad.DetalleServicioNecesidad.Total ? solicitudNecesidad.DetalleServicioNecesidad.Total : 0"
+                        ui-money-mask="2" disabled>
+                    </div>
+
+                    <div class="col-md-4">
+                      <label class="control-label">{{"TOTAL_FINANCIACION" | translate}}</label>
+                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.Necesidad.Valor"
+                        ui-money-mask="2" disabled>
+                    </div>
+
+                    <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
+                      <label class="control-label">{{"VALOR_COMPRA_SERVICIO" | translate}}</label>
+                      <input type="text" class="form-control money" ng-model="solicitudNecesidad.valor_compra_servicio"
+                        ui-money-mask="2" disabled>
+                    </div>
+
+
+
                   </div>
 
-                  <div class="col-md-4">
-                    <label class="control-label">Total</label>
-                    <input type="text" class="form-control money"
-                      ng-model="solicitudNecesidad.DetalleServicioNecesidad.Total"
-                      ng-init="solicitudNecesidad.DetalleServicioNecesidad.Total = solicitudNecesidad.DetalleServicioNecesidad.Total ? solicitudNecesidad.DetalleServicioNecesidad.Total : 0"
-                      ui-money-mask="2" disabled>
+
+                  <div class="col-md-12">
+                    <label for="objeto" class="control-label">{{"ACTIVIDADES_ESPECIFICAS" | translate}}</label>
+                    <div>
+                      <ul class="list-group">
+                        <li class="list-group-item row"
+                          ng-repeat="actesp in solicitudNecesidad.ActividadEspecificaNecesidad">
+                          <label class="col-md-11"><span class="text-info">{{$index+1}}.
+                            </span>{{actesp.Descripcion}}</label>
+                          <div class="col-md-1 text-right">
+                            <button type="button" class="btn btn-danger"
+                              ng-click="solicitudNecesidad.eliminarActividad(actesp)" aria-label="Left Align">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <textarea type="text" class="form-control" rows="6" ng-model="solicitudNecesidad.actividad_esp"
+                      placeholder="Descripcion actividad"></textarea>
                   </div>
-
-                  <div class="col-md-4">
-                    <label class="control-label">{{"TOTAL_FINANCIACION" | translate}}</label>
-                    <input type="text" class="form-control money" ng-model="solicitudNecesidad.Necesidad.Valor"
-                      ui-money-mask="2" disabled>
-                  </div>
-
-                  <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
-                    <label class="control-label">{{"VALOR_COMPRA_SERVICIO" | translate}}</label>
-                    <input type="text" class="form-control money" ng-model="solicitudNecesidad.valor_compra_servicio"
-                      ui-money-mask="2" disabled>
-                  </div>
-
-
-
-                </div>
-
-
-                <div class="col-md-12">
-                  <label for="objeto" class="control-label">{{"ACTIVIDADES_ESPECIFICAS" | translate}}</label>
-                  <div>
-                    <ul class="list-group">
-                      <li class="list-group-item row"
-                        ng-repeat="actesp in solicitudNecesidad.ActividadEspecificaNecesidad">
-                        <label class="col-md-11"><span class="text-info">{{$index+1}}.
-                          </span>{{actesp.Descripcion}}</label>
-                        <div class="col-md-1 text-right">
-                          <button type="button" class="btn btn-danger"
-                            ng-click="solicitudNecesidad.eliminarActividad(actesp)" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                          </button>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <textarea type="text" class="form-control" rows="6" ng-model="solicitudNecesidad.actividad_esp"
-                    placeholder="Descripcion actividad"></textarea>
-                </div>
-                <div class="col-md-12">
-                  <div style="text-align: center">
-                    <button type="button" class="btn btn-primary btn-outline"
-                      ng-click="solicitudNecesidad.actividad_esp!=undefined && solicitudNecesidad.agregarActEsp(solicitudNecesidad.actividad_esp);solicitudNecesidad.actividad_esp=undefined">{{"AGREGAR"
+                  <div class="col-md-12">
+                    <div style="text-align: center">
+                      <button type="button" class="btn btn-primary btn-outline"
+                        ng-click="solicitudNecesidad.actividad_esp!=undefined && solicitudNecesidad.agregarActEsp(solicitudNecesidad.actividad_esp);solicitudNecesidad.actividad_esp=undefined">{{"AGREGAR"
                                   | translate}}</button>
+                    </div>
+                    <br>
                   </div>
-                  <br>
-                </div>
 
-                <!-- Actividades economicas -->
-                <div class="col-md-12">
-                  <div class="col-md-6">
-                    <lista-actividades-economicas actividades="solicitudNecesidad.ActividadEconomicaNecesidad"
-                      id_actividades="solicitudNecesidad.actividades_economicas_id"></lista-actividades-economicas>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="objeto" class="control-label">{{"ACTIVIDADES_ECONOMICAS" | translate}}</label>
-                    <ul class="list-group">
-                      <li class="list-group-item" ng-repeat="act in solicitudNecesidad.ActividadEconomicaNecesidad">
-                        <label><span class="text-info">{{$index+1}}. </span>{{act.Codigo}} - {{act.Nombre}}</label>
-                      </li>
-                    </ul>
+                  <!-- Actividades economicas -->
+                  <div class="col-md-12">
+                    <div class="col-md-6">
+                      <lista-actividades-economicas actividades="solicitudNecesidad.ActividadEconomicaNecesidad"
+                        id_actividades="solicitudNecesidad.actividades_economicas_id"></lista-actividades-economicas>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="objeto" class="control-label">{{"ACTIVIDADES_ECONOMICAS" | translate}}</label>
+                      <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="act in solicitudNecesidad.ActividadEconomicaNecesidad">
+                          <label><span class="text-info">{{$index+1}}. </span>{{act.Codigo}} - {{act.Nombre}}</label>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
 
 
                 <!-- Aqui se cierra serv y compra/serv -->
-              </div>
 
 
-              <!-- </div> -->
 
-              <!--Revisar con nueva estructura Arka -->
-              <!-- Tipo contrato necesidad === (compra || Compra y Servicio || Servicio)-->
-              <div class="form-group"
-                ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
-                <div class="col-md-12">
-                  <lista-subgrupos-catalogos ng-model="solicitudNecesidad.producto_catalogo">
-                  </lista-subgrupos-catalogos>
-                </div>
+                <!-- </div> -->
 
-                <h4>{{"ELEMENTO" | translate}}</h4>
+                <!--Revisar con nueva estructura Arka -->
+                <!-- Tipo contrato necesidad === (compra || Compra y Servicio || Servicio)-->
+                <div class="form-group"
+                  ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
+                  <div class="col-md-12">
+                    <lista-subgrupos-catalogos ng-model="solicitudNecesidad.producto_catalogo">
+                    </lista-subgrupos-catalogos>
+                  </div>
 
-                <div id="modalProducto" class="modal fade modalProducto" role="dialog">
-                  <ng-form id="form_producto" name="prodDiv">
-                    <div class="col-md-12">
-                      <div class="panel panel-default">
-                        <div class="panel-heading">
-                          <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(prodDiv)">
-                            <span>{{solicitudNecesidad.producto_catalogo.ElementoNombre}} </span>
-                            <span class="fa fa-plus pull-right"></span> <span class="fa fa-minus pull-right"></span>
-                          </legend>
+                  <h4>{{"ELEMENTO" | translate}}</h4>
+
+                  <div id="modalProducto" class="modal fade modalProducto" role="dialog">
+                    <ng-form id="form_producto" name="prodDiv">
+                      <div class="col-md-12">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(prodDiv)">
+                              <span>{{solicitudNecesidad.producto_catalogo.ElementoNombre}} </span>
+                              <span class="fa fa-plus pull-right"></span> <span class="fa fa-minus pull-right"></span>
+                            </legend>
+
+                          </div>
+                          <div class="panel-body" ng-show="!prodDiv.open">
+                            <div class="col-md-12">
+                              <div class="col-md-6">
+                                <label class=" control-label">{{"DESCRIPCION" | translate}}</label>
+                                <textarea ng-model="solicitudNecesidad.producto_catalogo.Elemento" class="form-control"
+                                  maxlength="100" placeholder="Elemento (Descripción)" rows="1" required></textarea>
+                              </div>
+
+                              <div class="col-md-6">
+                                <label class=" control-label"
+                                  ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">{{"UNIDAD_MEDIDA" | translate}}</label>
+                                <select
+                                  ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4"
+                                  class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Unidad"
+                                  ng-options="unidad as unidad.Unidad for unidad in solicitudNecesidad.unidad_data"
+                                  required>
+                                  <option value="" disabled selected>{{"SELECCIONAR" | translate}}
+                                    {{"UNIDAD_MEDIDA" | translate}}</option>
+                                </select>
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                              <div class="col-md-4">
+                                <label class=" control-label"
+                                  ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">{{"CANTIDAD" | translate}}</label>
+                                <input class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Cantidad"
+                                  placeholder="Cantidad de Elementos" ui-number-mask="0"
+                                  ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4"
+                                  required>
+                              </div>
+
+                              <div class="col-md-4">
+                                <label class=" control-label">{{"VALOR_UNITARIO" | translate}}</label>
+                                <input class="form-control  money"
+                                  ng-model="solicitudNecesidad.producto_catalogo.Valor;" placeholder="Valor Unitario"
+                                  ui-money-mask="2" required>
+                              </div>
+
+                              <div class="col-md-4">
+                                <label class=" control-label">{{"IVA" | translate}} %</label>
+                                <select class="form-control  money" ng-init="pro.Iva = 0"
+                                  ng-model="solicitudNecesidad.producto_catalogo.Iva"
+                                  ng-options="iva.Id as iva.ImpuestoId.CodigoAbreviacion+' '+iva.Tarifa for iva in solicitudNecesidad.iva_data"
+                                  required>
+                                  <option value="iva.Id" disabled selected>{{"SELECCIONAR" | translate}}
+                                    {{"IVA" | translate}}
+                                    %
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+
+
+
+                            <div class="col-md-12">
+                              <div class="col-md-4">
+                                <label class=" control-label">{{"VALOR_IVA" | translate}}</label>
+                                <input class="form-control  money"
+                                  ng-model="solicitudNecesidad.producto_catalogo.ValorIVA" placeholder="valor_con_iva"
+                                  ui-money-mask="2" readonly>
+                              </div>
+
+                              <div class="col-md-4">
+                                <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
+                                <input class="form-control  money"
+                                  ng-model="solicitudNecesidad.producto_catalogo.Subtotal" placeholder="Total"
+                                  ui-money-mask="2" readonly>
+                              </div>
+                              <div class="col-md-4">
+                                <label class=" control-label">{{"PRECIO_MAS_IVA" | translate}}</label>
+                                <input class="form-control  money"
+                                  ng-model="solicitudNecesidad.producto_catalogo.preciomasIVA"
+                                  placeholder="valor_con_iva" ui-money-mask="2" readonly>
+                              </div>
+
+                            </div>
+
+                            <div class="col-md-12">
+                              <label for="objeto" class="control-label">{{"REQUISITOS_MINIMOS" | translate}}</label>
+                              <div>
+                                <ul class="list-group">
+                                  <li class="list-group-item"
+                                    ng-repeat="reqmin in solicitudNecesidad.producto_catalogo.RequisitosMinimos">
+                                    <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
+                                      ng-click="solicitudNecesidad.eliminarRequisito(reqmin)" aria-label="Left Align">
+                                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </button>
+                                    <label style="display:block;"><span
+                                        class="text-info"></span>{{reqmin.Descripcion}}</label>
+                                  </li>
+                                </ul>
+                              </div>
+                              <textarea type="text" class="form-control" rows="2"
+                                ng-model="solicitudNecesidad.producto_catalogo.requisitomin"
+                                placeholder="Requisito mínimo"></textarea>
+                            </div>
+
+
+                            <div class="col-md-12 form-group">
+                              <div style="text-align: center">
+                                <button type="button" class="btn btn-primary btn-outline"
+                                  ng-click="solicitudNecesidad.producto_catalogo.RequisitosMinimos.push({Descripcion: solicitudNecesidad.producto_catalogo.requisitomin});solicitudNecesidad.producto_catalogo.requisitomin=''">Agregar
+                                  requisito mínimo</button>
+                              </div>
+                            </div>
+                            <div class="col-md-12 form-group" style="text-align: center">
+                              <button type="button" class="btn btn-primary btn-success"
+                                ng-click="solicitudNecesidad.validar_formu(prodDiv) ? solicitudNecesidad.addProductoCatalogo() : _ ;">
+                                AGREGAR PRODUCTO</button>
+                            </div>
+                          </div>
 
                         </div>
-                        <div class="panel-body" ng-show="!prodDiv.open">
-                          <div class="col-md-12">
-                            <div class="col-md-6">
-                              <label class=" control-label">{{"DESCRIPCION" | translate}}</label>
-                              <textarea ng-model="solicitudNecesidad.producto_catalogo.Elemento" class="form-control"
-                                maxlength="100" placeholder="Elemento (Descripción)" rows="1" required></textarea>
-                            </div>
-
-                            <div class="col-md-6">
-                              <label class=" control-label"
-                                ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">{{"UNIDAD_MEDIDA" | translate}}</label>
-                              <select
-                                ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4"
-                                class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Unidad"
-                                ng-options="unidad as unidad.Unidad for unidad in solicitudNecesidad.unidad_data"
-                                required>
-                                <option value="" disabled selected>{{"SELECCIONAR" | translate}}
-                                  {{"UNIDAD_MEDIDA" | translate}}</option>
-                              </select>
-                            </div>
-                          </div>
-
-
-                          <div class="col-md-12">
-                            <div class="col-md-4">
-                              <label class=" control-label"
-                                ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">{{"CANTIDAD" | translate}}</label>
-                              <input class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Cantidad"
-                                placeholder="Cantidad de Elementos" ui-number-mask="0"
-                                ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4"
-                                required>
-                            </div>
-
-                            <div class="col-md-4">
-                              <label class=" control-label">{{"VALOR_UNITARIO" | translate}}</label>
-                              <input class="form-control  money" ng-model="solicitudNecesidad.producto_catalogo.Valor;"
-                                placeholder="Valor Unitario" ui-money-mask="2" required>
-                            </div>
-
-                            <div class="col-md-4">
-                              <label class=" control-label">{{"IVA" | translate}} %</label>
-                              <select class="form-control  money" ng-init="pro.Iva = 0"
-                                ng-model="solicitudNecesidad.producto_catalogo.Iva"
-                                ng-options="iva.Id as iva.ImpuestoId.CodigoAbreviacion+' '+iva.Tarifa for iva in solicitudNecesidad.iva_data"
-                                required>
-                                <option value="iva.Id" disabled selected>{{"SELECCIONAR" | translate}}
-                                  {{"IVA" | translate}}
-                                  %
-                                </option>
-                              </select>
-                            </div>
-                          </div>
-
-
-
-                          <div class="col-md-12">
-                            <div class="col-md-4">
-                              <label class=" control-label">{{"VALOR_IVA" | translate}}</label>
-                              <input class="form-control  money"
-                                ng-model="solicitudNecesidad.producto_catalogo.ValorIVA" placeholder="valor_con_iva"
-                                ui-money-mask="2" readonly>
-                            </div>
-
-                            <div class="col-md-4">
-                              <label class=" control-label">{{"SUBTOTAL" | translate}}</label>
-                              <input class="form-control  money"
-                                ng-model="solicitudNecesidad.producto_catalogo.Subtotal" placeholder="Total"
-                                ui-money-mask="2" readonly>
-                            </div>
-                            <div class="col-md-4">
-                              <label class=" control-label">{{"PRECIO_MAS_IVA" | translate}}</label>
-                              <input class="form-control  money"
-                                ng-model="solicitudNecesidad.producto_catalogo.preciomasIVA" placeholder="valor_con_iva"
-                                ui-money-mask="2" readonly>
-                            </div>
-
-                          </div>
-
-                          <div class="col-md-12">
-                            <label for="objeto" class="control-label">{{"REQUISITOS_MINIMOS" | translate}}</label>
-                            <div>
-                              <ul class="list-group">
-                                <li class="list-group-item"
-                                  ng-repeat="reqmin in solicitudNecesidad.producto_catalogo.RequisitosMinimos">
-                                  <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
-                                    ng-click="solicitudNecesidad.eliminarRequisito(reqmin)" aria-label="Left Align">
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                  </button>
-                                  <label style="display:block;"><span
-                                      class="text-info"></span>{{reqmin.Descripcion}}</label>
-                                </li>
-                              </ul>
-                            </div>
-                            <textarea type="text" class="form-control" rows="2"
-                              ng-model="solicitudNecesidad.producto_catalogo.requisitomin"
-                              placeholder="Requisito mínimo"></textarea>
-                          </div>
-
-
-                          <div class="col-md-12 form-group">
-                            <div style="text-align: center">
-                              <button type="button" class="btn btn-primary btn-outline"
-                                ng-click="solicitudNecesidad.producto_catalogo.RequisitosMinimos.push({Descripcion: solicitudNecesidad.producto_catalogo.requisitomin});solicitudNecesidad.producto_catalogo.requisitomin=''">Agregar
-                                requisito mínimo</button>
-                            </div>
-                          </div>
-                          <div class="col-md-12 form-group" style="text-align: center">
-                            <button type="button" class="btn btn-primary btn-success"
-                              ng-click="solicitudNecesidad.validar_formu(prodDiv) ? solicitudNecesidad.addProductoCatalogo() : _ ;">
-                              AGREGAR PRODUCTO</button>
-                          </div>
-                        </div>
-
                       </div>
-                    </div>
-                  </ng-form>
-                </div>
+                    </ng-form>
+                  </div>
 
-                <div class="panel panel-default col-md-12">
-                  <table class="table table-bordered tablaDetalle">
-                    <thead class="bg-primary">
-                      <th>{{"NUM_ITEM" | translate }}</th>
-                      <th>{{"NOMBRE" | translate }}</th>
-                      <th>{{"UNIDAD_MEDIDA" | translate}}</th>
-                      <th>{{"CANTIDAD" | translate}}</th>
-                      <th>{{"VALOR_UNITARIO" | translate}}</th>
-                      <th>{{"SUBTOTAL" | translate}}</th>
-                      <th>{{"IVA" | translate}} %</th>
-                      <th>{{"VALOR_IVA" | translate}}</th>
-                      <th>{{"PRECIO_MAS_IVA" | translate}}</th>
-                      <th>{{"ELIMINAR" | translate}}</th>
-                    </thead>
-                    <tbody>
-                      <tr ng-repeat="pro in solicitudNecesidad.ProductosCatalogoNecesidad track by pro.CatalogoId">
-                        <td>{{$index+1}}</td>
-                        <td>{{pro.ElementoNombre}}</td>
-                        <td>{{pro.Unidad.Unidad | lowercase}}</td>
-                        <td>{{pro.Cantidad}}</td>
-                        <td>{{pro.Valor | currency}}</td>
-                        <td class="money">{{pro.Subtotal | currency}}</td>
-                        <td class="money">{{((pro.ValorIVA / pro.Subtotal)*100)}}%</td>
-                        <td class="money">{{pro.ValorIVA | currency}}</td>
-                        <td class="money">{{pro.preciomasIVA | currency}}</td>
-                        <td class="accionTDetalle"><span
-                            ng-click="solicitudNecesidad.ProductosCatalogoNecesidad.splice($index,1)"
-                            class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <br>
-                  <table class="table table-bordered tablaDetalle" ng-show="solicitudNecesidad.MostrarTotalEspc">
-                    <thead>
-                      <tr>
-                        <th class="bg-info col-md-4">{{"SUBTOTAL" | translate}}</th>
-                        <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}</th>
-                      </tr>
-                      <tr>
-                        <th class="bg-info col-md-4">{{"IVA" | translate}} </th>
-                        <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
-                      </tr>
-                      <tr>
-                        <th class="bg-info col-md-4">{{"VALOR_TOTAL" | translate}}</th>
-                        <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</th>
-                      </tr>
-                      <tr ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1">
-                        <th class="bg-info col-md-4">{{"TOTAL_FINANCIACION" | translate}}:</th>
-                        <th class="money">{{solicitudNecesidad.Necesidad.Valor | currency}}</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
+                  <div class="panel panel-default col-md-12">
+                    <table class="table table-bordered tablaDetalle">
+                      <thead class="bg-primary">
+                        <th>{{"NUM_ITEM" | translate }}</th>
+                        <th>{{"NOMBRE" | translate }}</th>
+                        <th>{{"UNIDAD_MEDIDA" | translate}}</th>
+                        <th>{{"CANTIDAD" | translate}}</th>
+                        <th>{{"VALOR_UNITARIO" | translate}}</th>
+                        <th>{{"SUBTOTAL" | translate}}</th>
+                        <th>{{"IVA" | translate}} %</th>
+                        <th>{{"VALOR_IVA" | translate}}</th>
+                        <th>{{"PRECIO_MAS_IVA" | translate}}</th>
+                        <th>{{"ELIMINAR" | translate}}</th>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="pro in solicitudNecesidad.ProductosCatalogoNecesidad track by pro.CatalogoId">
+                          <td>{{$index+1}}</td>
+                          <td>{{pro.ElementoNombre}}</td>
+                          <td>{{pro.Unidad.Unidad | lowercase}}</td>
+                          <td>{{pro.Cantidad}}</td>
+                          <td>{{pro.Valor | currency}}</td>
+                          <td class="money">{{pro.Subtotal | currency}}</td>
+                          <td class="money">{{((pro.ValorIVA / pro.Subtotal)*100)}}%</td>
+                          <td class="money">{{pro.ValorIVA | currency}}</td>
+                          <td class="money">{{pro.preciomasIVA | currency}}</td>
+                          <td class="accionTDetalle"><span
+                              ng-click="solicitudNecesidad.ProductosCatalogoNecesidad.splice($index,1)"
+                              class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <br>
+                    <table class="table table-bordered tablaDetalle" ng-show="solicitudNecesidad.MostrarTotalEspc">
+                      <thead>
+                        <tr>
+                          <th class="bg-info col-md-4">{{"SUBTOTAL" | translate}}</th>
+                          <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}</th>
+                        </tr>
+                        <tr>
+                          <th class="bg-info col-md-4">{{"IVA" | translate}} </th>
+                          <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
+                        </tr>
+                        <tr>
+                          <th class="bg-info col-md-4">{{"VALOR_TOTAL" | translate}}</th>
+                          <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</th>
+                        </tr>
+                        <tr ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1">
+                          <th class="bg-info col-md-4">{{"TOTAL_FINANCIACION" | translate}}:</th>
+                          <th class="money">{{solicitudNecesidad.Necesidad.Valor | currency}}</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
 
+                </div>
               </div>
-  </div>
 
 
 
-  </ng-form>
+            </ng-form>
 
-  <fieldset>
-    <div style="text-align: center">
-      <button type="button" class="btn btn-success btn-outline" ng-click="solicitudNecesidad.submitForm(solicitudform)">
-        {{'REGISTRAR' | translate }}</button>
-      <button type="button" class="btn btn-primary btn-outline" ng-click="solicitudNecesidad.CambiarForm('legal');">
-        {{"ATRAS" | translate}}</button>
-    </div>
-  </fieldset>
-  <div style="text-align:center;">
-    </md-content>
-    </form>
-    </md-step>
+            <fieldset>
+              <div style="text-align: center">
+                <button type="button" class="btn btn-success btn-outline"
+                  ng-click="solicitudNecesidad.submitForm(solicitudform)">
+                  {{'REGISTRAR' | translate }}</button>
+                <button type="button" class="btn btn-primary btn-outline"
+                  ng-click="solicitudNecesidad.CambiarForm('legal');">
+                  {{"ATRAS" | translate}}</button>
+              </div>
+            </fieldset>
+            <div style="text-align:center;">
+          </md-content>
+      </form>
+      </md-step>
     </md-steppers>
   </div>
 </div>

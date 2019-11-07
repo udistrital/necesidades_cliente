@@ -58,9 +58,13 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows().map(function (e) {
-              return {FuenteId: e.Codigo};
-            });
+            $scope.fuenteapropiacion.length===0 ?$scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows().map(function (e) {
+              if($scope.fuenteapropiacion.filter(function(f){return f.FuenteId === e.Codigo}).length>0){
+                return $scope.fuenteapropiacion.filter(function(f){return f.FuenteId === e.Codigo})[0];
+              } else {
+                return {FuenteId: e.Codigo};
+              }  
+            }):_;
 
           })
         }
@@ -70,7 +74,7 @@ angular.module('contractualClienteApp')
           self.gridOptions.data = response.data.Body || [];
 
           var gridOptData = self.gridOptions.data;
-          gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData[0]) : _;
+          gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows([gridOptData[0]]) : _;
 
           $scope.$watch('fuenteapropiacion', function () {
             $scope.fuenteapropiacion ? $scope.fuenteapropiacion.forEach(function (act) {
