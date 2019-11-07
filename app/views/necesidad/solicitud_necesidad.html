@@ -673,7 +673,7 @@
                     <div class="col-md-6">
                       <label for="objeto" class="control-label">{{"ACTIVIDADES_ECONOMICAS" | translate}}</label>
                       <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="act in solicitudNecesidad.ActividadEconomicaNecesidad">
+                        <li class="list-group-item" ng-repeat="act in solicitudNecesidad.ActividadEconomicaNecesidad track by $index">
                           <label><span class="text-info">{{$index+1}}. </span>{{act.Codigo}} - {{act.Nombre}}</label>
                         </li>
                       </ul>
