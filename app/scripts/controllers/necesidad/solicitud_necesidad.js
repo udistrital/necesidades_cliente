@@ -204,8 +204,8 @@ angular.module('contractualClienteApp')
                     }
                 });
                 var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
-                self.DetalleServicioNecesidad.Total = (self.DetalleServicioNecesidad.Valor * tIva) / 100 + self.DetalleServicioNecesidad.Valor;
-                self.servicio_valor = self.DetalleServicioNecesidad.Total;
+                self.DetalleServicioNecesidad.Valor ? self.DetalleServicioNecesidad.Total = (self.DetalleServicioNecesidad.Valor * tIva) / 100 + self.DetalleServicioNecesidad.Valor : _;
+                self.DetalleServicioNecesidad.Total ? self.servicio_valor = self.DetalleServicioNecesidad.Total : _;
             });
 
 
@@ -214,6 +214,7 @@ angular.module('contractualClienteApp')
             self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad || [];
             self.Rubros = trNecesidad.Rubros || [];
             self.Rubros.forEach(function (r) {
+                r.Fuentes===null ? r.Fuentes =[]:_;
                 r.Apropiacion = r.Apropiacion || r.InfoRubro;
                 r.Productos ? r.Productos.forEach(function (p) {
                     p.InfoProducto ? p = _.merge(p, p.InfoProducto) : _;
@@ -840,6 +841,9 @@ angular.module('contractualClienteApp')
         };
 
         self.crear_solicitud = function () {
+            if(self.Necesidad.TipoNecesidadId.Id===2){//servicios publicos
+                self.Necesidad.TipoContratoNecesidadId = { Id: 3 };
+            }
             self.ActividadEconomicaNecesidad = self.actividades_economicas_id
             self.Necesidad.ModalidadSeleccionId = { Id: 8 }
             self.Necesidad.EstadoNecesidadId = { Id: 8 }
@@ -1016,7 +1020,8 @@ angular.module('contractualClienteApp')
                     fin_valid = fin_valid && ap.MontoMeta <= ap.Apropiacion.ValorActual;
                 } else {
                     //CASE FUNCIONAMIENTO
-                    fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual;
+                    ap.Fuentes.length===0 ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).agregarFuente):_;
+                    fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual && ap.Fuentes.length>0;
                 }
                 ap.MontoFuentes > ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
