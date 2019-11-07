@@ -151,9 +151,9 @@ angular.module('contractualClienteApp')
 
                 if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {
                     self.tipoInterventor = false;
-                    self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId).then(function(response){
-                        self.dependencia_supervisor = response.dependencia.Id;
-                    }) : _;
+                    // self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId).then(function(response){
+                    //     self.dependencia_supervisor = response.dependencia.Id;
+                    // }) : _;
                 } else {
                     self.tipoInterventor = true;
                     self.Necesidad.DependenciaNecesidadId.InterventorId ? self.dependencia_supervisor = necesidadService.getInfoPersonaNatural(self.Necesidad.DependenciaNecesidadId.InterventorId) : _;
@@ -931,7 +931,7 @@ angular.module('contractualClienteApp')
 
                 templateAlert = templateAlert + "</table>";
                 swal({
-                    title: 'Se ha creado el borrador de Necesidad N° XX. ',
+                    title: 'Se ha creado el borrador de Necesidad N°'+  response.data.Necesidad.ConsecutivoSolicitud ,
                     text: 'A continuación encontrará el resumen de los datos ingresados.',
                     type: "success",
                     width: 800,
