@@ -823,6 +823,9 @@ angular.module('contractualClienteApp')
         };
 
         self.crear_solicitud = function () {
+            if(self.Necesidad.TipoNecesidadId.Id===2){//servicios publicos
+                self.Necesidad.TipoContratoNecesidadId = { Id: 3 };
+            }
             self.ActividadEconomicaNecesidad = self.actividades_economicas_id
             self.Necesidad.ModalidadSeleccionId = { Id: 8 }
             self.Necesidad.EstadoNecesidadId = { Id: 8 }
