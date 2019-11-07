@@ -159,10 +159,11 @@ angular.module('contractualClienteApp')
 
             }
             self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad || {};
-            // if(self.DetallePrestacionServicioNecesidad.Valor=)
-            self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad || {};
-            console.info(self.DetallePrestacionServicioNecesidad);
 
+            self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad || {};
+
+
+            // CPS Nucleo Area y Nucleo Area Conocimiento
             parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
                 query: 'Id:' + self.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
                 limit: -1
