@@ -151,7 +151,9 @@ angular.module('contractualClienteApp')
 
                 if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {
                     self.tipoInterventor = false;
-                    self.Necesidad.DependenciaNecesidadId.SupervisorId ? self.dependencia_supervisor = necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId) : _;
+                    self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId).then(function(response){
+                        self.dependencia_supervisor = response.dependencia.Id;
+                    }) : _;
                 } else {
                     self.tipoInterventor = true;
                     self.Necesidad.DependenciaNecesidadId.InterventorId ? self.dependencia_supervisor = necesidadService.getInfoPersonaNatural(self.Necesidad.DependenciaNecesidadId.InterventorId) : _;
@@ -321,8 +323,7 @@ angular.module('contractualClienteApp')
             self.dependencia_supervisor ?
                 necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
                     self.supervisor = JD.Persona;
-                    self.dep_ned.supervisor = JD.JefeDependencia.Id;
-                    self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor;
+                    self.Necesidad.DependenciaNecesidadId.SupervisorId = JD.JefeDependencia.Id;
                 }).catch(function (err) {
                 }) : _;
 

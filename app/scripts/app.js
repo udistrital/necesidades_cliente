@@ -87,8 +87,6 @@ angular
                 return $q.reject(rejection);
             },
             'response': function(response) {
-                // do something on success
-                // console.log(response.headers());
                 return response;
             },
             responseError: function(err){

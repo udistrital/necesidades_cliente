@@ -314,52 +314,6 @@ angular.module('contractualClienteApp')
 
         };
 
-
-
-
-        /*self.gridOptions.onRegisterApi = function(gridApi){
-          self.gridApi = gridApi;
-          gridApi.selection.on.rowSelectionChanged($scope,function(row){
-            $("#myModal").modal();
-            $scope.apropiacion= undefined;
-            $scope.apropiaciones = [];
-            self.cdp = row.entity;
-            financieraRequest.get('disponibilidad_apropiacion','limit=0&query=Disponibilidad.Id:'+row.entity.Id).then(function(response) {
-              self.gridOptions_rubros.data = response.data;
-              angular.forEach(self.gridOptions_rubros.data, function(data){
-                if($scope.apropiaciones.indexOf(data.Apropiacion.Id) !== -1) {
-
-                }else{
-                  $scope.apropiaciones.push(data.Apropiacion.Id);
-                }
-
-                  console.log($scope.apropiaciones);
-                  console.log(self.cdp.Id);
-                  var saldo;
-                  var rp = {
-                    Disponibilidad : data.Disponibilidad, // se construye rp auxiliar para obtener el saldo del CDP para la apropiacion seleccionada
-                    Apropiacion : data.Apropiacion
-                  };
-                  financieraRequest.post('disponibilidad/SaldoCdp',rp).then(function(response){
-                    data.Saldo  = response.data;
-                  });
-                  self.gridHeight = uiGridService.getGridHeight(self.gridOptions_rubros);
-                });
-
-                  agoraRequest.get('informacion_persona_natural',$.param({
-                    query: "Id:"+self.cdp.Responsable,
-                    limit: 1
-                  })).then(function(response){
-                    if (response.data != null){
-                      self.cdp.Responsable = response.data[0];
-                    }
-
-                  });
-
-            });
-          });
-        };*/
-
         self.filtrarListaCdp = function() {
             self.gridOptions.data = {};
             var inicio = $filter('date')(self.fechaInicio, "yyyy-MM-dd");
