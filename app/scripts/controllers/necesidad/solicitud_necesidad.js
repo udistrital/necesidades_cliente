@@ -195,7 +195,8 @@ angular.module('contractualClienteApp')
 
             self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad || [];
             self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad || [];
-            self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad || [];
+            self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad || [];
+            self.ActividadEconomicaNecesidad=[];
             self.Rubros = trNecesidad.Rubros || [];
             self.Rubros.forEach(function (r) {
                 r.Fuentes===null ? r.Fuentes =[]:_;
