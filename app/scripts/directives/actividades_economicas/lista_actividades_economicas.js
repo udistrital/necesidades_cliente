@@ -75,12 +75,13 @@ angular.module('contractualClienteApp')
           $scope.$watch('idActividades', function () {
             self.actividades = [];
             $scope.idActividades.forEach(function (id) {
-              var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo === id; });
+              var tmp = self.gridOptions.data.filter(function (e) {return e.Id === id.ActividadEconomicaId; });
               if (tmp.length > 0) {
                 $scope.actividades.push(tmp[0]); //enriquecer actividades
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }
             });
+            $scope.actividades = self.gridApi.selection.getSelectedRows();
           });
         });
 

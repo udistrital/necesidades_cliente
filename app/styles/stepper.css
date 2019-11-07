@@ -33,7 +33,7 @@
     -ms-flex-negative: 0;
         flex-shrink: 0; }
     md-steppers:not(.md-no-step-content):not(.md-dynamic-height) {
-      min-height: 1272px; }
+      min-height: 1280px; }
     md-steppers[md-align-steppers="bottom"] {
       padding-bottom: 72px; }
       md-steppers[md-align-steppers="bottom"] md-steppers-wrapper {

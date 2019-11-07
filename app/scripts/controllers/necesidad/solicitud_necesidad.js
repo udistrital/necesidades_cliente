@@ -138,29 +138,53 @@ angular.module('contractualClienteApp')
             res.data ? trNecesidad = res.data.Body : trNecesidad = res;
             self.Necesidad = trNecesidad.Necesidad;
             if (self.Necesidad.DependenciaNecesidadId) {
-                necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
+                self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
                     self.dependencia_solicitante = response.dependencia.Id;
-                });
-                necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId).then(function (response) {
+                }) : _;
+                self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId).then(function (response) {
                     self.dependencia_destino = response.dependencia.Id;
-                });
+                }) : _;
 
-                necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId).then(function (response) {
+                self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId).then(function (response) {
                     self.rol_ordenador_gasto = response.dependencia.Id;
-                });
+                }) : _;
 
                 if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {
                     self.tipoInterventor = false;
-                    self.dependencia_supervisor = necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId)
+                    // self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId).then(function(response){
+                    //     self.dependencia_supervisor = response.dependencia.Id;
+                    // }) : _;
                 } else {
                     self.tipoInterventor = true;
-                    self.dependencia_supervisor = necesidadService.getInfoPersonaNatural(self.Necesidad.DependenciaNecesidadId.InterventorId)
+                    self.Necesidad.DependenciaNecesidadId.InterventorId ? self.dependencia_supervisor = necesidadService.getInfoPersonaNatural(self.Necesidad.DependenciaNecesidadId.InterventorId) : _;
                 }
 
             }
             self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad || {};
-            // if(self.DetallePrestacionServicioNecesidad.Valor=)
+
             self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad || {};
+
+
+            // CPS Nucleo Area y Nucleo Area Conocimiento
+            if(self.DetallePrestacionServicioNecesidad){
+                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+                    query: 'Id:' + self.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                    limit: -1
+                })).then(function (response) {
+                    if(response.data[0]!= undefined){
+                        self.DetallePrestacionServicioNecesidad.NucleoId = response.data[0].AreaConocimientoId.Id;
+                        parametrosGobiernoRequest.get('area_conocimiento', $.param({ 
+                            limit: -1,
+                            query: 'Id:'+ self.DetallePrestacionServicioNecesidad.NucleoId
+                        })).then(function (response2) {
+                             self.nucleoarea=response2.data[0].Id;
+                             
+                        });    
+                    }
+          
+                });
+            }
+
 
             self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad || [];
             parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
@@ -176,33 +200,34 @@ angular.module('contractualClienteApp')
                         sortby: "ElementoCodigo",
                         order: "asc",
                     })).then(function (response) {
-                        prod.ElementoNombre=response.data[0].ElementoNombre;
+                        prod.ElementoNombre = response.data[0].ElementoNombre;
                     });
                     if (self.iva_data != undefined) {
                         var tIva = self.getPorcIVAbyId(prod.IvaId);
                         prod.Subtotal = prod.Cantidad * prod.Valor;
-                        if (tIva[0].Tarifa === 0) {
-                            prod.ValorIVA = 0;
-                            prod.preciomasIVA = prod.Subtotal || 0;
-                        } else {
-                            prod.ValorIVA = (prod.Subtotal * (tIva[0].Tarifa / 100)) || 0;
-                            prod.preciomasIVA = prod.Subtotal + prod.ValorIVA || 0;
-                        }
+                        prod.ValorIVA = (prod.Subtotal * (tIva / 100)) || 0;
+                        prod.preciomasIVA = prod.Subtotal + prod.ValorIVA || 0;
+
 
                     }
                 });
+                var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
+                self.DetalleServicioNecesidad.Valor ? self.DetalleServicioNecesidad.Total = (self.DetalleServicioNecesidad.Valor * tIva) / 100 + self.DetalleServicioNecesidad.Valor : _;
+                self.DetalleServicioNecesidad.Total ? self.servicio_valor = self.DetalleServicioNecesidad.Total : _;
             });
 
 
             self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad || [];
             self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad || [];
-            self.ActividadEconomicaNecesidad = trNecesidad.ActividadEconomicaNecesidad || [];
+            self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad || [];
+            self.ActividadEconomicaNecesidad=[];
             self.Rubros = trNecesidad.Rubros || [];
             self.Rubros.forEach(function (r) {
+                r.Fuentes===null ? r.Fuentes =[]:_;
                 r.Apropiacion = r.Apropiacion || r.InfoRubro;
-                r.Productos.forEach(function (p) {
+                r.Productos ? r.Productos.forEach(function (p) {
                     p.InfoProducto ? p = _.merge(p, p.InfoProducto) : _;
-                })
+                }) : _;
             });
             self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
             self.dep_ned = trNecesidad.DependenciaNecesidad;
@@ -298,8 +323,7 @@ angular.module('contractualClienteApp')
             self.dependencia_supervisor ?
                 necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
                     self.supervisor = JD.Persona;
-                    self.dep_ned.supervisor = JD.JefeDependencia.Id;
-                    self.Necesidad.DependenciaNecesidadId.SupervisorId = self.dep_ned.supervisor;
+                    self.Necesidad.DependenciaNecesidadId.SupervisorId = JD.JefeDependencia.Id;
                 }).catch(function (err) {
                 }) : _;
 
@@ -733,10 +757,10 @@ angular.module('contractualClienteApp')
         }, true)
 
         self.getPorcIVAbyId = function (id) {
-            if (self.iva_data != undefined) {
-                return self.iva_data.filter(function (iva) { return iva.Id === id; })
+            if (id && self.iva_data && self.iva_data.length > 0) {
+                return self.iva_data.filter(function (iva) { return iva.Id === id; })[0].Tarifa
             } else {
-                return [];
+                return 0;
             }
         }
 
@@ -746,16 +770,9 @@ angular.module('contractualClienteApp')
             }
             self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
             var tIva = self.getPorcIVAbyId(self.producto_catalogo.Iva);
-            if (tIva[0] != undefined) {
-                if (tIva[0].Tarifa === 0) {
-                    self.producto_catalogo.ValorIVA = 0;
-                    self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal || 0;
-                } else {
-                    self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva[0].Tarifa / 100)) || 0;
-                    self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
-                }
+            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva / 100)) || 0;
+            self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
 
-            }
 
         }, true)
 
@@ -773,8 +790,10 @@ angular.module('contractualClienteApp')
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true);
 
-        $scope.$watch('solicitudNecesidad.DetalleServicioNecesidad.Valor', function () {
-            self.servicio_valor = self.DetalleServicioNecesidad.Valor;
+        $scope.$watchGroup(['solicitudNecesidad.DetalleServicioNecesidad.Valor', 'solicitudNecesidad.DetalleServicioNecesidad.IvaId'], function () {
+            var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
+            self.DetalleServicioNecesidad.Total = (self.DetalleServicioNecesidad.Valor * tIva) / 100 + self.DetalleServicioNecesidad.Valor;
+            self.servicio_valor = self.DetalleServicioNecesidad.Total;
         }, true);
 
         $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
@@ -791,7 +810,7 @@ angular.module('contractualClienteApp')
             // serv
             if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 5) {
                 self.servicio_valor = self.Necesidad.Valor;
-                self.DetalleServicioNecesidad.Valor = self.Necesidad.Valor;
+                //self.DetalleServicioNecesidad.Valor = self.Necesidad.Valor;
             }
             // compra y serv
             if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 4) {
@@ -829,36 +848,13 @@ angular.module('contractualClienteApp')
         };
 
         self.crear_solicitud = function () {
+            if(self.Necesidad.TipoNecesidadId.Id===2){//servicios publicos
+                self.Necesidad.TipoContratoNecesidadId = { Id: 3 };
+            }
             self.ActividadEconomicaNecesidad = self.actividades_economicas_id
             self.Necesidad.ModalidadSeleccionId = { Id: 8 }
             self.Necesidad.EstadoNecesidadId = { Id: 8 }
             self.Necesidad.FechaSolicitud = new Date()
-            // self.marcos_legales = self.documentos.map(function (d) { return { MarcoLegalId: d }; });
-            // self.f_apropiaciones = [];
-            // self.productos_apropiaciones = [];
-            // self.Rubros
-            //     .filter(function (fap) { return fap.fuentes !== undefined; })
-            //     .forEach(function (fap) {
-            //         fap.fuentes.forEach(function (fuente) {
-            //             var f = {
-            //                 Apropiacion: fap.Apropiacion,
-            //                 MontoParcial: fuente.MontoParcial,
-            //                 FuenteFinanciamiento: fuente.Codigo,
-            //             };
-            //             self.f_apropiaciones.push(f);
-            //         });
-            //         //Construye objeto relación producto-rubro para persistir
-            //         if (fap.productos && fap.productos.length > 0) {
-            //             fap.productos.forEach(function (producto) {
-            //                 var prod = {
-            //                     ProductoRubro: producto.Id,
-            //                     Apropiacion: fap.Apropiacion
-            //                 };
-            //                 self.productos_apropiaciones.push(prod);
-            //             });
-            //         }
-            //     });
-
             self.TrNecesidad = {
                 Necesidad: self.Necesidad,
                 DetalleServicioNecesidad: self.DetalleServicioNecesidad,
@@ -935,7 +931,7 @@ angular.module('contractualClienteApp')
 
                 templateAlert = templateAlert + "</table>";
                 swal({
-                    title: 'Se ha creado la necesidad exitosamente. ',
+                    title: 'Se ha creado el borrador de Necesidad N°'+  response.data.Necesidad.ConsecutivoSolicitud ,
                     text: 'A continuación encontrará el resumen de los datos ingresados.',
                     type: "success",
                     width: 800,
@@ -981,6 +977,7 @@ angular.module('contractualClienteApp')
                             especificaciones_valido = self.Necesidad.Valor === self.valorTotalEspecificaciones;
                             break;
                         case 2:
+
                             especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
 
                             break;
@@ -1029,7 +1026,8 @@ angular.module('contractualClienteApp')
                     fin_valid = fin_valid && ap.MontoMeta <= ap.Apropiacion.ValorActual;
                 } else {
                     //CASE FUNCIONAMIENTO
-                    fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual;
+                    ap.Fuentes.length===0 ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).agregarFuente):_;
+                    fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual && ap.Fuentes.length>0;
                 }
                 ap.MontoFuentes > ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
@@ -1112,8 +1110,8 @@ angular.module('contractualClienteApp')
                     return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
                     var val = self.ValidarFinanciacion()
-                    if(self.IdNecesidad) { return val;}
-                    return val && document.getElementById("f_financiacion").classList.contains('ng-valid') && !document.getElementById("f_financiacion").classList.contains('ng-pristine');
+                    if (self.IdNecesidad) { return val; }
+                    return val && document.getElementById("f_financiacion").classList.contains('ng-valid');
                 case 'legal':
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
                 case 'contratacion':
