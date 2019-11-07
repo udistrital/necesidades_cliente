@@ -903,7 +903,7 @@ angular.module('contractualClienteApp')
 
                 templateAlert = templateAlert + "</table>";
                 swal({
-                    title: 'Se ha creado la necesidad exitosamente. ',
+                    title: 'Se ha creado el borrador de Necesidad N° XX. ',
                     text: 'A continuación encontrará el resumen de los datos ingresados.',
                     type: "success",
                     width: 800,

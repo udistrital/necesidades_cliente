@@ -19,30 +19,62 @@
 
             <div class="panel-body">
               <!-- Tipo Necesidad -->
-              <ng-form name="tipoNecesidad" class="form-group col-md-6 "
+              <ng-form name="tipoNecesidad" class="form-group col-md-12 "
                 style="text-align: center; vertical-align: middle;">
                 <div class="row">
                   <div>
-                    <legend class="text-success">
-                      {{"SOLICITUD_NECESIDAD_CONTRATO" | translate}}
+                    <legend class="text-info" style="text-align: left;">
+                      Tipo de Necesidad
                     </legend>
                   </div>
                   <div>
-                    <label class="radio-inline" ng-repeat="tipo in solicitudNecesidad.tipo_necesidad_data">
-                      <input type="radio" ng-value="{{tipo.Id}}"
-                        ng-model="solicitudNecesidad.Necesidad.TipoNecesidadId.Id"
-                        ng-init="solicitudNecesidad.Necesidad.TipoNecesidadId.Id = solicitudNecesidad.Necesidad.TipoNecesidadId.Id ? solicitudNecesidad.Necesidad.TipoNecesidadId.Id : 1"
-                        ng-change="solicitudNecesidad.Necesidad.TipoNecesidadId=tipo;solicitudNecesidad.ResetNecesidad()"
-                        required>
-                      {{tipo.Nombre}}
-                    </label>
+                    <div class="col-md-6">
+                      <label>Por favor seleccione el tipo de Necesidad : </label>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="radio-inline" ng-repeat="tipo in solicitudNecesidad.tipo_necesidad_data">
+                        <input type="radio" ng-value="{{tipo.Id}}"
+                          ng-model="solicitudNecesidad.Necesidad.TipoNecesidadId.Id"
+                          ng-init="solicitudNecesidad.Necesidad.TipoNecesidadId.Id = solicitudNecesidad.Necesidad.TipoNecesidadId.Id ? solicitudNecesidad.Necesidad.TipoNecesidadId.Id : 1"
+                          ng-change="solicitudNecesidad.Necesidad.TipoNecesidadId=tipo;solicitudNecesidad.ResetNecesidad()"
+                          required>
+                        {{tipo.Nombre}}
+                      </label>
+                    </div>
+
                   </div>
                 </div>
 
+                <div class="row">
+                  <div>
+                    <legend class="text-info" style="text-align: left;">
+                      Duración de Necesidad
+                    </legend>
+                  </div>
+                  <div>
+
+                    <div class="col-md-6">
+                        <label>Por favor seleccione la duración de la Necesidad.<br> {{ "NOTA_DURACION_NECESIDAD" | translate }} : </label>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="radio-inline col-md-3" ng-repeat="tipo in solicitudNecesidad.tipo_duracion_necesidad_data">
+
+                            <input class="col-md-1" type="radio" ng-value="{{tipo.Id}}"
+                              ng-model="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id"
+                              ng-init="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id = solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id ? solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id : 1"
+                              ng-change="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId=tipo" required>
+                            {{tipo.Nombre}}
+                          </label>
+      
+                    </div>
+                 
+                  </div>
+                </div>
               </ng-form>
 
               <!-- Duración -->
-              <ng-form class="form-group col-md-6 " style="text-align: center; vertical-align: middle;">
+              <!-- <ng-form class="form-group col-md-12 " style="text-align: center; vertical-align: middle;">
                 <div>
                   <legend class="text-success">
                     {{"DURACION_NECESIDAD_CONTRATO" | translate}}
@@ -59,35 +91,36 @@
                   </label>
 
                 </div>
-              </ng-form>
+              </ng-form> -->
 
               <div class="col-md-6" ng-show="solicitudNecesidad.ver_duracion_fecha">
-                <div class="form-group">
-                  <label class="col-sm-1 control-label">{{"AÑOS" | translate}}</label>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control" placeholder="Años" maxlength="4"
-                      ng-model="solicitudNecesidad.anos"
-                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
-                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
-
-                  </div>
-                  <label class="col-sm-1 control-label">{{"MESES" | translate}}</label>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control" placeholder="Meses" ng-model="solicitudNecesidad.meses"
-                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
-                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
-                  </div>
-
-                  <label class="col-sm-1 control-label">{{"DIAS" | translate}}</label>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control" placeholder="Dias" ng-model="solicitudNecesidad.dias"
-                      ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
-                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
-                  </div>
-                </div>
+                
               </div>
               <div class="col-md-6">
-                <label>{{ "NOTA_DURACION_NECESIDAD" | translate }}</label>
+                  <div class="form-group">
+                      <label class="col-sm-1 control-label" style="display: inline-block;">{{"AÑOS" | translate}}</label>
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control" placeholder="Años" maxlength="4"
+                          ng-model="solicitudNecesidad.anos"
+                          ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
+                          onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+    
+                      </div>
+                      <label class="col-sm-1 control-label" style="display: inline-block;">{{"MESES" | translate}}</label>
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control" placeholder="Meses" ng-model="solicitudNecesidad.meses"
+                          ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
+                          onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                      </div>
+    
+                      <label class="col-sm-1 control-label" style="display: inline-block;">{{"DIAS" | translate}}</label>
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control" placeholder="Dias" ng-model="solicitudNecesidad.dias"
+                          ng-change="solicitudNecesidad.duracionEspecialFunc(solicitudNecesidad.DuracionEspecial)"
+                          onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                      </div>
+                    </div>
+                
               </div>
             </div>
 
