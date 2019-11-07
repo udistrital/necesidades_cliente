@@ -195,6 +195,13 @@ angular.module('contractualClienteApp')
           showCloseButton: true,
           confirmButtonText: $translate.instant("CERRAR")
         },
+        agregarFuente: {
+          title: 'Error Valor Fuentes Rubro ' + codigoRubro,
+          type: 'error',
+          text: 'Debe agregar al menos una fuente al rubro.',
+          showCloseButton: true,
+          confirmButtonText: $translate.instant("CERRAR")
+        },
         metasMayorQueProducto: {
           title: 'Error Valor Metas y actividades Rubro ' + codigoRubro,
           type: 'error',
