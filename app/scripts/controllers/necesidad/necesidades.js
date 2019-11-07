@@ -99,41 +99,7 @@ angular.module('contractualClienteApp')
                 },
                 width: '10%'
             },
-            // {
-            //     field: 'Objeto',
-            //     displayName: $translate.instant('OBJETO_CONTRACTUAL'),
-            //     headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-            //     cellTooltip: function (row) {
-            //         return row.entity.Objeto;
-            //     },
-            //     width: '35%'
-            // },
-            // {
-            //     field: 'Justificacion',
-            //     displayName: $translate.instant('JUSTIFICACION_CONTRATO'),
-            //     headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-            //     cellTooltip: function (row) {
-            //         return row.entity.Justificacion;
-            //     },
-            //     width: '25%'
-            // },
-            // {
-            //     field: "self.buscarUE(1)",
-            //     displayName: $translate.instant('UNIDAD_EJECUTORA'),
-            //     headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-            //     cellTooltip: function (row) {
-            //         if(row.entity.UnidadEjecutora === 1){
-            //             return "Rector";
-            //         } else{ 
-            //             return "Convenios";
-            //         }
-
-            //     },
-            //     filter: { 
-            //         options: [{ UnidadEjecutora: 1, Nombre: 'Rector' }, { UnidadEjecutora: 2, Nombre: 'Convenios' }]     // custom attribute that goes with custom directive above 
-            //       }, 
-            //     width: '15%'
-            // },
+        
             {
                 field: 'EstadoNecesidadId.Nombre',
                 displayName: $translate.instant('ESTADO'),
@@ -240,9 +206,14 @@ angular.module('contractualClienteApp')
             necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
                 if (l.data !== undefined) {
                     swal(
-                        $translate.instant("OK"),
-                        $translate.instant("NECESIDAD_SOLICITADA"),
-                        'success'
+                       {
+                            title: 'Se ha creado la Solicitud de necesidad N° XX exitosamente. ',
+                            text: 'El borrador de la solicitud se ha aprobado y se ha generado la Solicitud de Necesidad N° XX',
+                            type: "success",
+                            width: 600,
+                            showCloseButton: true,
+                            confirmButtonText: $translate.instant("CERRAR")
+                        }
                     );
                     self.cargarDatosNecesidades(self.offset, self.query);
                     $("#myModal").modal("hide");
@@ -265,12 +236,15 @@ angular.module('contractualClienteApp')
             necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
                 if (l.data !== undefined) {
                     swal(
-                        $translate.instant("OK"),
-                        $translate.instant("NECESIDAD_APROBADA"),
-                        'success'
-                    );
-                    self.cargarDatosNecesidades(self.offset, self.query);
-                    $("#myModal").modal("hide");
+                        {
+                             title: 'Se ha creado la Necesidad N° XX exitosamente. ',
+                             text: 'La solicitud de necesidad ha sido aprobada y se ha generado la Necesidad N° XX',
+                             type: "success",
+                             width: 600,
+                             showCloseButton: true,
+                             confirmButtonText: $translate.instant("CERRAR")
+                         }
+                     );
                 } else {
                     swal(
                         $translate.instant("ERROR"),
@@ -316,10 +290,15 @@ angular.module('contractualClienteApp')
             }).then(function (response) {
                 if (response.status === 200 || response.status === 201) {
                     swal(
-                        $translate.instant("OK"),
-                        $translate.instant("NECESIDAD_RECHAZADA"),
-                        'success'
-                    );
+                        {
+                             title: 'Se ha rechazado la Solicitud de Necesidad N° XX  ',
+                             text: 'La solicitud de necesidad ha sido rechazada',
+                             type: "success",
+                             width: 600,
+                             showCloseButton: true,
+                             confirmButtonText: $translate.instant("CERRAR")
+                         }
+                     );
                     necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad);
                 } else {
                     swal(
