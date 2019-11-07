@@ -164,19 +164,24 @@ angular.module('contractualClienteApp')
 
 
             // CPS Nucleo Area y Nucleo Area Conocimiento
-            parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-                query: 'Id:' + self.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
-                limit: -1
-            })).then(function (response) {
-                self.DetallePrestacionServicioNecesidad.NucleoId = response.data[0].AreaConocimientoId.Id;
-                parametrosGobiernoRequest.get('area_conocimiento', $.param({ 
-                    limit: -1,
-                    query: 'Id:'+ self.DetallePrestacionServicioNecesidad.NucleoId
-                })).then(function (response2) {
-                     self.nucleoarea=response2.data[0].Id;
-                     
-                });              
-            });
+            if(self.DetallePrestacionServicioNecesidad){
+                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+                    query: 'Id:' + self.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                    limit: -1
+                })).then(function (response) {
+                    if(response.data[0]!= undefined){
+                        self.DetallePrestacionServicioNecesidad.NucleoId = response.data[0].AreaConocimientoId.Id;
+                        parametrosGobiernoRequest.get('area_conocimiento', $.param({ 
+                            limit: -1,
+                            query: 'Id:'+ self.DetallePrestacionServicioNecesidad.NucleoId
+                        })).then(function (response2) {
+                             self.nucleoarea=response2.data[0].Id;
+                             
+                        });    
+                    }
+          
+                });
+            }
 
 
             self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad || [];
@@ -449,7 +454,6 @@ angular.module('contractualClienteApp')
                     limit: -1
                 })).then(function (response) {
                     self.nucleo_conocimiento_data = response.data;
-                    console.info(self.nucleo_conocimiento_data,"lala", self.nucleoarea)
                 }) : _;
         }, true);
 
@@ -979,7 +983,6 @@ angular.module('contractualClienteApp')
                             especificaciones_valido = self.Necesidad.Valor === (self.valorTotalEspecificaciones + self.servicio_valor);
                             break;
                         case 5:
-                            console.info(self.Necesidad.Valor, "JBALVIM", self.servicio_valor)
                             especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
                             break;
                     }
