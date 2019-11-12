@@ -194,7 +194,7 @@
           {{d_visualizarNecesidad.v_necesidad.EstudioMercado}}
         </p>
 
-        <h3 class="text-info">{{"MARCO_LEGAL" | translate}}</h3>
+        <h3 class="text-info" ng-show="d_visualizarNecesidad.v_necesidad.TipoNecesidadId.Id!==2">{{"MARCO_LEGAL" | translate}}</h3>
         <p class="text-muted text-justify">
           <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">
             {{doc.MarcoLegalId.NombreDocumento}}
