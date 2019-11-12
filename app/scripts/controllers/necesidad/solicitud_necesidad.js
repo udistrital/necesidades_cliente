@@ -799,15 +799,7 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
             //reiniciar objetos cuando se encuentre en curso
-            if(self.elaborando_necesidad===true){
-                self.DetalleServicioNecesidad = {};
-                self.DetallePrestacionServicioNecesidad = {};
-                self.ProductosCatalogoNecesidad = [];
-                self.ActividadEspecificaNecesidad = [];
-                self.ActividadEconomicaNecesidad = [];
-                self.producto_catalogo = {};
-                self.producto_catalogo.RequisitosMinimos = [];
-            }
+            self.ResetObjects();
             if (self.Necesidad.TipoContratoNecesidadId && (self.Necesidad.TipoContratoNecesidadId.Id === 1 || self.Necesidad.TipoContratoNecesidadId.Id === 4) /* tipo compra o compra y servicio */) {
                 self.MostrarTotalEspc = true;
             } else {
@@ -1032,7 +1024,6 @@ angular.module('contractualClienteApp')
         self.ValidarFinanciacion = function () {
             var fin_valid = self.Rubros.length > 0;
             self.Rubros.forEach(function (ap) {
-                var v_fuentes = ap.MontoFuentes || 0;
                 // CASE INVERSION
                 if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversion') {
                     fin_valid = fin_valid && ap.MontoMeta <= ap.Apropiacion.ValorActual;
@@ -1044,7 +1035,7 @@ angular.module('contractualClienteApp')
                 ap.MontoFuentes > ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
             });
-            !fin_valid ? _ : swal({
+            !fin_valid ? swal(necesidadService.getAlertaFinanciacion(0).ErrorFinanciacion) : swal({
                 title: 'Financiación balanceada',
                 type: 'success',
                 text: 'Los valores de financiación están en igualdad',
@@ -1058,10 +1049,23 @@ angular.module('contractualClienteApp')
             necesidadService.getFullNecesidad().then(function (res) {
                 var TipoNecesidad = self.Necesidad.TipoNecesidadId;
                 self.emptyStorage();
+                self.ResetObjects();
                 self.recibirNecesidad(res);
                 self.Necesidad.TipoNecesidadId = TipoNecesidad;
             });
         };
+
+        self.ResetObjects = function() {
+            if(self.elaborando_necesidad===true){
+                self.DetalleServicioNecesidad = {};
+                self.DetallePrestacionServicioNecesidad = {};
+                self.ProductosCatalogoNecesidad = [];
+                self.ActividadEspecificaNecesidad = [];
+                self.ActividadEconomicaNecesidad = [];
+                self.producto_catalogo = {};
+                self.producto_catalogo.RequisitosMinimos = [];
+            }
+        }
 
         // Control de visualizacion de los campos individuales en el formulario
         self.CambiarTipoNecesidad = function (TipoNecesidad) {
