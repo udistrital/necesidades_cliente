@@ -212,7 +212,8 @@ angular.module('contractualClienteApp')
                     }
                 });
                 var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
-                self.DetalleServicioNecesidad.Valor ? self.DetalleServicioNecesidad.Total = (self.DetalleServicioNecesidad.Valor * tIva) / 100 + self.DetalleServicioNecesidad.Valor : _;
+                self.val_iva = (self.DetalleServicioNecesidad.Valor * tIva) / 100 ;
+                self.DetalleServicioNecesidad.Valor ? self.DetalleServicioNecesidad.Total = self.val_iva + self.DetalleServicioNecesidad.Valor : _;
                 self.DetalleServicioNecesidad.Total ? self.servicio_valor = self.DetalleServicioNecesidad.Total : _;
             });
 
@@ -793,7 +794,8 @@ angular.module('contractualClienteApp')
 
         $scope.$watchGroup(['solicitudNecesidad.DetalleServicioNecesidad.Valor', 'solicitudNecesidad.DetalleServicioNecesidad.IvaId'], function () {
             var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
-            self.DetalleServicioNecesidad.Total = (self.DetalleServicioNecesidad.Valor * tIva) / 100 + self.DetalleServicioNecesidad.Valor;
+            self.val_iva = (self.DetalleServicioNecesidad.Valor * tIva) / 100 ;
+            self.DetalleServicioNecesidad.Total = self.val_iva + self.DetalleServicioNecesidad.Valor;
             self.servicio_valor = self.DetalleServicioNecesidad.Total;
         }, true);
 
