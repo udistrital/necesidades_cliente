@@ -202,10 +202,10 @@ angular.module('contractualClienteApp')
           showCloseButton: true,
           confirmButtonText: $translate.instant("CERRAR")
         },
-        metasMayorQueProducto: {
-          title: 'Error Valor Metas y actividades Rubro ' + codigoRubro,
+        errorFinanciacion: {
+          title: 'Error Sección Financiación',
           type: 'error',
-          text: 'Verifique los valores de metas y actividades, la suma no puede superar el valor de los productos.',
+          text: 'Verifique los valores de financiación.',
           showCloseButton: true,
           confirmButtonText: $translate.instant("CERRAR")
         },
