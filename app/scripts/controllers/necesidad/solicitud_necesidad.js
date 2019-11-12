@@ -230,7 +230,7 @@ angular.module('contractualClienteApp')
                 }) : _;
             });
             self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
-            self.dep_ned = trNecesidad.DependenciaNecesidad;
+            self.dependencia_solicitante = trNecesidad.DependenciaNecesidad;
             self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
             self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
             self.duracionEspecialReverse();
@@ -1035,21 +1035,25 @@ angular.module('contractualClienteApp')
                 ap.MontoFuentes > ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
             });
-            !fin_valid ? swal(necesidadService.getAlertaFinanciacion(0).ErrorFinanciacion) : swal({
+            !fin_valid ? swal(necesidadService.getAlertaFinanciacion(0).errorFinanciacion) : swal({
                 title: 'Financiación balanceada',
                 type: 'success',
                 text: 'Los valores de financiación están en igualdad',
                 showCloseButton: true,
                 confirmButtonText: $translate.instant("CERRAR")
+            }).then(function(event) {
+                self.SeccionesFormulario.financiacion.completado = true;
+                self.SeccionesFormulario.legal.activo = true;
+                self.FormularioSeleccionado = 2;
             });
             return fin_valid;
         }
 
         self.ResetNecesidad = function () {
+            self.emptyStorage();
+            self.ResetObjects();
             necesidadService.getFullNecesidad().then(function (res) {
                 var TipoNecesidad = self.Necesidad.TipoNecesidadId;
-                self.emptyStorage();
-                self.ResetObjects();
                 self.recibirNecesidad(res);
                 self.Necesidad.TipoNecesidadId = TipoNecesidad;
             });
@@ -1092,7 +1096,7 @@ angular.module('contractualClienteApp')
                     self.FormularioSeleccionado = 0;
                     break;
                 case 'financiacion':
-                    if (self.ValidarSeccion('general')) {
+                    if (ValidarSeccion('general')) {
                         self.SeccionesFormulario.general.completado = true;
                         self.SeccionesFormulario.financiacion.activo = true;
                         self.elaborando_necesidad=true;
@@ -1103,17 +1107,18 @@ angular.module('contractualClienteApp')
                     }
                     break;
                 case 'legal':
-                    if (self.ValidarSeccion('financiacion')) {
+                    if (ValidarSeccion('financiacion')) {
                         self.SeccionesFormulario.financiacion.completado = true;
                         self.SeccionesFormulario.legal.activo = true;
                         self.FormularioSeleccionado = 2;
+                        // console.info("dentro:",self.FormularioSeleccionado)
                     }
                     else {
                         // self.AlertSeccion('Financiación');
                     }
                     break;
                 case 'contratacion':
-                    if (self.ValidarSeccion('legal')) {
+                    if (ValidarSeccion('legal')) {
                         self.SeccionesFormulario.legal.completado = true;
                         self.SeccionesFormulario.contratacion.activo = true;
                         self.FormularioSeleccionado = 3;
@@ -1129,7 +1134,7 @@ angular.module('contractualClienteApp')
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }, true)
 
-        self.ValidarSeccion = function (form) {
+        function ValidarSeccion(form) {
             var n = self.solicitudNecesidad;
             switch (form) {
                 case 'general':
@@ -1137,8 +1142,10 @@ angular.module('contractualClienteApp')
                 case 'financiacion':
                     var val = self.ValidarFinanciacion()
                     if (self.IdNecesidad) { return val; }
+                    // console.info("fin", val , document.getElementById("f_financiacion").classList.contains('ng-valid'))
                     return val && document.getElementById("f_financiacion").classList.contains('ng-valid');
                 case 'legal':
+                    // console.info("ligal",!document.getElementById("f_legal").classList.contains('ng-invalid'))
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
                 case 'contratacion':
                     return true;

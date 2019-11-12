@@ -36,7 +36,7 @@
                         <input type="radio" ng-value="{{tipo.Id}}"
                           ng-model="solicitudNecesidad.Necesidad.TipoNecesidadId.Id"
                           ng-init="solicitudNecesidad.Necesidad.TipoNecesidadId.Id = solicitudNecesidad.Necesidad.TipoNecesidadId.Id ? solicitudNecesidad.Necesidad.TipoNecesidadId.Id : 1"
-                          ng-change="solicitudNecesidad.Necesidad.TipoNecesidadId=tipo;solicitudNecesidad.ResetNecesidad()"
+                          ng-click="solicitudNecesidad.Necesidad.TipoNecesidadId=tipo;solicitudNecesidad.ResetNecesidad()"
                           required>
                         {{tipo.Nombre}}
                       </label>
@@ -908,7 +908,7 @@
   </div>
 </div>
 </div>
-<pre>{{ solicitudNecesidad.Necesidad | json}}
+<!-- <pre>{{ solicitudNecesidad.Necesidad | json}}
   
   {{ solicitudNecesidad.MarcoLegalNecesidad | json}}
 
@@ -926,7 +926,7 @@
 
   {{solicitudNecesidad.TrNecesidad | json}}
   
-</pre>
+</pre> -->
 
 
 
