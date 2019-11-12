@@ -33,11 +33,22 @@ angular.module('contractualClienteApp')
                 var metas = {};
 
                 $scope.$watch('necesidad', function () {
+                    self.verJustificacion = null;
                     self.cargar_necesidad();
                     if ($scope.necesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'F') {
                         self.funcionamiento = true;
                     } else {
                         self.funcionamiento = false;
+                    }
+
+                    if ($scope.necesidad.Necesidad.EstadoNecesidadId.CodigoAbreviacionn === 'R') {
+                        necesidadesCrudRequest.get('necesidad_rechazada', $.param({
+                            query: 'NecesidadId:' + $scope.necesidad.Necesidad.Id
+                        })).then(function(response) {
+                            if(response.data !== null && response.status === 200) {
+                                self.verJustificacion = response.data;
+                            }
+                        });
                     }
                 });
 
@@ -90,16 +101,6 @@ angular.module('contractualClienteApp')
                     });
                 }
 
-                function get_ordenador_gasto(id_ordenador) {
-                    agoraRequest.get('informacion_persona_natural', $.param({
-                        query: 'Id:' + id_ordenador
-                    })).then(function (response) {
-                        if (response.data !== null && response.status === 200) {
-                            self.ordenador_gasto = response.data[0];
-                        } 
-                    });
-                }
-
                 function get_informacion_meta(rubro) {
                     rubro.Metas.forEach(function(meta) {
                         meta.InfoMeta = metas.actividades.find(function(item) {
@@ -129,12 +130,6 @@ angular.module('contractualClienteApp')
                     necesidadService.getJefeDependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId, true).then(function(response) {
                         self.ordenador_gasto = response.Persona;
                     });
-                    
-                    self.verJustificacion = [
-                        necesidadService.EstadoNecesidadType.Anulada.Id,
-                        necesidadService.EstadoNecesidadType.Rechazada.Id,
-                        necesidadService.EstadoNecesidadType.Modificada.Id,
-                    ].includes($scope.estado.Id);
 
                     if ($scope.necesidad.Necesidad.TipoContratoId && $scope.necesidad.Necesidad.TipoContratoId !== 0 ) {
                         agoraRequest.get('tipo_contrato/'+ $scope.necesidad.Necesidad.TipoContratoId).then(function (response) {

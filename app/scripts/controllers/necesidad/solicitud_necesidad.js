@@ -92,24 +92,24 @@ angular.module('contractualClienteApp')
             unico_pago: [true, true, false, undefined],
             agotar_presupuesto: [true, false, true, undefined]
         };
-
-
+        
+        self.elaborando_necesidad=false; //variable que se toma como cirterio para reiniciar objetos, verdadera en primer cambio de form
         self.SeccionesFormulario = {
             general: {
                 activo: true,
-                completado: true,
+                completado: false,
             },
             financiacion: {
-                activo: true,
-                completado: true,
+                activo: false,
+                completado: false,
             },
             legal: {
-                activo: true,
-                completado: true,
+                activo: false,
+                completado: false,
             },
             contratacion: {
-                activo: true,
-                completado: true,
+                activo: false,
+                completado: false,
             }
         };
 
@@ -459,17 +459,18 @@ angular.module('contractualClienteApp')
                 }) : _;
         }, true);
 
-        $scope.$watch('solicitudNecesidad.necesidad.TipoNecesidad.Id', function () {
-            if (!self.necesidad) {
+        $scope.$watch('solicitudNecesidad.necesidad.TipoNecesidadId.Id', function () {
+            if (!self.Necesidad) {
                 return;
             }
-            var TipoNecesidad = self.necesidad.TipoNecesidad.Id;
-            self.CambiarTipoNecesidad(TipoNecesidad);
+            self.CambiarTipoNecesidad(self.Necesidad.TipoNecesidadId.Id);
         });
 
         $scope.$watchGroup(['solicitudNecesidad.Necesidad.AreaFuncional', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
-            // self.Necesidad.AreaFuncional&&self.Necesidad.TipoFinanciacionNecesidadId ? self.Rubros = [] : _;
+            if(self.elaborando_necesidad===true) {
+                self.Necesidad.AreaFuncional&&self.Necesidad.TipoFinanciacionNecesidadId ? self.Rubros = [] : _;
+            }
         })
 
         necesidadService.getAllDependencias().then(function (Dependencias) {
@@ -797,6 +798,16 @@ angular.module('contractualClienteApp')
         }, true);
 
         $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
+            //reiniciar objetos cuando se encuentre en curso
+            if(self.elaborando_necesidad===true){
+                self.DetalleServicioNecesidad = {};
+                self.DetallePrestacionServicioNecesidad = {};
+                self.ProductosCatalogoNecesidad = [];
+                self.ActividadEspecificaNecesidad = [];
+                self.ActividadEconomicaNecesidad = [];
+                self.producto_catalogo = {};
+                self.producto_catalogo.RequisitosMinimos = [];
+            }
             if (self.Necesidad.TipoContratoNecesidadId && (self.Necesidad.TipoContratoNecesidadId.Id === 1 || self.Necesidad.TipoContratoNecesidadId.Id === 4) /* tipo compra o compra y servicio */) {
                 self.MostrarTotalEspc = true;
             } else {
@@ -1060,6 +1071,15 @@ angular.module('contractualClienteApp')
             _.merge(self.forms, self.estructura[self.TipoNecesidadType[TipoNecesidad]].forms);
             _.merge(self.fields, self.estructura[self.TipoNecesidadType[TipoNecesidad]]);
             self.Necesidad.TipoContratoNecesidadId = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
+            if(self.f.elaborando_necesidad===true) {
+                self.DetalleServicioNecesidad = {};
+                self.DetallePrestacionServicioNecesidad = {};
+                self.ProductosCatalogoNecesidad = [];
+                self.ActividadEspecificaNecesidad = [];
+                self.ActividadEconomicaNecesidad = [];
+                self.producto_catalogo = {};
+                self.producto_catalogo.RequisitosMinimos = []; 
+            }
         };
         //control avance y retroceso en el formulario
         self.CambiarForm = function (form) {
@@ -1071,6 +1091,7 @@ angular.module('contractualClienteApp')
                     if (self.ValidarSeccion('general')) {
                         self.SeccionesFormulario.general.completado = true;
                         self.SeccionesFormulario.financiacion.activo = true;
+                        self.elaborando_necesidad=true;
                         self.FormularioSeleccionado = 1;
                     }
                     else {
