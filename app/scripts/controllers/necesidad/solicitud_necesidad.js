@@ -166,7 +166,7 @@ angular.module('contractualClienteApp')
 
 
             // CPS Nucleo Area y Nucleo Area Conocimiento
-            if(self.DetallePrestacionServicioNecesidad){
+            if(self.DetallePrestacionServicioNecesidad && self.DetallePrestacionServicioNecesidad.NucleoConocimientoId){
                 parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
                     query: 'Id:' + self.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
                     limit: -1
@@ -459,12 +459,12 @@ angular.module('contractualClienteApp')
                 }) : _;
         }, true);
 
-        $scope.$watch('solicitudNecesidad.necesidad.TipoNecesidadId.Id', function () {
-            if (!self.Necesidad) {
-                return;
-            }
-            self.CambiarTipoNecesidad(self.Necesidad.TipoNecesidadId.Id);
-        });
+        // $scope.$watch('solicitudNecesidad.Necesidad.TipoNecesidadId.Id', function () {
+        //     if (!self.Necesidad) {
+        //         return;
+        //     }
+        //     self.CambiarTipoNecesidad(self.Necesidad.TipoNecesidadId.Id);
+        // });
 
         $scope.$watchGroup(['solicitudNecesidad.Necesidad.AreaFuncional', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
