@@ -151,9 +151,9 @@ angular.module('contractualClienteApp')
 
                 if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {
                     self.tipoInterventor = false;
-                    // self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId).then(function(response){
-                    //     self.dependencia_supervisor = response.dependencia.Id;
-                    // }) : _;
+                    self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId).then(function(response){
+                        self.dependencia_supervisor = response.dependencia.Id;
+                    }) : _;
                 } else {
                     self.tipoInterventor = true;
                     self.Necesidad.DependenciaNecesidadId.InterventorId ? self.dependencia_supervisor = necesidadService.getInfoPersonaNatural(self.Necesidad.DependenciaNecesidadId.InterventorId) : _;
@@ -951,6 +951,7 @@ angular.module('contractualClienteApp')
                     confirmButtonText: $translate.instant("CERRAR")
                 });
                 if (response.status < 300) {
+                    self.emptyStorage();
                     $window.location.href = '#/necesidades';
                 }
             };
