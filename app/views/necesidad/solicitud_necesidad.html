@@ -534,7 +534,7 @@
                 <div
                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===2 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
 
-                  <div class="col-md-6" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===2">
+                  <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===2">
                     <label for="perfil" class="control-label">{{"PERFIL" | translate}}</label>
                     <select class="form-control"
                       ng-model="solicitudNecesidad.DetallePrestacionServicioNecesidad.PerfilId"
@@ -544,7 +544,7 @@
                     </select>
                   </div>
 
-                  <div class="col-md-6" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===2">
+                  <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===2">
                     <label class=" control-label">{{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</label>
                     <select class="form-control" ng-model="solicitudNecesidad.nucleoarea"
                       ng-options="nucleoa.Id as nucleoa.Nombre for nucleoa in solicitudNecesidad.nucleo_area_data">
@@ -575,7 +575,7 @@
                     </select>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
                     <label class="control-label">{{"VALOR_SERVICIO" | translate}}</label>
                     <input type="text" class="form-control money"
                       ng-model="solicitudNecesidad.DetalleServicioNecesidad.Valor"
@@ -583,7 +583,7 @@
                       ui-money-mask="2">
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
                     <label class=" control-label">{{"IVA" | translate}} %</label>
                     <select class="form-control  money"
                       ng-init="solicitudNecesidad.DetalleServicioNecesidad.IvaId = solicitudNecesidad.DetalleServicioNecesidad.IvaId ? solicitudNecesidad.DetalleServicioNecesidad.IvaId : 0"
@@ -600,18 +600,18 @@
 
 
 
-                  <div class="col-md-12">
+                  <!-- <div class="col-md-12"> -->
 
-                    <div class="col-md-4">
-                      <label class="control-label">Subtotal</label>
+                    <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
+                      <label class="control-label">Valor IVA</label>
                       <input type="text" class="form-control money"
-                        ng-model="solicitudNecesidad.DetalleServicioNecesidad.Valor"
-                        ng-init="solicitudNecesidad.DetalleServicioNecesidad.Valor = solicitudNecesidad.DetalleServicioNecesidad.Valor ? solicitudNecesidad.DetalleServicioNecesidad.Valor : 0"
+                        ng-model="solicitudNecesidad.val_iva"
+                        ng-init="solicitudNecesidad.val_iva = solicitudNecesidad.val_iva ? solicitudNecesidad.val_iva : 0"
                         ui-money-mask="2" disabled>
                     </div>
 
-                    <div class="col-md-4">
-                      <label class="control-label">Total</label>
+                    <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
+                      <label class="control-label">Total Servicio</label>
                       <input type="text" class="form-control money"
                         ng-model="solicitudNecesidad.DetalleServicioNecesidad.Total"
                         ng-init="solicitudNecesidad.DetalleServicioNecesidad.Total = solicitudNecesidad.DetalleServicioNecesidad.Total ? solicitudNecesidad.DetalleServicioNecesidad.Total : 0"
@@ -632,7 +632,7 @@
 
 
 
-                  </div>
+                  <!-- </div> -->
 
 
                   <div class="col-md-12">
@@ -917,6 +917,7 @@
   {{solicitudNecesidad.ProductosCatalogoNecesidad | json}}
 
   {{solicitudNecesidad.DetalleServicioNecesidad | json}}
+  RITMP
 
   {{solicitudNecesidad.DetallePrestacionServicioNecesidad | json}}
 
