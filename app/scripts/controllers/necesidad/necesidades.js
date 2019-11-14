@@ -142,10 +142,8 @@ angular.module('contractualClienteApp')
                 });
             }
         };
+        self.gridOptions.multiSelect = false;
 
-        $scope.$watch('necesidades.modalidadSel', function () {
-
-        })
 
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema
         self.cargarDatosNecesidades = function (offset, query) {
@@ -156,7 +154,7 @@ angular.module('contractualClienteApp')
             var req = necesidadesCrudRequest.get('necesidad', $.param({
                 limit: self.gridOptions.paginationPageSize,
                 offset: offset,
-                sortby: "Vigencia",
+                sortby: "ConsecutivoSolicitud",
                 order: "desc"
             }, true));
 
@@ -220,9 +218,23 @@ angular.module('contractualClienteApp')
                 }
             });
         };
+        
 
 
         self.aprobar_necesidad = function () {
+            if (!self.modalidadSel || !self.TipoContrato) {
+                swal(
+                    {
+                        title: 'Error al aprobar necesidad. ',
+                        text: 'Por favor, seleccione la modalidad de selección y el tipo de contrato antes de aprobar la necesidad.',
+                        type: "error",
+                        width: 600,
+                        showCloseButton: true,
+                        confirmButtonText: $translate.instant("CERRAR")
+                    }
+                )
+                return
+            }
             self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
             self.necesidad.Necesidad.ModalidadSeleccionId = self.modalidadSel;
             self.necesidad.Necesidad.TipoContratoId = self.TipoContrato.Id;
@@ -232,13 +244,15 @@ angular.module('contractualClienteApp')
                     swal(
                         {
                              title: 'Se ha creado la Necesidad N°'+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
-                             text: 'La solicitud de necesidad ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.ConsecutivoNecesidad ,
+                             text: 'La solicitud de necesidad '+self.necesidad.Necesidad.ConsecutivoSolicitud+'ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.ConsecutivoNecesidad ,
                              type: "success",
                              width: 600,
                              showCloseButton: true,
                              confirmButtonText: $translate.instant("CERRAR")
                          }
                      );
+                     self.cargarDatosNecesidades(self.offset, self.query);
+                     $("#myModal").modal("hide");
                 } else {
                     swal(
                         $translate.instant("ERROR"),
@@ -337,13 +351,21 @@ angular.module('contractualClienteApp')
             planCuentasMidRequest.post("cdp/solicitarCDP", self.necesidad.Necesidad).then(
                 function (response) {
                     if (response.status === 200 || response.status === 201) {
+                        console.info(response)
                         self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.CdpSolicitado;
+                        self.necesidad.Necesidad.TipoContratoId = self.necesidad.Necesidad.TipoContratoId.Id;
                         necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {
                             if (resp_nececesidad.status === 200 || resp_nececesidad.status === 201) {
                                 swal(
-                                    $translate.instant("OK"),
-                                    $translate.instant("CDP_SOLICITADO"),
-                                    'success'
+                    
+                                    {
+                                        title: 'Se ha creado la solicitud de CDP N° '+response.Body,
+                                        text: $translate.instant("CDP_SOLICITADO"),
+                                        type: "success",
+                                        width: 600,
+                                        showCloseButton: true,
+                                        confirmButtonText: $translate.instant("CERRAR")
+                                    }
                                 );
                                 self.cargarDatosNecesidades(self.offset, self.query);
                                 self.necesidad = undefined;

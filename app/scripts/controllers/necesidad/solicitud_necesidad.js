@@ -97,34 +97,30 @@ angular.module('contractualClienteApp')
         self.SeccionesFormulario = {
             general: {
                 activo: true,
-                completado: false,
+                completado: true,
             },
             financiacion: {
-                activo: false,
-                completado: false,
+                activo: true,
+                completado: true,
             },
             legal: {
-                activo: false,
-                completado: false,
+                activo: true,
+                completado: true,
             },
             contratacion: {
-                activo: false,
-                completado: false,
+                activo: true,
+                completado: true,
             }
         };
 
 
         // El tipo de solicitud de contrato
         self.duracionEspecialFunc = function (especial) {
-            //self.necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
             self.Necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
             var s = self.duracionEspecialMap[especial];
             if (!s) { return; }
 
             self.ver_duracion_fecha = s[0];
-            // self.necesidad.UnicoPago = s[1];
-            // self.necesidad.AgotarPresupuesto = s[2];
-            // self.necesidad.DiasDuracion = s[3] === undefined ? self.necesidad.DiasDuracion : s[3];
         };
 
         self.duracionEspecialReverse = function () {
@@ -421,9 +417,6 @@ angular.module('contractualClienteApp')
             }
         };
 
-        // coreAmazonRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, $.param({ query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') })).then(function (response) {
-        //     self.dependencia_solicitante_data = response.data;
-        // });
 
         $scope.$watch('solicitudNecesidad.especificaciones.Valor', function () {
             self.valor_iva = (self.especificaciones.Iva / 100) * self.especificaciones.Valor * self.especificaciones.Cantidad;
@@ -460,12 +453,6 @@ angular.module('contractualClienteApp')
                 }) : _;
         }, true);
 
-        // $scope.$watch('solicitudNecesidad.Necesidad.TipoNecesidadId.Id', function () {
-        //     if (!self.Necesidad) {
-        //         return;
-        //     }
-        //     self.CambiarTipoNecesidad(self.Necesidad.TipoNecesidadId.Id);
-        // });
 
         $scope.$watchGroup(['solicitudNecesidad.Necesidad.AreaFuncional', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
             // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
@@ -485,64 +472,7 @@ angular.module('contractualClienteApp')
         })).then(function (response) {
             self.ordenador_gasto_data = response.data;
         }).catch(function (err) {
-            //solucion cuestonablemente provisional  porque el servicio core no responde en json
-            self.ordenador_gasto_data = [
-                {
-                    Id: 7,
-                    Cargo: 'Decano Facultad Ciencias y Educación',
-                    DependenciaId: 17
-                },
-                {
-                    Id: 10,
-                    Cargo: 'Decano Facultad de Artes',
-                    DependenciaId: 35
-                },
-                {
-                    Id: 8,
-                    Cargo: 'Decano Facultad de Medio Ambiente',
-                    DependenciaId: 65
-                },
-                {
-                    Id: 6,
-                    Cargo: 'Decano Facultad Ingeniería',
-                    DependenciaId: 14
-                },
-                {
-                    Id: 9,
-                    Cargo: 'Decano Facultad Tecnológica',
-                    DependenciaId: 66
-                },
-                {
-                    Id: 4,
-                    Cargo: 'Director Centro de Investigaciones y Desarrollo Científico',
-                    DependenciaId: 43
-                },
-                {
-                    Id: 11,
-                    Cargo: 'Director IDEXUD',
-                    DependenciaId: 12
-                },
-                {
-                    Id: 3,
-                    Cargo: 'Rector',
-                    DependenciaId: 7
-                },
-                {
-                    Id: 5,
-                    Cargo: 'Secretario General',
-                    DependenciaId: 9
-                },
-                {
-                    Id: 1,
-                    Cargo: 'Vicerrector Académico',
-                    DependenciaId: 8
-                },
-                {
-                    Id: 2,
-                    Cargo: 'Vicerrector Administrativo y Financiero',
-                    DependenciaId: 15
-                }
-            ]
+            console.info(err)
         });
 
 
@@ -732,11 +662,6 @@ angular.module('contractualClienteApp')
                     if (self.Rubros[i].Metas.length > 0 && self.Rubros[i].Metas[0].Actividades) {
                         self.Rubros[i].MontoPorApropiacion += self.Rubros[i].Metas[0].MontoPorMeta;
                     }
-                    // if (self.Rubros[i].Apropiacion.productos !== undefined) {
-                    //     for (var k = 0; k < self.Rubros[i].Apropiacion.productos.length; k++) {
-                    //         self.Rubros[i].MontoProductos += self.Rubros[i].Apropiacion.productos[k].MontoParcial;
-                    //     }
-                    // }
                 }
 
                 // case Funcionamiento
@@ -1043,11 +968,7 @@ angular.module('contractualClienteApp')
                 text: 'Los valores de financiación están en igualdad',
                 showCloseButton: true,
                 confirmButtonText: $translate.instant("CERRAR")
-            }).then(function(event) {
-                self.SeccionesFormulario.financiacion.completado = true;
-                self.SeccionesFormulario.legal.activo = true;
-                self.FormularioSeleccionado = 2;
-            });
+            })
             return fin_valid;
         }
 
@@ -1099,36 +1020,34 @@ angular.module('contractualClienteApp')
                     break;
                 case 'financiacion':
                     if (ValidarSeccion('general')) {
-                        self.SeccionesFormulario.general.completado = true;
                         self.SeccionesFormulario.financiacion.activo = true;
                         self.elaborando_necesidad=true;
                         self.FormularioSeleccionado = 1;
+                        break;
                     }
                     else {
                         self.AlertSeccion('General');
+                        break;
                     }
-                    break;
                 case 'legal':
                     if (ValidarSeccion('financiacion')) {
-                        self.SeccionesFormulario.financiacion.completado = true;
                         self.SeccionesFormulario.legal.activo = true;
                         self.FormularioSeleccionado = 2;
-                        // console.info("dentro:",self.FormularioSeleccionado)
+                        break;
                     }
                     else {
-                        // self.AlertSeccion('Financiación');
+                        break;
                     }
-                    break;
                 case 'contratacion':
                     if (ValidarSeccion('legal')) {
-                        self.SeccionesFormulario.legal.completado = true;
                         self.SeccionesFormulario.contratacion.activo = true;
                         self.FormularioSeleccionado = 3;
+                        break;
                     }
                     else {
                         self.AlertSeccion('Legal');
+                        break;
                     }
-                    break;
             }
         };
 
@@ -1144,10 +1063,8 @@ angular.module('contractualClienteApp')
                 case 'financiacion':
                     var val = self.ValidarFinanciacion()
                     if (self.IdNecesidad) { return val; }
-                    // console.info("fin", val , document.getElementById("f_financiacion").classList.contains('ng-valid'))
                     return val && document.getElementById("f_financiacion").classList.contains('ng-valid');
                 case 'legal':
-                    // console.info("ligal",!document.getElementById("f_legal").classList.contains('ng-invalid'))
                     return !document.getElementById("f_legal").classList.contains('ng-invalid');
                 case 'contratacion':
                     return true;

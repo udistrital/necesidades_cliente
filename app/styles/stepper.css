@@ -206,7 +206,7 @@
               transform: scaleY(0.75) translateY(20px); }
       md-steppers md-steppers-wrapper md-busy.ng-hide ~ md-pagination-wrapper, md-steppers md-steppers-wrapper md-busy.ng-hide ~ .md-dummy-wrapper {
         opacity: 1;
-        pointer-events: initial; }
+        pointer-events: none; }
     md-steppers md-steppers-wrapper md-busy ~ md-pagination-wrapper, md-steppers md-steppers-wrapper md-busy ~ .md-dummy-wrapper {
       opacity: 0;
       pointer-events: none; }
@@ -427,4 +427,6 @@
   md-toolbar + md-steppers {
     border-top-left-radius: 0;
     border-top-right-radius: 0; }
+
+
   
