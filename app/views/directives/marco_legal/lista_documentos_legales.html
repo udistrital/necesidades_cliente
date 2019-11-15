@@ -6,6 +6,17 @@
   						<div style="height: 250px" ui-grid="d_listaDocumentosLegales.gridOptions" ui-grid-selection ui-grid-auto-resize ui-grid-pagination></div>
     </div>
 
+    <div>
+      <h3>Documentos</h3>
+      <ul class="list-group">
+        <li class="list-group-item row"
+          ng-repeat="doc in documentos">
+          <label ><span class="text-info">{{$index+1}}.
+            </span>{{doc.MarcoLegalId.NombreDocumento}}</label>
+        </li>
+      </ul>
+    </div>
+
     <button type="button" class="col-md-12 btn btn-primary btn-outline"
     ng-click="d_listaDocumentosLegales.HabilitarAgregarDocs()" aria-label="Left Align">{{"AGREGAR_DOCUMENTO" | translate}}</button>
 
@@ -26,4 +37,7 @@
       <button class="btn btn-primary btn-outline"  ng-click="d_listaDocumentosLegales.AniadirDocumento()">CARGAR DOCUMENTO</button>
     </div>
   </div>
+
+
+
   
