@@ -63,7 +63,10 @@ angular.module('contractualClienteApp')
             headerCellClass: $scope.highlightFilteredHeader + ' text-info',
             cellTooltip: function (row) {
               return row.entity.valor_actividad;
-            }
+            },
+            cellClass: function () {
+                  return "money";
+          }
           }
           ]
         };

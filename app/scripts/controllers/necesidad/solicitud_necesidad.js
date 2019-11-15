@@ -618,10 +618,14 @@ angular.module('contractualClienteApp')
                     showConfirmButton: true,
                 }) :
                 self.ProductosCatalogoNecesidad.push(self.producto_catalogo);
-            $("#modalProducto").modal("hide");
-            $(".modal-backdrop").remove();
+            self.cerrarModalProducto();
             self.producto_catalogo = {};
             self.producto_catalogo.RequisitosMinimos = [];
+        }
+
+        self.cerrarModalProducto = function() {
+            $("#modalProducto").modal("hide");
+            $(".modal-backdrop").remove();
         }
 
         self.eliminarRubro = function (rubro) {

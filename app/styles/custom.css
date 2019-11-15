@@ -38,8 +38,3 @@ border-color: black;
   color: #1C69F0;
 }
 
-.modalProducto{
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
