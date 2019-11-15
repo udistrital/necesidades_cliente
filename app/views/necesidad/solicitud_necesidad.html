@@ -283,14 +283,14 @@
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.ObjetoContractual.ObjetoContrato">
                   <label for="objeto" class="control-label">{{"OBJETO_CONTRATO" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
-                  <textarea type="text" class="form-control" rows="6" maxlength="800"
+                  <textarea type="text" class="form-control" rows="6" 
                     ng-model="solicitudNecesidad.Necesidad.Objeto" placeholder="Objeto de Contrato" required></textarea>
                 </div>
 
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.ObjetoContractual.JustificacionContrato">
                   <label for="justificacion" class="control-label">{{"JUSTIFICACION_CONTRATO" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
-                  <textarea type="text" class="form-control" rows="6" maxlength="600"
+                  <textarea type="text" class="form-control" rows="6" 
                     ng-model="solicitudNecesidad.Necesidad.Justificacion" placeholder="Justificación de Contrato"
                     required></textarea>
                 </div>
@@ -298,7 +298,7 @@
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.EstudioMercado"
                   ng-class="{ 'has-error' : solicitudform.estudio_mercados.$invalid && !solicitudform.estudio_mercados.$pristine }">
                   <label for="estudio_mercados" class="control-label">{{"ESTUDIO_MERCADO" | translate}}</label>
-                  <textarea name="estudio_mercados" type="text" class="form-control" maxlength="600"
+                  <textarea name="estudio_mercados" type="text" class="form-control"
                     ng-model="solicitudNecesidad.Necesidad.EstudioMercado" placeholder="Estudio de Mercado"
                     rows="6"></textarea>
                 </div>
@@ -309,7 +309,7 @@
 
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.AnalisisRiesgo">
                   <label for="analisis_riesgos" class="control-label">{{"ANALISIS_RIESGOS" | translate}}</label>
-                  <textarea type="text" class="form-control" maxlength="600"
+                  <textarea type="text" class="form-control"
                     ng-model="solicitudNecesidad.Necesidad.AnalisisRiesgo" placeholder="Análisis de riesgos"
                     rows="6"></textarea>
                 </div>

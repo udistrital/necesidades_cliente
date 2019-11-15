@@ -24,7 +24,6 @@ angular.module('planCuentasMidService',[])
             }
         },
         post: function(tabla, elemento) {
-            console.info("da heds", token_service.setting_bearer.headers)
             return $http.post(path + tabla, elemento, token_service.setting_bearer.headers);
         },
         put: function(tabla, id, elemento) {

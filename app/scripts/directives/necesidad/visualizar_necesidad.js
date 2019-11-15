@@ -33,6 +33,9 @@ angular.module('contractualClienteApp')
                 var metas = {};
 
                 $scope.$watch('necesidad', function () {
+                    if (!$scope.necesidad) {
+                        return
+                    }
                     self.verJustificacion = null;
                     self.cargar_necesidad();
                     if ($scope.necesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'F') {
@@ -102,7 +105,7 @@ angular.module('contractualClienteApp')
                 }
 
                 function get_informacion_meta(rubro) {
-                    rubro.Metas.forEach(function(meta) {
+                    rubro.Metas ? rubro.Metas.forEach(function(meta) {
                         meta.InfoMeta = metas.actividades.find(function(item) {
                             return item.meta_id === meta.MetaId
                         });
@@ -111,7 +114,7 @@ angular.module('contractualClienteApp')
                                return actividad.ActividadId === item.actividad_id
                            });
                         });
-                    });
+                    }):_;
                 }
 
 

@@ -76,12 +76,14 @@ angular.module('contractualClienteApp')
 
         // se observa cambios en documentos para seleccionar las respectivas filas en la tabla
         $scope.$watch('documentos', function () {
-          $scope.documentos.forEach(function (doc) {
-            var tmp = self.gridOptions.data.filter(function (e) { return e.Id == doc.MarcoLegalId.Id })
-            if (tmp.length > 0) {
-              self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-            }
-          });
+          setTimeout(function() {
+            $scope.documentos.forEach(function (doc) {
+              var tmp = self.gridOptions.data.filter(function (e) { return e.Id == doc.MarcoLegalId.Id})
+              if (tmp.length > 0) {
+                self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+              }
+            });
+          },2000)   
         });
 
         $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {
