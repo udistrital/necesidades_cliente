@@ -351,7 +351,6 @@ angular.module('contractualClienteApp')
             planCuentasMidRequest.post("cdp/solicitarCDP", self.necesidad.Necesidad).then(
                 function (response) {
                     if (response.status === 200 || response.status === 201) {
-                        console.info(response)
                         self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.CdpSolicitado;
                         self.necesidad.Necesidad.TipoContratoId = self.necesidad.Necesidad.TipoContratoId.Id;
                         necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {

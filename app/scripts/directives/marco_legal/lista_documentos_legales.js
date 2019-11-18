@@ -105,11 +105,18 @@ angular.module('contractualClienteApp')
 
         self.AniadirDocumento = function () {
           necesidadesCrudRequest.post("marco_legal", self.obj_documento).then(function () {
-            self.obj_documento = {
-              NombreDocumento: '',
-              Enlace: ''
-            };
-            self.loadDocumentos();
+            swal({
+              title: 'Documento guardado',
+              type: 'success',
+              text: 'Se agregó el documento '+self.obj_documento.NombreDocumento+" al repositorio de documentos.",
+              showCloseButton: true,
+              confirmButtonText: $translate.instant("CERRAR")
+          });
+          self.obj_documento = {
+            NombreDocumento: '',
+            Enlace: ''
+          };
+          self.loadDocumentos();
           }
           );
 
