@@ -61,7 +61,7 @@ angular.module('contractualClienteApp')
         self.meses = 0;
         self.dias = 0;
 
-        self.variable = {};
+        self.enviando = false;
 
         self.DuracionEspecial = 'unico_pago';
         self.fecha = new Date();
@@ -279,6 +279,21 @@ angular.module('contractualClienteApp')
                 localStorage.removeItem(key);
             })
         }
+
+        // observa si hay cambio de ruta
+
+        $scope.$on('$locationChangeStart', function( event ) {
+            if(self.enviando===true) {
+                self.emptyStorage();
+                return;
+            }
+            var answer = confirm("¿Esta seguro de que desea salir de la página, los datos sin guardar podrían perderse?")
+            if (!answer) {
+                event.preventDefault();
+            } else {
+                self.emptyStorage();
+            }
+        });
 
 
         $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
@@ -736,6 +751,14 @@ angular.module('contractualClienteApp')
  
         }, true);
 
+        $scope.$watch('solicitudNecesidad.Necesidad.Valor',function() {
+            // si es una CPS
+            if(self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 2) {
+                self.servicio_valor = self.Necesidad.Valor;
+
+            }
+        },true)
+
         $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
             //reiniciar objetos cuando se encuentre en curso
             self.ResetObjects();
@@ -775,6 +798,7 @@ angular.module('contractualClienteApp')
 
         self.submitForm = function (form) {
             if (form.$valid) {
+                self.enviando=true;
                 self.crear_solicitud();
             } else {
                 swal(
