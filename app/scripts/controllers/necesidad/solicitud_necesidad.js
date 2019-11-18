@@ -9,7 +9,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window, agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
         var self = this;
         //inicializar Necesidad
         self.Necesidad = {
@@ -177,6 +177,10 @@ angular.module('contractualClienteApp')
                              
                         });    
                     }
+                    setTimeout(function() {
+                        self.servicio_valor = self.Necesidad.Valor;
+                    }, 2000);
+                    
           
                 });
             }
@@ -662,14 +666,14 @@ angular.module('contractualClienteApp')
                 self.Rubros[i].MontoProductos = 0;
                 self.Rubros[i].MontoMeta = 0;
                 // calculo valor case inversion
-                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversion') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'I') {
                     if (self.Rubros[i].Metas.length > 0 && self.Rubros[i].Metas[0].Actividades) {
                         self.Rubros[i].MontoPorApropiacion += self.Rubros[i].Metas[0].MontoPorMeta;
                     }
                 }
 
                 // case Funcionamiento
-                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Funcionamiento') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'F') {
                     if (self.Rubros[i].Fuentes.length > 0) {
                         for (var index = 0; index < self.Rubros[i].Fuentes.length; index++) {
                             self.Rubros[i].MontoFuentes += self.Rubros[i].Fuentes[index].MontoParcial;
@@ -722,10 +726,14 @@ angular.module('contractualClienteApp')
         }, true);
 
         $scope.$watchGroup(['solicitudNecesidad.DetalleServicioNecesidad.Valor', 'solicitudNecesidad.DetalleServicioNecesidad.IvaId'], function () {
-            var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
-            self.val_iva = (self.DetalleServicioNecesidad.Valor * tIva) / 100 ;
-            self.DetalleServicioNecesidad.Total = self.val_iva + self.DetalleServicioNecesidad.Valor;
-            self.servicio_valor = self.DetalleServicioNecesidad.Total;
+            //solo si es serv o compra y serv
+            if (self.Necesidad.TipoContratoNecesidadId && (self.Necesidad.TipoContratoNecesidadId.Id === 5 || self.Necesidad.TipoContratoNecesidadId.Id === 4)) {
+                var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
+                self.val_iva = (self.DetalleServicioNecesidad.Valor * tIva) / 100 ;
+                self.DetalleServicioNecesidad.Total = self.val_iva + self.DetalleServicioNecesidad.Valor;
+                self.servicio_valor = self.DetalleServicioNecesidad.Total;
+            }
+ 
         }, true);
 
         $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
@@ -738,7 +746,7 @@ angular.module('contractualClienteApp')
             }
             //prestacion serv
             if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 2) {
-                self.servicio_valor = self.Necesidad.Valor;
+                self.Necesidad.Valor ? self.servicio_valor = self.Necesidad.Valor : _;
                 self.DetallePrestacionServicioNecesidad.Cantidad = 1;
             }
             // serv
@@ -914,7 +922,7 @@ angular.module('contractualClienteApp')
                         case 2:
 
                             especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
-
+                            console.info(especificaciones_valido , self.Necesidad.Valor , self.servicio_valor)
                             break;
                         case 4:
                             especificaciones_valido = self.Necesidad.Valor === (self.valorTotalEspecificaciones + self.servicio_valor);
@@ -953,10 +961,10 @@ angular.module('contractualClienteApp')
         };
 
         self.ValidarFinanciacion = function () {
-            var fin_valid = self.Rubros.length > 0;
+            var fin_valid = self.Rubros.length > 0&& self.Necesidad.Valor>0;
             self.Rubros.forEach(function (ap) {
                 // CASE INVERSION
-                if (self.Necesidad.TipoFinanciacionNecesidadId.Nombre === 'Inversion') {
+                if (self.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'I') {
                     fin_valid = fin_valid && ap.MontoMeta <= ap.Apropiacion.ValorActual;
                 } else {
                     //CASE FUNCIONAMIENTO

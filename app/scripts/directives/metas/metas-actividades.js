@@ -145,7 +145,7 @@ angular.module('contractualClienteApp')
             self.actividades.forEach(function (a) {
               self.getFuentesActividad($scope.vigencia, a.dependencia, a.rubro, a.actividad_id).then(function (res) {
                 var fuentesact = res.data.fuentes.fuentes_actividad ? res.data.fuentes.fuentes_actividad : [];
-                a.FuentesActividad = a.FuentesActividad ? a.FuentesActividad : fuentesact;
+                a.FuentesActividad ? a.FuentesActividad=a.FuentesActividad : a.FuentesActividad = fuentesact;
               });
             });
             $scope.metas[0].Actividades = self.actividades;
@@ -214,13 +214,13 @@ angular.module('contractualClienteApp')
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
-          $scope.actividades ? $scope.actividades.forEach(function (act) {
-            var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id !== act.ActividadId })
-            if (tmp.length > 0) {
-              self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-            }
-          }) : _;
-          self.actividades = $scope.actividades;
+            $scope.actividades ? $scope.actividades.forEach(function (act) {
+              var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id !== act.ActividadId })
+              if (tmp.length > 0) {
+                self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+              }
+            }) : _;
+            self.actividades = $scope.actividades;
         });
 
         $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {

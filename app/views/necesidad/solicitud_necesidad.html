@@ -318,6 +318,9 @@
             </ng-form>
 
             <div style="text-align:center;">
+              <button type="button" class="btn btn-danger btn-outline"
+              ng-click="solicitudNecesidad.ResetNecesidad();">
+              {{"LIMPIAR" | translate}}</button>
               <button type="button" class="btn btn-primary btn-outline"
                 ng-click="solicitudNecesidad.CambiarForm('financiacion');">
                 {{"SIGUIENTE" | translate}}</button>
@@ -368,9 +371,7 @@
                         {{ap.Apropiacion.Nombre}}</h3>
                       <br>
                       <div class="row"
-                        ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Inversion'">
-                        <!-- se debe mostrar solo cuando sea rubro inversion ng show por definir -->
-
+                        ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='I'">
                         <metas-actividades apropiacion="ap" metas="ap.Metas"
                           dependenciasolicitante="solicitudNecesidad.dependencia_solicitante"
                           dependenciadestino="solicitudNecesidad.dependencia_destino"
@@ -379,7 +380,7 @@
                       </div>
                       <div class="row">
                         <div class="col-md-6"
-                          ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Funcionamiento'">
+                          ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='F'">
                           <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Fuentes"
                             dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
                           </fuentes-apropiacion>
@@ -409,7 +410,7 @@
 
                       </div>
 
-                      <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Inversion'"
+                      <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='I'"
                         class="row">
                         <div class="col-md-6">
                           <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Productos"
@@ -465,12 +466,12 @@
 
             <fieldset ng-if="solicitudNecesidad.Necesidad.TipoNecesidadId.Id===2">
               <div style="text-align: center">
+                <button type="button" class="btn btn-primary btn-outline"
+                ng-click="solicitudNecesidad.CambiarForm('general');">
+                {{"ATRAS" | translate}}</button>
                 <button type="button" class="btn btn-success btn-outline"
                   ng-click="solicitudNecesidad.submitForm(solicitudform)">
                   {{'REGISTRAR' | translate }}</button>
-                <button type="button" class="btn btn-primary btn-outline"
-                  ng-click="solicitudNecesidad.CambiarForm('general');">
-                  {{"ATRAS" | translate}}</button>
               </div>
             </fieldset>
 
@@ -913,26 +914,28 @@
     </md-steppers>
   </div>
 </div>
-<!-- <pre>{{ solicitudNecesidad.Necesidad | json}}
+<pre>Nec:{{ solicitudNecesidad.Necesidad | json}}
   
-  {{ solicitudNecesidad.MarcoLegalNecesidad | json}}
+  ML:{{ solicitudNecesidad.MarcoLegalNecesidad | json}}
 
-  {{ solicitudNecesidad.Rubros | json}}
+  Rb:{{ solicitudNecesidad.Rubros | json}}
 
-  {{solicitudNecesidad.ProductosCatalogoNecesidad | json}}
+  PC:{{solicitudNecesidad.ProductosCatalogoNecesidad | json}}
 
-  {{solicitudNecesidad.DetalleServicioNecesidad | json}}
-  RITMP
+  DS:{{solicitudNecesidad.DetalleServicioNecesidad | json}}
+ 
 
-  {{solicitudNecesidad.DetallePrestacionServicioNecesidad | json}}
+  CPS:{{solicitudNecesidad.DetallePrestacionServicioNecesidad | json}}
 
-  {{solicitudNecesidad.ActividadEspecificaNecesidad | json}}
+  AE:{{solicitudNecesidad.ActividadEspecificaNecesidad | json}}
 
-  {{solicitudNecesidad.actividades_economicas_id | json}}
+  AEc:{{solicitudNecesidad.actividades_economicas_id | json}}
 
-  {{solicitudNecesidad.TrNecesidad | json}}
+  dep: {{solicitudNecesidad.dependencia_solicitante }} : {{solicitudNecesidad.dependencia_destino}}
+
+  Tr:{{solicitudNecesidad.TrNecesidad | json}}
   
-</pre> -->
+</pre>
 
 
 
