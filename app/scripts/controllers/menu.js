@@ -127,45 +127,45 @@ angular.module('contractualClienteApp')
                     }
                 });
             });
-            // $rootScope.my_menu = [ // menu por si deja de servir configuracion
-            //     {
-            //         Id: 1,
-            //         Nombre: "Gestion Necesidades",
-            //         Opciones: [
-            //             {
-            //                 Id: 2,
-            //                 Nombre: "Solicitud Necesidad",
-            //                 Opciones: null,
-            //                 TipoOpcion: "Menú",
-            //                 Url: "necesidad/solicitud_necesidad"
-            //             },
-            //             {
-            //                 Id: 3,
-            //                 Nombre: "Consultar Necesidad",
-            //                 Opciones: null,
-            //                 TipoOpcion: "Menú",
-            //                 Url: "necesidades"
-            //             }
-            //         ],
-            //         TipoOpcion: "Menú",
-            //         Url: ""
-            //     },
-            //     {
-            //         Id: 331,
-            //         Nombre: "Edit necesidad",
-            //         Url: "necesidad/solicitud_necesidad/:IdNecesidad",
-            //         TipoOpcion: "Acción",
-            //         Opciones: null
-            //     },
-            //     {
-            //         Id: 341,
-            //         Nombre: "main",
-            //         Url: "/",
-            //         TipoOpcion: "Acción",
-            //         Opciones: null
-            //     }
+             $rootScope.my_menu = [ // menu por si deja de servir configuracion
+                 {
+                     Id: 1,
+                     Nombre: "Gestion Necesidades",
+                     Opciones: [
+                         {
+                            Id: 2,
+                            Nombre: "Solicitud Necesidad",
+                            Opciones: null,
+                            TipoOpcion: "Menú",
+                            Url: "necesidad/solicitud_necesidad"
+                         },
+                         {
+                             Id: 3,
+                             Nombre: "Consultar Necesidad",
+                             Opciones: null,
+                             TipoOpcion: "Menú",
+                             Url: "necesidades"
+                         }
+                    ],
+                    TipoOpcion: "Menú",
+                     Url: ""
+                 },
+                 {
+                     Id: 331,
+                     Nombre: "Edit necesidad",
+                     Url: "necesidad/solicitud_necesidad/:IdNecesidad",
+                    TipoOpcion: "Acción",
+                     Opciones: null
+                },
+                 {
+                     Id: 341,
+                    Nombre: "main",
+                    Url: "/",
+                    TipoOpcion: "Acción",
+                    Opciones: null
+                 }
 
-            // ];
+             ];
 
 
          }
