@@ -24,6 +24,7 @@ angular.module('contractualClienteApp')
         var self = this;
         self.actividades = $scope.actividades;
         self.meta = undefined;
+        self.editando = false;
         self.MontoPorMeta = 0;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
@@ -85,6 +86,7 @@ angular.module('contractualClienteApp')
                 if ($scope.apropiacion.Metas.length > 0) {
                   self.meta = $scope.apropiacion.Metas[0].MetaId;
                 }
+                self.editando=true;
               }
             );
           }
@@ -166,6 +168,7 @@ angular.module('contractualClienteApp')
                 if (tmp.length > 0) {
                   act = _.merge(act,tmp[0]);
                   self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+                  console.info("seleciono")
                 }
               });
               self.actividades = $scope.apropiacion.Metas[0].Actividades;
@@ -203,14 +206,9 @@ angular.module('contractualClienteApp')
               });
             }
 
-
           });
         }
 
-
-        self.loadFuentesFinanciamiento = function () {
-          metasRequest.get('plan_adquisiciones_fuentes_financiamiento/2019/122/388/1.2')
-        }
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
@@ -218,6 +216,7 @@ angular.module('contractualClienteApp')
               var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id !== act.ActividadId })
               if (tmp.length > 0) {
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+                console.info("act",tmp[0])
               }
             }) : _;
             self.actividades = $scope.actividades;

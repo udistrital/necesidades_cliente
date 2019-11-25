@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -46,6 +46,13 @@ angular.module('contractualClienteApp')
 
             });
         };
+        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
+            limit: -1,
+            query: 'Activo:true'
+        })).then(function (response) {
+            self.iva_data=response.data;
+        });
+
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
             paginationPageSize: 10,
@@ -137,12 +144,49 @@ angular.module('contractualClienteApp')
                     necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
                         if (response.status === 200) {
                             self.necesidad = response.data.Body;
+                            console.info(self.necesidad)
+                            //traer data de objetos para contratacion
+                            //compra
+                            if (self.necesidad.ProductosCatalogoNecesidad&&self.necesidad.ProductosCatalogoNecesidad!==null) {
+                                console.info("entro")
+                                self.necesidad.ProductosCatalogoNecesidad.forEach(function(prod) {
+                                    prod.ElementoNombre="";
+                                    prod.ValorTotal=0;
+                                    administrativaRequest.get('catalogo_elemento_grupo', $.param({
+                                        query: 'Id:' + prod.CatalogoId,
+                                        fields: 'Id,ElementoNombre,ElementoCodigo',
+                                        limit: -1
+                                    })).then(function (response) {
+                                        prod.ElementoNombre = response.data[0].ElementoNombre;
+                                        calculoIVA(prod)
+                                    });
+                                })
+                            }
+                            //servicio
+                            if(self.necesidad.DetalleServicioNecesidad.TipoServicioId) {
+                                self.necesidad.DetalleServicioNecesidad.ValorTotal=0;
+                                calculoIVA(self.necesidad.DetalleServicioNecesidad);
+                                $http.get("scripts/models/tipo_servicio.json")
+                                .then(function (response) {
+                                    self.necesidad.DetalleServicioNecesidad.TipoServicioNombre=response.data.filter(function(s){
+                                        return s.ID===self.necesidad.DetalleServicioNecesidad.TipoServicioId
+                                    })[0].DESCRIPCION;
+                                });
+                            }
+                            //compra y servicio
+                            //cps
                         }
                     });
                 });
             }
         };
         self.gridOptions.multiSelect = false;
+
+        function calculoIVA(elemento) {
+            var tarifa=self.iva_data.filter(function(i) { return i.Id === elemento.IvaId})[0].Tarifa;
+            elemento.valorIvaUnd=elemento.Valor*(tarifa/100);
+            elemento.Cantidad ? elemento.ValorTotal=elemento.Cantidad*(elemento.Valor+elemento.valorIvaUnd) : elemento.ValorTotal= elemento.Valor+elemento.valorIvaUnd;
+        }
 
 
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema

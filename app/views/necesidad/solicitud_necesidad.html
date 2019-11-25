@@ -640,6 +640,8 @@
 
                   </div>
 
+                  <!-- actividades especificas necesidad -->
+
 
                   <div class="col-md-12">
                     <label for="objeto" class="control-label">{{"ACTIVIDADES_ESPECIFICAS" | translate}}</label>
@@ -665,6 +667,36 @@
                     <div style="text-align: center">
                       <button type="button" class="btn btn-primary btn-outline"
                         ng-click="solicitudNecesidad.actividad_esp!=undefined && solicitudNecesidad.agregarActEsp(solicitudNecesidad.actividad_esp);solicitudNecesidad.actividad_esp=undefined">{{"AGREGAR"
+                                  | translate}}</button>
+                    </div>
+                    <br>
+                  </div>
+                   <!-- requisitos minimos necesidad -->
+
+                   <div class="col-md-12">
+                    <label for="objeto" class="control-label">{{"REQUISITOS_MINIMOS" | translate}}</label>
+                    <div>
+                      <ul class="list-group">
+                        <li class="list-group-item row"
+                          ng-repeat="rm in solicitudNecesidad.RequisitoMinimoNecesidad">
+                          <label class="col-md-11"><span class="text-info">{{$index+1}}.
+                            </span>{{rm.Descripcion}}</label>
+                          <div class="col-md-1 text-right">
+                            <button type="button" class="btn btn-danger"
+                              ng-click="solicitudNecesidad.eliminarRequisitoMinimo(rm)" aria-label="Left Align">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <textarea type="text" class="form-control" rows="6" ng-model="solicitudNecesidad.req_min"
+                      placeholder="Descripcion requisito mínimo"></textarea>
+                  </div>
+                  <div class="col-md-12">
+                    <div style="text-align: center">
+                      <button type="button" class="btn btn-primary btn-outline"
+                        ng-click="solicitudNecesidad.req_min!=undefined && solicitudNecesidad.agregarReqMin(solicitudNecesidad.req_min);solicitudNecesidad.req_min=undefined">{{"AGREGAR"
                                   | translate}}</button>
                     </div>
                     <br>

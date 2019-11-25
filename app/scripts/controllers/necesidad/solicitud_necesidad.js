@@ -29,6 +29,7 @@ angular.module('contractualClienteApp')
         self.ProductosCatalogoNecesidad = [];
         self.MarcoLegalNecesidad = [];
         self.ActividadEspecificaNecesidad = [];
+        self.RequisitoMinimoNecesidad = [];
         self.ActividadEconomicaNecesidad = [];
         self.Rubros = [];
 
@@ -220,6 +221,7 @@ angular.module('contractualClienteApp')
 
             self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad || [];
             self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad || [];
+            self.RequisitoMinimoNecesidad = trNecesidad.RequisitoMinimoNecesidad || [];
             self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad || [];
             self.ActividadEconomicaNecesidad=[];
             self.Rubros = trNecesidad.Rubros || [];
@@ -266,6 +268,9 @@ angular.module('contractualClienteApp')
         $scope.$watch('solicitudNecesidad.ActividadEspecificaNecesidad', function () {
             localStorage.setItem("ActividadEspecificaNecesidad", JSON.stringify(self.ActividadEspecificaNecesidad));
         }, true);
+        $scope.$watch('solicitudNecesidad.RequisitoMinimoNecesidad', function () {
+            localStorage.setItem("RequisitoMinimoNecesidad", JSON.stringify(self.RequisitoMinimoNecesidad));
+        }, true);
         $scope.$watch('solicitudNecesidad.ActividadEconomicaNecesidad', function () {
             localStorage.setItem("ActividadEconomicaNecesidad", JSON.stringify(self.ActividadEconomicaNecesidad));
         }, true);
@@ -274,7 +279,7 @@ angular.module('contractualClienteApp')
         }, true);
 
         self.emptyStorage = function () {
-            var keysToRemove = ["Necesidad", "DetalleServicioNecesidad", "DetallePrestacionServicioNecesidad", "ProductosCatalogoNecesidad", "MarcoLegalNecesidad", "ActividadEspecificaNecesidad", "ActividadEspecificaNecesidad", "ActividadEconomicaNecesidad", "Rubros"];
+            var keysToRemove = ["Necesidad", "DetalleServicioNecesidad", "DetallePrestacionServicioNecesidad", "ProductosCatalogoNecesidad", "MarcoLegalNecesidad", "ActividadEspecificaNecesidad", "RequisitoMinimoNecesidad", "ActividadEconomicaNecesidad", "Rubros"];
             keysToRemove.forEach(function (key) {
                 localStorage.removeItem(key);
             })
@@ -672,6 +677,14 @@ angular.module('contractualClienteApp')
             }
         };
 
+        self.eliminarRequisitoMinimo = function (rm) {
+            for (var i = 0; i < self.RequisitoMinimoNecesidad.length; i += 1) {
+                if (self.RequisitoMinimoNecesidad[i] === rm) {
+                    self.RequisitoMinimoNecesidad.splice(i, 1);
+                }
+            }
+        };
+
         $scope.$watch('solicitudNecesidad.Rubros', function () {
             self.Necesidad.Valor = 0;
 
@@ -792,6 +805,12 @@ angular.module('contractualClienteApp')
             self.ActividadEspecificaNecesidad.push(a);
         };
 
+        self.agregarReqMin = function (rm) {
+            var a = {};
+            a.Descripcion = rm;
+            self.RequisitoMinimoNecesidad.push(a);
+        };
+
         self.quitar_act_esp = function (i) {
             self.ActividadEspecifica.splice(i, 1);
         };
@@ -837,6 +856,7 @@ angular.module('contractualClienteApp')
                 }),
                 MarcoLegalNecesidad: self.MarcoLegalNecesidad,
                 ActividadEspecificaNecesidad: self.ActividadEspecificaNecesidad,
+                RequisitoMinimoNecesidad: self.RequisitoMinimoNecesidad,
                 ActividadEconomicaNecesidad: self.ActividadEconomicaNecesidad,
                 Rubros: self.Rubros
 
@@ -944,9 +964,7 @@ angular.module('contractualClienteApp')
                             especificaciones_valido = self.Necesidad.Valor === self.valorTotalEspecificaciones;
                             break;
                         case 2:
-
                             especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
-                            console.info(especificaciones_valido , self.Necesidad.Valor , self.servicio_valor)
                             break;
                         case 4:
                             especificaciones_valido = self.Necesidad.Valor === (self.valorTotalEspecificaciones + self.servicio_valor);
@@ -1013,8 +1031,10 @@ angular.module('contractualClienteApp')
             self.ResetObjects();
             necesidadService.getFullNecesidad().then(function (res) {
                 var TipoNecesidad = self.Necesidad.TipoNecesidadId;
+                var DuracionNecesidad = self.Necesidad.TipoDuracionNecesidadId
                 self.recibirNecesidad(res);
                 self.Necesidad.TipoNecesidadId = TipoNecesidad;
+                self.Necesidad.TipoDuracionNecesidadId = DuracionNecesidad;
             });
         };
 
@@ -1024,6 +1044,7 @@ angular.module('contractualClienteApp')
                 self.DetallePrestacionServicioNecesidad = {};
                 self.ProductosCatalogoNecesidad = [];
                 self.ActividadEspecificaNecesidad = [];
+                self.RequisitoMinimoNecesidad = [];
                 self.ActividadEconomicaNecesidad = [];
                 self.producto_catalogo = {};
                 self.producto_catalogo.RequisitosMinimos = [];
@@ -1043,6 +1064,7 @@ angular.module('contractualClienteApp')
                 self.DetallePrestacionServicioNecesidad = {};
                 self.ProductosCatalogoNecesidad = [];
                 self.ActividadEspecificaNecesidad = [];
+                self.RequisitoMinimoNecesidad = [];
                 self.ActividadEconomicaNecesidad = [];
                 self.producto_catalogo = {};
                 self.producto_catalogo.RequisitosMinimos = []; 
