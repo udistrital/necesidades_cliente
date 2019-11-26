@@ -24,6 +24,7 @@ angular.module('contractualClienteApp')
         var self = this;
         self.actividades = $scope.actividades;
         self.meta = undefined;
+        self.editando = false;
         self.MontoPorMeta = 0;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
@@ -74,9 +75,9 @@ angular.module('contractualClienteApp')
         self.cargarMetas = function () {
 
           if ($scope.dependenciasolicitante) {
-            metasRequest.get('plan_adquisiciones/2019/' + $scope.dependenciasolicitante.toString()).then(
+            metasRequest.get('plan_adquisiciones/'+$scope.vigencia+'/'+ $scope.dependenciasolicitante.toString()).then(
               function (res) {
-                var tempmetas = res.data.metas.actividades; // falta un filter por rubro
+                var tempmetas = res.data.metas.actividades.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}); // falta un filter por rubro
                 self.metas = [];
 
                 tempmetas.forEach(function (act) {
@@ -85,6 +86,7 @@ angular.module('contractualClienteApp')
                 if ($scope.apropiacion.Metas.length > 0) {
                   self.meta = $scope.apropiacion.Metas[0].MetaId;
                 }
+                self.editando=true;
               }
             );
           }
@@ -136,7 +138,7 @@ angular.module('contractualClienteApp')
           }
 
         });
-
+ 
 
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
@@ -158,14 +160,18 @@ angular.module('contractualClienteApp')
 
 
         self.loadActividades = function () {
-          metasRequest.get('plan_adquisiciones/2019/' + $scope.dependenciasolicitante.toString()).then(function (response) {
-            self.gridOptions.data = response.data.metas.actividades;
+          metasRequest.get('plan_adquisiciones/'+$scope.vigencia+'/'+$scope.dependenciasolicitante.toString()).then(function (response) {
+            self.gridOptions.data = [];
+            response.data.metas.actividades.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}).forEach(function(act) {
+              self.gridOptions.data.filter(function(a){ return a.actividad_id===act.actividad_id}).length===0 ? self.gridOptions.data.push(act) : _;
+            });
             if ($scope.apropiacion.Metas[0].Actividades) {
               $scope.apropiacion.Metas[0].Actividades.forEach(function (act) {
                 var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id == act.ActividadId })
                 if (tmp.length > 0) {
                   act = _.merge(act,tmp[0]);
                   self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+                  console.info("seleciono")
                 }
               });
               self.actividades = $scope.apropiacion.Metas[0].Actividades;
@@ -203,14 +209,9 @@ angular.module('contractualClienteApp')
               });
             }
 
-
           });
         }
 
-
-        self.loadFuentesFinanciamiento = function () {
-          metasRequest.get('plan_adquisiciones_fuentes_financiamiento/2019/122/388/1.2')
-        }
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch('actividades', function () {
@@ -218,6 +219,7 @@ angular.module('contractualClienteApp')
               var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id !== act.ActividadId })
               if (tmp.length > 0) {
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+                console.info("act",tmp[0])
               }
             }) : _;
             self.actividades = $scope.actividades;

@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, planCuentasRequest, rolesService, necesidadService, $translate, $window, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -46,6 +46,17 @@ angular.module('contractualClienteApp')
 
             });
         };
+        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
+            limit: -1,
+            query: 'Activo:true'
+        })).then(function (response) {
+            self.iva_data=response.data;
+        });
+
+        necesidadService.getParametroEstandar().then(function (response) {
+            self.perfil_data = response.data;
+        });
+
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
             paginationPageSize: 10,
@@ -137,12 +148,68 @@ angular.module('contractualClienteApp')
                     necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
                         if (response.status === 200) {
                             self.necesidad = response.data.Body;
+                            console.info(self.necesidad)
+                            //traer data de objetos para contratacion
+                            //compra
+                            if (self.necesidad.ProductosCatalogoNecesidad&&self.necesidad.ProductosCatalogoNecesidad!==null) {
+                                self.necesidad.ProductosCatalogoNecesidad.forEach(function(prod) {
+                                    prod.valorIvaUnd=0;
+                                    prod.ElementoNombre="";
+                                    prod.ValorTotal=0;
+                                    administrativaRequest.get('catalogo_elemento_grupo', $.param({
+                                        query: 'Id:' + prod.CatalogoId,
+                                        fields: 'Id,ElementoNombre,ElementoCodigo',
+                                        limit: -1
+                                    })).then(function (response) {
+                                        prod.ElementoNombre = response.data[0].ElementoNombre;
+                                        calculoIVA(prod)
+                                    });
+                                })
+                            }
+                            //servicio
+                            if(self.necesidad.DetalleServicioNecesidad.TipoServicioId) {
+                                self.necesidad.DetalleServicioNecesidad.ValorTotal=0;
+                                self.necesidad.DetalleServicioNecesidad.valorIvaUnd=0;
+                                self.necesidad.DetalleServicioNecesidad.TipoServicioNombre="";
+                                calculoIVA(self.necesidad.DetalleServicioNecesidad);
+                                $http.get("scripts/models/tipo_servicio.json")
+                                .then(function (response) {
+                                    self.necesidad.DetalleServicioNecesidad.TipoServicioNombre=response.data.filter(function(s){
+                                        return s.ID===self.necesidad.DetalleServicioNecesidad.TipoServicioId
+                                    })[0].DESCRIPCION;
+                                });
+                            }
+                      
+                            //cps
+                            if (self.necesidad.DetallePrestacionServicioNecesidad.PerfilId) {
+                                self.necesidad.DetallePrestacionServicioNecesidad.PerfilNombre=self.perfil_data.filter(function(p){
+                                    return p.Id===self.necesidad.DetallePrestacionServicioNecesidad.PerfilId;
+                                })[0].ValorParametro;
+                            }
+                            if (self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
+                                self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre="";
+                                self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea="";
+                                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+                                    query: 'Id:' + self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                                    limit: -1
+                                })).then(function (response) {
+                                    self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre=response.data[0].Nombre;
+                                    self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea=response.data[0].AreaConocimientoId.Nombre;
+                                })
+
+                            }
                         }
                     });
                 });
             }
         };
         self.gridOptions.multiSelect = false;
+
+        function calculoIVA(elemento) {
+            var tarifa=self.iva_data.filter(function(i) { return i.Id === elemento.IvaId})[0].Tarifa;
+            elemento.valorIvaUnd=elemento.Valor*(tarifa/100);
+            elemento.Cantidad ? elemento.ValorTotal=elemento.Cantidad*(elemento.Valor+elemento.valorIvaUnd) : elemento.ValorTotal= elemento.Valor+elemento.valorIvaUnd;
+        }
 
 
         //Funcion para cargar los datos de las necesidades creadas y almacenadas dentro del sistema
