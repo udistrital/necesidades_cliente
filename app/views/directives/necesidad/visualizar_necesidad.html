@@ -193,26 +193,68 @@
         <!-- clase de contratacion necesidad resumen -->
 
         <h3 class="text-info" ng-show="d_visualizarNecesidad.v_necesidad.TipoNecesidadId.Id!==2">{{"CLASE_CONTRATACION" | translate}}: {{d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.Nombre}}</h3>
-        <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='C'">
-          compra
-        </div>
+        <!-- info cps  -->
         <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CPS'">
-          cps
+          <table class="table table-bordered tablaDetalle">
+            <tr>
+              <th>{{"PERFIL" | translate}}</th>
+              <th>{{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</th>
+              <th>{{"NUCLEO_CONOCIMIENTO" | translate}}</th>
+            </tr>
+            <tr>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.PerfilNombre}}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea}}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre}}</td>
+            </tr>
+          </table>
         </div>
-        <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CS'">
-          <p><strong>Detalle servicio</strong></p>
-          Tipo servicio: {{necesidad.DetalleServicioNecesidad.TipoServicioNombre}}
+        <!-- info compra -->
+        <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CS'||d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='C'">
           <p><strong>Detalle compra</strong></p>
+          <table class="table table-bordered tablaDetalle">
+            <tr>
+              <th>Elemento</th>
+              <th>Cantidad</th>
+              <th>Valor IVA</th>
+              <th>Valor total</th>
+            </tr>
+            <tr ng-repeat="prod in necesidad.ProductosCatalogoNecesidad">
+              <td>{{prod.ElementoNombre}}</td>
+              <td>{{prod.Cantidad}}</td>
+              <td class="money">{{prod.valorIvaUnd*prod.Cantidad | currency}}</td>
+              <td class="money">{{prod.ValorTotal | currency}}</td>
+            </tr>
+          </table>
+        </div>
+        <!-- info servicio  -->
+        <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='S'||d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CS'">
+            <p><strong>Detalle servicio</strong></p>
+            <table class="table table-bordered tablaDetalle">
+              <tr><th>Tipo servicio</th><th>Valor IVA</th><th>Valor total servicio</th></tr>
+              <tr>
+                <td>{{necesidad.DetalleServicioNecesidad.TipoServicioNombre}}</td>
+                <td class="money">{{necesidad.DetalleServicioNecesidad.valorIvaUnd | currency}}</td>
+                <td class="money">{{necesidad.DetalleServicioNecesidad.ValorTotal | currency}}</td>
+              </tr>
+            </table>
+        </div>
+        <!-- actividades especificas, requisitos minimos -->
+        <div ng-if="['S','CS','CPS'].indexOf(d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion)>-1">
+          <p><strong>{{"ACTIVIDADES_ESPECIFICAS" | translate}}</strong></p>
           <ul>
-            <li ng-repeat="prod in necesidad.ProductosCatalogoNecesidad">
-              <p>Elemento: {{prod.ElementoNombre}} Cantidad: {{prod.Cantidad}} Valor total: {{prod.ValorTotal | currency}}</p>
+            <li ng-repeat="ae in necesidad.ActividadEspecificaNecesidad">
+                {{$index+1}}. {{ae.Descripcion}}
             </li>
           </ul>
-          
+          <p><strong>{{"REQUISITOS_MINIMOS" | translate}}</strong></p>
+          <ul>
+            <li ng-repeat="rm in necesidad.RequisitoMinimoNecesidad">
+                {{$index+1}}. {{rm.Descripcion}}
+            </li>
+          </ul>
         </div>
-        <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='S'">
-          serv
-        </div>
+
+
 
 
         <!-- fin clase de contratacion necesidad resumen -->

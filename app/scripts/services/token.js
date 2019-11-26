@@ -119,8 +119,10 @@ angular.module('implicitToken', [])
                 }
             },
             getPayload: function () {
-                var id_token = window.localStorage.getItem('id_token').split('.');
-                return JSON.parse(atob(id_token[1]));
+                if(window.localStorage.getItem('id_token')!==null) {
+                    var id_token = window.localStorage.getItem('id_token').split('.');
+                    return JSON.parse(atob(id_token[1]));
+                }  
             },
             logout: function () {
                 window.location.replace(service.logout_url);
@@ -143,7 +145,7 @@ angular.module('implicitToken', [])
                         if (service.expired()) {
                             emptyStorage();
                         }
-                    }, 5000);
+                    }, 500000);
                 }
             },
 

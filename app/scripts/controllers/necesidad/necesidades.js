@@ -53,6 +53,10 @@ angular.module('contractualClienteApp')
             self.iva_data=response.data;
         });
 
+        necesidadService.getParametroEstandar().then(function (response) {
+            self.perfil_data = response.data;
+        });
+
         self.gridOptions = {
             paginationPageSizes: [10, 15, 20],
             paginationPageSize: 10,
@@ -148,7 +152,6 @@ angular.module('contractualClienteApp')
                             //traer data de objetos para contratacion
                             //compra
                             if (self.necesidad.ProductosCatalogoNecesidad&&self.necesidad.ProductosCatalogoNecesidad!==null) {
-                                console.info("entro")
                                 self.necesidad.ProductosCatalogoNecesidad.forEach(function(prod) {
                                     prod.ElementoNombre="";
                                     prod.ValorTotal=0;
@@ -165,6 +168,8 @@ angular.module('contractualClienteApp')
                             //servicio
                             if(self.necesidad.DetalleServicioNecesidad.TipoServicioId) {
                                 self.necesidad.DetalleServicioNecesidad.ValorTotal=0;
+                                self.necesidad.DetalleServicioNecesidad.valorIvaUnd=0;
+                                self.necesidad.DetalleServicioNecesidad.TipoServicioNombre="";
                                 calculoIVA(self.necesidad.DetalleServicioNecesidad);
                                 $http.get("scripts/models/tipo_servicio.json")
                                 .then(function (response) {
@@ -173,8 +178,25 @@ angular.module('contractualClienteApp')
                                     })[0].DESCRIPCION;
                                 });
                             }
-                            //compra y servicio
+                      
                             //cps
+                            if (self.necesidad.DetallePrestacionServicioNecesidad.PerfilId) {
+                                self.necesidad.DetallePrestacionServicioNecesidad.PerfilNombre=self.perfil_data.filter(function(p){
+                                    return p.Id===self.necesidad.DetallePrestacionServicioNecesidad.PerfilId;
+                                })[0].ValorParametro;
+                            }
+                            if (self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
+                                self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre="";
+                                self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea="";
+                                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+                                    query: 'Id:' + self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                                    limit: -1
+                                })).then(function (response) {
+                                    self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre=response.data[0].Nombre;
+                                    self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea=response.data[0].AreaConocimientoId.Nombre;
+                                })
+
+                            }
                         }
                     });
                 });
