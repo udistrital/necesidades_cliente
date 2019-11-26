@@ -291,6 +291,7 @@ angular.module('contractualClienteApp')
             ProductosCatalogoNecesidad: (localStorage.getItem("ProductosCatalogoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ProductosCatalogoNecesidad")),
             MarcoLegalNecesidad: (localStorage.getItem("MarcoLegalNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("MarcoLegalNecesidad")),
             ActividadEspecificaNecesidad: (localStorage.getItem("ActividadEspecificaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEspecificaNecesidad")),
+            RequisitoMinimoNecesidad: (localStorage.getItem("RequisitoMinimoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("RequisitoMinimoNecesidad")),
             ActividadEconomicaNecesidad: (localStorage.getItem("ActividadEconomicaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEconomicaNecesidad")),
             Rubros: (localStorage.getItem("Rubros") === null) ? [] : JSON.parse(localStorage.getItem("Rubros"))
           });
