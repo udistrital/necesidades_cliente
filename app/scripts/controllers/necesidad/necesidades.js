@@ -153,6 +153,7 @@ angular.module('contractualClienteApp')
                             //compra
                             if (self.necesidad.ProductosCatalogoNecesidad&&self.necesidad.ProductosCatalogoNecesidad!==null) {
                                 self.necesidad.ProductosCatalogoNecesidad.forEach(function(prod) {
+                                    prod.valorIvaUnd=0;
                                     prod.ElementoNombre="";
                                     prod.ValorTotal=0;
                                     administrativaRequest.get('catalogo_elemento_grupo', $.param({

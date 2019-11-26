@@ -398,7 +398,7 @@
                           <div class="panel-body container-fluid">
                             <div class="list-group-item" ng-repeat="fu in ap.Fuentes track by fu.FuenteId">
                               <label class="text-warning col-md-8 titleActividad">{{"FUENTE" | translate}}:
-                                {{fu.Nombre}}</label>
+                                {{fu.FuenteId}}</label>
                               <input class="col-md-4 money" type="text"
                                 ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
                                 ng-model="fu.MontoParcial" ui-money-mask="2">

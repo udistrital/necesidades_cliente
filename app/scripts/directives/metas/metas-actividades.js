@@ -75,9 +75,9 @@ angular.module('contractualClienteApp')
         self.cargarMetas = function () {
 
           if ($scope.dependenciasolicitante) {
-            metasRequest.get('plan_adquisiciones/2019/' + $scope.dependenciasolicitante.toString()).then(
+            metasRequest.get('plan_adquisiciones/'+$scope.vigencia+'/'+ $scope.dependenciasolicitante.toString()).then(
               function (res) {
-                var tempmetas = res.data.metas.actividades; // falta un filter por rubro
+                var tempmetas = res.data.metas.actividades.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}); // falta un filter por rubro
                 self.metas = [];
 
                 tempmetas.forEach(function (act) {
@@ -138,7 +138,7 @@ angular.module('contractualClienteApp')
           }
 
         });
-
+ 
 
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
@@ -160,8 +160,11 @@ angular.module('contractualClienteApp')
 
 
         self.loadActividades = function () {
-          metasRequest.get('plan_adquisiciones/2019/' + $scope.dependenciasolicitante.toString()).then(function (response) {
-            self.gridOptions.data = response.data.metas.actividades;
+          metasRequest.get('plan_adquisiciones/'+$scope.vigencia+'/'+$scope.dependenciasolicitante.toString()).then(function (response) {
+            self.gridOptions.data = [];
+            response.data.metas.actividades.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}).forEach(function(act) {
+              self.gridOptions.data.filter(function(a){ return a.actividad_id===act.actividad_id}).length===0 ? self.gridOptions.data.push(act) : _;
+            });
             if ($scope.apropiacion.Metas[0].Actividades) {
               $scope.apropiacion.Metas[0].Actividades.forEach(function (act) {
                 var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id == act.ActividadId })

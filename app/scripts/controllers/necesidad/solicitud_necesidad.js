@@ -194,6 +194,7 @@ angular.module('contractualClienteApp')
             })).then(function (response) {
                 self.iva_data = response.data;
                 self.ProductosCatalogoNecesidad.forEach(function (prod) {
+                    prod.RequisitosMinimos===null ? prod.RequisitosMinimos=[]:_;
                     administrativaRequest.get('catalogo_elemento_grupo', $.param({
                         query: 'Id:' + prod.CatalogoId,
                         fields: 'Id,ElementoNombre,ElementoCodigo',
