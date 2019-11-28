@@ -250,7 +250,7 @@ angular.module('contractualClienteApp')
                 var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id,]
                     .includes(necesidad.EstadoNecesidadId.Id);
 
-                self.verBotonAprobarSolicitud = necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id; // Cuando este Guardada (Borrador)
+                self.verBotonAprobarSolicitud = necesidadService.EstadoNecesidadType.Guardada.Id===necesidad.EstadoNecesidadId.Id&&necesidad.JustificacionRechazo!==1; // Cuando este Guardada (Borrador)
                 self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
                 self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
                 self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;

@@ -247,6 +247,10 @@ angular.module('contractualClienteApp')
 
         necesidadService.getFullNecesidad(self.IdNecesidad).then(function (res) {
             self.recibirNecesidad(res);
+            // en caso de que haya informacion pegada en el localstorage o se acceda de forma irregular a la url
+            if(!self.IdNecesidad&&self.Necesidad.Id) {
+                self.ResetNecesidad();
+            }
         }
 
         );
@@ -816,10 +820,10 @@ angular.module('contractualClienteApp')
             self.ActividadEspecifica.splice(i, 1);
         };
 
-        self.submitForm = function (form) {
+        self.submitForm = function (form,completado) {
             if (form.$valid) {
                 self.enviando=true;
-                self.crear_solicitud();
+                self.crear_solicitud(completado);
             } else {
                 swal(
                     'Faltan datos en el formulario',
@@ -833,9 +837,14 @@ angular.module('contractualClienteApp')
             };
         };
 
-        self.crear_solicitud = function () {
-            if(self.Necesidad.TipoNecesidadId.Id===2){//servicios publicos
+        self.crear_solicitud = function (completado) {
+            if(self.Necesidad.TipoNecesidadId.Id===2 || !completado){//servicios publicos o incompleta
                 self.Necesidad.TipoContratoNecesidadId = { Id: 3 };
+            }
+            if (!completado) {
+                self.Necesidad.JustificacionRechazo=1;
+            } else {
+                self.Necesidad.JustificacionRechazo=0;
             }
             self.ActividadEconomicaNecesidad = self.actividades_economicas_id
             self.Necesidad.ModalidadSeleccionId = { Id: 8 }
@@ -849,10 +858,10 @@ angular.module('contractualClienteApp')
                     return {
                         CatalogoId: p.CatalogoId,
                         UnidadId: p.UnidadId || p.Unidad.Id,
-                        IvaId: p.Iva,
+                        IvaId: p.IvaId || p.Iva,
                         Cantidad: p.Cantidad,
                         Valor: p.Valor,
-                        RequisitosMinimos: p.RequisitosMinimos
+                        RequisitosMinimos: p.RequisitosMinimos || []
                     }
                 }),
                 MarcoLegalNecesidad: self.MarcoLegalNecesidad,
@@ -951,9 +960,9 @@ angular.module('contractualClienteApp')
                 self.TrNecesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Guardada;
                 // validacion de financiacion vs especificaciones
                 var especificaciones_valido = false;
-                if (self.Necesidad.TipoNecesidadId.Id === 2) {
+                if (self.Necesidad.TipoNecesidadId.Id === 2 || !completado) {
                     especificaciones_valido = true;
-                    self.ValidarFinanciacion() ? planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
+                    self.ValidarFinanciacion() || !completado ? planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
                         NecesidadHandle(r);
                     }).catch(function (e) {
                         console.info(e)
@@ -1008,11 +1017,11 @@ angular.module('contractualClienteApp')
             self.Rubros.forEach(function (ap) {
                 // CASE INVERSION
                 if (self.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'I') {
-                    fin_valid = fin_valid && ap.MontoMeta <= ap.Apropiacion.ValorActual;
+                    fin_valid = fin_valid && ap.MontoMeta <= ap.Apropiacion.ValorActual && ap.MontoPorApropiacion>0;
                 } else {
                     //CASE FUNCIONAMIENTO
                     ap.Fuentes.length===0 ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).agregarFuente):_;
-                    fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual && ap.Fuentes.length>0;
+                    fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual && ap.Fuentes.length>0 && ap.MontoPorApropiacion>0;
                 }
                 ap.MontoFuentes > ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
