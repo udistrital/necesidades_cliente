@@ -318,9 +318,8 @@
             </ng-form>
 
             <div style="text-align:center;">
-              <button type="button" class="btn btn-danger btn-outline"
-              ng-click="solicitudNecesidad.ResetNecesidad();">
-              {{"LIMPIAR" | translate}}</button>
+              <button type="button" class="btn btn-danger btn-outline" ng-click="solicitudNecesidad.ResetNecesidad();">
+                {{"LIMPIAR" | translate}}</button>
               <button type="button" class="btn btn-primary btn-outline"
                 ng-click="solicitudNecesidad.CambiarForm('financiacion');">
                 {{"SIGUIENTE" | translate}}</button>
@@ -459,6 +458,10 @@
               <button type="button" class="btn btn-primary btn-outline"
                 ng-click="solicitudNecesidad.CambiarForm('general');">
                 {{"ATRAS" | translate}}</button>
+              <button type="button" class="btn btn-success btn-success"
+                ng-if="!solicitudNecesidad.IdNecesidad||solicitudNecesidad.Necesidad.JustificacionRechazo===1"
+                ng-click="solicitudNecesidad.submitForm(solicitudform)">
+                {{'GUARDAR' | translate }}</button>
               <button type="button" class="btn btn-primary btn-outline"
                 ng-click="solicitudNecesidad.CambiarForm('legal');" ng-disabled="!solicitudNecesidad.Rubros.length>0">
                 {{"SIGUIENTE" | translate}}</button>
@@ -467,10 +470,11 @@
             <fieldset ng-if="solicitudNecesidad.Necesidad.TipoNecesidadId.Id===2">
               <div style="text-align: center">
                 <button type="button" class="btn btn-primary btn-outline"
-                ng-click="solicitudNecesidad.CambiarForm('general');">
-                {{"ATRAS" | translate}}</button>
+                  ng-click="solicitudNecesidad.CambiarForm('general');">
+                  {{"ATRAS" | translate}}</button>
                 <button type="button" class="btn btn-success btn-outline"
-                  ng-click="solicitudNecesidad.submitForm(solicitudform)">
+                  ng-click="solicitudNecesidad.submitForm(solicitudform, true)"
+                  ng-disabled="!solicitudNecesidad.Rubros.length>0">
                   {{'REGISTRAR' | translate }}</button>
               </div>
             </fieldset>
@@ -571,7 +575,8 @@
                     ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
                     <label class="control-label">{{"TIPO_SERVICIO" | translate}}</label>
                     <select class="form-control" ng-model="solicitudNecesidad.DetalleServicioNecesidad.TipoServicioId"
-                      ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios" required>
+                      ng-options="tipoServ.ID*1 as tipoServ.DESCRIPCION for tipoServ in solicitudNecesidad.TiposServicios"
+                      required>
                       <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
                         {{"SERVICIO" | translate}}</option>
                     </select>
@@ -671,14 +676,13 @@
                     </div>
                     <br>
                   </div>
-                   <!-- requisitos minimos necesidad -->
+                  <!-- requisitos minimos necesidad -->
 
-                   <div class="col-md-12">
+                  <div class="col-md-12">
                     <label for="objeto" class="control-label">{{"REQUISITOS_MINIMOS" | translate}}</label>
                     <div>
                       <ul class="list-group">
-                        <li class="list-group-item row"
-                          ng-repeat="rm in solicitudNecesidad.RequisitoMinimoNecesidad">
+                        <li class="list-group-item row" ng-repeat="rm in solicitudNecesidad.RequisitoMinimoNecesidad">
                           <label class="col-md-11"><span class="text-info">{{$index+1}}.
                             </span>{{rm.Descripcion}}</label>
                           <div class="col-md-1 text-right">
@@ -930,12 +934,13 @@
 
             <fieldset>
               <div style="text-align: center">
-                <button type="button" class="btn btn-success btn-outline"
-                  ng-click="solicitudNecesidad.submitForm(solicitudform)">
-                  {{'REGISTRAR' | translate }}</button>
                 <button type="button" class="btn btn-primary btn-outline"
                   ng-click="solicitudNecesidad.CambiarForm('legal');">
                   {{"ATRAS" | translate}}</button>
+                <button type="button" class="btn btn-success btn-outline"
+                  ng-click="solicitudNecesidad.submitForm(solicitudform,true)"
+                  ng-disabled="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===3">
+                  {{'REGISTRAR' | translate }}</button>
               </div>
             </fieldset>
 

@@ -20,6 +20,7 @@ angular.module('contractualClienteApp')
         var self = this
         $scope.fuente = $translate.instant('FUENTE')
         self.fuenteapropiacion = $scope.fuenteapropiacion;
+        self.editando=false;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
           paginationPageSize: 5,
@@ -55,18 +56,21 @@ angular.module('contractualClienteApp')
         ]
         }
 
+
+
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi
           gridApi.selection.on.rowSelectionChanged($scope, function () {
-            $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows().map(function (e) {
-              if($scope.fuenteapropiacion.filter(function(f){ return f.FuenteId===e.Codigo}).length>0) {
-                return $scope.fuenteapropiacion.filter(function(f){ return f.FuenteId===e.Codigo})[0];
-              } else {
-                return {FuenteId: e.Codigo};
-              }
-              
-            });
-
+            if(self.editando===true) {
+              $scope.fuenteapropiacion = self.gridApi.selection.getSelectedRows().map(function (e) {
+                if($scope.fuenteapropiacion.filter(function(f){ return f.FuenteId===e.Codigo}).length>0) {
+                  $scope.fuenteapropiacion.filter(function(f){ return f.FuenteId===e.Codigo})[0].Saldo=e.ValorActual;
+                  return $scope.fuenteapropiacion.filter(function(f){ return f.FuenteId===e.Codigo})[0];
+                } else {
+                  return {FuenteId: e.Codigo, Saldo: e.ValorActual};
+                }
+              });
+            }
           })
         }
 
@@ -78,15 +82,25 @@ angular.module('contractualClienteApp')
           gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _;
 
           $scope.$watch('fuenteapropiacion', function () {
-            $scope.fuenteapropiacion ? $scope.fuenteapropiacion.forEach(function (act) {
-              var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo !== act.Codigo })
-
+            $scope.fuenteapropiacion ? $scope.fuenteapropiacion.forEach(function (fuente) {
+              if(fuente.MontoParcial&&fuente.Saldo&&fuente.MontoParcial>fuente.Saldo) {
+                swal({
+                  title: 'Error Valor Fuentes de Financiamiento ' + fuente.FuenteId,
+                  type: 'error',
+                  text: 'Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo asignado.',
+                  showCloseButton: true,
+                  confirmButtonText: $translate.instant("CERRAR")
+                });
+                fuente.MontoParcial = 0;
+              }
+              var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo === fuente.FuenteId })
               if (tmp.length > 0) {
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }
             }) : _;
+            self.editando=true;
             self.fuenteapropiacion = $scope.fuenteapropiacion;
-          })
+          },true)
         })
 
         $scope.$watch('[d_fuentesApropiacion.gridOptions.paginationPageSize, d_fuentesApropiacion.gridOptions.data]', function () {

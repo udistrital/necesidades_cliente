@@ -24,7 +24,7 @@ angular.module('contractualClienteApp')
         var self = this;
         self.actividades = $scope.actividades;
         self.meta = undefined;
-        self.editando = false;
+        self.cargainicial = true;
         self.MontoPorMeta = 0;
         self.gridOptions = {
           paginationPageSizes: [5, 10, 15],
@@ -108,10 +108,10 @@ angular.module('contractualClienteApp')
               act.ActividadId = act.actividad_id;
               act.MetaID = act.meta_id;
               act.FuentesActividad ? act.FuentesActividad.forEach(function (f) {
-                f.FuenteId = f.fuente_financiamiento;
+                f.FuenteId = f.FuenteId || f.fuente_financiamiento;
                 if (parseFloat(f.MontoParcial) > parseFloat(f.valor_fuente_financiamiento) - parseFloat(f.saldo_comprometido)) {
                   swal({
-                    title: 'Error Valor Fuentes de Financiamiento ' + act.actividad_id,
+                    title: 'Error Valor Fuentes de Financiamiento ' + f.FuenteId + ' actividad: '+ act.actividad_id,
                     type: 'error',
                     text: 'Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo asignado.',
                     showCloseButton: true,
@@ -129,6 +129,11 @@ angular.module('contractualClienteApp')
           $scope.metas.length > 0 ? $scope.metas[0].MontoPorMeta = self.MontoPorMeta : _;
         }, true);
 
+        self.ResetMeta = function ( ) {
+          $scope.metas = [{ MetaId: self.meta, Actividades: [] }];
+          self.actividades = [];
+        }
+
         $scope.$watch('d_metasActividades.meta', function () {
           if (self.meta !== undefined) {
             $scope.metas[0] ? _ : $scope.metas = [{ MetaId: self.meta }];
@@ -142,6 +147,27 @@ angular.module('contractualClienteApp')
 
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
+          if($scope.metas&&$scope.metas[0]&&$scope.metas[0].Actividades) {
+            var montos = [];
+            $scope.metas[0].Actividades.forEach(function(a){
+              var fuentes = [];
+              a.FuentesActividad.forEach(function(f) {
+                fuentes.push(f.MontoParcial)
+              })
+              montos.push(fuentes)
+            })
+
+            if(self.cargainicial===true&&$scope.metas) {
+              setTimeout(function() {
+                for (var i=0;i<$scope.metas[0].Actividades.length; i++) {
+                  for (var j=0; j<$scope.metas[0].Actividades[i].FuentesActividad.length; j++) {
+                    $scope.metas[0].Actividades[i].FuentesActividad[j].MontoParcial=montos[i][j];
+                  }
+                }
+                self.cargainicial=false;
+              }, 3000);
+            }
+          }
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             self.actividades = self.gridApi.selection.getSelectedRows()
             self.actividades.forEach(function (a) {
@@ -165,13 +191,13 @@ angular.module('contractualClienteApp')
             response.data.metas.actividades.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}).forEach(function(act) {
               self.gridOptions.data.filter(function(a){ return a.actividad_id===act.actividad_id}).length===0 ? self.gridOptions.data.push(act) : _;
             });
+            self.gridApi.grid.modifyRows(self.gridOptions.data);
             if ($scope.apropiacion.Metas[0].Actividades) {
               $scope.apropiacion.Metas[0].Actividades.forEach(function (act) {
                 var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id == act.ActividadId })
                 if (tmp.length > 0) {
-                  act = _.merge(act,tmp[0]);
-                  self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-                  console.info("seleciono")
+                  self.gridApi.selection.selectRow(tmp[0]);
+                  act = _.merge(act,tmp[0]); //seleccionar las filas
                 }
               });
               self.actividades = $scope.apropiacion.Metas[0].Actividades;
@@ -219,13 +245,12 @@ angular.module('contractualClienteApp')
               var tmp = self.gridOptions.data.filter(function (e) { return e.actividad_id !== act.ActividadId })
               if (tmp.length > 0) {
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-                console.info("act",tmp[0])
               }
             }) : _;
             self.actividades = $scope.actividades;
         });
 
-        $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {
+        $scope.$watch('[d_metasActividades.gridOptions.paginationPageSize, d_metasActividades.gridOptions.data]', function () {
           if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
             $scope.gridHeight = self.gridOptions.rowHeight * 2 + (self.gridOptions.data.length * self.gridOptions.rowHeight);
             if (self.gridOptions.data.length <= 5) {
