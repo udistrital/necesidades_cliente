@@ -305,13 +305,14 @@ angular.module('contractualClienteApp')
             self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
             self.necesidad.Necesidad.ModalidadSeleccionId = self.modalidadSel;
             self.necesidad.Necesidad.TipoContratoId = self.TipoContrato.Id;
+            self.necesidad.Necesidad.ConsecutivoNecesidad=self.necesidad.Necesidad.Id+16;
 
             necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
                 if (l.data !== undefined) {
                     swal(
                         {
-                             title: 'Se ha creado la Necesidad N°'+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
-                             text: 'La solicitud de necesidad '+self.necesidad.Necesidad.ConsecutivoSolicitud+'ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.ConsecutivoNecesidad ,
+                             title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
+                             text: 'La solicitud de necesidad '+self.necesidad.Necesidad.ConsecutivoSolicitud+' ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.ConsecutivoNecesidad ,
                              type: "success",
                              width: 600,
                              showCloseButton: true,
@@ -366,7 +367,7 @@ angular.module('contractualClienteApp')
                 if (response.status === 200 || response.status === 201) {
                     swal(
                         {
-                             title: 'Se ha rechazado la Solicitud de Necesidad N° XX  ',
+                             title: 'Se ha rechazado la Solicitud de Necesidad N° '+self.necesidad.Necesidad.ConsecutivoSolicitud,
                              text: 'La solicitud de necesidad ha sido rechazada',
                              type: "success",
                              width: 600,
@@ -420,12 +421,13 @@ angular.module('contractualClienteApp')
                     if (response.status === 200 || response.status === 201) {
                         self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.CdpSolicitado;
                         self.necesidad.Necesidad.TipoContratoId = self.necesidad.Necesidad.TipoContratoId.Id;
+                        var consec_cdp = response.data.Body.consecutivo;
                         necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {
                             if (resp_nececesidad.status === 200 || resp_nececesidad.status === 201) {
                                 swal(
                     
                                     {
-                                        title: 'Se ha creado la solicitud de CDP N° '+response.Body,
+                                        title: 'Se ha creado la solicitud de CDP N° '+consec_cdp,
                                         text: $translate.instant("CDP_SOLICITADO"),
                                         type: "success",
                                         width: 600,

@@ -250,7 +250,7 @@ angular.module('contractualClienteApp')
             self.actividades = $scope.actividades;
         });
 
-        $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {
+        $scope.$watch('[d_metasActividades.gridOptions.paginationPageSize, d_metasActividades.gridOptions.data]', function () {
           if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {
             $scope.gridHeight = self.gridOptions.rowHeight * 2 + (self.gridOptions.data.length * self.gridOptions.rowHeight);
             if (self.gridOptions.data.length <= 5) {

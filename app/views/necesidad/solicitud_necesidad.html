@@ -459,7 +459,7 @@
                 ng-click="solicitudNecesidad.CambiarForm('general');">
                 {{"ATRAS" | translate}}</button>
               <button type="button" class="btn btn-success btn-success"
-                ng-if="!solicitudNecesidad.IdNecesidad"
+                ng-if="!solicitudNecesidad.IdNecesidad||solicitudNecesidad.Necesidad.JustificacionRechazo===1"
                 ng-click="solicitudNecesidad.submitForm(solicitudform)">
                 {{'GUARDAR' | translate }}</button>
               <button type="button" class="btn btn-primary btn-outline"
@@ -938,7 +938,8 @@
                   ng-click="solicitudNecesidad.CambiarForm('legal');">
                   {{"ATRAS" | translate}}</button>
                 <button type="button" class="btn btn-success btn-outline"
-                  ng-click="solicitudNecesidad.submitForm(solicitudform,true)">
+                  ng-click="solicitudNecesidad.submitForm(solicitudform,true)"
+                  ng-disabled="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===3">
                   {{'REGISTRAR' | translate }}</button>
               </div>
             </fieldset>
