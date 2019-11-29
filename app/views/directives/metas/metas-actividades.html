@@ -11,6 +11,7 @@
             <ul>
                 <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas | orderBy:Id:true">
                     <input type="radio" name="name" value="{{meta.Id}}" ng-model="d_metasActividades.meta"
+                    ng-click="d_metasActividades.ResetMeta()"
                         required />{{ meta.Id }}, {{ meta.Nombre }}
                 </li>
             </ul>
@@ -38,12 +39,12 @@
                 <div class="col-md-12" ng-repeat="fuente in actividad.FuentesActividad">
                 
                     <div class="col-md-6">
-                            <label>Fuente de financiamiento: {{fuente.fuente_financiamiento}}</label>
+                            <label>Fuente de financiamiento: {{fuente.FuenteId}}</label>
                             <input class="money" type="text" ng-init="fuente.MontoParcial = fuente.MontoParcial ? fuente.MontoParcial : 0"
                                 ng-model="fuente.MontoParcial" ui-money-mask="2">
                     </div>
                        <div class="col-md-6">
-                            <label>Saldo Fuente Financiamiento: 
+                            <label>Saldo Fuente Financiamiento:
                                     <input type="text" class="form-control money" ng-model="fuente.valor_fuente_financiamiento"
                                     ui-money-mask="2" disabled>
                                     <!-- <span class="money">{{ fuente.valor_fuente_financiamiento | currency }}</span></label> -->
