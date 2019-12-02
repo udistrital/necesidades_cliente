@@ -117,7 +117,7 @@ var text_es = {
     CLASE_CONTRATACION: "Clase de contratación",
     PERFIL: "Perfil",
     EL_TIPO_DE: "el Tipo de",
-    NUCLEO_CONOCIMIENTO_AREA: "Núcleo conocimiento área",
+    NUCLEO_CONOCIMIENTO_AREA: "Área núcleo conocimiento",
     NUCLEO_CONOCIMIENTO: "Núcleo básico conocimiento",
     SNIES_AREA: "Snies Área",
     SNIES_NUCLEO_BASICO: "SNIES núcleo básico",

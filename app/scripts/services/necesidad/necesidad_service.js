@@ -33,21 +33,21 @@ angular.module('contractualClienteApp')
       CPS: {
         title: 'Error en el valor de especificaciones',
         type: 'error',
-        text: 'Verifique que el valor ingresado para la prestación de servicio coincida con el valor de financiación.',
+        text: 'Verifique que ha seleccionado perfil, área y núcleo de conocimiento.',
         showCloseButton: true,
         confirmButtonText: $translate.instant("CERRAR")
       },
       CompraServicio: {
         title: 'Error en el valor de especificaciones',
         type: 'error',
-        text: 'Verifique que la suma del valor del servicio más el total de la compra coincida con el valor de financiación.',
+        text: 'Verifique que ha seleccionado el tipo de servicio y que la suma del valor del servicio más el total de la compra coincida con el valor de financiación.',
         showCloseButton: true,
         confirmButtonText: $translate.instant("CERRAR")
       },
       Servicio: {
         title: 'Error en el valor de especificaciones',
         type: 'error',
-        text: 'Verifique que el valor ingresado para el servicio coincida con el valor de financiación.',
+        text: 'Verifique que ha seleccionado el tipo de servicio y que el valor ingresado para el servicio coincida con el valor de financiación.',
         showCloseButton: true,
         confirmButtonText: $translate.instant("CERRAR")
       }
