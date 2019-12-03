@@ -833,9 +833,10 @@ angular.module('contractualClienteApp')
                     'Completa todos los datos obligatorios del formulario',
                     'warning'
                 ).then(function (event) {
+                    console.info(event)
                     var e = angular.element('.ng-invalid-required')[2];
                     e.focus(); // para que enfoque el elemento
-                    //e.classList.add("ng-dirty"); //para que se vea rojo
+                    e.classList.add("ng-dirty"); //para que se vea rojo
                 })
             };
         };

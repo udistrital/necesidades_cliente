@@ -1,68 +1,62 @@
-<div class="panel panel-default col-md-6">
-    <div class="panel-heading">
-        {{"METAS" | translate}} {{"Y" | translate}} {{"ACTIVIDADES_META" | translate}}
-    </div>
-    <div class="panel-body">
-        <p>
-            Seleccione la meta y enseguida las actividades relacionadas.
-        </p>
-
-        <div>
-            <ul>
-                <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas | orderBy:Id:true">
-                    <input type="radio" name="name" value="{{meta.Id}}" ng-model="d_metasActividades.meta"
-                    ng-click="d_metasActividades.ResetMeta()"
-                        required />{{ meta.Id }}, {{ meta.Nombre }}
-                </li>
-            </ul>
-
-
-        </div>
-        <div style="height: 250px" ui-grid="d_metasActividades.gridOptions" ui-grid-selection ui-grid-auto-resize
-            ui-grid-pagination></div>
-
-
-    </div>
-
-</div>
-
-<div class="panel panel-default col-md-6">
-    <div class="panel-heading container-fluid">
-        <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"META" | translate}}:</div>
-        <div class="col-sm-8 money">
-            {{d_metasActividades.MontoPorMeta | currency}}
-        </div>
-    </div>
-    <div class="panel-body container-fluid">
-        <div ng-repeat="actividad in d_metasActividades.actividades">
-            <div class="col-md-12"><text class="titleActividad">{{actividad.actividad_id}} {{ actividad.actividad}}</text>
-                <div class="col-md-12" ng-repeat="fuente in actividad.FuentesActividad">
-                
-                    <div class="col-md-6">
-                            <label>Fuente de financiamiento: {{fuente.FuenteId}}</label>
-                            <input class="money" type="text" ng-init="fuente.MontoParcial = fuente.MontoParcial ? fuente.MontoParcial : 0"
-                                ng-model="fuente.MontoParcial" ui-money-mask="2">
-                    </div>
-                       <div class="col-md-6">
-                            <label>Saldo Fuente Financiamiento:
-                                    <input type="text" class="form-control money" ng-model="fuente.valor_fuente_financiamiento"
-                                    ui-money-mask="2" disabled>
-                                    <!-- <span class="money">{{ fuente.valor_fuente_financiamiento | currency }}</span></label> -->
-                            </label>
-                       </div>
-                      
-                    </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{"METAS" | translate}} {{"Y" | translate}} {{"ACTIVIDADES_META" | translate}}
             </div>
-            <!-- <input class="money" type="text"
-                ng-init="actividad.MontoParcial = actividad.MontoParcial ? actividad.MontoParcial : 0"
-                ng-model="actividad.MontoParcial" ui-money-mask="2"> -->
-  
-
-            <br>
+            <div class="panel-body">
+                <p>
+                    Seleccione la meta y enseguida las actividades relacionadas.
+                </p>
+                <div>
+                    <ul>
+                        <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas | orderBy:Id:true">
+                            <input type="radio" name="name" value="{{meta.Id}}" ng-model="d_metasActividades.meta"
+                                ng-click="d_metasActividades.ResetMeta()" required />{{ meta.Id }}, {{ meta.Nombre }}
+                        </li>
+                    </ul>
+                </div>
+                <div style="height: 250px" ui-grid="d_metasActividades.gridOptions" ui-grid-selection
+                    ui-grid-auto-resize ui-grid-pagination></div>
+            </div>
         </div>
     </div>
-
-
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading container-fluid">
+                <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"META" | translate}}:</div>
+                <div class="col-sm-8 money">
+                    {{d_metasActividades.MontoPorMeta | currency}}
+                </div>
+            </div>
+            <div class="panel-body container-fluid">
+                <div ng-repeat="actividad in d_metasActividades.actividades">
+                    <div class="col-md-12"><text class="titleActividad">{{actividad.actividad_id}}
+                            {{ actividad.actividad}}</text>
+                        <div class="row" ng-repeat="fuente in actividad.FuentesActividad">
+                            <div class="col-md-6">
+                                <label>Fuente de financiamiento: {{fuente.FuenteId}}</label>
+                                <input class="money" type="text"
+                                    ng-init="fuente.MontoParcial = fuente.MontoParcial ? fuente.MontoParcial : 0"
+                                    ng-model="fuente.MontoParcial" ui-money-mask="2">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Saldo Fuente Financiamiento:
+                                    <input type="text" class="form-control money"
+                                        ng-model="fuente.valor_fuente_financiamiento" ui-money-mask="2" disabled>
+                                    <!-- <span class="money">{{ fuente.valor_fuente_financiamiento | currency }}</span></label> -->
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <input class="money" type="text"
+                    ng-init="actividad.MontoParcial = actividad.MontoParcial ? actividad.MontoParcial : 0"
+                    ng-model="actividad.MontoParcial" ui-money-mask="2"> -->
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- <pre>Metas: {{metas | json}}
         Aprop: {{apropiacion | json}}

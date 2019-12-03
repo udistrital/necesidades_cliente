@@ -339,8 +339,7 @@
                     </div>
 
 
-                    <div class="panel panel-body col-md-12"
-                      ng-repeat="ap in solicitudNecesidad.Rubros track by ap.RubroId">
+                    <div class="panel panel-body" ng-repeat="ap in solicitudNecesidad.Rubros track by ap.RubroId">
                       <button type="button" class="btn btn-danger btn-sm col-md-offset-11"
                         ng-click="solicitudNecesidad.eliminarRubro(ap)" aria-label="Left Align">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -367,25 +366,30 @@
 
 
                         <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Funcionamiento'"
-                          class="panel panel-default col-md-6">
-                          <div class="panel-heading container-fluid">
-                            <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"FUENTES" | translate}}:</div>
-                            <div class="col-sm-8 money">
-                              {{ap.MontoFuentes | currency}}
+                          class="col-md-6">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <div class="row">
+                                <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"FUENTES" | translate}}:</div>
+                                <div class="col-sm-8 money">
+                                  {{ap.MontoFuentes | currency}}
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                          <div class="panel-body container-fluid">
-                            <div class="list-group-item" ng-repeat="fu in ap.Fuentes track by fu.FuenteId">
-                              <label class="text-warning col-md-8 titleActividad">{{"FUENTE" | translate}}:
-                                {{fu.FuenteId}}</label>
-                              <input class="col-md-4 money" type="text"
-                                ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
-                                ng-model="fu.MontoParcial" ui-money-mask="2">
-                              <br>
+                            <div class="panel-body">
+                              <div class="list-group-item" ng-repeat="fu in ap.Fuentes track by fu.FuenteId">
+                                <div class="row">
+                                    <label class="text-warning col-sm-4 titleActividad">{{"FUENTE" | translate}}:
+                                        {{fu.FuenteId}}</label>
+                                      <input class="col-sm-8 money" type="text"
+                                        ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
+                                        ng-model="fu.MontoParcial" ui-money-mask="2">
+                                </div>
+
+                              </div>
                             </div>
                           </div>
                         </div>
-
 
                       </div>
 
@@ -726,16 +730,15 @@
                     <ng-form id="form_producto" name="prodDiv">
                       <div class="col-md-12">
                         <div class="panel panel-default">
-                          <div class="panel-heading">
-                            <legend class="text-primary" ng-click="solicitudNecesidad.cerrarModalProducto()">
-                              <span>{{solicitudNecesidad.producto_catalogo.ElementoNombre}} </span>
-                            </legend>
+                          <div class="panel-heading" ng-click="solicitudNecesidad.cerrarModalProducto()"> 
+                              <h3>{{solicitudNecesidad.producto_catalogo.ElementoNombre}} </h3>
 
                           </div>
                           <div class="panel-body" ng-show="!prodDiv.open">
                             <div class="col-md-12">
                               <div class="col-md-6">
                                 <label class=" control-label">{{"DESCRIPCION" | translate}}</label>
+                                <small>*{{"OBLIGATORIO" | translate}}</small>
                                 <textarea ng-model="solicitudNecesidad.producto_catalogo.Elemento" class="form-control"
                                   maxlength="100" placeholder="Elemento (Descripción)" rows="1" required></textarea>
                               </div>
@@ -743,6 +746,7 @@
                               <div class="col-md-6">
                                 <label class=" control-label"
                                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">{{"UNIDAD_MEDIDA" | translate}}</label>
+                                <small>*{{"OBLIGATORIO" | translate}}</small>
                                 <select
                                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4"
                                   class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Unidad"
@@ -759,6 +763,7 @@
                               <div class="col-md-4">
                                 <label class=" control-label"
                                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">{{"CANTIDAD" | translate}}</label>
+                                <small>*{{"OBLIGATORIO" | translate}}</small>
                                 <input class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Cantidad"
                                   placeholder="Cantidad de Elementos" ui-number-mask="0"
                                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4"
@@ -767,6 +772,7 @@
 
                               <div class="col-md-4">
                                 <label class=" control-label">{{"VALOR_UNITARIO" | translate}}</label>
+                                <small>*{{"OBLIGATORIO" | translate}}</small>
                                 <input class="form-control  money"
                                   ng-model="solicitudNecesidad.producto_catalogo.Valor;" placeholder="Valor Unitario"
                                   ui-money-mask="2" required>
@@ -774,6 +780,7 @@
 
                               <div class="col-md-4">
                                 <label class=" control-label">{{"IVA" | translate}} %</label>
+                                <small>*{{"OBLIGATORIO" | translate}}</small>
                                 <select class="form-control  money" ng-init="pro.Iva = 0"
                                   ng-model="solicitudNecesidad.producto_catalogo.Iva"
                                   ng-options="iva.Id as iva.ImpuestoId.CodigoAbreviacion+' '+iva.Tarifa for iva in solicitudNecesidad.iva_data"
@@ -835,7 +842,8 @@
                             <div class="col-md-12 form-group">
                               <div style="text-align: center">
                                 <button type="button" class="btn btn-primary btn-outline"
-                                  ng-click="solicitudNecesidad.producto_catalogo.RequisitosMinimos.push({Descripcion: solicitudNecesidad.producto_catalogo.requisitomin});solicitudNecesidad.producto_catalogo.requisitomin=''">AGREGAR REQUISITO MÍNIMO</button>
+                                  ng-click="solicitudNecesidad.producto_catalogo.RequisitosMinimos.push({Descripcion: solicitudNecesidad.producto_catalogo.requisitomin});solicitudNecesidad.producto_catalogo.requisitomin=''">AGREGAR
+                                  REQUISITO MÍNIMO</button>
                               </div>
                             </div>
                             <div class="col-md-12 form-group" style="text-align: center">
@@ -885,19 +893,19 @@
                     <table class="table table-bordered tablaDetalle" ng-show="solicitudNecesidad.MostrarTotalEspc">
                       <thead>
                         <tr>
-                          <th class="bg-info col-md-4">{{"SUBTOTAL" | translate}}</th>
+                          <th class="bg-primary col-md-4">{{"SUBTOTAL" | translate}}</th>
                           <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}</th>
                         </tr>
                         <tr>
-                          <th class="bg-info col-md-4">{{"IVA" | translate}} </th>
+                          <th class="bg-primary col-md-4">{{"IVA" | translate}} </th>
                           <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
                         </tr>
                         <tr>
-                          <th class="bg-info col-md-4">{{"VALOR_TOTAL" | translate}}</th>
+                          <th class="bg-primary col-md-4">{{"VALOR_TOTAL" | translate}}</th>
                           <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</th>
                         </tr>
                         <tr ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1">
-                          <th class="bg-info col-md-4">{{"TOTAL_FINANCIACION" | translate}}:</th>
+                          <th class="bg-primary col-md-4">{{"TOTAL_FINANCIACION" | translate}}:</th>
                           <th class="money">{{solicitudNecesidad.Necesidad.Valor | currency}}</th>
                         </tr>
                       </thead>

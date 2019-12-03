@@ -137,7 +137,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidad.Nombre + ".\n" + row.entity.EstadoNecesidad.Descripcion;
                 },
-                width: '20%'
+                width: '15%'
             }],
             onRegisterApi: function (gridApi) {
                 self.gridApi = gridApi;
