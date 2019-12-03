@@ -75,26 +75,6 @@
                 </div>
               </ng-form>
 
-              <!-- Duración -->
-              <!-- <ng-form class="form-group col-md-12 " style="text-align: center; vertical-align: middle;">
-                <div>
-                  <legend class="text-success">
-                    {{"DURACION_NECESIDAD_CONTRATO" | translate}}
-                  </legend>
-                </div>
-                <div>
-                  <label class="radio-inline" ng-repeat="tipo in solicitudNecesidad.tipo_duracion_necesidad_data">
-
-                    <input type="radio" ng-value="{{tipo.Id}}"
-                      ng-model="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id"
-                      ng-init="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id = solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id ? solicitudNecesidad.Necesidad.TipoDuracionNecesidadId.Id : 1"
-                      ng-change="solicitudNecesidad.Necesidad.TipoDuracionNecesidadId=tipo" required>
-                    {{tipo.Nombre}}
-                  </label>
-
-                </div>
-              </ng-form> -->
-
               <div class="col-md-6" ng-show="solicitudNecesidad.ver_duracion_fecha">
 
               </div>
@@ -855,8 +835,7 @@
                             <div class="col-md-12 form-group">
                               <div style="text-align: center">
                                 <button type="button" class="btn btn-primary btn-outline"
-                                  ng-click="solicitudNecesidad.producto_catalogo.RequisitosMinimos.push({Descripcion: solicitudNecesidad.producto_catalogo.requisitomin});solicitudNecesidad.producto_catalogo.requisitomin=''">Agregar
-                                  requisito mínimo</button>
+                                  ng-click="solicitudNecesidad.producto_catalogo.RequisitosMinimos.push({Descripcion: solicitudNecesidad.producto_catalogo.requisitomin});solicitudNecesidad.producto_catalogo.requisitomin=''">AGREGAR REQUISITO MÍNIMO</button>
                               </div>
                             </div>
                             <div class="col-md-12 form-group" style="text-align: center">

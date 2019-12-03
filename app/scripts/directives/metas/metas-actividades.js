@@ -148,25 +148,41 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function (gridApi) {
           self.gridApi = gridApi;
           if($scope.metas&&$scope.metas[0]&&$scope.metas[0].Actividades) {
-            var montos = [];
+            self.montos = [];
             $scope.metas[0].Actividades.forEach(function(a){
               var fuentes = [];
               a.FuentesActividad.forEach(function(f) {
                 fuentes.push(f.MontoParcial)
               })
-              montos.push(fuentes)
+              self.montos.push(fuentes)
             })
+    
 
-            if(self.cargainicial===true&&$scope.metas) {
-              setTimeout(function() {
-                for (var i=0;i<$scope.metas[0].Actividades.length; i++) {
-                  for (var j=0; j<$scope.metas[0].Actividades[i].FuentesActividad.length; j++) {
-                    $scope.metas[0].Actividades[i].FuentesActividad[j].MontoParcial=montos[i][j];
+            function addMontos() {
+              if(self.cargainicial===true&&$scope.metas) {
+                setTimeout(function() {
+                  try {
+                    for (var i=0;i<$scope.metas[0].Actividades.length; i++) {
+                      for (var j=0; j<$scope.metas[0].Actividades[i].FuentesActividad.length; j++) {
+                        if($scope.metas[0].Actividades[i].FuentesActividad[j].Id) {
+                          self.cargainicial=true;
+                          addMontos();
+                          return
+                        }
+                        $scope.metas[0].Actividades[i].FuentesActividad[j].MontoParcial=self.montos[i][j];
+                      }
+                    }
+                    self.cargainicial=false;
+                  } catch (error) {
+                    addMontos();
                   }
-                }
-                self.cargainicial=false;
-              }, 3000);
+                }, 1000);
+              }
             }
+            
+            addMontos();
+
+
           }
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             self.actividades = self.gridApi.selection.getSelectedRows()
