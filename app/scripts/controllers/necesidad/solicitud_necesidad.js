@@ -33,7 +33,7 @@ angular.module('contractualClienteApp')
         self.ActividadEconomicaNecesidad = [];
         self.Rubros = [];
 
-
+        // se obtiene idnecesidad de la ruta
         self.IdNecesidad = $routeParams.IdNecesidad;
         self.iva_data = undefined;
         self.documentos = [];
@@ -52,7 +52,7 @@ angular.module('contractualClienteApp')
         self.producto_catalogo = {};
         self.producto_catalogo.RequisitosMinimos = [];
 
-
+        // obtener vigencia, provisional
         self.fecha_actual = new Date();
         self.vigencia = "2019";
         self.deepCopy = function (obj) {
@@ -82,7 +82,7 @@ angular.module('contractualClienteApp')
         self.FormularioSeleccionado = 0;
         self.tipoInterventor = false;
 
-
+        // para mostrar select de plan adquisicion, no existe servicio
         self.planes_anuales = [{
             Id: 1,
             Nombre: "Plan de Adquisición 2019"
@@ -95,7 +95,7 @@ angular.module('contractualClienteApp')
         };
         
         self.elaborando_necesidad=false; //variable que se toma como cirterio para reiniciar objetos, verdadera en primer cambio de form
-        self.SeccionesFormulario = {
+        self.SeccionesFormulario = { // control stepper
             general: {
                 activo: true,
                 completado: true,
@@ -116,7 +116,7 @@ angular.module('contractualClienteApp')
 
 
         // El tipo de solicitud de contrato
-        self.duracionEspecialFunc = function (especial) {
+        self.duracionEspecialFunc = function (especial) {// calculo de unidades de tiempo
             self.Necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
             var s = self.duracionEspecialMap[especial];
             if (!s) { return; }
@@ -125,18 +125,17 @@ angular.module('contractualClienteApp')
         };
 
         self.duracionEspecialReverse = function () {
-
             self.ver_duracion_fecha = true
 
         };
 
-        self.recibirNecesidad = function (res) {
+        self.recibirNecesidad = function (res) { // recibir el objeto del mid o un nuevo objeto y realizar mapeo correspondiente
             var trNecesidad;
-            res.data ? trNecesidad = res.data.Body : trNecesidad = res;
+            res.data ? trNecesidad = res.data.Body : trNecesidad = res; // identifica si viene del mid o es nuevo
             self.Necesidad = trNecesidad.Necesidad;
             if (self.Necesidad.DependenciaNecesidadId) {
                 self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
-                    self.dependencia_solicitante = response.dependencia.Id;
+                    self.dependencia_solicitante = response.dependencia.Id; // traer dependencias partiendo de jefe de dependencia almacenado en necesidad
                 }) : _;
                 self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId).then(function (response) {
                     self.dependencia_destino = response.dependencia.Id;
@@ -146,7 +145,7 @@ angular.module('contractualClienteApp')
                     self.rol_ordenador_gasto = response.dependencia.Id;
                 }) : _;
 
-                if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {
+                if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {//verifica si es supervisor o interventor
                     self.tipoInterventor = false;
                     self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId).then(function(response){
                         self.dependencia_supervisor = response.dependencia.Id;
@@ -178,7 +177,7 @@ angular.module('contractualClienteApp')
                              
                         });    
                     }
-                    setTimeout(function() {
+                    setTimeout(function() { // ponser el valor del servicio cuando llegue la necesidad
                         self.servicio_valor = self.Necesidad.Valor;
                     }, 2000);
                     
@@ -188,14 +187,14 @@ angular.module('contractualClienteApp')
 
 
             self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad || [];
-            parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
+            parametrosGobiernoRequest.get('vigencia_impuesto', $.param({ // traer datos de iva y ponerlos en productos y servivios
                 limit: -1,
                 query: 'Activo:true'
             })).then(function (response) {
                 self.iva_data = response.data;
                 self.ProductosCatalogoNecesidad.forEach(function (prod) {
                     prod.RequisitosMinimos===null ? prod.RequisitosMinimos=[]:_;
-                    administrativaRequest.get('catalogo_elemento_grupo', $.param({
+                    administrativaRequest.get('catalogo_elemento_grupo', $.param({ // info de productos
                         query: 'Id:' + prod.CatalogoId,
                         fields: 'Id,ElementoNombre,ElementoCodigo',
                         limit: -1,
@@ -204,7 +203,7 @@ angular.module('contractualClienteApp')
                     })).then(function (response) {
                         prod.ElementoNombre = response.data[0].ElementoNombre;
                     });
-                    if (self.iva_data != undefined) {
+                    if (self.iva_data != undefined) { // calculo valores iva
                         var tIva = self.getPorcIVAbyId(prod.IvaId);
                         prod.Subtotal = prod.Cantidad * prod.Valor;
                         prod.ValorIVA = (prod.Subtotal * (tIva / 100)) || 0;
@@ -230,10 +229,10 @@ angular.module('contractualClienteApp')
                 r.Fuentes===null ? r.Fuentes =[]:_;
                 r.Apropiacion = r.Apropiacion || r.InfoRubro;
                 r.Productos ? r.Productos.forEach(function (p) {
-                    p.InfoProducto ? p = _.merge(p, p.InfoProducto) : _;
+                    p.InfoProducto ? p = _.merge(p, p.InfoProducto) : _; // mezclar la info de productos de plan cuentas con la de necesidades
                 }) : _;
             });
-            self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : [];
+            self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : []; //id de marcos legales para seleccionar 
             self.dependencia_solicitante = trNecesidad.DependenciaNecesidad;
             self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
             self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
@@ -250,11 +249,15 @@ angular.module('contractualClienteApp')
             // en caso de que haya informacion pegada en el localstorage o se acceda de forma irregular a la url
             if(!self.IdNecesidad&&self.Necesidad.Id) {
                 self.ResetNecesidad();
+                self.dependencia_solicitante=undefined;
+                self.dependencia_destino=undefined;
+                self.dependencia_supervisor=undefined; 
+                self.rol_ordenador_gasto=undefined;
             }
         }
 
         );
-
+        // watchers para actualizar informacion en el localstorage
         $scope.$watch('solicitudNecesidad.Necesidad', function () {
             localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
         }, true);
@@ -283,7 +286,7 @@ angular.module('contractualClienteApp')
             localStorage.setItem("Rubros", JSON.stringify(self.Rubros));
         }, true);
 
-        self.emptyStorage = function () {
+        self.emptyStorage = function () { // funcion para vaciar el localstorage
             var keysToRemove = ["Necesidad", "DetalleServicioNecesidad", "DetallePrestacionServicioNecesidad", "ProductosCatalogoNecesidad", "MarcoLegalNecesidad", "ActividadEspecificaNecesidad", "RequisitoMinimoNecesidad", "ActividadEconomicaNecesidad", "Rubros"];
             keysToRemove.forEach(function (key) {
                 localStorage.removeItem(key);
@@ -297,7 +300,7 @@ angular.module('contractualClienteApp')
                 self.emptyStorage();
                 return;
             }
-            var answer = confirm("¿Esta seguro de que desea salir de la página, los datos sin guardar podrían perderse?")
+            var answer = confirm("¿Esta seguro de que desea salir de la página, los datos sin guardar podrían perderse?") //mostrar confirmacion de dejar pagina
             if (!answer) {
                 event.preventDefault();
             } else {
@@ -321,7 +324,7 @@ angular.module('contractualClienteApp')
             });
         }, true);
 
-        $scope.$watch('solicitudNecesidad.dependencia_solicitante', function () {
+        $scope.$watch('solicitudNecesidad.dependencia_solicitante', function () { // observa cambios en dependencias para traer datos de jefes
             self.jefe_solicitante = null;
             self.dependencia_solicitante ?
                 necesidadService.getJefeDependencia(self.dependencia_solicitante).then(function (JD) {
@@ -367,7 +370,7 @@ angular.module('contractualClienteApp')
                 }) : _;
         }, true);
 
-        self.estructura = {
+        self.estructura = { // DEFINE QUE CAMPOS SE MUESTRAN    
             init: {
                 forms: {
                     Avances: false,
@@ -430,7 +433,7 @@ angular.module('contractualClienteApp')
         self.forms = _.extend({}, self.estructura.init.forms);
         self.fields = _.extend({}, self.estructura.init);
 
-        var alertInfo = {
+        var alertInfo = { //alert error formulario
             type: 'error',
             title: 'Complete todos los campos obligatorios en el formulario',
             showConfirmButton: false,
@@ -446,7 +449,7 @@ angular.module('contractualClienteApp')
             }
         };
 
-
+        // especificar si estos watchers cumaplen funcion o eliminarlos
         $scope.$watch('solicitudNecesidad.especificaciones.Valor', function () {
             self.valor_iva = (self.especificaciones.Iva / 100) * self.especificaciones.Valor * self.especificaciones.Cantidad;
         }, true);
@@ -472,7 +475,7 @@ angular.module('contractualClienteApp')
 
 
 
-        $scope.$watch('solicitudNecesidad.nucleoarea', function () {
+        $scope.$watch('solicitudNecesidad.nucleoarea', function () { // trae nucleo con dependiendo del area
             self.nucleoarea ?
                 parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
                     query: 'AreaConocimientoId.Id:' + self.nucleoarea,
@@ -490,11 +493,11 @@ angular.module('contractualClienteApp')
             }
         })
 
-        necesidadService.getAllDependencias().then(function (Dependencias) {
+        necesidadService.getAllDependencias().then(function (Dependencias) { //trae lista dependencias
             self.dependencia_data = Dependencias;
         });
 
-        coreAmazonRequest.get('ordenador_gasto', $.param({
+        coreAmazonRequest.get('ordenador_gasto', $.param({ // lista ordenadores del gasto
             limit: -1,
             sortby: "Cargo",
             order: "asc",
@@ -510,21 +513,21 @@ angular.module('contractualClienteApp')
         self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }]; //PRovisional esta asquerosidad :) 
 
 
-        necesidadesCrudRequest.get('tipo_necesidad', $.param({
+        necesidadesCrudRequest.get('tipo_necesidad', $.param({ // parametro desde necesidades crud
             limit: -1
         })).then(function (response) {
             self.tipo_necesidad_data = response.data;
 
         });
 
-        necesidadesCrudRequest.get('tipo_duracion_necesidad', $.param({
+        necesidadesCrudRequest.get('tipo_duracion_necesidad', $.param({ // parametro desde necesidades crud
             limit: -1
         })).then(function (response) {
             self.tipo_duracion_necesidad_data = response.data;
         });
 
 
-        agoraRequest.get('unidad', $.param({
+        agoraRequest.get('unidad', $.param({ // parametro desde adm, unidad producto
             limit: -1,
             sortby: "Unidad",
             order: "asc",
@@ -543,7 +546,7 @@ angular.module('contractualClienteApp')
         // Se traen los jefes de dependencia actuales 
         agoraRequest.get('informacion_persona_natural', $.param({
             limit: -1,
-        })).then(function (response) {
+        })).then(function (response) { // trae los interventores, puede ser cualquier tercero TODO: cambiar de modo de carga ya que es muy pesada, implementar lazy load y busqueda
             var arrJD = [];
             self.interventor_data = response.data;
             self.persona_data = response.data.filter(function (p) {
@@ -557,12 +560,12 @@ angular.module('contractualClienteApp')
             });
         });
 
-        necesidadService.getParametroEstandar().then(function (response) {
+        necesidadService.getParametroEstandar().then(function (response) { // tipo perfil CPS
             self.parametro_estandar_data = response.data;
         });
         //-----
 
-        administrativaRequest.get('modalidad_seleccion', $.param({
+        administrativaRequest.get('modalidad_seleccion', $.param({ //modalidad seleccion
             limit: -1,
             sortby: "NumeroOrden",
             order: "asc",
@@ -570,34 +573,34 @@ angular.module('contractualClienteApp')
             self.modalidad_data = response.data;
         });
 
-        necesidadesCrudRequest.get('tipo_financiacion_necesidad', $.param({
-            limit: -1
+        necesidadesCrudRequest.get('tipo_financiacion_necesidad', $.param({// parametro desde necesidades crud
+            limit: -1 
         })).then(function (response) {
             self.tipo_financiacion_data = response.data;
         });
 
-        necesidadesCrudRequest.get('tipo_contrato_necesidad', $.param({
+        necesidadesCrudRequest.get('tipo_contrato_necesidad', $.param({// parametro desde necesidades crud
             limit: -1,
             query: 'Activo:true'
         })).then(function (response) {
             self.tipo_contrato_data = response.data;
         });
 
-        $http.get("scripts/models/marco_legal.json")
+        $http.get("scripts/models/marco_legal.json") // texto info de seccion marco legal por ahora local
             .then(function (response) {
 
                 self.MarcoLegalNecesidadText = $sce.trustAsHtml(response.data.common_text);
 
             });
 
-        // Se carga JSON con los tipos de servicio
+        // Se carga JSON con los tipos de servicio local, no hay servicio
         $http.get("scripts/models/tipo_servicio.json")
             .then(function (response) {
                 self.TiposServicios = response.data;
 
             });
 
-        self.agregar_ffapropiacion = function (apropiacion) {
+        self.agregar_ffapropiacion = function (apropiacion) { // agregar rubros en financiacion
             if (apropiacion === undefined) {
                 return;
             }
@@ -637,7 +640,7 @@ angular.module('contractualClienteApp')
             Actividades: self.actividades,
             MontoPorMeta: 0
         };
-        self.addProductoCatalogo = function () {
+        self.addProductoCatalogo = function () { // añadir productos de catalogo en compra o compra serv
             self.ProductosCatalogoNecesidad.filter(function (e) {
                 return e.CatalogoId === self.producto_catalogo.CatalogoId;
             }).length > 0 || !self.producto_catalogo.CatalogoId ?
@@ -652,12 +655,12 @@ angular.module('contractualClienteApp')
             self.producto_catalogo.RequisitosMinimos = [];
         }
 
-        self.cerrarModalProducto = function() {
+        self.cerrarModalProducto = function() { // cerrar form productos catalogo
             $("#modalProducto").modal("hide");
             $(".modal-backdrop").remove();
         }
 
-        self.eliminarRubro = function (rubro) {
+        self.eliminarRubro = function (rubro) { //quitar producto
             for (var i = 0; i < self.Rubros.length; i += 1) {
                 if (self.Rubros[i] === rubro) {
                     self.Rubros.splice(i, 1);
@@ -666,7 +669,7 @@ angular.module('contractualClienteApp')
 
         };
 
-        self.eliminarRequisito = function (requisito) {
+        self.eliminarRequisito = function (requisito) { // quitar requisito minimo de un producto
             for (var i = 0; i < self.producto_catalogo.RequisitosMinimos.length; i += 1) {
                 if (self.producto_catalogo.RequisitosMinimos[i] === requisito) {
                     self.producto_catalogo.RequisitosMinimos.splice(i, 1);
@@ -674,7 +677,7 @@ angular.module('contractualClienteApp')
             }
         };
 
-        self.eliminarActividad = function (actividad) {
+        self.eliminarActividad = function (actividad) { // quitar act especifica
             for (var i = 0; i < self.ActividadEspecificaNecesidad.length; i += 1) {
                 if (self.ActividadEspecificaNecesidad[i] === actividad) {
                     self.ActividadEspecificaNecesidad.splice(i, 1);
@@ -682,7 +685,7 @@ angular.module('contractualClienteApp')
             }
         };
 
-        self.eliminarRequisitoMinimo = function (rm) {
+        self.eliminarRequisitoMinimo = function (rm) { // quitar requisito minimo de la necesidad
             for (var i = 0; i < self.RequisitoMinimoNecesidad.length; i += 1) {
                 if (self.RequisitoMinimoNecesidad[i] === rm) {
                     self.RequisitoMinimoNecesidad.splice(i, 1);
@@ -690,7 +693,7 @@ angular.module('contractualClienteApp')
             }
         };
 
-        $scope.$watch('solicitudNecesidad.Rubros', function () {
+        $scope.$watch('solicitudNecesidad.Rubros', function () { // se hace la sumatoria de valores hasta el rubro, desde montos parciales fuentes
             self.Necesidad.Valor = 0;
 
             for (var i = 0; i < self.Rubros.length; i++) {
@@ -720,11 +723,11 @@ angular.module('contractualClienteApp')
             }
         }, true);
 
-        $scope.$watch('solicitudNecesidad.servicio_valor', function () {
+        $scope.$watch('solicitudNecesidad.servicio_valor', function () { // calculo compra y serv 
             self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true)
 
-        self.getPorcIVAbyId = function (id) {
+        self.getPorcIVAbyId = function (id) { //trae porcentaje iva con id
             if (id && self.iva_data && self.iva_data.length > 0) {
                 return self.iva_data.filter(function (iva) { return iva.Id === id; })[0].Tarifa
             } else {
@@ -732,7 +735,7 @@ angular.module('contractualClienteApp')
             }
         }
 
-        $scope.$watch('solicitudNecesidad.producto_catalogo', function () {
+        $scope.$watch('solicitudNecesidad.producto_catalogo', function () { // activar modal y preparar producto cuando se selecciona desde tabla
             if (self.producto_catalogo.CatalogoId && self.producto_catalogo !== {}) {
                 $("#modalProducto").modal();
             }
@@ -744,7 +747,7 @@ angular.module('contractualClienteApp')
 
         }, true)
 
-        $scope.$watch('solicitudNecesidad.ProductosCatalogoNecesidad', function () {
+        $scope.$watch('solicitudNecesidad.ProductosCatalogoNecesidad', function () { // hacer los calculos de productos catalogo para el valor 
             self.valorTotalEspecificaciones = 0;
             self.subtotalEspecificaciones = 0;
             self.valorIVA = 0;
@@ -820,7 +823,7 @@ angular.module('contractualClienteApp')
             self.ActividadEspecifica.splice(i, 1);
         };
 
-        self.submitForm = function (form,completado) {
+        self.submitForm = function (form,completado) { //enviar formulario, completado define si es guardado parcial o total
             if (form.$valid) {
                 self.enviando=true;
                 self.crear_solicitud(completado);
@@ -842,19 +845,19 @@ angular.module('contractualClienteApp')
                 self.Necesidad.TipoContratoNecesidadId = { Id: 3 };
             }
             if (!completado) {
-                self.Necesidad.JustificacionRechazo=1;
+                self.Necesidad.JustificacionRechazo=1; //guardado parcial
             } else {
-                self.Necesidad.JustificacionRechazo=0;
+                self.Necesidad.JustificacionRechazo=0; //guardado total 
             }
-            self.ActividadEconomicaNecesidad = self.actividades_economicas_id
-            self.Necesidad.ModalidadSeleccionId = { Id: 8 }
-            self.Necesidad.EstadoNecesidadId = { Id: 8 }
+            self.ActividadEconomicaNecesidad = self.actividades_economicas_id //mapear lista de ids
+            self.Necesidad.ModalidadSeleccionId = { Id: 8 } // mod otra
+            self.Necesidad.EstadoNecesidadId = { Id: 8 } // estado guardada
             self.Necesidad.FechaSolicitud = new Date()
             self.TrNecesidad = {
                 Necesidad: self.Necesidad,
                 DetalleServicioNecesidad: self.DetalleServicioNecesidad,
                 DetallePrestacionServicioNecesidad: self.DetallePrestacionServicioNecesidad,
-                ProductosCatalogoNecesidad: self.ProductosCatalogoNecesidad.map(function (p) {
+                ProductosCatalogoNecesidad: self.ProductosCatalogoNecesidad.map(function (p) { // ajuste a estructura crud
                     return {
                         CatalogoId: p.CatalogoId,
                         UnidadId: p.UnidadId || p.Unidad.Id,
@@ -871,10 +874,10 @@ angular.module('contractualClienteApp')
                 Rubros: self.Rubros
 
             }
-            delete self.Necesidad.DependenciaNecesidadId.Id;
+            delete self.Necesidad.DependenciaNecesidadId.Id; // cuando sea edicion para que no falle post
 
 
-            var NecesidadHandle = function (response, type) {
+            var NecesidadHandle = function (response, type) { // funcion de alerta a partir de response 
                 var templateAlert = "<table class='table table-bordered'><th>" +
                     $translate.instant('UNIDAD_EJECUTORA') + "</th><th>" +
                     $translate.instant('DEPENDENCIA_DESTINO') + "</th><th>" +
@@ -894,17 +897,9 @@ angular.module('contractualClienteApp')
                     });
                     return;
                 }
-                if ((self.alerta_necesidad.status < 300) && self.alerta_necesidad.Body.Necesidad.Id) {
-                    if (type === "post") {
-
-                    }
-                    if (type === "put") {
 
 
-                    }
-                }
-
-                var forEachResponse = function (response) {
+                var forEachResponse = function (response) { //mostrar tabla
                     if (response.status > 300) {
                         templateAlert += "<tr class='danger'>";
                     } else {
@@ -935,7 +930,7 @@ angular.module('contractualClienteApp')
                     showCloseButton: true,
                     confirmButtonText: $translate.instant("CERRAR")
                 });
-                if (response.status < 300) {
+                if (response.status < 300) { // borrar los objetos y redirigir a la lista de necesidades
                     self.emptyStorage();
                     $window.location.href = '#/necesidades';
                 }
@@ -952,7 +947,7 @@ angular.module('contractualClienteApp')
                 }
                 self.TrNecesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Modificada;
                 planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
-                    NecesidadHandle(r);
+                    NecesidadHandle(r); //alertar y redirigir o mostrar error 
                 }).catch(function (e) {
                     console.info(e)
                 })
@@ -960,8 +955,8 @@ angular.module('contractualClienteApp')
                 self.TrNecesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Guardada;
                 // validacion de financiacion vs especificaciones
                 var especificaciones_valido = false;
-                if (self.Necesidad.TipoNecesidadId.Id === 2 || !completado) {
-                    especificaciones_valido = true;
+                if (self.Necesidad.TipoNecesidadId.Id === 2 || !completado) { // serv publicos o guardada parcial
+                    especificaciones_valido = true; // no validate 
                     self.ValidarFinanciacion() || !completado ? planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
                         NecesidadHandle(r);
                     }).catch(function (e) {
@@ -974,13 +969,13 @@ angular.module('contractualClienteApp')
                             especificaciones_valido = self.Necesidad.Valor === self.valorTotalEspecificaciones;
                             break;
                         case 2:
-                            especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
+                            especificaciones_valido = self.Necesidad.Valor === self.servicio_valor && self.DetallePrestacionServicioNecesidad.PerfilId && self.DetallePrestacionServicioNecesidad.NucleoConocimientoId;
                             break;
                         case 4:
-                            especificaciones_valido = self.Necesidad.Valor === (self.valorTotalEspecificaciones + self.servicio_valor);
+                            especificaciones_valido = self.Necesidad.Valor === (self.valorTotalEspecificaciones + self.servicio_valor) && self.DetalleServicioNecesidad.TipoServicioId;
                             break;
                         case 5:
-                            especificaciones_valido = self.Necesidad.Valor === self.servicio_valor;
+                            especificaciones_valido = self.Necesidad.Valor === self.servicio_valor && self.DetalleServicioNecesidad.TipoServicioId;
                             break;
                     }
 
@@ -992,7 +987,7 @@ angular.module('contractualClienteApp')
                             console.info(e)
                         })
                     } else {
-                        switch (self.Necesidad.TipoContratoNecesidadId.Id) {
+                        switch (self.Necesidad.TipoContratoNecesidadId.Id) { // alertas dependiendo de tipo contrato
                             case 1:
                                 swal(necesidadService.AlertaErrorEspecificaciones.Compra)
                                 break;
@@ -1036,7 +1031,7 @@ angular.module('contractualClienteApp')
             return fin_valid;
         }
 
-        self.ResetNecesidad = function () {
+        self.ResetNecesidad = function () { // limpiar form
             self.emptyStorage();
             self.ResetObjects();
             necesidadService.getFullNecesidad().then(function (res) {
@@ -1048,7 +1043,7 @@ angular.module('contractualClienteApp')
             });
         };
 
-        self.ResetObjects = function() {
+        self.ResetObjects = function() { //limpiar variables
             if(self.elaborando_necesidad===true){
                 self.DetalleServicioNecesidad = {};
                 self.DetallePrestacionServicioNecesidad = {};
@@ -1119,7 +1114,7 @@ angular.module('contractualClienteApp')
             }
         };
 
-        $scope.$watch('solicitudNecesidad.FormularioSeleccionado', function () {
+        $scope.$watch('solicitudNecesidad.FormularioSeleccionado', function () { // animar cambio de step y ubicar en la parte superior
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }, true)
 
