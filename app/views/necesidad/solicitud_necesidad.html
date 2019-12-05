@@ -10,7 +10,7 @@
 
 
   <div class="panel-body">
-    <md-steppers class="col-md-12" md-selected="solicitudNecesidad.FormularioSeleccionado">
+    <md-steppers class="row" md-selected="solicitudNecesidad.FormularioSeleccionado">
       <form name="solicitudform" novalidate>
         <md-step label="Responsables" md-complete="solicitudNecesidad.SeccionesFormulario.general.completo"
           ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
@@ -19,7 +19,7 @@
 
             <div class="panel-body">
               <!-- Tipo Necesidad -->
-              <ng-form name="tipoNecesidad" class="form-group col-md-12 "
+              <ng-form name="tipoNecesidad" class="form-group row "
                 style="text-align: center; vertical-align: middle;">
                 <div class="row">
                   <div>
@@ -370,7 +370,8 @@
                           <div class="panel panel-default">
                             <div class="panel-heading">
                               <div class="row">
-                                <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"FUENTES" | translate}}:</div>
+                                <div class="col-sm-4">{{"VALOR_SOLICITADO" | translate}} {{"FUENTES" | translate}}:
+                                </div>
                                 <div class="col-sm-8 money">
                                   {{ap.MontoFuentes | currency}}
                                 </div>
@@ -379,11 +380,11 @@
                             <div class="panel-body">
                               <div class="list-group-item" ng-repeat="fu in ap.Fuentes track by fu.FuenteId">
                                 <div class="row">
-                                    <label class="text-warning col-sm-4 titleActividad">{{"FUENTE" | translate}}:
-                                        {{fu.FuenteId}}</label>
-                                      <input class="col-sm-8 money" type="text"
-                                        ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
-                                        ng-model="fu.MontoParcial" ui-money-mask="2">
+                                  <label class="text-warning col-sm-4 titleActividad">{{"FUENTE" | translate}}:
+                                    {{fu.FuenteId}}</label>
+                                  <input class="col-sm-8 money" type="text"
+                                    ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
+                                    ng-model="fu.MontoParcial" ui-money-mask="2">
                                 </div>
 
                               </div>
@@ -728,14 +729,14 @@
 
                   <div id="modalProducto" class="modal fade " role="dialog">
                     <ng-form id="form_producto" name="prodDiv">
-                      <div class="col-md-12">
+                      <div class="row">
                         <div class="panel panel-default">
-                          <div class="panel-heading" ng-click="solicitudNecesidad.cerrarModalProducto()"> 
-                              <h3>{{solicitudNecesidad.producto_catalogo.ElementoNombre}} </h3>
+                          <div class="panel-heading" ng-click="solicitudNecesidad.cerrarModalProducto()">
+                            <h3>{{solicitudNecesidad.producto_catalogo.ElementoNombre}} </h3>
 
                           </div>
                           <div class="panel-body" ng-show="!prodDiv.open">
-                            <div class="col-md-12">
+                            <div class="row">
                               <div class="col-md-6">
                                 <label class=" control-label">{{"DESCRIPCION" | translate}}</label>
                                 <small>*{{"OBLIGATORIO" | translate}}</small>
@@ -759,7 +760,7 @@
                             </div>
 
 
-                            <div class="col-md-12">
+                            <div class="row">
                               <div class="col-md-4">
                                 <label class=" control-label"
                                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">{{"CANTIDAD" | translate}}</label>
@@ -795,7 +796,7 @@
 
 
 
-                            <div class="col-md-12">
+                            <div class="row">
                               <div class="col-md-4">
                                 <label class=" control-label">{{"VALOR_IVA" | translate}}</label>
                                 <input class="form-control  money"
@@ -818,7 +819,7 @@
 
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="row">
                               <label for="objeto" class="control-label">{{"REQUISITOS_MINIMOS" | translate}}</label>
                               <div>
                                 <ul class="list-group">
@@ -839,14 +840,14 @@
                             </div>
 
 
-                            <div class="col-md-12 form-group">
+                            <div class="row form-group">
                               <div style="text-align: center">
                                 <button type="button" class="btn btn-primary btn-outline"
                                   ng-click="solicitudNecesidad.producto_catalogo.RequisitosMinimos.push({Descripcion: solicitudNecesidad.producto_catalogo.requisitomin});solicitudNecesidad.producto_catalogo.requisitomin=''">AGREGAR
                                   REQUISITO MÍNIMO</button>
                               </div>
                             </div>
-                            <div class="col-md-12 form-group" style="text-align: center">
+                            <div class="row form-group" style="text-align: center">
                               <button type="button" class="btn btn-primary btn-success"
                                 ng-click="solicitudNecesidad.validar_formu(prodDiv) ? solicitudNecesidad.addProductoCatalogo() : _ ;">
                                 AGREGAR PRODUCTO</button>
@@ -858,60 +859,61 @@
                     </ng-form>
                   </div>
 
-                  <div class="panel panel-default col-md-12">
-                    <table class="table table-bordered tablaDetalle">
-                      <thead class="bg-primary">
-                        <th>{{"NUM_ITEM" | translate }}</th>
-                        <th>{{"NOMBRE" | translate }}</th>
-                        <th>{{"UNIDAD_MEDIDA" | translate}}</th>
-                        <th>{{"CANTIDAD" | translate}}</th>
-                        <th>{{"VALOR_UNITARIO" | translate}}</th>
-                        <th>{{"SUBTOTAL" | translate}}</th>
-                        <th>{{"IVA" | translate}} %</th>
-                        <th>{{"VALOR_IVA" | translate}}</th>
-                        <th>{{"PRECIO_MAS_IVA" | translate}}</th>
-                        <th>{{"ELIMINAR" | translate}}</th>
-                      </thead>
-                      <tbody>
-                        <tr ng-repeat="pro in solicitudNecesidad.ProductosCatalogoNecesidad track by pro.CatalogoId">
-                          <td>{{$index+1}}</td>
-                          <td>{{pro.ElementoNombre}}</td>
-                          <td>{{pro.Unidad.Unidad | lowercase}}</td>
-                          <td>{{pro.Cantidad}}</td>
-                          <td class="money">{{pro.Valor | currency}}</td>
-                          <td class="money">{{pro.Subtotal | currency}}</td>
-                          <td class="money">{{((pro.ValorIVA / pro.Subtotal)*100)}}%</td>
-                          <td class="money">{{pro.ValorIVA | currency}}</td>
-                          <td class="money">{{pro.preciomasIVA | currency}}</td>
-                          <td class="accionTDetalle"><span
-                              ng-click="solicitudNecesidad.ProductosCatalogoNecesidad.splice($index,1)"
-                              class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <br>
-                    <table class="table table-bordered tablaDetalle" ng-show="solicitudNecesidad.MostrarTotalEspc">
-                      <thead>
-                        <tr>
-                          <th class="bg-primary col-md-4">{{"SUBTOTAL" | translate}}</th>
-                          <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}</th>
-                        </tr>
-                        <tr>
-                          <th class="bg-primary col-md-4">{{"IVA" | translate}} </th>
-                          <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
-                        </tr>
-                        <tr>
-                          <th class="bg-primary col-md-4">{{"VALOR_TOTAL" | translate}}</th>
-                          <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</th>
-                        </tr>
-                        <tr ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1">
-                          <th class="bg-primary col-md-4">{{"TOTAL_FINANCIACION" | translate}}:</th>
-                          <th class="money">{{solicitudNecesidad.Necesidad.Valor | currency}}</th>
-                        </tr>
-                      </thead>
-                    </table>
+                  <div class="row">
+                    <div class="panel panel-default">
+                      <table class="table table-bordered tablaDetalle">
+                        <thead class="bg-primary">
+                          <th>{{"NUM_ITEM" | translate }}</th>
+                          <th>{{"NOMBRE" | translate }}</th>
+                          <th>{{"UNIDAD_MEDIDA" | translate}}</th>
+                          <th>{{"CANTIDAD" | translate}}</th>
+                          <th>{{"VALOR_UNITARIO" | translate}}</th>
+                          <th>{{"SUBTOTAL" | translate}}</th>
+                          <th>{{"IVA" | translate}} %</th>
+                          <th>{{"VALOR_IVA" | translate}}</th>
+                          <th>{{"PRECIO_MAS_IVA" | translate}}</th>
+                          <th>{{"ELIMINAR" | translate}}</th>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="pro in solicitudNecesidad.ProductosCatalogoNecesidad track by pro.CatalogoId">
+                            <td>{{$index+1}}</td>
+                            <td>{{pro.ElementoNombre}}</td>
+                            <td>{{pro.Unidad.Unidad | lowercase}}</td>
+                            <td>{{pro.Cantidad}}</td>
+                            <td class="money">{{pro.Valor | currency}}</td>
+                            <td class="money">{{pro.Subtotal | currency}}</td>
+                            <td class="money">{{((pro.ValorIVA / pro.Subtotal)*100)}}%</td>
+                            <td class="money">{{pro.ValorIVA | currency}}</td>
+                            <td class="money">{{pro.preciomasIVA | currency}}</td>
+                            <td class="accionTDetalle"><span
+                                ng-click="solicitudNecesidad.ProductosCatalogoNecesidad.splice($index,1)"
+                                class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <br>
+                      <table class="table table-bordered tablaDetalle" ng-show="solicitudNecesidad.MostrarTotalEspc">
+                        <thead>
+                          <tr>
+                            <th class="bg-primary col-md-4">{{"SUBTOTAL" | translate}}</th>
+                            <th class="money">{{solicitudNecesidad.subtotalEspecificaciones  | currency}}</th>
+                          </tr>
+                          <tr>
+                            <th class="bg-primary col-md-4">{{"IVA" | translate}} </th>
+                            <th class="money">{{solicitudNecesidad.valorIVA | currency}}</th>
+                          </tr>
+                          <tr>
+                            <th class="bg-primary col-md-4">{{"VALOR_TOTAL" | translate}}</th>
+                            <th class="money">{{solicitudNecesidad.valorTotalEspecificaciones | currency}}</th>
+                          </tr>
+                          <tr ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1">
+                            <th class="bg-primary col-md-4">{{"TOTAL_FINANCIACION" | translate}}:</th>
+                            <th class="money">{{solicitudNecesidad.Necesidad.Valor | currency}}</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
                   </div>
-
                 </div>
               </div>
 

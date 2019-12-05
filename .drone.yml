@@ -13,7 +13,7 @@ steps:
      - cp -f app/scripts/environments/environment_test.js app/scripts/environments/environment.js
      - grunt build
     when:
-      branch: [fixes]
+      branch: [test]
       event: [push, pull_request]
 
   - name: buildmaster
@@ -43,7 +43,7 @@ steps:
       strip_prefix: dist/
     when:
       branch:
-      - fixes
+      - test
       event:
       - push
 
@@ -84,7 +84,7 @@ steps:
     when:
       branch:
       - master
-      - fixes
+      - test
       status:
       - failure
       - success
