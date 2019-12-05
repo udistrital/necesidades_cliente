@@ -8,6 +8,8 @@
  * Service in the implicitToken.
  */
 // First, parse the query string
+
+
 if (window.localStorage.getItem('access_token') === null ||
   window.localStorage.getItem('access_token') === undefined) {
   var params = {},
@@ -29,7 +31,7 @@ if (window.localStorage.getItem('access_token') === null ||
     window.localStorage.setItem('state', params['state']);
     window.localStorage.setItem('expires_in', params['expires_in']);
   } else {
-    window.localStorage.clear();
+    service.clearStorage();
   }
   req.onreadystatechange = function (e) {
     if (req.readyState === 4) {
@@ -151,7 +153,7 @@ angular.module('implicitToken', [])
           state = decodeURIComponent(m[2]);
         }
         if (window.localStorage.getItem('state') === state) {
-          window.localStorage.clear();
+          service.clearStorage();
           valid = true;
         } else {
           valid = false;
@@ -159,11 +161,10 @@ angular.module('implicitToken', [])
         return valid;
       },
       clearStorage: function () {
-        window.localStorage.removeItem('access_token');
-        window.localStorage.removeItem('id_token');
-        window.localStorage.removeItem('expires_in');
-        window.localStorage.removeItem('state');
-        window.localStorage.removeItem('expires_at');
+        var keysToRemove = ["access_token", "id_token", "state", "expires_in"];
+        keysToRemove.forEach(function (key) {
+            window.localStorage.removeItem(key);
+        })
       }
     };
     service.setExpiresAt();
