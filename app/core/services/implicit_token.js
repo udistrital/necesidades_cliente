@@ -8,8 +8,12 @@
  * Service in the implicitToken.
  */
 // First, parse the query string
-
-
+ function clearStorage() {
+  var keysToRemove = ["access_token", "id_token", "state", "expires_in"];
+  keysToRemove.forEach(function (key) {
+      window.localStorage.removeItem(key);
+  })
+}
 if (window.localStorage.getItem('access_token') === null ||
   window.localStorage.getItem('access_token') === undefined) {
   var params = {},
@@ -31,7 +35,7 @@ if (window.localStorage.getItem('access_token') === null ||
     window.localStorage.setItem('state', params['state']);
     window.localStorage.setItem('expires_in', params['expires_in']);
   } else {
-    service.clearStorage();
+    clearStorage();
   }
   req.onreadystatechange = function (e) {
     if (req.readyState === 4) {

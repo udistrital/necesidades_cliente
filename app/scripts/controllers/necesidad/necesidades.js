@@ -84,7 +84,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.ConsecutivoNecesidad;
                 },
-                width: '10%'
+                width: '15%'
             },
             {
                 field: 'Id',
@@ -114,7 +114,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidadId.Nombre + ".\n" + row.entity.EstadoNecesidadId.Descripcion;
                 },
-                width: '20%'
+                width: '25%'
             },
             {
                 field: 'TipoNecesidadId.Nombre',
@@ -123,7 +123,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '20%'
+                width: '25%'
             },
             {
                 field: 'ver',
@@ -136,8 +136,7 @@ angular.module('contractualClienteApp')
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidad.Nombre + ".\n" + row.entity.EstadoNecesidad.Descripcion;
-                },
-                width: '15%'
+                }
             }],
             onRegisterApi: function (gridApi) {
                 self.gridApi = gridApi;
