@@ -39,7 +39,7 @@ angular.module('core')
                     }
 
                     roles = roles.replace(/,/g, '%2C');
-                    configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + roles + '/'+ CONF.APP_MENU, '').then(function (response) {
+                    configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + roles + '/' + CONF.APP_MENU, '').then(function (response) {
 
                         $rootScope.menu = response.data;
                         behaviorTheme.initMenu(response.data);
