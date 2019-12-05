@@ -23,7 +23,7 @@ steps:
      - npm install natives
      - npm install
      - bower install --allow-root
-     - cp -f app/scripts/environment/environment_prod.js app/scripts/environment/environment.js
+     - cp -f app/scripts/environments/environment_prod.js app/scripts/environments/environment.js
      - grunt build
     when:
       branch: [master]
