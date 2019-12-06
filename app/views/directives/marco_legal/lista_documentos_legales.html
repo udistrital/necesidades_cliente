@@ -17,10 +17,10 @@
       </ul>
     </div>
 
-    <button type="button" class="col-md-12 btn btn-primary btn-outline"
+    <button type="button" class=" btn btn-primary btn-outline"
     ng-click="d_listaDocumentosLegales.HabilitarAgregarDocs()" aria-label="Left Align">{{"AGREGAR_DOCUMENTO" | translate}}</button>
 
-  <div class="col-md-12" ng-show="d_listaDocumentosLegales.aniadirDoc">
+  <div class="row" ng-show="d_listaDocumentosLegales.aniadirDoc">
     <div class="col-md-4" id="addDoc" name="addDoc">
       <label class=" control-label">{{"NOMBRE_DOCUMENTO" | translate}}</label>
       <small>*{{"OBLIGATORIO" | translate}}</small>
@@ -34,7 +34,7 @@
     <div class="col-md-4">
       <br>
         <label>&nbsp;</label>
-      <button class="btn btn-primary btn-outline"  ng-click="d_listaDocumentosLegales.AniadirDocumento()">CARGAR DOCUMENTO</button>
+      <button type="button" class="btn btn-primary btn-outline"  ng-click="d_listaDocumentosLegales.AniadirDocumento()">CARGAR DOCUMENTO</button>
     </div>
   </div>
 

@@ -7,7 +7,7 @@
  * # catalogosElementos/listaSubgruposCatalogos
  */
 angular.module('contractualClienteApp')
-    .directive('listaSubgruposCatalogos', function (administrativaRequest, $translate) {
+    .directive('listaSubgruposCatalogos', function (catalogoRequest, $translate) {
         return {
             restrict: 'E',
             scope: {
@@ -30,15 +30,15 @@ angular.module('contractualClienteApp')
                     enablePaginationControls: true,
                     multiSelect: false,
                     columnDefs: [{
-                        field: 'ElementoCodigo',
+                        field: 'Id',
                         displayName: $translate.instant('CODIGO'),
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                         cellTooltip: function (row) {
-                            return row.entity.Nombre;
+                            return row.entity.Id;
                         }
                     },
                     {
-                        field: 'ElementoNombre',
+                        field: 'Nombre',
                         displayName: $translate.instant('PRODUCTOS'),
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                         cellTooltip: function (row) {
@@ -49,10 +49,11 @@ angular.module('contractualClienteApp')
                 };
                 self.loadData = function () {
                     //administrativaRequest.get('catalogo_elemento',$.param({
-                    administrativaRequest.get('catalogo_elemento_grupo', $.param({
-                        fields: 'Id,ElementoNombre,ElementoCodigo',
+                        catalogoRequest.get('elemento', $.param({
+                        query: "SubgrupoId.Id:19",
+                        fields: 'Id,Nombre',
                         limit: -1,
-                        sortby: "ElementoCodigo",
+                        sortby: "Nombre",
                         order: "asc",
                     })).then(function (response) {
                         self.gridOptions.data = response.data;
@@ -71,7 +72,7 @@ angular.module('contractualClienteApp')
                 self.gridOptions.onRegisterApi = function (gridApi) {
                     self.gridApi = gridApi;
                     self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                        $scope.producto_catalogo ={CatalogoId: row.entity.Id, ElementoNombre: row.entity.ElementoNombre,RequisitosMinimos: []};
+                        $scope.producto_catalogo ={CatalogoId: row.entity.Id, ElementoNombre: row.entity.Nombre,RequisitosMinimos: []};
                     });
 
                 };

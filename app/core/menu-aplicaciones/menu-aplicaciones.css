@@ -1,0 +1,76 @@
+.aplicaciones_menu_container p{
+  margin-bottom: 11px;
+  margin-top: 0;
+}
+
+.menu-app {
+  border-color: #34495e;
+  border-radius: 7px;
+  border: solid 1px;
+  box-shadow: 0px 0px 8px #888888;
+}
+
+.container-aplicativos{
+  height: 88%;
+}
+
+.container-aplicativos-scroll{
+  height: none;
+}
+
+.catalogo-button-container{
+  justify-content: center;
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+}
+
+#catalogo-button-icon{
+  font-size: 40px;
+}
+
+.title-app-menu-div{
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 21px;
+  font-family: "Open Sans", sans-serif;
+}
+
+.apps_menu_container {
+  background: #fff;
+  border: 1px solid #d6dae1;
+  color: #000;
+  position: fixed;
+  right: 80px;
+  top: 69px;
+  -webkit-border-radius: 2px;
+  right: -100vw;
+  border-radius: 2px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(-139px + 100vh);
+  width: 320px;
+  transition: 0.3s;
+  z-index: 3;
+}
+
+
+.menu_is_active {
+  right: 0;
+}
+.app-image-container{
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.image-application{
+  width: 30%;
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.categoria-title {
+  color: white;
+}

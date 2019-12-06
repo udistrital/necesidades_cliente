@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest,catalogoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -84,7 +84,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.ConsecutivoNecesidad;
                 },
-                width: '10%'
+                width: '15%'
             },
             {
                 field: 'Id',
@@ -114,7 +114,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidadId.Nombre + ".\n" + row.entity.EstadoNecesidadId.Descripcion;
                 },
-                width: '20%'
+                width: '25%'
             },
             {
                 field: 'TipoNecesidadId.Nombre',
@@ -123,7 +123,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '20%'
+                width: '25%'
             },
             {
                 field: 'ver',
@@ -136,14 +136,12 @@ angular.module('contractualClienteApp')
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidad.Nombre + ".\n" + row.entity.EstadoNecesidad.Descripcion;
-                },
-                width: '20%'
+                }
             }],
             onRegisterApi: function (gridApi) {
                 self.gridApi = gridApi;
                 self.gridApi = gridApiService.pagination(self.gridApi, self.cargarDatosNecesidades, $scope);
                 self.gridApi = gridApiService.filter(self.gridApi, self.cargarDatosNecesidades, $scope);
-
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
                         if (response.status === 200) {
@@ -156,12 +154,14 @@ angular.module('contractualClienteApp')
                                     prod.valorIvaUnd=0;
                                     prod.ElementoNombre="";
                                     prod.ValorTotal=0;
-                                    administrativaRequest.get('catalogo_elemento_grupo', $.param({
-                                        query: 'Id:' + prod.CatalogoId,
-                                        fields: 'Id,ElementoNombre,ElementoCodigo',
-                                        limit: -1
+                                    catalogoRequest.get('elemento', $.param({
+                                        query: "SubgrupoId.Id:19",
+                                        fields: 'Id,Nombre',
+                                        limit: -1,
+                                        sortby: "Nombre",
+                                        order: "asc",
                                     })).then(function (response) {
-                                        prod.ElementoNombre = response.data[0].ElementoNombre;
+                                        prod.ElementoNombre = response.data[0].Nombre;
                                         calculoIVA(prod)
                                     });
                                 })
