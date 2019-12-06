@@ -1,24 +1,35 @@
+ 
 kind: pipeline
 name: cliente_deploy
 
-steps:
-  - name: buildNode
+steps: 
+  - name: buildtest
     image: node:10.7.0
     commands:
      - npm install -g grunt-cli bower
      - npm install natives
      - npm install
      - bower install --allow-root
-     - grunt build --force
+     - cp -f app/scripts/environments/environment_test.js app/scripts/environments/environment.js
+     - grunt build
     when:
-      branch:
-      - master
-      - test
-      event:
-      - push
-      - pull_request
+      branch: [test]
+      event: [push, pull_request]
 
-  - name: publish-s3-test
+  - name: buildmaster
+    image: node:10.7.0
+    commands:
+     - npm install -g grunt-cli bower
+     - npm install natives
+     - npm install
+     - bower install --allow-root
+     - cp -f app/scripts/environments/environment_prod.js app/scripts/environments/environment.js
+     - grunt build
+    when:
+      branch: [master]
+      event: [push, pull_request]
+
+  - name: publish-s3-test  
     image: plugins/s3
     settings:
       bucket: cliente-pruebas
@@ -36,7 +47,7 @@ steps:
       event:
       - push
 
-  - name: publish-s3-master
+  - name: publish-s3-master  
     image: plugins/s3
     settings:
       bucket: cliente-pruebas
@@ -64,13 +75,11 @@ steps:
       format: html
       message: >
         {{#success build.status}}
-          <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">SUCCESS</a>
-          <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
-          <code> By:{{commit.author}}</code>
+          <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">SUCCESS</a> 
+          <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a><code> By:{{commit.author}}</code>
         {{else}}
           <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">FAILURE</a>
-          <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
-          <code> By:{{commit.author}}</code>
+          <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a><code> By:{{commit.author}}</code>
         {{/success}}
     when:
       branch:

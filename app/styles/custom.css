@@ -18,7 +18,7 @@
 }
 
 .tablaDetalle {
-border: 1px solid black;
+border: 1px solid var(--primary);
 }
 
 .accionTDetalle {
@@ -27,14 +27,50 @@ vertical-align: middle;
 }
 
 .tablaDetalle, .tablaDetalle td{
-border-color: black;
+border-color: var(--primary);
 }
 
 .titleNecesidad {
-  color: #8ae7d3;
+  color: var(--color1);
 }
 
 .titleActividad {
-  color: #1C69F0;
+  color: var(--primary);
 }
 
+.bg-primary {
+  color: #fff;
+  background-color: var(--primary);
+}
+
+
+.text-info,
+.text-primary {
+  color: var(--primary);
+}
+
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: var(--color3);
+  border-color: var(--color5);
+}
+
+.btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: var(--color3);
+  border-color: var(--color5);
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  color: #fff;
+  background-color: var(--color3);
+  border-color: var(--color5);
+}
+
+p {
+  font-size: 13px;
+  text-align: left;
+  margin: 0;
+  font-family: OpenSans;
+}

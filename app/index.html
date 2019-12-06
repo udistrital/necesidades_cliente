@@ -27,28 +27,61 @@
     <link rel="stylesheet" href="bower_components/md-steppers/dist/md-steppers.css" />
     <!-- endbower -->
     <!-- endbuild -->
+	
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/estilo-cdve.css">
     <link rel="stylesheet" href="styles/custom.css">
-    <link rel="stylesheet" href="styles/table-demo.css">
-    <link rel="stylesheet" href="styles/timeline.css">
-    <link rel="stylesheet" href="styles/loading-bar.css">
     <link rel="stylesheet" href="styles/stepper.css">
     <!-- endbuild -->
-    <link rel="stylesheet" href="https://s3.amazonaws.com/assets-oas/sb-admin-2.css">
-    <link rel="stylesheet" href="https://s3.amazonaws.com/assets-oas/oas-style.css">
+    <link rel="stylesheet" href="core/css/core.css">
+    <link rel="stylesheet" href="core/footer/footer.css">
+    <link rel="stylesheet" href="core/header/header.css">
+    <link rel="stylesheet" href="core/menu-lateral/menu-lateral.css">
+    <link rel="stylesheet" href="core/menu-aplicaciones/menu-aplicaciones.css">
+    <link rel="stylesheet" href="core/notificaciones/notificaciones.css">
+    <link rel="stylesheet" href="core/css/ui-grid.css">
+    <link rel="stylesheet" href="https://pruebasassets.portaloas.udistrital.edu.co/gaia-style.css">
+    <link rel="stylesheet" href="https://pruebasassets.portaloas.udistrital.edu.co/oas-style.css">
+    <link rel="stylesheet" href="https://pruebasassets.portaloas.udistrital.edu.co/logo-stylus.css">
+    <link rel="stylesheet" href="https://pruebasassets.portaloas.udistrital.edu.co/logo-info.css">
+    <link rel="stylesheet" href="https://pruebasassets.portaloas.udistrital.edu.co/isotipo-header.css">
+    <link rel="stylesheet" href="https://pruebasassets.portaloas.udistrital.edu.co/logo-header.css">
+    
 
 </head>
 
 <body ng-app="contractualClienteApp">
-    <div ng-include="'views/menu.html'" ng-controller="menuCtrl"></div>
-    <!--[if lte IE 8]>
-    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-    <div class="container-fluid">
-        <div ng-view=""></div>
-    </div>
-    <div ng-include="'views/footer.html'" ng-controller="footerCtrl"></div>
+	
+        <div ng-controller="headerCtrl">
+                <div ng-if="!isLogin" id="nb-global-spinner" class="spinner">
+                    <div class="blob blob-0"></div>
+                    <div class="blob blob-1"></div>
+                    <div class="blob blob-2"></div>
+                    <div class="blob blob-3"></div>
+                    <div class="blob blob-4"></div>
+                    <div class="blob blob-5"></div>
+                </div>
+                <div ng-if="isLogin" ng-include="'core/header/header.html'" ng-controller="headerCtrl">
+                </div>
+                <div ng-if="isLogin" class="body-container-menuaplicaciones"
+                    ng-include="'core/menu-aplicaciones/menu-aplicaciones.html'" ng-controller="menuaplicacionesCtrl">
+                </div>
+                <div ng-if="isLogin" class="body-container-notificaciones"
+                    ng-include="'core/notificaciones/notificaciones.html'" ng-controller="notificacionesCtrl">
+                </div>
+                <div ng-if="isLogin" class="container-app">
+                    <div id="menu-sidebar-container" ng-class="sidebarClases.sidebarContainerClase" ng-controller="headerCtrl">
+                        <div id="menu-sidebar" ng-include="'core/menu-lateral/menu-lateral.html'"
+                            ng-controller="menuLateralCtrl" ng-class="sidebarClases.sidebarDivClase">
+                        </div>
+                    </div>
+                    <div ng-class="sidebarClases.containerBodyClase" ng-controller="headerCtrl">
+                        <div ng-view="" ng-class="sidebarClases.containerDivClase" ng-controller="headerCtrl">
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="isLogin" class="container-footer" ng-include="'core/footer/footer.html'" ng-controller="footerCtrl">
+                </div>
+            </div>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -114,14 +147,20 @@
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
+    <script src="core/core.module.js"></script>
+    <script src="core/header/header.js"></script>
+    <script src="core/footer/footer.js"></script>
+    <script src="core/menu-lateral/menu-lateral.js"></script>
+    <script src="core/menu-lateral/opciones-component/opciones-directive.js"></script>
+    <script src="core/menu-aplicaciones/menu-aplicaciones.js"></script>
+    <script src="core/notificaciones/notificaciones.js"></script>
+    <script src="core/services/notificacion.js"></script>
+    <script src="core/services/theme.js"></script>
+    <script src="core/services/implicit_token.js"></script>
     <!-- endbuild -->
 </body>
 <!-- build:js({.tmp,app}) scripts/extras.js -->
-<script src="scripts/services/token.js"></script>
-<script src="scripts/services/notificacion.js"></script>
-<script src="scripts/controllers/menu.js"></script>
-<script src="scripts/controllers/footer.js"></script>
-<script src="scripts/controllers/notificaciones.js"></script>
+<script src="scripts/environments/environment.js"></script>
 <script src="bower_components/moment/locale/es.js"></script>
 <script src="scripts/decorators/text_translate.js"></script>
 <script src="scripts/controllers/about.js"></script>
@@ -165,7 +204,6 @@
 <script src="scripts/services/contrato_service.js"></script>
 <script src="scripts/services/configuracion_service.js"></script>
 <script src="scripts/services/grid_options_service.js"></script>
-<script src="scripts/services/config.js"></script>
 <script src="scripts/services/nuxeo_service.js"></script>
 <script src="scripts/services/cookie_service.js"></script>
 <script src="scripts/services/wso2_general_service.js"></script>
@@ -186,6 +224,7 @@
 <script src="scripts/services/plancuentas_service.js"></script>
 <script src="scripts/services/plan_cuentas_mid.js"></script>
 <script src="scripts/services/metas_service.js"></script>
+<script src="scripts/services/catalogo_service.js"></script>
 <script src="scripts/services/parametros_gobierno.js"></script>
 <script src="scripts/directives/metas/metas-actividades.js"></script>
 <script src="scripts/directives/apropiaciones/fuente_financiacion_necesidad.js"></script>

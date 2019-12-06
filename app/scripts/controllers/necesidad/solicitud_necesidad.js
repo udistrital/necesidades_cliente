@@ -9,7 +9,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest,catalogoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
         var self = this;
         //inicializar Necesidad
         self.Necesidad = {
@@ -194,14 +194,14 @@ angular.module('contractualClienteApp')
                 self.iva_data = response.data;
                 self.ProductosCatalogoNecesidad.forEach(function (prod) {
                     prod.RequisitosMinimos===null ? prod.RequisitosMinimos=[]:_;
-                    administrativaRequest.get('catalogo_elemento_grupo', $.param({ // info de productos
-                        query: 'Id:' + prod.CatalogoId,
-                        fields: 'Id,ElementoNombre,ElementoCodigo',
+                    catalogoRequest.get('elemento', $.param({
+                        query: "SubgrupoId.Id:19",
+                        fields: 'Id,Nombre',
                         limit: -1,
-                        sortby: "ElementoCodigo",
+                        sortby: "Nombre",
                         order: "asc",
                     })).then(function (response) {
-                        prod.ElementoNombre = response.data[0].ElementoNombre;
+                        prod.ElementoNombre = response.data[0].Nombre;
                     });
                     if (self.iva_data != undefined) { // calculo valores iva
                         var tIva = self.getPorcIVAbyId(prod.IvaId);
@@ -833,9 +833,10 @@ angular.module('contractualClienteApp')
                     'Completa todos los datos obligatorios del formulario',
                     'warning'
                 ).then(function (event) {
+                    console.info(event)
                     var e = angular.element('.ng-invalid-required')[2];
                     e.focus(); // para que enfoque el elemento
-                    //e.classList.add("ng-dirty"); //para que se vea rojo
+                    e.classList.add("ng-dirty"); //para que se vea rojo
                 })
             };
         };

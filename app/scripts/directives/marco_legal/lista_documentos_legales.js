@@ -104,6 +104,16 @@ angular.module('contractualClienteApp')
         };
 
         self.AniadirDocumento = function () {
+          if (!self.obj_documento.NombreDocumento || !self.obj_documento.Enlace || self.obj_documento.NombreDocumento==="" || self.obj_documento.Enlace==="") {
+            swal({
+              title: 'Error al guardar documento',
+              type: 'error',
+              text: 'Por favor, ingrese el nombre y el enlace del documento.',
+              showCloseButton: true,
+              confirmButtonText: $translate.instant("CERRAR")
+          });
+          return;
+          }
           necesidadesCrudRequest.post("marco_legal", self.obj_documento).then(function () {
             swal({
               title: 'Documento guardado',
