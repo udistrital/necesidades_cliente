@@ -10,7 +10,7 @@
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        APP: "argo",
+        APP: "kronos",
         APP_MENU: "Necesidades",
         GENERAL: {
             //no wso2

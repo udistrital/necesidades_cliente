@@ -15,7 +15,7 @@
         </div>
         <div class="header-button-user-container" ng-click="toogleCerrarSesion()" ng-show="token_service.live_token()">
             <i id="header-user-icon" class="fa fa-user-o"></i>
-            <p>{{token.sub}}</p>
+            <p class="user-info">{{token.sub}}</p>
             <i class="fa fa-chevron-down"></i>
             <div id="header-button-cerrarsesion-container" ng-click='logout()'>
                 <p>cerrar sesion</p>

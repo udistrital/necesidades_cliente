@@ -155,7 +155,7 @@ angular.module('contractualClienteApp')
                                     prod.ElementoNombre="";
                                     prod.ValorTotal=0;
                                     catalogoRequest.get('elemento', $.param({
-                                        query: "SubgrupoId.Id:19",
+                                        query: "Id:"+prod.CatalogoId,
                                         fields: 'Id,Nombre',
                                         limit: -1,
                                         sortby: "Nombre",
