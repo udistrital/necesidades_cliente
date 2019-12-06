@@ -146,7 +146,7 @@ var text_es = {
     //lista_documentos_legales
     MARCO_LEGAL: "Marco Legal",
     NOMBRE_DOCUMENTO: "Nombre del documento",
-    AGREGAR_DOCUMENTO: "Agregar documento",
+    AGREGAR_DOCUMENTO: "REGISTRAR NUEVO DOCUMENTO",
     URL_DOCUMENTO: "URL del documento",
     //lista_actividades_economicas
     ACTIVIDADES_ECONOMICAS: "Actividades económicas",

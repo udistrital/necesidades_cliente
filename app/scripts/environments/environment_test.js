@@ -10,7 +10,7 @@
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        APP: "argo",
+        APP: "kronos",
         APP_MENU: "Necesidades",
         GENERAL: {
             WSO2_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services/", // NO ESTA URL EN PREPROD
