@@ -10,7 +10,7 @@
 
 
   <div class="panel-body">
-    <md-steppers class="row" md-selected="solicitudNecesidad.FormularioSeleccionado">
+    <md-steppers  md-selected="solicitudNecesidad.FormularioSeleccionado">
       <form name="solicitudform" novalidate>
         <md-step label="Responsables" md-complete="solicitudNecesidad.SeccionesFormulario.general.completo"
           ng-disabled="!solicitudNecesidad.SeccionesFormulario.general.activo">
@@ -401,19 +401,18 @@
                             initProductoapropiacion="ap.initProductos"></productos-apropiacion>
                         </div>
 
-
-                        <div class="panel panel-default col-md-6">
-                          <div class="panel-body container-fluid">
-                            <div class="list-group-item" ng-repeat="prod in ap.Productos track by prod.ProductoId">
-                              <label class="text-warning col-md-8 titleActividad">{{"PRODUCTO" | translate}}:
-                                {{prod.Nombre}}</label>
-                              <!-- <input class="col-md-4 money" type="text"
-                                ng-init="prod.MontoParcial = prod.MontoParcial ? prod.MontoParcial : 0"
-                                ng-model="prod.MontoParcial" ui-money-mask="2"> -->
-                              <br>
-                            </div>
-                          </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                  <div class="list-group-item" ng-repeat="prod in ap.Productos track by prod.ProductoId">
+                                    <label class="text-warning titleActividad"><p>{{"PRODUCTO" | translate}}:
+                                        {{prod.Nombre}}</p></label>
+                                    <br>
+                                  </div>
+                                </div>
+                              </div>
                         </div>
+
 
                       </div>
                     </div>
