@@ -45,6 +45,7 @@ angular
         'planCuentasService',
         'planCuentasMidService',
         'metasService',
+        'catalogoService',
         'coreService',
         'coreAmazonService',
         'parametrosGobiernoService',

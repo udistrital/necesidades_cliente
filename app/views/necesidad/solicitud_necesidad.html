@@ -156,7 +156,7 @@
                     {{solicitudNecesidad.jefe_destino.SegundoApellido}}</span>
                 </div>
                 <!-- seleccionar si es supervisor o interventor -->
-                <div class="col-md-12" ng-if="solicitudNecesidad.fields.General.Supervisor">
+                <div class="row" ng-if="solicitudNecesidad.fields.General.Supervisor">
                   <label class="radio-inline">
                     <input type="radio" ng-value="true" ng-model="solicitudNecesidad.tipoInterventor" required>
                     {{"INTERVENTOR" | translate}}
@@ -187,7 +187,7 @@
                   </div>
                 </div>
                 <!-- interventor -->
-                <div class="col-md-12" ng-if="solicitudNecesidad.tipoInterventor">
+                <div class="row" ng-if="solicitudNecesidad.tipoInterventor">
                   <label for="interventor" class="control-label">{{"INTERVENTOR" | translate}}</label>
                   <select class="form-control"
                     ng-model="solicitudNecesidad.Necesidad.DependenciaNecesidadId.InterventorId"
@@ -231,7 +231,7 @@
 
               <div class="panel-body" ng-hide="general.open">
 
-                <div class="col-md-12 form-group">
+                <div class="row form-group">
                   <label class=" control-label">{{"TIPO_FINANCIACION" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
                   <select class="form-control" ng-model="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId"
@@ -480,7 +480,7 @@
                 style="text-align: justify">
               </div>
               <div class="panel-body" ng-hide="marcoLegal.open">
-                <lista-documentos-legales class="col-md-12" documentos="solicitudNecesidad.MarcoLegalNecesidad">
+                <lista-documentos-legales class="row" documentos="solicitudNecesidad.MarcoLegalNecesidad">
                 </lista-documentos-legales>
               </div>
 
@@ -510,7 +510,7 @@
                   class="fa fa-minus pull-right" ng-show="!especificaciones.open"></span></legend>
               <div class="panel-body" ng-hide="especificaciones.open">
 
-                <div class="col-md-12">
+                <div class="row">
                   <label class=" control-label">{{ "CLASE_CONTRATACION" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
                   <!-- Filtra tipo necesidad no aplica Tipo necesidad == 3 -->
@@ -595,7 +595,7 @@
 
 
 
-                  <div class="col-md-12">
+                  <div class="row">
 
                     <div class="col-md-4"
                       ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===5">
@@ -633,7 +633,7 @@
                   <!-- actividades especificas necesidad -->
 
 
-                  <div class="col-md-12">
+                  <div class="row">
                     <label for="objeto" class="control-label">{{"ACTIVIDADES_ESPECIFICAS" | translate}}</label>
                     <div>
                       <ul class="list-group">
@@ -653,7 +653,7 @@
                     <textarea type="text" class="form-control" rows="6" ng-model="solicitudNecesidad.actividad_esp"
                       placeholder="Descripcion actividad"></textarea>
                   </div>
-                  <div class="col-md-12">
+                  <div class="row">
                     <div style="text-align: center">
                       <button type="button" class="btn btn-primary btn-outline"
                         ng-click="solicitudNecesidad.actividad_esp!=undefined && solicitudNecesidad.agregarActEsp(solicitudNecesidad.actividad_esp);solicitudNecesidad.actividad_esp=undefined">{{"AGREGAR"
@@ -663,7 +663,7 @@
                   </div>
                   <!-- requisitos minimos necesidad -->
 
-                  <div class="col-md-12">
+                  <div class="row">
                     <label for="objeto" class="control-label">{{"REQUISITOS_MINIMOS" | translate}}</label>
                     <div>
                       <ul class="list-group">
@@ -682,7 +682,7 @@
                     <textarea type="text" class="form-control" rows="6" ng-model="solicitudNecesidad.req_min"
                       placeholder="Descripcion requisito mínimo"></textarea>
                   </div>
-                  <div class="col-md-12">
+                  <div class="row">
                     <div style="text-align: center">
                       <button type="button" class="btn btn-primary btn-outline"
                         ng-click="solicitudNecesidad.req_min!=undefined && solicitudNecesidad.agregarReqMin(solicitudNecesidad.req_min);solicitudNecesidad.req_min=undefined">{{"AGREGAR"
@@ -692,7 +692,7 @@
                   </div>
 
                   <!-- Actividades economicas -->
-                  <div class="col-md-12">
+                  <div class="row">
                     <div class="col-md-6">
                       <lista-actividades-economicas actividades="solicitudNecesidad.ActividadEconomicaNecesidad"
                         id_actividades="solicitudNecesidad.actividades_economicas_id"></lista-actividades-economicas>
@@ -720,7 +720,7 @@
                 <!-- Tipo contrato necesidad === (compra || Compra y Servicio || Servicio)-->
                 <div class="form-group"
                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
-                  <div class="col-md-12">
+                  <div class="row">
                     <lista-subgrupos-catalogos ng-model="solicitudNecesidad.producto_catalogo">
                     </lista-subgrupos-catalogos>
                   </div>

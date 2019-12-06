@@ -21,6 +21,7 @@ angular.module('contractualClienteApp')
             CORE_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/core_api/v1/",
             CORE_AMAZON_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/core_amazon_crud/v1/",
             PARAMETROS_GOBIERNO_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros_gobierno/v1/",
+            CATALOGO_ARKA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/catalogo_elementos_crud/v1/",
             PLAN_CUENTAS_MID_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mid/v1/',
             PLAN_CUENTAS_MONGO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mongo_crud/v1/',
             NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/",

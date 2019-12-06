@@ -23,6 +23,7 @@ angular.module('contractualClienteApp')
             //CORE_AMAZON_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/",
             CORE_AMAZON_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8106/v1/",
             PARAMETROS_GOBIERNO_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/",
+            CATALOGO_ARKA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/catalogo_elementos_crud/v1/",
             PLAN_CUENTAS_MID_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mid/v1/",//"http://10.20.2.126:8084/v1/",
             PLAN_CUENTAS_MONGO_SERVICE: "http://pruebasapi.intranetoas.udistrital.edu.co:8203/v1/",
             NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/",//"http://10.20.2.126:8201/v1/",
