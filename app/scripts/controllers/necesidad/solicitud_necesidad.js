@@ -195,7 +195,7 @@ angular.module('contractualClienteApp')
                 self.ProductosCatalogoNecesidad.forEach(function (prod) {
                     prod.RequisitosMinimos===null ? prod.RequisitosMinimos=[]:_;
                     catalogoRequest.get('elemento', $.param({
-                        query: "SubgrupoId.Id:19",
+                        query: "Id:"+prod.CatalogoId,
                         fields: 'Id,Nombre',
                         limit: -1,
                         sortby: "Nombre",

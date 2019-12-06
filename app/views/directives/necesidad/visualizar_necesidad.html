@@ -1,7 +1,7 @@
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <div class="row">
+      <div class="panel-heading">
       <div class="row">
+      <div>
           <h3 class="titleNecesidad">
           <span ng-show="
             d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 ||
@@ -20,7 +20,7 @@
         </h3>
       </div>
 
-      <div class="col-md-7"><span
+      <div class="col-md-7"><span class="titleNecesidad"
           ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7">{{"MODALIDAD_SELECCION" | translate}}:
           {{d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Nombre}}</span> </div>
     </div>
@@ -98,30 +98,30 @@
 
         <!-- Inversion -->
         <div ng-if="!d_visualizarNecesidad.funcionamiento">
-          <p class="text-justify"><strong> Rubro / Proyecto </strong></p><br>
+          <p><strong> Rubro / Proyecto </strong></p><br>
           <div ng-repeat="rubro in d_visualizarNecesidad.rubros">
             <ul>
               <li>{{ rubro.RubroId }} : {{ rubro.InfoRubro.Nombre }}</li>
               <!-- Metas -->
               <br>
-              <p class="text-justify"><strong>Metas</strong></p>
+              <p><strong>Metas</strong></p>
               <ul ng-repeat="meta in rubro.Metas">
-                <li><strong>Código:</strong> {{ meta.MetaId }}<p class="text-justify">{{ meta.InfoMeta.meta }}</p>
+                <li><strong>Código:</strong> {{ meta.MetaId }}<p>{{ meta.InfoMeta.meta }}</p>
                   <hr>
                 </li>
                 <!-- Actividades -->
                 <br>
-                <p class="text-justify"><strong>Actividades</strong></p>
+                <p><strong>Actividades</strong></p>
                 <ul ng-repeat="act in meta.Actividades">
-                  <li><strong>Código:</strong> {{ act.ActividadId }} <p class="text-justify">
+                  <li><strong>Código:</strong> {{ act.ActividadId }} <p>
                       {{ act.InfoActividad.actividad }}</p>
                   </li>
                   <!-- FuentesActividad -->
                   <br>
-                  <p class="text-justify"><strong>Fuentes de Financiamiento</strong></p>
+                  <p><strong>Fuentes de Financiamiento</strong></p>
                   <ul ng-repeat="f in act.FuentesActividad" style="list-style: none;">
                     <li>
-                      <p class="text-justify"><strong>Código:</strong> {{f.FuenteId}}<br>
+                      <p><strong>Código:</strong> {{f.FuenteId}}<br>
                       {{ f.InfoFuente.Nombre }}<br>
                       <strong>Valor:</strong> {{ f.MontoParcial | currency }}</p>
                     </li>
@@ -132,10 +132,10 @@
                 <br>
               </ul>
               <!-- Productos -->
-              <p class="text-justify"><strong ng-if="rubro.Productos.length>0">{{"PRODUCTOS" | translate}}</strong></p><br>
+              <p><strong ng-if="rubro.Productos.length>0">{{"PRODUCTOS" | translate}}</strong></p><br>
               <ul>
                 <li ng-repeat="producto in rubro.Productos">
-                  {{producto.InfoProducto.Nombre}} <p class="text-justify"><strong></strong></p>
+                  {{producto.InfoProducto.Nombre}} <p><strong></strong></p>
                 </li>
               </ul>
               <br>
@@ -146,17 +146,17 @@
 
         <!-- Funcionamiento -->
         <div ng-if="d_visualizarNecesidad.funcionamiento">
-          <p class="text-justify"><strong>Rubros / Proyecto</strong></p> <br>
+          <p><strong>Rubros / Proyecto</strong></p> <br>
             <div ng-repeat="rubro in d_visualizarNecesidad.rubros">
               <ul>
                 <li>{{ rubro.InfoRubro.Codigo }} : {{ rubro.InfoRubro.Nombre }}</li>
                 <br>
-                <p class="text-justify"><strong>Fuentes de Financiamiento</strong></p>
+                <p><strong>Fuentes de Financiamiento</strong></p>
                 <ul ng-repeat="fuente in rubro.Fuentes">
                   <li>
                     <strong>Código:</strong>{{fuente.InfoFuente.Codigo}}<br>
                     <strong>Nombre: </strong>{{ fuente.InfoFuente.Nombre}}<br>
-                    <p class="text-justify"><strong>Valor:</strong> {{ fuente.MontoParcial | currency }}</p>
+                    <p><strong>Valor:</strong> {{ fuente.MontoParcial | currency }}</p>
                   </li>
                 </ul>
               </ul>
@@ -196,7 +196,7 @@
         <!-- info cps  -->
         <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CPS'">
           <table class="table table-bordered tablaDetalle">
-            <tr>
+            <tr class="bg-primary">
               <th>{{"PERFIL" | translate}}</th>
               <th>{{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</th>
               <th>{{"NUCLEO_CONOCIMIENTO" | translate}}</th>
@@ -210,17 +210,19 @@
         </div>
         <!-- info compra -->
         <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CS'||d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='C'">
-          <p class="text-justify"><strong>Detalle compra</strong></p>
+          <p><strong>Detalle compra</strong></p>
           <table class="table table-bordered tablaDetalle">
-            <tr>
+            <tr class="bg-primary">
               <th>Elemento</th>
               <th>Cantidad</th>
+              <th>Subtotal</th>
               <th>Valor IVA</th>
               <th>Valor total</th>
             </tr>
             <tr ng-repeat="prod in necesidad.ProductosCatalogoNecesidad">
               <td>{{prod.ElementoNombre}}</td>
               <td>{{prod.Cantidad}}</td>
+              <td class="money">{{prod.Valor*prod.Cantidad | currency}}</td>
               <td class="money">{{prod.valorIvaUnd*prod.Cantidad | currency}}</td>
               <td class="money">{{prod.ValorTotal | currency}}</td>
             </tr>
@@ -228,9 +230,9 @@
         </div>
         <!-- info servicio  -->
         <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='S'||d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CS'">
-            <p class="text-justify"><strong>Detalle servicio</strong></p>
+            <p><strong>Detalle servicio</strong></p>
             <table class="table table-bordered tablaDetalle">
-              <tr><th>Tipo servicio</th><th>Valor IVA</th><th>Valor total servicio</th></tr>
+              <tr class="bg-primary"><th>Tipo servicio</th><th>Valor IVA</th><th>Valor total servicio</th></tr>
               <tr>
                 <td>{{necesidad.DetalleServicioNecesidad.TipoServicioNombre}}</td>
                 <td class="money">{{necesidad.DetalleServicioNecesidad.valorIvaUnd | currency}}</td>
@@ -240,13 +242,13 @@
         </div>
         <!-- actividades especificas, requisitos minimos -->
         <div ng-if="['S','CS','CPS'].indexOf(d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion)>-1">
-          <p class="text-justify"><strong>{{"ACTIVIDADES_ESPECIFICAS" | translate}}</strong></p>
+          <p><strong>{{"ACTIVIDADES_ESPECIFICAS" | translate}}</strong></p>
           <ul>
             <li ng-repeat="ae in necesidad.ActividadEspecificaNecesidad">
                 {{$index+1}}. {{ae.Descripcion}}
             </li>
           </ul>
-          <p class="text-justify"><strong>{{"REQUISITOS_MINIMOS" | translate}}</strong></p>
+          <p><strong>{{"REQUISITOS_MINIMOS" | translate}}</strong></p>
           <ul>
             <li ng-repeat="rm in necesidad.RequisitoMinimoNecesidad">
                 {{$index+1}}. {{rm.Descripcion}}

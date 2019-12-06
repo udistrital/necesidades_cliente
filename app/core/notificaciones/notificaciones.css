@@ -1,9 +1,9 @@
-.aplicaciones_menu_container p{
+.aplicaciones_menu_container p {
   margin-bottom: 11px;
   margin-top: 0;
 }
 
-.title-notifications{
+.title-notifications {
   text-align: left;
   font-family: "Open Sans", sans-serif;
   font-size: 22px;
@@ -49,10 +49,10 @@
   font-size: 12px;
 }
 
-.form-control {
+.notificacion-input > .form-control {
   margin: 0px 23px;
-    font-family: "Open Sans", sans-serif;
-    width: 86%;
+  font-family: "Open Sans", sans-serif;
+  width: 86%;
 }
 
 .notificacion_container {

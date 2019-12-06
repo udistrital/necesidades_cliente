@@ -22,7 +22,7 @@ angular.module('core')
                 $scope.isLogin = true;
                 $scope.notificacion = notificacion;
                 $scope.token = token_service.getPayload();
-            }else {
+            } else {
                 $scope.isLogin = false;
             }
             $scope.logout = function () {
@@ -43,13 +43,18 @@ angular.module('core')
             }
 
             $scope.togglenotify = function () {
-                if(!behaviorTheme.notificacion.open){
+                if (!behaviorTheme.notificacion.open) {
                     notificacion.changeStateNoView();
                 }
                 behaviorTheme.toogleNotificacion();
             }
 
             $scope.sidebarEvent = function () {
+                behaviorTheme.toogleSidebar();
+            }
+            var mediaquery = window.matchMedia("(max-width: 855px)");
+            if (mediaquery.matches) {
+                behaviorTheme.toogleSidebar();
                 behaviorTheme.toogleSidebar();
             }
         });
