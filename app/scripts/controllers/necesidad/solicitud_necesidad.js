@@ -641,6 +641,14 @@ angular.module('contractualClienteApp')
             MontoPorMeta: 0
         };
         self.addProductoCatalogo = function () { // añadir productos de catalogo en compra o compra serv
+            if (!self.producto_catalogo.Cantidad>0 || !self.producto_catalogo.Valor>0) {
+                swal({
+                    type: 'error',
+                    title: 'Por favor, ingrese un valor y cantidad válidos y mayores a 0.',
+                    showConfirmButton: true,
+                })
+                return
+            }
             self.ProductosCatalogoNecesidad.filter(function (e) {
                 return e.CatalogoId === self.producto_catalogo.CatalogoId;
             }).length > 0 || !self.producto_catalogo.CatalogoId ?
@@ -1115,8 +1123,9 @@ angular.module('contractualClienteApp')
             }
         };
 
-        $scope.$watch('solicitudNecesidad.FormularioSeleccionado', function () { // animar cambio de step y ubicar en la parte superior
-            $("html, body").animate({ scrollTop: 0 }, "slow");
+        $scope.$watch('solicitudNecesidad.FormularioSeleccionado', function () { 
+            // animar cambio de step y ubicar en la parte superior
+            $('body, html, #mainapp').animate({ scrollTop: 0 }, "slow");
         }, true)
 
         function ValidarSeccion(form) {

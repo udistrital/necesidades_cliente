@@ -26,7 +26,7 @@ angular.module('contractualClienteApp')
                     enableRowSelection: true,
                     enableRowHeaderSelection: false,
                     enableFiltering: true,
-                    showTreeExpandNoChildren: false,
+                    // showTreeExpandNoChildren: false,
 
                     columnDefs: [{
                         field: 'Codigo',
@@ -36,7 +36,7 @@ angular.module('contractualClienteApp')
                             if (col.treeNode.children.length === 0) {
                                 return "unbold ";
                             } else {
-                                return "text-info";
+                                return "unbold";
                             }
                         },
                         width: '15%'
@@ -52,7 +52,7 @@ angular.module('contractualClienteApp')
                             if (col.treeNode.children.length === 0) {
                                 return "unbold ";
                             } else {
-                                return "text-info";
+                                return "unbold";
                             }
                         },
                         width: '40%'
@@ -110,19 +110,19 @@ angular.module('contractualClienteApp')
                             });
                             self.max_level = 0;
                             var level = 0;
-                            for (var i = 0; i < self.gridOptions.data.length; i += 1) {
-                                level = (self.gridOptions.data[i].Codigo.match(/-/g) || []).length;
-                                if (level > self.max_level) {
-                                    self.max_level = level;
-                                }
-                            }
+                            // for (var i = 0; i < self.gridOptions.data.length; i += 1) {
+                            //     level = (self.gridOptions.data[i].Codigo.match(/-/g) || []).length;
+                            //     if (level > self.max_level) {
+                            //         self.max_level = level;
+                            //     }
+                            // }
 
-                            for (var j = 0; j < self.gridOptions.data.length; j += 1) {
-                                level = (self.gridOptions.data[j].Codigo.match(/-/g) || []).length;
-                                if (level < self.max_level) {
-                                    self.gridOptions.data[j].$$treeLevel = level;
-                                }
-                            }
+                            // for (var j = 0; j < self.gridOptions.data.length; j += 1) {
+                            //     level = (self.gridOptions.data[j].Codigo.match(/-/g) || []).length;
+                            //     if (level < self.max_level) {
+                            //         self.gridOptions.data[j].$$treeLevel = level;
+                            //     }
+                            // }
 
                         } else {
                             self.gridOptions.data = [];
@@ -145,7 +145,7 @@ angular.module('contractualClienteApp')
 
                 self.gridOptions.isRowSelectable = function (row) {
                     if (row.treeNode.children.length > 0 && $scope.selhijos === true) {
-                        return false;
+                        return true;
                     } else {
                         return true;
                     }
