@@ -91,7 +91,7 @@ var text_es = {
     ORDENADOR_GASTO: "Ordenador del gasto",
     GENERAL: "General",
     PLAN_ANUAL_ADQUISICIONES: "Plan Anual de Adquisiciones",
-    ESTUDIO_MERCADO: "Estudio de mercado",
+    ESTUDIO_MERCADO: "Estudio de mercado / Estudios previos",
     ANALISIS_RIESGOS: "Análisis de riesgos",
     SUPERVISOR: "Supervisor",
     RUBROS: "rubros",

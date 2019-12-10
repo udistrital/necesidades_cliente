@@ -131,7 +131,7 @@ angular.module('contractualClienteApp')
                 enableSorting: false,
                 displayName: $translate.instant('VER'),
                 cellTemplate: function () {
-                    return '<div class="col-md-3"></div><div class="col-md-2"><a href="" style="border:0; text-align: center; display: inline-block;" type="button" ng-click="grid.appScope.direccionar(row.entity)"><span class="fa fa-check-square faa-shake animated-hover"></span></a></div><div class="col-md-3"></div>';
+                    return '<div class="col-md-3"></div><div class="col-md-2"><a href="" style="border:0; text-align: center; display: inline-block;" type="button" ><span class="fa fa-check-square faa-shake animated-hover"></span></a></div><div class="col-md-3"></div>';
                 },
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
@@ -145,12 +145,12 @@ angular.module('contractualClienteApp')
                 self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     necesidadService.getFullNecesidad(row.entity.Id).then(function (response) {
                         if (response.status === 200) {
-                            self.necesidad = response.data.Body;
-                            console.info(self.necesidad)
+                            var nec =response.data.Body
+                            // console.info(self.necesidad)
                             //traer data de objetos para contratacion
                             //compra
-                            if (self.necesidad.ProductosCatalogoNecesidad&&self.necesidad.ProductosCatalogoNecesidad!==null) {
-                                self.necesidad.ProductosCatalogoNecesidad.forEach(function(prod) {
+                            if (nec.ProductosCatalogoNecesidad&&nec.ProductosCatalogoNecesidad!==null) {
+                                nec.ProductosCatalogoNecesidad.forEach(function(prod) {
                                     prod.valorIvaUnd=0;
                                     prod.ElementoNombre="";
                                     prod.ValorTotal=0;
@@ -167,37 +167,60 @@ angular.module('contractualClienteApp')
                                 })
                             }
                             //servicio
-                            if(self.necesidad.DetalleServicioNecesidad.TipoServicioId) {
-                                self.necesidad.DetalleServicioNecesidad.ValorTotal=0;
-                                self.necesidad.DetalleServicioNecesidad.valorIvaUnd=0;
-                                self.necesidad.DetalleServicioNecesidad.TipoServicioNombre="";
-                                calculoIVA(self.necesidad.DetalleServicioNecesidad);
+                            if(nec.DetalleServicioNecesidad.TipoServicioId) {
+                                nec.DetalleServicioNecesidad.ValorTotal=0;
+                                nec.DetalleServicioNecesidad.valorIvaUnd=0;
+                                nec.DetalleServicioNecesidad.TipoServicioNombre="";
+                                calculoIVA(nec.DetalleServicioNecesidad);
                                 $http.get("scripts/models/tipo_servicio.json")
                                 .then(function (response) {
-                                    self.necesidad.DetalleServicioNecesidad.TipoServicioNombre=response.data.filter(function(s){
-                                        return s.ID===self.necesidad.DetalleServicioNecesidad.TipoServicioId
+                                    nec.DetalleServicioNecesidad.TipoServicioNombre=response.data.filter(function(s){
+                                        return s.ID===nec.DetalleServicioNecesidad.TipoServicioId
                                     })[0].DESCRIPCION;
                                 });
                             }
                       
                             //cps
-                            if (self.necesidad.DetallePrestacionServicioNecesidad.PerfilId) {
-                                self.necesidad.DetallePrestacionServicioNecesidad.PerfilNombre=self.perfil_data.filter(function(p){
-                                    return p.Id===self.necesidad.DetallePrestacionServicioNecesidad.PerfilId;
+                            if (nec.DetallePrestacionServicioNecesidad.PerfilId) {
+                                nec.DetallePrestacionServicioNecesidad.PerfilNombre="";
+                                nec.DetallePrestacionServicioNecesidad.PerfilNombre=self.perfil_data.filter(function(p){
+                                    return p.Id===nec.DetallePrestacionServicioNecesidad.PerfilId;
                                 })[0].ValorParametro;
                             }
-                            if (self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
-                                self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre="";
-                                self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea="";
+                            if (nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
+                                nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre="";
+                                nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea="";
                                 parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-                                    query: 'Id:' + self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                                    query: 'Id:' + nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
                                     limit: -1
                                 })).then(function (response) {
-                                    self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre=response.data[0].Nombre;
-                                    self.necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea=response.data[0].AreaConocimientoId.Nombre;
+                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre=response.data[0].Nombre;
+                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea=response.data[0].AreaConocimientoId.Nombre;
                                 })
 
                             }
+                            self.necesidad = nec;
+                            var necesidad= self.necesidad.Necesidad
+
+                            self.g_necesidad = necesidad;
+                            self.numero_el = necesidad.NumeroElaboracion;
+                            self.vigencia = necesidad.Vigencia;
+                            self.modalidadSel = necesidad.ModalidadSeleccion;
+            
+                            //para mostrar informacion de rechazo
+            
+            
+                            // validaciones para los botones: (estado) && (permisos rol)
+                            var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id,]
+                                .includes(necesidad.EstadoNecesidadId.Id);
+            
+                            self.verBotonAprobarSolicitud = necesidadService.EstadoNecesidadType.Guardada.Id===necesidad.EstadoNecesidadId.Id&&necesidad.JustificacionRechazo!==1; // Cuando este Guardada (Borrador)
+                            self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
+                            self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
+                            self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
+                            self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
+            
+                            $("#myModal").modal();
                         }
                     });
                 });
@@ -231,34 +254,7 @@ angular.module('contractualClienteApp')
 
         self.cargarDatosNecesidades(self.offset, self.query);
 
-        $scope.direccionar = function (necesidad) {
-            necesidadService.getFullNecesidad(necesidad.Id).then(function (response) {
-                if (response.status === 200) {
-                    self.necesidad = response.data.Body;
-                }
 
-
-                self.g_necesidad = necesidad;
-                self.numero_el = necesidad.NumeroElaboracion;
-                self.vigencia = necesidad.Vigencia;
-                self.modalidadSel = necesidad.ModalidadSeleccion;
-
-                //para mostrar informacion de rechazo
-
-
-                // validaciones para los botones: (estado) && (permisos rol)
-                var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id,]
-                    .includes(necesidad.EstadoNecesidadId.Id);
-
-                self.verBotonAprobarSolicitud = necesidadService.EstadoNecesidadType.Guardada.Id===necesidad.EstadoNecesidadId.Id&&necesidad.JustificacionRechazo!==1; // Cuando este Guardada (Borrador)
-                self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
-                self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
-                self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
-                self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
-
-                $("#myModal").modal();
-            });
-        };
 
         self.aprobar_solicitud = function () {
             self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Solicitada;

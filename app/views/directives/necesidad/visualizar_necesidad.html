@@ -192,7 +192,7 @@
 
         <!-- clase de contratacion necesidad resumen -->
 
-        <h3 class="text-info" ng-show="d_visualizarNecesidad.v_necesidad.TipoNecesidadId.Id!==2">{{"CLASE_CONTRATACION" | translate}}: {{d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.Nombre}}</h3>
+        <h3 class="text-info" ng-if="d_visualizarNecesidad.v_necesidad.TipoNecesidadId.Id!==2">{{"CLASE_CONTRATACION" | translate}}: {{d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.Nombre}}</h3>
         <!-- info cps  -->
         <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CPS'">
           <table class="table table-bordered tablaDetalle">
@@ -202,9 +202,9 @@
               <th>{{"NUCLEO_CONOCIMIENTO" | translate}}</th>
             </tr>
             <tr>
-              <td>{{necesidad.DetallePrestacionServicioNecesidad.PerfilNombre}}</td>
-              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea}}</td>
-              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre}}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.PerfilNombre }}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea }}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre }}</td>
             </tr>
           </table>
         </div>
@@ -219,7 +219,7 @@
               <th>Valor IVA</th>
               <th>Valor total</th>
             </tr>
-            <tr ng-repeat="prod in necesidad.ProductosCatalogoNecesidad">
+            <tr ng-repeat="prod in necesidad.ProductosCatalogoNecesidad" >
               <td>{{prod.ElementoNombre}}</td>
               <td>{{prod.Cantidad}}</td>
               <td class="money">{{prod.Valor*prod.Cantidad | currency}}</td>
