@@ -47,16 +47,33 @@ angular.module('contractualClienteApp')
                     if ($scope.necesidad.Necesidad.EstadoNecesidadId.CodigoAbreviacionn === 'R') {
                         necesidadesCrudRequest.get('necesidad_rechazada', $.param({
                             query: 'NecesidadId:' + $scope.necesidad.Necesidad.Id
-                        })).then(function(response) {
-                            if(response.data !== null && response.status === 200) {
+                        })).then(function (response) {
+                            if (response.data !== null && response.status === 200) {
                                 self.verJustificacion = response.data;
                             }
                         });
                     }
+                    if (["CDPE", "CDPA"].includes($scope.necesidad.Necesidad.EstadoNecesidadId.CodigoAbreviacionn)) {
+                        $scope.necesidad.ConsecutivoCDP = 0;
+                        $scope.necesidad.ValorInicialCDP = 0;
+                        $scope.necesidad.ValorActualCDP = 0;
+                        planCuentasRequest.get('solicitudesCDP/?query=necesidad:' + $scope.necesidad.Necesidad.Id).then(function (response) {
+                            if (response.status === 200) {
+                                var id_sol_cdp = response.data.Body[0]._id;
+                                planCuentasRequest.get('documento_presupuestal/' + $scope.necesidad.Necesidad.Vigencia + '/' + $scope.necesidad.Necesidad.AreaFuncional + '?query=tipo:cdp,data.solicitud_cdp:' + id_sol_cdp).then(function (res) {
+                                    var documento_cdp = res.data.Body[0];
+                                    $scope.necesidad.ConsecutivoCDP = documento_cdp.Consecutivo;
+                                    $scope.necesidad.ValorInicialCDP = documento_cdp.ValorInicial;
+                                    $scope.necesidad.ValorActualCDP = documento_cdp.ValorActual;
+                                })
+                            }
+                        })
+
+                    }
                 });
 
                 $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
-                    $scope.modalidadSel=self.modalidadSel;
+                    $scope.modalidadSel = self.modalidadSel;
                 });
 
                 function get_jefe_dependencia(id_jefe_dependencia, solicitante) {
@@ -87,34 +104,34 @@ angular.module('contractualClienteApp')
                             if (response_dependencia.data !== null && response_dependencia.status === 200) {
                                 if (solicitante) {
                                     self.dependencia_solicitante = response_dependencia.data[0];
-                                    
-                                    metasRequest.get('plan_adquisiciones/'+$scope.necesidad.Necesidad.Vigencia+
-                                        "/"+response_dependencia.data[0].Id).then(function(response) {
-                                        
-                                        if (response.data !== null && response.status === 200) {
-                                            metas = response.data.metas;
-                                            $scope.necesidad.Rubros.forEach(get_informacion_meta);
-                                        }
-                                    });
+
+                                    metasRequest.get('plan_adquisiciones/' + $scope.necesidad.Necesidad.Vigencia +
+                                        "/" + response_dependencia.data[0].Id).then(function (response) {
+
+                                            if (response.data !== null && response.status === 200) {
+                                                metas = response.data.metas;
+                                                $scope.necesidad.Rubros.forEach(get_informacion_meta);
+                                            }
+                                        });
                                 } else {
                                     self.dependencia_destino = response_dependencia.data[0];
                                 }
                             }
-                        }); 
+                        });
                     });
                 }
 
                 function get_informacion_meta(rubro) {
-                    rubro.Metas ? rubro.Metas.forEach(function(meta) {
-                        meta.InfoMeta = metas.actividades.find(function(item) {
+                    rubro.Metas ? rubro.Metas.forEach(function (meta) {
+                        meta.InfoMeta = metas.actividades.find(function (item) {
                             return item.meta_id === meta.MetaId
                         });
-                        meta.Actividades.forEach(function(actividad) {
-                           actividad.InfoActividad = metas.actividades.find(function(item) {
-                               return actividad.ActividadId === item.actividad_id
-                           });
+                        meta.Actividades.forEach(function (actividad) {
+                            actividad.InfoActividad = metas.actividades.find(function (item) {
+                                return actividad.ActividadId === item.actividad_id
+                            });
                         });
-                    }):_;
+                    }) : _;
                 }
 
 
@@ -124,18 +141,18 @@ angular.module('contractualClienteApp')
                     self.rubros = $scope.necesidad.Rubros;
 
                     // Jefes de dependencias
-                    get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId,true);
+                    get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId, true);
                     get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
                     //Información de dependencias
-                    get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId,true);
+                    get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId, true);
                     get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
                     // Información del ordenador de gasto
-                    necesidadService.getJefeDependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId, true).then(function(response) {
+                    necesidadService.getJefeDependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId, true).then(function (response) {
                         self.ordenador_gasto = response.Persona;
                     });
 
-                    if ($scope.necesidad.Necesidad.TipoContratoId && $scope.necesidad.Necesidad.TipoContratoId !== 0 ) {
-                        agoraRequest.get('tipo_contrato/'+ $scope.necesidad.Necesidad.TipoContratoId).then(function (response) {
+                    if ($scope.necesidad.Necesidad.TipoContratoId && $scope.necesidad.Necesidad.TipoContratoId !== 0) {
+                        agoraRequest.get('tipo_contrato/' + $scope.necesidad.Necesidad.TipoContratoId).then(function (response) {
                             self.v_necesidad.TipoContratoId = response.data;
                         });
                     }

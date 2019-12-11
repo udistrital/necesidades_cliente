@@ -118,7 +118,7 @@ angular.module('implicitToken', [])
       },
 
       setExpiresAt: function () {
-        if (angular.isUndefined(window.localStorage.getItem('expires_at')) || window.localStorage.getItem('expires_at') === null || window.localStorage.getItem('expires_at') === 'Invalid Date') {
+        if (angular.isUndefined(window.localStorage.getItem('expires_at')) || window.localStorage.getItem('expires_at') === null) {
           var expires_at = new Date();
           expires_at.setSeconds(expires_at.getSeconds() + parseInt(window.localStorage.getItem('expires_in')) - 40); // 40 seconds less to secure browser and response latency
           window.localStorage.setItem('expires_at', expires_at);
@@ -126,7 +126,7 @@ angular.module('implicitToken', [])
       },
 
       timer: function () {
-        if (!angular.isUndefined(window.localStorage.getItem('expires_at')) || window.localStorage.getItem('expires_at') === null) {
+        if (!angular.isUndefined(window.localStorage.getItem('expires_at')) || window.localStorage.getItem('expires_at') === null || window.localStorage.getItem('expires_at') === 'Invalid Date') {
           $interval(function () {
             if (service.expired()) {
               service.logout();

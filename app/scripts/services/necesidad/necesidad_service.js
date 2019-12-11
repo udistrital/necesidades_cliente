@@ -16,7 +16,7 @@ angular.module('contractualClienteApp')
 
 
     necesidadesCrudRequest.get('estado_necesidad', $.param({})).then(function (response) {
-      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado", "Guardada"];
+      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado", "Guardada", "CDPExpedido", "CDPAprobado"];
       keys.forEach(function (v, i) {
         self.EstadoNecesidadType[v] = response.data[i];
       });

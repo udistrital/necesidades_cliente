@@ -18,6 +18,7 @@ angular.module('contractualClienteApp')
             RechazarNecesidad: true,
             EditarNecesidad: true,
             SolicitarCDP: true,
+            AprobarCDP: true,
         };
 
         self.modalidadSel = {};
@@ -219,6 +220,7 @@ angular.module('contractualClienteApp')
                             self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
                             self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
                             self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
+                            self.verBotonAprobarCDPNecesidad = necesidadService.EstadoNecesidadType.CDPExpedido.Id === necesidad.EstadoNecesidadId.Id && self.buttons.AprobarCDP;
             
                             $("#myModal").modal();
                         }
