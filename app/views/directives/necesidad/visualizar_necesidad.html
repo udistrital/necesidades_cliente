@@ -256,7 +256,7 @@
 
         <!-- fin clase de contratacion necesidad resumen -->
 
-        <div ng-if="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===2 ||  d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===6 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===7">
+        <div ng-if="[2,6,7,9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
           <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
           <div class="row">
             <p class="text-muted text-justify">  
@@ -281,9 +281,9 @@
               <th>{{"NUMERO_CDP" | translate}}</th><th>{{"INICIAL_CDP" | translate}}</th><th>{{"SALDO_CDP" | translate}}</th>
             </tr>
             <tr>
-              <td>{{necesidad.ConsecutivoCDP}}</td>
-              <td class="money">{{necesidad.ValorInicialCDP | currency}}</td>
-              <td class="money">{{necesidad.ValorActualCDP | currency}}</td>
+              <td>{{necesidad.documento_cdp.Consecutivo}}</td>
+              <td class="money">{{necesidad.documento_cdp.ValorInicial | currency}}</td>
+              <td class="money">{{necesidad.documento_cdp.ValorActual | currency}}</td>
             </tr>
           </table>
 

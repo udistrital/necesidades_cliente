@@ -54,17 +54,11 @@ angular.module('contractualClienteApp')
                         });
                     }
                     if (["CDPE", "CDPA"].includes($scope.necesidad.Necesidad.EstadoNecesidadId.CodigoAbreviacionn)) {
-                        $scope.necesidad.ConsecutivoCDP = 0;
-                        $scope.necesidad.ValorInicialCDP = 0;
-                        $scope.necesidad.ValorActualCDP = 0;
                         planCuentasRequest.get('solicitudesCDP/?query=necesidad:' + $scope.necesidad.Necesidad.Id).then(function (response) {
                             if (response.status === 200) {
                                 var id_sol_cdp = response.data.Body[0]._id;
                                 planCuentasRequest.get('documento_presupuestal/' + $scope.necesidad.Necesidad.Vigencia + '/' + $scope.necesidad.Necesidad.AreaFuncional + '?query=tipo:cdp,data.solicitud_cdp:' + id_sol_cdp).then(function (res) {
-                                    var documento_cdp = res.data.Body[0];
-                                    $scope.necesidad.ConsecutivoCDP = documento_cdp.Consecutivo;
-                                    $scope.necesidad.ValorInicialCDP = documento_cdp.ValorInicial;
-                                    $scope.necesidad.ValorActualCDP = documento_cdp.ValorActual;
+                                    $scope.necesidad.documento_cdp = res.data.Body[0];
                                 })
                             }
                         })
