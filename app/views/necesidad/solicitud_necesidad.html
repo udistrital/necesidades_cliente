@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="col-md-6">
-                      <label class="radio-inline col-md-3"
+                      <label class="radio-inline col-md-2"
                         ng-repeat="tipo in solicitudNecesidad.tipo_duracion_necesidad_data">
 
                         <input class="col-md-1" type="radio" ng-value="{{tipo.Id}}"
@@ -281,7 +281,7 @@
                   ng-class="{ 'has-error' : solicitudform.estudio_mercados.$invalid && !solicitudform.estudio_mercados.$pristine }">
                   <label for="estudio_mercados" class="control-label">{{"ESTUDIO_MERCADO" | translate}}</label>
                   <textarea name="estudio_mercados" type="text" class="form-control"
-                    ng-model="solicitudNecesidad.Necesidad.EstudioMercado" placeholder="Estudio de Mercado"
+                    ng-model="solicitudNecesidad.Necesidad.EstudioMercado" placeholder="Estudio de Mercado / Estudios previos"
                     rows="6"></textarea>
                 </div>
                 <div class="alert alert-danger"
