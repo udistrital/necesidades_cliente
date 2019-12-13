@@ -126,9 +126,10 @@ angular.module('implicitToken', [])
       },
 
       timer: function () {
-        if (!angular.isUndefined(window.localStorage.getItem('expires_at')) || window.localStorage.getItem('expires_at') === null) {
+        if (!angular.isUndefined(window.localStorage.getItem('expires_at')) || window.localStorage.getItem('expires_at') === null || window.localStorage.getItem('expires_at') === 'Invalid Date') {
           $interval(function () {
             if (service.expired()) {
+              service.logout();
               service.clearStorage();
             }
           }, 5000);

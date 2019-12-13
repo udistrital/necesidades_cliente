@@ -3,10 +3,7 @@
       <div class="row">
       <div>
           <h3 class="titleNecesidad">
-          <span ng-show="
-            d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 ||
-            d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7 || 
-            d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==5">
+          <span ng-if="[2,7,5,9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
               {{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}
           </span>
           <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==3">
@@ -192,7 +189,7 @@
 
         <!-- clase de contratacion necesidad resumen -->
 
-        <h3 class="text-info" ng-show="d_visualizarNecesidad.v_necesidad.TipoNecesidadId.Id!==2">{{"CLASE_CONTRATACION" | translate}}: {{d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.Nombre}}</h3>
+        <h3 class="text-info" ng-if="d_visualizarNecesidad.v_necesidad.TipoNecesidadId.Id!==2">{{"CLASE_CONTRATACION" | translate}}: {{d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.Nombre}}</h3>
         <!-- info cps  -->
         <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CPS'">
           <table class="table table-bordered tablaDetalle">
@@ -202,9 +199,9 @@
               <th>{{"NUCLEO_CONOCIMIENTO" | translate}}</th>
             </tr>
             <tr>
-              <td>{{necesidad.DetallePrestacionServicioNecesidad.PerfilNombre}}</td>
-              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea}}</td>
-              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre}}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.PerfilNombre }}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea }}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre }}</td>
             </tr>
           </table>
         </div>
@@ -219,7 +216,7 @@
               <th>Valor IVA</th>
               <th>Valor total</th>
             </tr>
-            <tr ng-repeat="prod in necesidad.ProductosCatalogoNecesidad">
+            <tr ng-repeat="prod in necesidad.ProductosCatalogoNecesidad" >
               <td>{{prod.ElementoNombre}}</td>
               <td>{{prod.Cantidad}}</td>
               <td class="money">{{prod.Valor*prod.Cantidad | currency}}</td>
@@ -257,10 +254,9 @@
         </div>
 
 
-
-
         <!-- fin clase de contratacion necesidad resumen -->
-        <div ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===2 ||  d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===6 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id===7">
+
+        <div ng-if="[2,6,7,9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
           <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
           <div class="row">
             <p class="text-muted text-justify">  
@@ -277,10 +273,25 @@
             </p>
           </div>
         </div>
+        <!-- si esta expedido el CDP  -->
+        <div ng-if="[9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
+          <h3 class="text-info">{{"INFO_CDP" | translate}}</h3>
+          <table class="table table-bordered tablaDetalle">
+            <tr class="bg-primary">
+              <th>{{"NUMERO_CDP" | translate}}</th><th>{{"INICIAL_CDP" | translate}}</th><th>{{"SALDO_CDP" | translate}}</th>
+            </tr>
+            <tr>
+              <td>{{necesidad.documento_cdp.Consecutivo}}</td>
+              <td class="money">{{necesidad.documento_cdp.ValorInicial | currency}}</td>
+              <td class="money">{{necesidad.documento_cdp.ValorActual | currency}}</td>
+            </tr>
+          </table>
+
+        </div>
 
       </div>
 
-      <div class="col-sm-6" ng-show="d_visualizarNecesidad.verJustificacion">
+      <div class="col-sm-6" ng-if="d_visualizarNecesidad.verJustificacion">
         <h3 class="text-info">{{"NECESIDAD_JUSTIFICACION_RECHAZO" | translate}}</h3>
 
         <p class="text-justify" ng-repeat="justificacion_rechazo in d_visualizarNecesidad.verJustificacion">

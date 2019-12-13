@@ -24,7 +24,7 @@ body {
 }
 
 .container-app {
-  height: 100vw;
+  height: calc(100vh - 140px);
 }
 
 .scrollbar {
@@ -177,6 +177,10 @@ textarea {
 
 .row {
   margin: 2px;
+}
+
+div:focus{
+  outline: 0px ridge var(--primary);
 }
 
 /* End content main */
