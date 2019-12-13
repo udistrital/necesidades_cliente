@@ -457,47 +457,52 @@ angular.module('contractualClienteApp')
         };
 
         self.aprobar_cdp = function () {
-            console.info("aprobar:" , self.necesidad)
-            // planCuentasMidRequest.post("cdp/solicitarCDP", self.necesidad.Necesidad).then(
-            //     function (response) {
-            //         if (response.status === 200 || response.status === 201) {
-            //             self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.CDPAprobado;
-            //             self.necesidad.Necesidad.TipoContratoId = self.necesidad.Necesidad.TipoContratoId.Id;
-            //             var consec_cdp = response.data.Body.consecutivo;
-            //             necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {
-            //                 if (resp_nececesidad.status === 200 || resp_nececesidad.status === 201) {
-            //                     swal(
+            
+            var actualizar_cdp = {
+                _id: self.necesidad.documento_cdp._id,
+                vigencia: self.necesidad.documento_cdp.Vigencia,
+                area_funcional: self.necesidad.documento_cdp.CentroGestor, 
+            }
+            planCuentasMidRequest.post("cdp/aprobar_cdp",actualizar_cdp ).then(
+                function (response) {
+                    if (response.status === 200 || response.status === 201) {
+                        self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.CDPAprobado;
+                        self.necesidad.Necesidad.TipoContratoId = self.necesidad.Necesidad.TipoContratoId.Id;
+                        var consec_cdp = response.data.Body.consecutivo;
+                        necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {
+                            if (resp_nececesidad.status === 200 || resp_nececesidad.status === 201) {
+                                swal(
                     
-            //                         {
-            //                             title: 'Se ha creado la solicitud de CDP N° '+consec_cdp,
-            //                             text: $translate.instant("CDP_SOLICITADO"),
-            //                             type: "success",
-            //                             width: 600,
-            //                             showCloseButton: true,
-            //                             confirmButtonText: $translate.instant("CERRAR")
-            //                         }
-            //                     );
-            //                     self.cargarDatosNecesidades(self.offset, self.query);
-            //                     self.necesidad = undefined;
-            //                     $("#myModal").modal("hide");
-            //                 } else {
-            //                     swal(
-            //                         $translate.instant("ERROR"),
-            //                         $translate.instant("CDP_NO_SOLICITADO"),
-            //                         'error'
-            //                     );
-            //                 }
+                                    {
+                                        title: 'Se ha aprobado el CDP N° '+self.necesidad.documento_cdp.Consecutivo,
+                                        text: $translate.instant("CDP_APROBADO"),
+                                        type: "success",
+                                        width: 600,
+                                        showCloseButton: true,
+                                        confirmButtonText: $translate.instant("CERRAR")
+                                    }
+                                );
+                                self.cargarDatosNecesidades(self.offset, self.query);
+                                self.necesidad = undefined;
+                                $("#myModal").modal("hide");
+                            } else {
+                                swal(
+                                    $translate.instant("ERROR"),
+                                    $translate.instant("CDP_NO_APROBADO"),
+                                    'error'
+                                );
+                            }
 
-            //             });
-            //         } else {
-            //             swal(
-            //                 $translate.instant("ERROR"),
-            //                 $translate.instant("CDP_NO_SOLICITADO"),
-            //                 'error'
-            //             );
-            //         }
+                        });
+                    } else {
+                        swal(
+                            $translate.instant("ERROR"),
+                            $translate.instant("CDP_NO_SOLICITADO"),
+                            'error'
+                        );
+                    }
 
-            //     });
+                });
         }
 
         $scope.crearPDF = function (row) {

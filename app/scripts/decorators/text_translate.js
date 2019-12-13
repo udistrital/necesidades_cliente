@@ -144,6 +144,8 @@ var text_es = {
     NO_NECESIDAD: "No. elaboración necesidad",
     CDP_SOLICITADO: "CDP Solicitado",
     CDP_NO_SOLICITADO: "El CDP no pudo ser solicitado",
+    CDP_APROBADO: "CDP aprobado",
+    CDP_NO_APROBADO: "El CDP no pudo ser aprobado",
     //lista_documentos_legales
     MARCO_LEGAL: "Marco Legal",
     NOMBRE_DOCUMENTO: "Nombre del documento",
