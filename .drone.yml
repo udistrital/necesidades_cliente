@@ -3,6 +3,17 @@ kind: pipeline
 name: cliente_deploy
 
 steps: 
+  - name: grunt-sonar-runner
+    image: timbru31/java-node
+    commands:
+     - npm install -g grunt-cli bower
+     - npm install grunt --save-dev
+     - npm install grunt-sonar-runner --save-dev
+     - grunt sonarRunner:analysis
+    when:
+      branch: [dev,test]
+      event: [push, pull_request]
+
   - name: buildtest
     image: node:10.7.0
     commands:
