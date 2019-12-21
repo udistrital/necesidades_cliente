@@ -452,8 +452,8 @@ module.exports = function(grunt) {
             ]
         },
 
-        //sonar
-sonarRunner: {
+  //sonar
+  sonarRunner: {
     analysis: {
       options: {
         debug: true,
@@ -461,10 +461,10 @@ sonarRunner: {
         dryRun: false,
         sonar: {
           host: {
-            url: 'http://localhost:9000'
+            url: 'https://sonarqube.portaloas.udistrital.edu.co/'
           },
-          projectKey: 'grunt:administrativa-cliente:0.01',
-          projectName: 'Grunt: Administrativa Cliente 0.01',
+          projectKey: 'necesidades_cliente',
+          projectName: 'necesidades_cliente',
           projectVersion: '0.01',
           sources: ['app','test'].join(','),
           language: 'js',
