@@ -461,7 +461,7 @@ module.exports = function (grunt) {
           dryRun: false,
           sonar: {
             host: {
-              url: 'https://sonarqube.portaloas.udistrital.edu.co/'
+              url: 'https://sonarqube.portaloas.udistrital.edu.co'
             },
             projectKey: 'necesidades_cliente',
             projectName: 'necesidades_cliente',
