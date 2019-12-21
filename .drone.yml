@@ -23,7 +23,6 @@ steps:
       event:
       - push
 
-
   - name: buildtest
     image: node:10.7.0
     commands:
