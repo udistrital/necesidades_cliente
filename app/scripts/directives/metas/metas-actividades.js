@@ -202,7 +202,7 @@ angular.module('contractualClienteApp')
 
 
         self.loadActividades = function () {
-          metasRequest.get('plan_adquisiciones/'+$scope.vigencia+'/'+$scope.dependenciasolicitante.toString()).then(function (response) {
+          metasRequest.get('plan_adquisiciones/2019/'+$scope.dependenciasolicitante.toString()).then(function (response) {
             self.gridOptions.data = [];
             response.data.metas.actividades.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}).forEach(function(act) {
               self.gridOptions.data.filter(function(a){ return a.actividad_id===act.actividad_id}).length===0 ? self.gridOptions.data.push(act) : _;
