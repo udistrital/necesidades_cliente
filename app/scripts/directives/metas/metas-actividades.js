@@ -197,7 +197,7 @@ angular.module('contractualClienteApp')
 
         };
         self.getFuentesActividad = function (vigencia, dependencia, rubro, actividadid) {
-          return metasRequest.get('plan_adquisiciones_fuentes_financiamiento/' + vigencia + '/' + dependencia + '/' + rubro + '/' + actividadid)
+          return metasRequest.get('plan_adquisiciones_fuentes_financiamiento/2019/' + dependencia + '/' + rubro + '/' + actividadid)
         }
 
 
