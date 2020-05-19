@@ -75,7 +75,7 @@ angular.module('contractualClienteApp')
         self.cargarMetas = function () {
 
           if ($scope.dependenciasolicitante) {
-            metasRequest.get('plan_adquisiciones/'+$scope.vigencia+'/'+ $scope.dependenciasolicitante.toString()).then(
+            metasRequest.get('plan_adquisiciones/2019/'+ $scope.dependenciasolicitante.toString()).then(
               function (res) {
                 var tempmetas = res.data.metas.actividades.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}); // falta un filter por rubro
                 self.metas = [];
