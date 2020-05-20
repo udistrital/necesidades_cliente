@@ -278,7 +278,7 @@ angular.module('contractualClienteApp')
               JefeDepSolicitanteId: undefined,
               SupervisorId: undefined
             },
-            Vigencia: new Date().getFullYear() + "",
+            Vigencia: 2019 + "",
             Valor: 0,
             DiasDuracion: 0,
 
