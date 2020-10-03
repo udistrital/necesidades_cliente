@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Test wich SonarQube
   grunt.loadNpmTasks('grunt-sonar-runner');
@@ -88,7 +88,7 @@ module.exports = function(grunt) {
       livereload: {
         options: {
           open: true,
-          middleware: function(connect) {
+          middleware: function (connect) {
             return [
               connect.static('.tmp'),
               connect().use(
@@ -107,7 +107,7 @@ module.exports = function(grunt) {
       test: {
         options: {
           port: 9001,
-          middleware: function(connect) {
+          middleware: function (connect) {
             return [
               connect.static('.tmp'),
               connect.static('test'),
@@ -406,7 +406,7 @@ module.exports = function(grunt) {
           cwd: '<%= yeoman.app %>/core',
           src: '**/*.*',
           dest: '<%= yeoman.dist %>/core'
-        },{
+        }, {
           expand: true,
           cwd: 'bower_components/angular-ui-grid/fonts',
           src: ['*.eot', '*.svg', '*.ttf', '*.woff'],
@@ -428,100 +428,100 @@ module.exports = function(grunt) {
           dest: '<%= yeoman.dist %>'
         }]
       },
-      
-            styles: {
-                expand: true,
-                cwd: '<%= yeoman.app %>/styles',
-                dest: '.tmp/styles/',
-                src: '**/*.css'
-            }
-        },
 
-        // Run some tasks in parallel to speed up the build process
-        concurrent: {
-            server: [
-                'copy:styles'
-            ],
-            test: [
-                'copy:styles'
-            ],
-            dist: [
-                'copy:styles',
-                'imagemin',
-                'svgmin'
-            ]
-        },
+      styles: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/styles',
+        dest: '.tmp/styles/',
+        src: '**/*.css'
+      }
+    },
 
-        //sonar
-sonarRunner: {
-    analysis: {
-      options: {
-        debug: true,
-        separator: '\n',
-        dryRun: false,
-        sonar: {
-          host: {
-            url: 'http://localhost:9000'
-          },
-          projectKey: 'grunt:administrativa-cliente:0.01',
-          projectName: 'Grunt: Administrativa Cliente 0.01',
-          projectVersion: '0.01',
-          sources: ['app','test'].join(','),
-          language: 'js',
-          sourceEncoding: 'UTF-8'
+    // Run some tasks in parallel to speed up the build process
+    concurrent: {
+      server: [
+        'copy:styles'
+      ],
+      test: [
+        'copy:styles'
+      ],
+      dist: [
+        'copy:styles',
+        'imagemin',
+        'svgmin'
+      ]
+    },
+
+    //sonar
+    sonarRunner: {
+      analysis: {
+        options: {
+          debug: true,
+          separator: '\n',
+          dryRun: false,
+          sonar: {
+            host: {
+              url: 'https://sonarqube.portaloas.udistrital.edu.co'
+            },
+            projectKey: 'necesidades_cliente',
+            projectName: 'necesidades_cliente',
+            projectVersion: '0.01',
+            sources: ['app', 'test'].join(','),
+            language: 'js',
+            sourceEncoding: 'UTF-8'
+          }
         }
       }
+    },
+    // fin sonar
+
+    // Test settings
+    karma: {
+      unit: {
+        configFile: 'test/karma.conf.js',
+        singleRun: true
+      }
     }
-   },
-   // fin sonar
-        // Test settings
-        karma: {
-            unit: {
-                configFile: 'test/karma.conf.js',
-                singleRun: true
-            }
-        }
-    });
+  });
 
-    grunt.loadNpmTasks('grunt-sonar-runner');
-    grunt.registerTask('serve', 'Compile then start a connect web server', function(target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
-        }
+  grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
+    if (target === 'dist') {
+      return grunt.task.run(['build', 'connect:dist:keepalive']);
+    }
 
-        grunt.task.run([
-            'clean:server',
-            'wiredep',
-            'concurrent:server',
-            'postcss:server',
-            'connect:livereload',
-            'watch'
-        ]);
-    });
-
-    grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function(target) {
-        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-        grunt.task.run(['serve:' + target]);
-    });
-
-    grunt.registerTask('test', [
-        'clean:server',
-        'wiredep',
-        'concurrent:test',
-        'postcss',
-        'connect:test',
-        'karma'
+    grunt.task.run([
+      'clean:server',
+      'wiredep',
+      'concurrent:server',
+      'postcss:server',
+      'connect:livereload',
+      'watch'
     ]);
+  });
 
-    grunt.registerTask('default', [
-        'newer:jshint',
-        'newer:jscs',
-        'test',
-        'build'
-    ]);
-  
+  grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
+    grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
+    grunt.task.run(['serve:' + target]);
+  });
 
-  grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function(target) {
+  grunt.registerTask('test', [
+    'clean:server',
+    'wiredep',
+    'concurrent:test',
+    'postcss',
+    'connect:test',
+    'karma'
+  ]);
+
+  grunt.registerTask('default', [
+    'newer:jshint',
+    'newer:jscs',
+    'test',
+    'build'
+  ]);
+
+
+  grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
     grunt.task.run(['serve:' + target]);
   });

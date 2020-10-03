@@ -20,7 +20,6 @@
     "angular-moment": "latest",
     "angular-translate": "latest",
     "sweetalert2": "^6.4.4",
-    "angular-timelinejs3": "^0.2.3",
     "chart.js": "^2.6.0",
     "vis": "^4.20.0",
     "font-awesome": "^4.7.0",
