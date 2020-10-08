@@ -3,3 +3,72 @@
     display: inline-block;
     padding: 6px 6px;
   }
+
+
+  textarea {
+    resize: none;
+  }
+
+.money {
+    text-align: right;
+}
+
+.tablaDetalle{
+  border-collapse: collapse;
+}
+
+.tablaDetalle {
+border: 1px solid var(--primary);
+}
+
+.accionTDetalle {
+text-align: center; 
+vertical-align: middle;
+}
+
+.tablaDetalle, .tablaDetalle td{
+border-color: var(--primary);
+}
+
+.titleNecesidad {
+  color: #fff;
+}
+
+.titleActividad {
+  color: var(--primary);
+}
+
+.bg-primary {
+  color: #fff;
+  background-color: var(--primary);
+}
+
+
+.text-info,
+.text-primary {
+  color: var(--primary);
+}
+
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: var(--color3);
+  border-color: var(--color5);
+}
+
+.btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: var(--color3);
+  border-color: var(--color5);
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  color: #fff;
+  background-color: var(--color3);
+  border-color: var(--color5);
+}
+
+
+.row {
+  margin: 2px;
+}

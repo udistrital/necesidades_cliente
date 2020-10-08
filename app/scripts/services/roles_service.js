@@ -29,7 +29,7 @@ angular.module('contractualClienteApp')
                         }
                     });
                 }
-            };
+            }
             return roles;
         };
 

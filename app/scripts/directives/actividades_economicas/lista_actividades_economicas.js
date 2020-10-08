@@ -7,7 +7,7 @@
  * # listaActividadesEconomicas
  */
 angular.module('contractualClienteApp')
-  .directive('listaActividadesEconomicas', function (coreRequest, $translate) {
+  .directive('listaActividadesEconomicas', function (parametrosGobiernoRequest, $translate) {
     return {
       restrict: 'E',
       scope: {
@@ -33,7 +33,7 @@ angular.module('contractualClienteApp')
             visible: false
           },
           {
-            field: 'Codigo',
+            field: 'Id',
             displayName: $translate.instant('CODIGO'),
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             width: '20%',
@@ -56,17 +56,18 @@ angular.module('contractualClienteApp')
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             $scope.actividades = self.gridApi.selection.getSelectedRows();
+            $scope.idActividades = $scope.actividades.map(function(e) {return {ActividadEconomicaId : e.Id}})
           });
         };
 
-        coreRequest.get('actividad_economica', $.param({
+        parametrosGobiernoRequest.get('actividad_economica', $.param({
           limit: -1,
-          query: "ClasificacionCiiu.Nombre:Subclase,Activo:true",
+          query: "ClasificacionCiiuId.Nombre:Subclase,Activo:true",
           sortby: "Id",
           order: "asc",
         })).then(function (response) {
           self.gridOptions.data = response.data;
-        }).then(function (t) {
+        }).then(function () {
           // Se inicializa el grid api para seleccionar
           self.gridApi.grid.modifyRows(self.gridOptions.data);
 
@@ -74,12 +75,13 @@ angular.module('contractualClienteApp')
           $scope.$watch('idActividades', function () {
             self.actividades = [];
             $scope.idActividades.forEach(function (id) {
-              var tmp = self.gridOptions.data.filter(function (e) { return e.Codigo == id })
+              var tmp = self.gridOptions.data.filter(function (e) {return e.Id === id.ActividadEconomicaId; });
               if (tmp.length > 0) {
                 $scope.actividades.push(tmp[0]); //enriquecer actividades
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }
             });
+            $scope.actividades = self.gridApi.selection.getSelectedRows();
           });
         });
 

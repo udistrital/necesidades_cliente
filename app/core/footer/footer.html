@@ -1,0 +1,21 @@
+<link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+<div id="footer-id" class="footer-div">
+  <figure class="footer-card-imageContainer">
+    <img src="https://pruebasassets.portaloas.udistrital.edu.co/logo_universidad_acreditacion.png" class="card-image" alt="logo-udistrital">
+  </figure>
+  <div class="footer-column">
+    <h5 class="footer-title">Oficina Asesora de Sistemas</h5>
+
+  </div>
+
+  <div class="footer-logos">
+    <div class="social" ng-repeat="lista in list">
+      <a href="{{lista.link}}"><i class="icon ion-md-{{lista.class}}"></i></a>
+      <div class="text-container">
+        <p ng-repeat="value in lista.value">
+          {{ value }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

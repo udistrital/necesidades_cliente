@@ -1,0 +1,24 @@
+<div ng-class="father">
+    <div ng-repeat="nivel in data" ng-if="nivel.Opciones === null && nivel.TipoOpcion === 'Menú'"
+        ng-click="redirect_url(nivel.Url); $event.stopPropagation(); ">
+        <div class="menulateral-icon-container">
+            <i class="fa fa-th-large menulateral-icon"></i>
+        </div>
+        <p class="menulateral-text oculto">
+            {{nivel.Nombre}}
+        </p>
+    </div>
+    <div class="content-options">
+        <div ng-repeat="nivel in data" ng-if="nivel.Opciones !== null && nivel.TipoOpcion === 'Menú'"
+            ng-click="toogle(nivel); $event.stopPropagation();" ng-class="nivel.style_icon?nivel.style_icon:'opcion-down'"> 
+            <div class="menulateral-icon-container">
+                <i class="fa fa-th-large menulateral-icon"></i>
+            </div>
+            <p class="menulateral-text oculto">
+                {{nivel.Nombre}}
+            </p>
+            <opciones data="nivel.Opciones" father="nivel.clase?nivel.clase:'content-menu-off'"></opciones>
+        </opciones>
+        </div>
+    </div>
+</div>

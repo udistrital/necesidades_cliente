@@ -1,33 +1,48 @@
-<!--<div class="panel panel-primary panel-body">-->
-
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <div class="row">
-      <div class="col-md-12">
-        <h3 class="page-header">{{ 'NECESIDAD' | translate }} <span ng-show="estado === d_visualizarNecesidad.estados.aprobada">{{d_visualizarNecesidad.v_necesidad.Numero}}
-            {{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>
-          <span class="pull-right text-info">{{d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Nombre}}</span></h3>
+      <div class="panel-heading">
+      <div class="row">
+      <div>
+          <h3 class="titleNecesidad">
+          <span ng-if="[2,7,5,9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
+              {{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}
+          </span>
+          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==3">
+            Solicitud {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}
+          </span>
+          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==8">
+            Borrador {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}
+          </span>
+          <span>{{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>
+          <span class="titleNecesidad pull-right ">Estado: {{d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Nombre}}</span>
+        </h3>
       </div>
 
-      <div class="col-md-7"><span>{{"MODALIDAD_SELECCION" | translate}}:
+      <div class="col-md-7"><span class="titleNecesidad"
+          ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7">{{"MODALIDAD_SELECCION" | translate}}:
           {{d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Nombre}}</span> </div>
-      <div class="col-md-5" style="text-align: center"><span>{{d_visualizarNecesidad.v_necesidad.FechaSolicitud |
-          date:'dd-MMM-yyyy'}}</span></div>
     </div>
 
   </div>
   <div class="panel-body">
     <div class="text-info pull-right text-right">
-      <cite class=""> {{d_visualizarNecesidad.v_necesidad.NumeroElaboracion || '-'}}</cite><br>
-      <cite class=""> {{d_visualizarNecesidad.v_necesidad.Numero || '-'}}</cite><br>
-      <cite class=""> {{d_visualizarNecesidad.solicitud_disponibilidad.Numero || '-'}}</cite>
-    </div>
-    <div class="text-info pull-right">
-      <cite class="">{{"NUMERO_ELABORACION_NECESIDAD" | translate}}: </cite><br>
-      <cite class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}: </cite><br>
-      <cite class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}: </cite>
+      <cite class=""> {{vigencia|| '-'}}</cite><br>
+      <cite class=""> {{d_visualizarNecesidad.v_necesidad.FechaSolicitud | date:'dd-MMM-yyyy'}}</cite><br>
+      <cite
+        ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7"
+        class=""> {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}</cite><br>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7" class="">
+        {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}</cite> <br>
     </div>
 
+    <div class="text-info pull-right">
+      <cite class="">{{"VIGENCIA" | translate}}: </cite><br>
+      <cite class="">{{"FECHA_SOLICITUD" | translate}}: </cite><br>
+      <cite
+        ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7"
+        class="">{{"NUMERO_NECESIDAD_COMPACTO" | translate}}:</cite><br>
+      <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7"
+        class="">{{"NUMERO_SOLICITUD_NECESIDAD" | translate}}:</cite><br>
+    </div>
 
     <h3 class="text-info">{{"RESPONSABLES" | translate}}</h3>
     <p class="text-muted text-justify">
@@ -62,10 +77,10 @@
             {{d_visualizarNecesidad.ordenador_gasto.SegundoApellido}}</td>
         </tr>
       </table>
-
     </p>
+
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
 
         <h3 class="text-info">{{"OBJETO_CONTRACTUAL" | translate}}</h3>
         <p class="text-muted text-justify">
@@ -73,58 +88,220 @@
         </p>
         <h3 class="text-info">{{"FINANCIACION" | translate}}</h3>
         <p class="text-muted text-justify">
-          Por {{d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidad.Nombre}} de <strong>{{d_visualizarNecesidad.v_necesidad.Valor
+          Por {{d_visualizarNecesidad.v_necesidad.TipoFinanciacionNecesidadId.Nombre}} de <strong>{{d_visualizarNecesidad.v_necesidad.Valor
             | currency}}</strong>
-          <ul ng-repeat="inv in d_visualizarNecesidad.ff_necesidad track by $index">
-            <strong>{{inv.Apropiacion.Rubro.Codigo}}</strong> {{inv.Apropiacion.Rubro.Nombre}}
-            <li ng-repeat='f in inv.Fuentes'>
-              {{f.InfoFuente[0].Nombre}} <strong>{{"Monto" | translate}}:</strong> {{f.MontoParcial | currency}}
-            </li>
-            <br><strong ng-if="inv.Productos.length">{{"PRODUCTOS" | translate}}</strong>
-            <li ng-repeat='p in inv.Productos'>
-              <strong>{{p.ProductoRubroInfo[0].Producto.Nombre}}:</strong>
-              {{p.ProductoRubroInfo[0].Producto.Descripcion}}
-            </li>
-          </ul>
         </p>
+
+
+        <!-- Inversion -->
+        <div ng-if="!d_visualizarNecesidad.funcionamiento">
+          <p><strong> Rubro / Proyecto </strong></p><br>
+          <div ng-repeat="rubro in d_visualizarNecesidad.rubros">
+            <ul>
+              <li>{{ rubro.RubroId }} : {{ rubro.InfoRubro.Nombre }}</li>
+              <!-- Metas -->
+              <br>
+              <p><strong>Metas</strong></p>
+              <ul ng-repeat="meta in rubro.Metas">
+                <li><strong>Código:</strong> {{ meta.MetaId }}<p>{{ meta.InfoMeta.meta }}</p>
+                  <hr>
+                </li>
+                <!-- Actividades -->
+                <br>
+                <p><strong>Actividades</strong></p>
+                <ul ng-repeat="act in meta.Actividades">
+                  <li><strong>Código:</strong> {{ act.ActividadId }} <p>
+                      {{ act.InfoActividad.actividad }}</p>
+                  </li>
+                  <!-- FuentesActividad -->
+                  <br>
+                  <p><strong>Fuentes de Financiamiento</strong></p>
+                  <ul ng-repeat="f in act.FuentesActividad" style="list-style: none;">
+                    <li>
+                      <p><strong>Código:</strong> {{f.FuenteId}}<br>
+                      {{ f.InfoFuente.Nombre }}<br>
+                      <strong>Valor:</strong> {{ f.MontoParcial | currency }}</p>
+                    </li>
+                  </ul>
+                  <br>
+                  <hr>
+                </ul>
+                <br>
+              </ul>
+              <!-- Productos -->
+              <p><strong ng-if="rubro.Productos.length>0">{{"PRODUCTOS" | translate}}</strong></p><br>
+              <ul>
+                <li ng-repeat="producto in rubro.Productos">
+                  {{producto.InfoProducto.Nombre}} <p><strong></strong></p>
+                </li>
+              </ul>
+              <br>
+            </ul>
+          </div>
+        </div>
+        <!-- Inversion -->
+
+        <!-- Funcionamiento -->
+        <div ng-if="d_visualizarNecesidad.funcionamiento">
+          <p><strong>Rubros / Proyecto</strong></p> <br>
+            <div ng-repeat="rubro in d_visualizarNecesidad.rubros">
+              <ul>
+                <li>{{ rubro.InfoRubro.Codigo }} : {{ rubro.InfoRubro.Nombre }}</li>
+                <br>
+                <p><strong>Fuentes de Financiamiento</strong></p>
+                <ul ng-repeat="fuente in rubro.Fuentes">
+                  <li>
+                    <strong>Código:</strong>{{fuente.InfoFuente.Codigo}}<br>
+                    <strong>Nombre: </strong>{{ fuente.InfoFuente.Nombre}}<br>
+                    <p><strong>Valor:</strong> {{ fuente.MontoParcial | currency }}</p>
+                  </li>
+                </ul>
+              </ul>
+            </div>
+        </div>
+        <!-- Funcionamiento -->
+
+        <!-- Inversion -->
+        <div ng-if="!d_visualizarNecesidad.funcionamiento">
+          
+        </div>
+        <!-- Inversion -->
 
         <h3 class="text-info">{{"JUSTIFICACION_CONTRATO" | translate}}</h3>
         <p class="text-muted text-justify">
           {{d_visualizarNecesidad.v_necesidad.Justificacion}}
         </p>
-        <h3 class="text-info">{{"ANALISIS_RIESGOS" | translate}}</h3>
+        <h3 class="text-info" ng-if="d_visualizarNecesidad.v_necesidad.AnalisisRiesgo!==''">{{"ANALISIS_RIESGOS" | translate}}</h3>
         <p class="text-muted text-justify">
           {{d_visualizarNecesidad.v_necesidad.AnalisisRiesgo}}
         </p>
-        <h3 class="text-info">{{"ESTUDIO_MERCADO" | translate}}</h3>
+        <h3 class="text-info" ng-if="d_visualizarNecesidad.v_necesidad.EstudioMercado!==''">{{"ESTUDIO_MERCADO" | translate}}</h3>
         <p class="text-muted text-justify">
           {{d_visualizarNecesidad.v_necesidad.EstudioMercado}}
         </p>
 
-        <h3 class="text-info">{{"MARCO_LEGAL" | translate}}</h3>
+        <h3 class="text-info" ng-show="d_visualizarNecesidad.v_necesidad.TipoNecesidadId.Id!==2&&d_visualizarNecesidad.marco_legal.length>0">{{"MARCO_LEGAL" | translate}}</h3>
         <p class="text-muted text-justify">
-          <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">{{doc.MarcoLegal.NombreDocumento}}</li>
+          <li ng-repeat="doc in d_visualizarNecesidad.marco_legal track by $index">
+            {{doc.MarcoLegalId.NombreDocumento}}
+          </li>
         </p>
+
+        <!-- clase de contratacion necesidad resumen -->
+
+        <h3 class="text-info" ng-if="d_visualizarNecesidad.v_necesidad.TipoNecesidadId.Id!==2">{{"CLASE_CONTRATACION" | translate}}: {{d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.Nombre}}</h3>
+        <!-- info cps  -->
+        <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CPS'">
+          <table class="table table-bordered tablaDetalle">
+            <tr class="bg-primary">
+              <th>{{"PERFIL" | translate}}</th>
+              <th>{{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</th>
+              <th>{{"NUCLEO_CONOCIMIENTO" | translate}}</th>
+            </tr>
+            <tr>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.PerfilNombre }}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoArea }}</td>
+              <td>{{necesidad.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre }}</td>
+            </tr>
+          </table>
+        </div>
+        <!-- info compra -->
+        <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CS'||d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='C'">
+          <p><strong>Detalle compra</strong></p>
+          <table class="table table-bordered tablaDetalle">
+            <tr class="bg-primary">
+              <th>Elemento</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+              <th>Valor IVA</th>
+              <th>Valor total</th>
+            </tr>
+            <tr ng-repeat="prod in necesidad.ProductosCatalogoNecesidad" >
+              <td>{{prod.ElementoNombre}}</td>
+              <td>{{prod.Cantidad}}</td>
+              <td class="money">{{prod.Valor*prod.Cantidad | currency}}</td>
+              <td class="money">{{prod.valorIvaUnd*prod.Cantidad | currency}}</td>
+              <td class="money">{{prod.ValorTotal | currency}}</td>
+            </tr>
+          </table>
+        </div>
+        <!-- info servicio  -->
+        <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='S'||d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CS'">
+            <p><strong>Detalle servicio</strong></p>
+            <table class="table table-bordered tablaDetalle">
+              <tr class="bg-primary"><th>Tipo servicio</th><th>Valor IVA</th><th>Valor total servicio</th></tr>
+              <tr>
+                <td>{{necesidad.DetalleServicioNecesidad.TipoServicioNombre}}</td>
+                <td class="money">{{necesidad.DetalleServicioNecesidad.valorIvaUnd | currency}}</td>
+                <td class="money">{{necesidad.DetalleServicioNecesidad.ValorTotal | currency}}</td>
+              </tr>
+            </table>
+        </div>
+        <!-- actividades especificas, requisitos minimos -->
+        <div ng-if="['S','CS','CPS'].indexOf(d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion)>-1">
+          <p><strong>{{"ACTIVIDADES_ESPECIFICAS" | translate}}</strong></p>
+          <ul>
+            <li ng-repeat="ae in necesidad.ActividadEspecificaNecesidad">
+                {{$index+1}}. {{ae.Descripcion}}
+            </li>
+          </ul>
+          <p><strong>{{"REQUISITOS_MINIMOS" | translate}}</strong></p>
+          <ul>
+            <li ng-repeat="rm in necesidad.RequisitoMinimoNecesidad">
+                {{$index+1}}. {{rm.Descripcion}}
+            </li>
+          </ul>
+        </div>
+
+
+        <!-- fin clase de contratacion necesidad resumen -->
+
+        <div ng-if="[2,6,7,9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
+          <h3 class="text-info">{{"MODALIDAD_SELECCION" | translate}}</h3>
+          <div class="row">
+            <p class="text-muted text-justify">  
+              {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccionId.Id }} -
+              {{ d_visualizarNecesidad.v_necesidad.ModalidadSeleccionId.Nombre }}
+            </p>
+          </div>
+
+          <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
+          <div class="row">
+            <p class="text-muted text-justify">
+              {{ d_visualizarNecesidad.v_necesidad.TipoContratoId.Id}} -
+              {{ d_visualizarNecesidad.v_necesidad.TipoContratoId.TipoContrato}}
+            </p>
+          </div>
+        </div>
+        <!-- si esta expedido el CDP  -->
+        <div ng-if="[9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
+          <h3 class="text-info">{{"INFO_CDP" | translate}}</h3>
+          <table class="table table-bordered tablaDetalle">
+            <tr class="bg-primary">
+              <th>{{"NUMERO_CDP" | translate}}</th><th>{{"INICIAL_CDP" | translate}}</th><th>{{"SALDO_CDP" | translate}}</th>
+            </tr>
+            <tr>
+              <td>{{necesidad.documento_cdp.Consecutivo}}</td>
+              <td class="money">{{necesidad.documento_cdp.ValorInicial | currency}}</td>
+              <td class="money">{{necesidad.documento_cdp.ValorActual | currency}}</td>
+            </tr>
+          </table>
+
+        </div>
+
       </div>
-      <div class="col-sm-6" ng-show="d_visualizarNecesidad.verJustificacion">
+
+      <div class="col-sm-6" ng-if="d_visualizarNecesidad.verJustificacion">
         <h3 class="text-info">{{"NECESIDAD_JUSTIFICACION_RECHAZO" | translate}}</h3>
 
-        <p class="text-justify" ng-repeat="justificacion_rechazo in d_visualizarNecesidad.justificaciones_rechazo">
+        <p class="text-justify" ng-repeat="justificacion_rechazo in d_visualizarNecesidad.verJustificacion">
           <strong>{{"NECESIDAD_FECHA_RECHAZO" | translate}}:</strong>
-          {{justificacion_rechazo.Fecha | date:'dd/MM/yyyy':'UTC' }} <br>
+          {{justificacion_rechazo.FechaCreacion | date:'dd/MM/yyyy':'UTC' }} <br>
           <strong>{{"NECESIDAD_JUSTIFICACION_DESCRIPCION_RECHAZO" | translate}}:</strong><br>
           {{justificacion_rechazo.Justificacion}}
         </p>
       </div>
+
     </div>
-
-
-
-
   </div>
-
-
-</div>
-</div>
-
 </div>

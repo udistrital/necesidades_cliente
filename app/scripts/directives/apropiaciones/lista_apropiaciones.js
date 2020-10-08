@@ -7,11 +7,11 @@
  * # apropiaciones/listaApropiaciones
  */
 angular.module('contractualClienteApp')
-    .directive('listaApropiaciones', function (financieraRequest, $translate) {
+    .directive('listaApropiaciones', function (planCuentasRequest, $translate) {
         return {
             restrict: 'E',
             scope: {
-                apropiacion: '=',
+                apropiacion: '=?',
                 vigencia: "=",
                 tipo: "<",
                 unidadejecutora: "=",
@@ -26,51 +26,51 @@ angular.module('contractualClienteApp')
                     enableRowSelection: true,
                     enableRowHeaderSelection: false,
                     enableFiltering: true,
-                    showTreeExpandNoChildren: false,
+                    // showTreeExpandNoChildren: false,
 
                     columnDefs: [{
-                        field: 'Rubro.Codigo',
+                        field: 'Codigo',
                         displayName: $translate.instant('CODIGO_RUBRO'),
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
                         cellClass: function (row, col) {
                             if (col.treeNode.children.length === 0) {
                                 return "unbold ";
                             } else {
-                                return "text-info";
+                                return "unbold";
                             }
                         },
                         width: '15%'
                     },
                     {
-                        field: 'Rubro.Nombre',
+                        field: 'Nombre',
                         displayName: $translate.instant('NOMBRE_RUBRO'),
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
                         cellTooltip: function (row) {
-                            return row.entity.Rubro.Nombre;
+                            return row.entity.Nombre;
                         },
                         cellClass: function (row, col) {
                             if (col.treeNode.children.length === 0) {
                                 return "unbold ";
                             } else {
-                                return "text-info";
+                                return "unbold";
                             }
                         },
-                        width: '58%'
+                        width: '40%'
                     },
                     {
-                        field: 'Valor',
-                        displayName: $translate.instant('VALOR'),
+                        field: 'ValorActual',
+                        displayName: $translate.instant('VALOR_U'),
                         cellFilter: 'currency',
-                        cellTemplate: '<div align="right">{{row.entity.Valor | currency}}</div>',
+                        // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
                         cellClass: function (row, col) {
                             if (col.treeNode.children.length === 0) {
-                                return "unbold";
+                                return "money";
                             } else {
-                                return "text-info";
+                                return "money";
                             }
                         },
-                        width: '20%'
+                        width: '40%'
                     }
                     ]
 
@@ -78,46 +78,51 @@ angular.module('contractualClienteApp')
 
                 $scope.$watchGroup(['unidadejecutora', 'tipofinanciacion'], function () {
                     if ($scope.unidadejecutora !== undefined && $scope.tipofinanciacion !== undefined) {
+                        // UD inversion
                         if ($scope.unidadejecutora === 1 && $scope.tipofinanciacion.Id === 1) {
-                            $scope.tipo = "3-3";
+                            $scope.tipo = "3-03";
+                        // UD funcionamiento
                         } else if ($scope.unidadejecutora === 1 && $scope.tipofinanciacion.Id === 2) {
-                            $scope.tipo = "3-1";
+                            $scope.tipo = "3-01";
+                        // IDEXUD inversion, no existen
                         } else if ($scope.unidadejecutora === 2 && $scope.tipofinanciacion.Id === 1) {
-                            $scope.tipo = "3-0-0";
+                            $scope.tipo = "XYZ";
+                        // IDEXUD funcionamiento
                         } else if ($scope.unidadejecutora === 2 && $scope.tipofinanciacion.Id === 2) {
-                            $scope.tipo = "3-0";
+                            $scope.tipo = "3-00-991";
                         }
                         self.actualiza_rubros();
-                        if ($scope.tipo !== "3-0-0") {
-
-                        }
                     }
                 }, true);
 
 
                 self.actualiza_rubros = function () {
-                    financieraRequest.get('apropiacion', 'limit=-1&query=Vigencia:' + $scope.vigencia + ",Rubro.Codigo__startswith:" + $scope.tipo + ",Rubro.UnidadEjecutora:" + $scope.unidadejecutora + ",Estado.Id:" + 2).then(function (response) {
-                        if (response.data !== null) {
-                            self.gridOptions.data = response.data.sort(function (a, b) {
-                                if (a.Rubro.Codigo < b.Rubro.Codigo) { return -1; }
-                                if (a.Rubro.Codigo > b.Rubro.Codigo) { return 1; }
+                    planCuentasRequest.get("arbol_rubro_apropiacion/get_hojas/" + $scope.unidadejecutora + "/" + $scope.vigencia).then(function (response) {
+                        if (response.data.Body !== null) {
+                            response.data.Body = response.data.Body.filter(function (a) {
+                                // funcion para filtrar rubros por codigo 
+                                return a.Codigo.startsWith($scope.tipo);
+                            });
+                            self.gridOptions.data = response.data.Body .sort(function (a, b) {
+                                if (a.Codigo < b.Codigo) { return -1; }
+                                if (a.Codigo > b.Codigo) { return 1; }
                                 return 0;
                             });
                             self.max_level = 0;
                             var level = 0;
-                            for (var i = 0; i < self.gridOptions.data.length; i++) {
-                                level = (self.gridOptions.data[i].Rubro.Codigo.match(/-/g) || []).length;
-                                if (level > self.max_level) {
-                                    self.max_level = level;
-                                }
-                            }
+                            // for (var i = 0; i < self.gridOptions.data.length; i += 1) {
+                            //     level = (self.gridOptions.data[i].Codigo.match(/-/g) || []).length;
+                            //     if (level > self.max_level) {
+                            //         self.max_level = level;
+                            //     }
+                            // }
 
-                            for (var j = 0; j < self.gridOptions.data.length; j++) {
-                                level = (self.gridOptions.data[j].Rubro.Codigo.match(/-/g) || []).length;
-                                if (level < self.max_level) {
-                                    self.gridOptions.data[j].$$treeLevel = level;
-                                }
-                            }
+                            // for (var j = 0; j < self.gridOptions.data.length; j += 1) {
+                            //     level = (self.gridOptions.data[j].Codigo.match(/-/g) || []).length;
+                            //     if (level < self.max_level) {
+                            //         self.gridOptions.data[j].$$treeLevel = level;
+                            //     }
+                            // }
 
                         } else {
                             self.gridOptions.data = [];
@@ -140,7 +145,7 @@ angular.module('contractualClienteApp')
 
                 self.gridOptions.isRowSelectable = function (row) {
                     if (row.treeNode.children.length > 0 && $scope.selhijos === true) {
-                        return false;
+                        return true;
                     } else {
                         return true;
                     }

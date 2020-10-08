@@ -1,6 +1,7 @@
 'use strict';
 
 /**
+ * 
  * @ngdoc function
  * @name contractualClienteApp.controller:NecesidadSolicitudNecesidadCtrl
  * @description
@@ -8,147 +9,368 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, $scope, $sce, $http, $filter, $window, agoraRequest, oikosRequest, coreAmazonRequest, financieraRequest, coreRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest,catalogoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
         var self = this;
+        //inicializar Necesidad
+        self.Necesidad = {
+            DependenciaNecesidadId: {
+                InterventorId: undefined,
+                JefeDepDestinoId: undefined,
+                JefeDepSolicitanteId: undefined,
+                SupervisorId: undefined
+            },
+            Vigencia: new Date().getFullYear() + "",
+            Valor: 0,
 
+        }
+        //inicializar objetos necesidad
+        self.DetalleServicioNecesidad = {};
+        self.DetallePrestacionServicioNecesidad = {};
+        self.ProductosCatalogoNecesidad = [];
+        self.MarcoLegalNecesidad = [];
+        self.ActividadEspecificaNecesidad = [];
+        self.RequisitoMinimoNecesidad = [];
+        self.ActividadEconomicaNecesidad = [];
+        self.Rubros = [];
+
+        // se obtiene idnecesidad de la ruta
         self.IdNecesidad = $routeParams.IdNecesidad;
-
+        self.iva_data = undefined;
         self.documentos = [];
         self.avance = undefined;
         self.formuIncompleto = true;
-
-        self.apro = undefined;
-
-        self.dep_ned = {
-            JefeDependenciaSolicitante: 6
+        self.meta = undefined;
+        self.meta_necesidad = {
+            Meta: undefined,
+            Actividades: [],
+            MontoPorMeta: 0
         };
+        self.actividades = undefined;
+        self.apSelected = false;
+        self.apSelectedOb = undefined;
+        self.jefes_dep_data = undefined;
+        self.producto_catalogo = {};
+        self.producto_catalogo.RequisitosMinimos = [];
 
+        // obtener vigencia, provisional
         self.fecha_actual = new Date();
-        self.vigencia = self.fecha_actual.getFullYear();
-
+        self.vigencia = "2019";
         self.deepCopy = function (obj) {
             return JSON.parse(JSON.stringify(obj));
         };
+        self.anos = 0;
+        self.meses = 0;
+        self.dias = 0;
 
-        self.variable = {};
+        self.enviando = false;
 
         self.DuracionEspecial = 'unico_pago';
         self.fecha = new Date();
-        self.f_apropiacion = [];
         self.ActividadEspecifica = [];
         self.especificaciones = [];
         self.requisitos_minimos = [];
         self.actividades_economicas = [];
         self.actividades_economicas_id = [];
         self.productos = [];
-        self.f_valor = 0;
+        self.servicio_valor = 0;
+        self.valor_compra_servicio = 0;
+        self.meta_valor = 0;
         self.asd = [];
         self.valorTotalEspecificaciones = 0;
+        self.subtotalEspecificaciones = 0;
+        self.valorIVA = 0;
+        self.FormularioSeleccionado = 0;
+        self.tipoInterventor = false;
+
+        // para mostrar select de plan adquisicion, no existe servicio
         self.planes_anuales = [{
             Id: 1,
-            Nombre: "Necesidad1 -2017"
+            Nombre: "Plan de Adquisición 2019"
         }];
 
         self.duracionEspecialMap = {
             duracion: [true, false, false, undefined],
-            unico_pago: [false, true, false, 0],
+            unico_pago: [true, true, false, undefined],
             agotar_presupuesto: [true, false, true, undefined]
         };
+        
+        self.elaborando_necesidad=false; //variable que se toma como cirterio para reiniciar objetos, verdadera en primer cambio de form
+        self.SeccionesFormulario = { // control stepper
+            general: {
+                activo: true,
+                completado: true,
+            },
+            financiacion: {
+                activo: true,
+                completado: true,
+            },
+            legal: {
+                activo: true,
+                completado: true,
+            },
+            contratacion: {
+                activo: true,
+                completado: true,
+            }
+        };
+
 
         // El tipo de solicitud de contrato
-        self.duracionEspecialFunc = function (especial) {
-            self.necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
-
+        self.duracionEspecialFunc = function (especial) {// calculo de unidades de tiempo
+            self.Necesidad.DiasDuracion = necesidadService.calculo_total_dias(self.anos, self.meses, self.dias);
             var s = self.duracionEspecialMap[especial];
-            if (!s) return;
+            if (!s) { return; }
 
             self.ver_duracion_fecha = s[0];
-            self.necesidad.UnicoPago = s[1];
-            self.necesidad.AgotarPresupuesto = s[2];
-            self.necesidad.DiasDuracion = s[3] == undefined ? self.necesidad.DiasDuracion : s[3];
         };
 
         self.duracionEspecialReverse = function () {
-            var test = [self.necesidad.UnicoPago, self.necesidad.AgotarPresupuesto];
-            Object.keys(self.duracionEspecialMap).forEach(function (k) {
-                var v = self.duracionEspecialMap[k].slice(1, 3);
-                if (_.isEqual(test, v)) {
-                    self.DuracionEspecial = k;
-                    self.ver_duracion_fecha = self.duracionEspecialMap[k][0];
-                }
-            });
+            self.ver_duracion_fecha = true
+
         };
 
-        necesidadService.initNecesidad(self.IdNecesidad).then(function (trNecesidad) {
-            self.necesidad = trNecesidad.Necesidad;
-            self.detalle_servicio_necesidad = trNecesidad.DetalleServicioNecesidad;
-            self.ActividadEspecifica = trNecesidad.ActividadEspecifica;
-            if (self.necesidad.TipoContratoNecesidad.Id == 2) self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad.map(function (d) { return parseInt(d.ActividadEconomica); });
+        self.recibirNecesidad = function (res) { // recibir el objeto del mid o un nuevo objeto y realizar mapeo correspondiente
+            var trNecesidad;
+            res.data ? trNecesidad = res.data.Body : trNecesidad = res; // identifica si viene del mid o es nuevo
+            self.Necesidad = trNecesidad.Necesidad;
+            if (self.Necesidad.DependenciaNecesidadId) {
+                self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
+                    self.dependencia_solicitante = response.dependencia.Id; // traer dependencias partiendo de jefe de dependencia almacenado en necesidad
+                }) : _;
+                self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId).then(function (response) {
+                    self.dependencia_destino = response.dependencia.Id;
+                }) : _;
 
-            if (trNecesidad.Ffapropiacion) {
-                self.f_apropiaciones = trNecesidad.Ffapropiacion;
-                //necesidadService.groupByApropiacion(self.f_apropiaciones, false).then(function (fap) { self.f_apropiacion = fap });
-                self.f_apropiaciones.forEach(function (apropiacion) {
-                    var cantidadFuentes = apropiacion.Fuentes.length;
-                    for (var i = 0; i < cantidadFuentes; i++) {
-                        apropiacion.Fuentes[i].FuenteFinanciamiento = apropiacion.Fuentes[i].InfoFuente;
+                self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId).then(function (response) {
+                    self.rol_ordenador_gasto = response.dependencia.Id;
+                }) : _;
+
+                if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {//verifica si es supervisor o interventor
+                    self.tipoInterventor = false;
+                    self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.SupervisorId).then(function(response){
+                        self.dependencia_supervisor = response.dependencia.Id;
+                    }) : _;
+                } else {
+                    self.tipoInterventor = true;
+                    self.Necesidad.DependenciaNecesidadId.InterventorId ? self.dependencia_supervisor = necesidadService.getInfoPersonaNatural(self.Necesidad.DependenciaNecesidadId.InterventorId) : _;
+                }
+
+            }
+            self.DetalleServicioNecesidad = trNecesidad.DetalleServicioNecesidad || {};
+
+            self.DetallePrestacionServicioNecesidad = trNecesidad.DetallePrestacionServicioNecesidad || {};
+
+
+            // CPS Nucleo Area y Nucleo Area Conocimiento
+            if(self.DetallePrestacionServicioNecesidad && self.DetallePrestacionServicioNecesidad.NucleoConocimientoId){
+                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+                    query: 'Id:' + self.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                    limit: -1
+                })).then(function (response) {
+                    if(response.data[0]!= undefined){
+                        self.DetallePrestacionServicioNecesidad.NucleoId = response.data[0].AreaConocimientoId.Id;
+                        parametrosGobiernoRequest.get('area_conocimiento', $.param({ 
+                            limit: -1,
+                            query: 'Id:'+ self.DetallePrestacionServicioNecesidad.NucleoId
+                        })).then(function (response2) {
+                             self.nucleoarea=response2.data[0].Id;
+                             
+                        });    
                     }
-                    self.f_apropiacion.push({
-                        Apropiacion: apropiacion.Apropiacion.Id,
-                        aprop: apropiacion.Apropiacion,
-                        fuentes: apropiacion.Fuentes,
-                        initFuentes: apropiacion.Fuentes,
-                        Monto: apropiacion.Monto,
-                        productos: apropiacion.Productos,
-                        initProductos: apropiacion.Productos
-                    });
-                })
+                    setTimeout(function() { // ponser el valor del servicio cuando llegue la necesidad
+                        self.servicio_valor = self.Necesidad.Valor;
+                    }, 2000);
+                    
+          
+                });
             }
 
-            self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegal; }) : [];
-            self.dep_ned = trNecesidad.DependenciaNecesidad;
+
+            self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad || [];
+            parametrosGobiernoRequest.get('vigencia_impuesto', $.param({ // traer datos de iva y ponerlos en productos y servivios
+                limit: -1,
+                query: 'Activo:true'
+            })).then(function (response) {
+                self.iva_data = response.data;
+                self.ProductosCatalogoNecesidad.forEach(function (prod) {
+                    prod.RequisitosMinimos===null ? prod.RequisitosMinimos=[]:_;
+                    catalogoRequest.get('elemento', $.param({
+                        query: "Id:"+prod.CatalogoId,
+                        fields: 'Id,Nombre',
+                        limit: -1,
+                        sortby: "Nombre",
+                        order: "asc",
+                    })).then(function (response) {
+                        prod.ElementoNombre = response.data[0].Nombre;
+                    });
+                    if (self.iva_data != undefined) { // calculo valores iva
+                        var tIva = self.getPorcIVAbyId(prod.IvaId);
+                        prod.Subtotal = prod.Cantidad * prod.Valor;
+                        prod.ValorIVA = (prod.Subtotal * (tIva / 100)) || 0;
+                        prod.preciomasIVA = prod.Subtotal + prod.ValorIVA || 0;
+
+
+                    }
+                });
+                var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
+                self.val_iva = (self.DetalleServicioNecesidad.Valor * tIva) / 100 ;
+                self.DetalleServicioNecesidad.Valor ? self.DetalleServicioNecesidad.Total = self.val_iva + self.DetalleServicioNecesidad.Valor : _;
+                self.DetalleServicioNecesidad.Total ? self.servicio_valor = self.DetalleServicioNecesidad.Total : _;
+            });
+
+
+            self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad || [];
+            self.ActividadEspecificaNecesidad = trNecesidad.ActividadEspecificaNecesidad || [];
+            self.RequisitoMinimoNecesidad = trNecesidad.RequisitoMinimoNecesidad || [];
+            self.actividades_economicas_id = trNecesidad.ActividadEconomicaNecesidad || [];
+            self.ActividadEconomicaNecesidad=[];
+            self.Rubros = trNecesidad.Rubros || [];
+            self.Rubros.forEach(function (r) {
+                r.Fuentes===null ? r.Fuentes =[]:_;
+                r.Apropiacion = r.Apropiacion || r.InfoRubro;
+                r.Productos ? r.Productos.forEach(function (p) {
+                    p.InfoProducto ? p = _.merge(p, p.InfoProducto) : _; // mezclar la info de productos de plan cuentas con la de necesidades
+                }) : _;
+            });
+            self.documentos = trNecesidad.MarcoLegalNecesidad ? trNecesidad.MarcoLegalNecesidad.map(function (d) { return d.MarcoLegalId; }) : []; //id de marcos legales para seleccionar 
+            self.dependencia_solicitante = trNecesidad.DependenciaNecesidad;
             self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
             self.rol_ordenador_gasto = trNecesidad.RolOrdenadorGasto;
             self.duracionEspecialReverse();
-            var data = necesidadService.calculo_total_dias_rev(self.necesidad.DiasDuracion);
+            var data = necesidadService.calculo_total_dias_rev(self.Necesidad.DiasDuracion);
             self.anos = data.anos;
             self.meses = data.meses;
             self.dias = data.dias;
+        }
 
 
-            $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
-                if (!self.detalle_servicio_necesidad) return
-                coreAmazonRequest.get('snies_nucleo_basico', $.param({
-                    query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
-                    limit: -1
-                })).then(function (response) {
-                    if (response.data != null && response.data.lenght > 0)
-                        self.nucleoarea = response.data[0].IdArea.Id;
-                });
-            }, true);
+        necesidadService.getFullNecesidad(self.IdNecesidad).then(function (res) {
+            self.recibirNecesidad(res);
+            // en caso de que haya informacion pegada en el localstorage o se acceda de forma irregular a la url
+            if(!self.IdNecesidad&&self.Necesidad.Id) {
+                self.ResetNecesidad();
+                self.dependencia_solicitante=undefined;
+                self.dependencia_destino=undefined;
+                self.dependencia_supervisor=undefined; 
+                self.rol_ordenador_gasto=undefined;
+            }
+        }
 
-            $scope.$watch('solicitudNecesidad.dependencia_destino', function () {
-                necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
-                    self.jefe_destino = JD.Persona;
-                    self.dep_ned.JefeDependenciaDestino = JD.JefeDependencia.Id;
-                }).catch(function (err) {
-                    //console.log(err)
-                });
-            }, true);
+        );
+        // watchers para actualizar informacion en el localstorage
+        $scope.$watch('solicitudNecesidad.Necesidad', function () {
+            localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.DetalleServicioNecesidad', function () {
+            localStorage.setItem("DetalleServicioNecesidad", JSON.stringify(self.DetalleServicioNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.DetallePrestacionServicioNecesidad', function () {
+            localStorage.setItem("DetallePrestacionServicioNecesidad", JSON.stringify(self.DetallePrestacionServicioNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.ProductosCatalogoNecesidad', function () {
+            localStorage.setItem("ProductosCatalogoNecesidad", JSON.stringify(self.ProductosCatalogoNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.MarcoLegalNecesidad', function () {
+            localStorage.setItem("MarcoLegalNecesidad", JSON.stringify(self.MarcoLegalNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.ActividadEspecificaNecesidad', function () {
+            localStorage.setItem("ActividadEspecificaNecesidad", JSON.stringify(self.ActividadEspecificaNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.RequisitoMinimoNecesidad', function () {
+            localStorage.setItem("RequisitoMinimoNecesidad", JSON.stringify(self.RequisitoMinimoNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.ActividadEconomicaNecesidad', function () {
+            localStorage.setItem("ActividadEconomicaNecesidad", JSON.stringify(self.ActividadEconomicaNecesidad));
+        }, true);
+        $scope.$watch('solicitudNecesidad.Rubros', function () {
+            localStorage.setItem("Rubros", JSON.stringify(self.Rubros));
+        }, true);
 
+        self.emptyStorage = function () { // funcion para vaciar el localstorage
+            var keysToRemove = ["Necesidad", "DetalleServicioNecesidad", "DetallePrestacionServicioNecesidad", "ProductosCatalogoNecesidad", "MarcoLegalNecesidad", "ActividadEspecificaNecesidad", "RequisitoMinimoNecesidad", "ActividadEconomicaNecesidad", "Rubros"];
+            keysToRemove.forEach(function (key) {
+                localStorage.removeItem(key);
+            })
+        }
 
-            $scope.$watch('solicitudNecesidad.rol_ordenador_gasto', function () {
-                necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
-                    self.ordenador_gasto = JD.Persona;
-                    self.dep_ned.OrdenadorGasto = parseInt(JD.Persona.Id);
-                }).catch(function (err) {
-                    //console.log(err)
-                });
-            }, true);
+        // observa si hay cambio de ruta
 
+        $scope.$on('$locationChangeStart', function( event ) {
+            if(self.enviando===true) {
+                self.emptyStorage();
+                return;
+            }
+            var answer = confirm("¿Esta seguro de que desea salir de la página, los datos sin guardar podrían perderse?") //mostrar confirmacion de dejar pagina
+            if (!answer) {
+                event.preventDefault();
+            } else {
+                self.emptyStorage();
+            }
         });
 
-        self.estructura = {
+
+        $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
+            if (!self.detalle_servicio_necesidad) { return; }
+            parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+                query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
+                limit: -1
+            })).then(function (response) {
+                if (response.data !== null && response.data.lenght > 0) {
+                    self.nucleoarea = response.data[0].AreaConocimientoId.Id;
+                }
+
+            }).catch(function (err) {
+                console.error(err)
+            });
+        }, true);
+
+        $scope.$watch('solicitudNecesidad.dependencia_solicitante', function () { // observa cambios en dependencias para traer datos de jefes
+            self.jefe_solicitante = null;
+            self.dependencia_solicitante ?
+                necesidadService.getJefeDependencia(self.dependencia_solicitante).then(function (JD) {
+                    self.jefe_solicitante = JD.Persona;
+                    self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId = JD.JefeDependencia.Id;
+                    // self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id; OLD
+                }).catch(function (err) {
+                }) : _;
+        }, true);
+
+
+        $scope.$watch('solicitudNecesidad.dependencia_destino', function () {
+            self.jefe_destino = null;
+            self.dependencia_destino ?
+                necesidadService.getJefeDependencia(self.dependencia_destino).then(function (JD) {
+                    self.jefe_destino = JD.Persona;
+                    self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId = JD.JefeDependencia.Id;
+                }).catch(function (err) {
+                }) : _;
+
+        }, true);
+
+        $scope.$watch('solicitudNecesidad.dependencia_supervisor', function () {
+            self.supervisor = null;
+            self.dependencia_supervisor ?
+                necesidadService.getJefeDependencia(self.dependencia_supervisor).then(function (JD) {
+                    self.supervisor = JD.Persona;
+                    self.Necesidad.DependenciaNecesidadId.SupervisorId = JD.JefeDependencia.Id;
+                }).catch(function (err) {
+                }) : _;
+
+
+        }, true);
+
+
+        $scope.$watch('solicitudNecesidad.rol_ordenador_gasto', function () {
+            self.ordenador_gasto = null;
+            self.rol_ordenador_gasto ?
+                necesidadService.getJefeDependencia(self.rol_ordenador_gasto).then(function (JD) {
+                    self.ordenador_gasto = JD.Persona;
+                    self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId = parseInt(JD.JefeDependencia.Id, 10);
+                }).catch(function (err) {
+                }) : _;
+        }, true);
+
+        self.estructura = { // DEFINE QUE CAMPOS SE MUESTRAN    
             init: {
                 forms: {
                     Avances: false,
@@ -211,7 +433,7 @@ angular.module('contractualClienteApp')
         self.forms = _.extend({}, self.estructura.init.forms);
         self.fields = _.extend({}, self.estructura.init);
 
-        var alertInfo = {
+        var alertInfo = { //alert error formulario
             type: 'error',
             title: 'Complete todos los campos obligatorios en el formulario',
             showConfirmButton: false,
@@ -221,18 +443,13 @@ angular.module('contractualClienteApp')
         self.validar_formu = function (form) {
             if (form.$invalid) {
                 swal(alertInfo);
-                form.open = false;
                 return false;
             } else {
-                form.open = !form.open;
                 return true;
             }
         };
 
-        coreRequest.get('jefe_dependencia/' + self.dep_ned.JefeDependenciaSolicitante, $.param({ query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD') })).then(function (response) {
-            self.dependencia_solicitante_data = response.data;
-        });
-
+        // especificar si estos watchers cumaplen funcion o eliminarlos
         $scope.$watch('solicitudNecesidad.especificaciones.Valor', function () {
             self.valor_iva = (self.especificaciones.Iva / 100) * self.especificaciones.Valor * self.especificaciones.Cantidad;
         }, true);
@@ -249,79 +466,68 @@ angular.module('contractualClienteApp')
             self.valor_total = (self.especificaciones.Valor * self.especificaciones.Cantidad) + self.valor_iva;
         }, true);
 
-        coreAmazonRequest.get('snies_area', $.param({
+        parametrosGobiernoRequest.get('area_conocimiento', $.param({ //Primer Select NAC
             limit: -1,
-            query: 'Estado:ACTIVO'
+            query: 'Activo:true'
         })).then(function (response) {
             self.nucleo_area_data = response.data;
         });
 
-        $scope.$watch('solicitudNecesidad.nucleoarea', function () {
-            coreAmazonRequest.get('snies_nucleo_basico', $.param({
-                query: 'IdArea.Id:' + self.nucleoarea,
-                limit: -1
-            })).then(function (response) {
-                self.nucleo_conocimiento_data = response.data;
-            });
+
+
+        $scope.$watch('solicitudNecesidad.nucleoarea', function () { // trae nucleo con dependiendo del area
+            self.nucleoarea ?
+                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
+                    query: 'AreaConocimientoId.Id:' + self.nucleoarea,
+                    limit: -1
+                })).then(function (response) {
+                    self.nucleo_conocimiento_data = response.data;
+                }) : _;
         }, true);
 
-        $scope.$watch('solicitudNecesidad.necesidad.TipoNecesidad.Id', function () {
-            if (!self.necesidad) return
-            var TipoNecesidad = self.necesidad.TipoNecesidad.Id;
-            self.CambiarTipoNecesidad(TipoNecesidad);
+
+        $scope.$watchGroup(['solicitudNecesidad.Necesidad.AreaFuncional', 'solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId'], function () {
+            // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
+            if(self.elaborando_necesidad===true) {
+                self.Necesidad.AreaFuncional&&self.Necesidad.TipoFinanciacionNecesidadId ? self.Rubros = [] : _;
+            }
         })
 
-        necesidadService.getAllDependencias().then(function (Dependencias) {
+        necesidadService.getAllDependencias().then(function (Dependencias) { //trae lista dependencias
             self.dependencia_data = Dependencias;
-        })
+        });
 
-        coreAmazonRequest.get('ordenador_gasto', $.param({
+        coreAmazonRequest.get('ordenador_gasto', $.param({ // lista ordenadores del gasto
             limit: -1,
             sortby: "Cargo",
             order: "asc",
         })).then(function (response) {
             self.ordenador_gasto_data = response.data;
+        }).catch(function (err) {
+            console.info(err)
         });
 
-        oikosRequest.get('dependencia', $.param({
-            query: 'Id:122',
+
+        //TODO: usar el servicio de unidad ejecutora cuando exista
+
+        self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }]; //PRovisional esta asquerosidad :) 
+
+
+        necesidadesCrudRequest.get('tipo_necesidad', $.param({ // parametro desde necesidades crud
             limit: -1
-        })).then(function (response) {
-            self.dependencia_solicitante = response.data[0];
-        });
-
-        agoraRequest.get('informacion_persona_natural', $.param({
-            query: 'Id:52204982',
-            limit: -1
-        })).then(function (response) {
-            self.persona_solicitante = response.data[0];
-        });
-
-
-        //TODO: cambio de identificacion en financiera a oikos (7,12, etc)
-        //oikosRequest.get('dependencia', $.param({
-        financieraRequest.get('unidad_ejecutora', $.param({
-            limit: -1,
-            sortby: "Nombre",
-            order: "asc",
-        })).then(function (response) {
-            //self.unidad_ejecutora_data = response.data.filter(function(d) {return (d.Id === 7 || d.Id === 12)}); //TODO: usar query:Id__in:(7,12) con la sistaxis correcta si beego tiene soporte
-            self.unidad_ejecutora_data = response.data;
-        });
-
-        administrativaRequest.get('tipo_necesidad', $.param({
-            limit: -1,
-            sortby: "NumeroOrden",
-            order: "asc",
         })).then(function (response) {
             self.tipo_necesidad_data = response.data;
-            //ocultar terporalmente funcionalidad no implementada
-            //TODO: implementar la demas funcionalidad
-            var tmpSet = [2, 4, 5] // Ocultando: Nomina, Seguridad Social, Contratacion docente
-            self.tipo_necesidad_data = self.tipo_necesidad_data.filter(function (tn) { return !tmpSet.includes(tn.Id) })
+
         });
 
-        agoraRequest.get('unidad', $.param({
+        necesidadesCrudRequest.get('tipo_duracion_necesidad', $.param({ // parametro desde necesidades crud
+            limit: -1
+        })).then(function (response) {
+            self.tipo_duracion_necesidad_data = response.data;
+        });
+
+
+        agoraRequest.get('unidad', $.param({ // parametro desde adm, unidad producto
             limit: -1,
             sortby: "Unidad",
             order: "asc",
@@ -329,21 +535,37 @@ angular.module('contractualClienteApp')
             self.unidad_data = response.data;
         });
 
-        //Temporal viene dado por un servicio de javier
+
+        coreAmazonRequest.get('jefe_dependencia', $.param({
+            limit: -1,
+            query: 'FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD')
+        })).then(function (responseJD) {
+            self.jefes_dep_data = responseJD;
+
+        });
+        // Se traen los jefes de dependencia actuales 
         agoraRequest.get('informacion_persona_natural', $.param({
             limit: -1,
-            sortby: "PrimerNombre",
-            order: "asc",
-        })).then(function (response) {
-            self.persona_data = response.data;
+        })).then(function (response) { // trae los interventores, puede ser cualquier tercero TODO: cambiar de modo de carga ya que es muy pesada, implementar lazy load y busqueda
+            var arrJD = [];
+            self.interventor_data = response.data;
+            self.persona_data = response.data.filter(function (p) {
+                self.jefes_dep_data.data.forEach(function (i) {
+                    if (p.Id == i.TerceroId) {
+                        arrJD.push(p);
+                    }
+
+                })
+                return arrJD;
+            });
         });
 
-        necesidadService.getParametroEstandar().then(function (response) {
+        necesidadService.getParametroEstandar().then(function (response) { // tipo perfil CPS
             self.parametro_estandar_data = response.data;
         });
         //-----
 
-        administrativaRequest.get('modalidad_seleccion', $.param({
+        administrativaRequest.get('modalidad_seleccion', $.param({ //modalidad seleccion
             limit: -1,
             sortby: "NumeroOrden",
             order: "asc",
@@ -351,298 +573,588 @@ angular.module('contractualClienteApp')
             self.modalidad_data = response.data;
         });
 
-        administrativaRequest.get('tipo_financiacion_necesidad', $.param({
-            limit: -1
+        necesidadesCrudRequest.get('tipo_financiacion_necesidad', $.param({// parametro desde necesidades crud
+            limit: -1 
         })).then(function (response) {
             self.tipo_financiacion_data = response.data;
         });
 
-        administrativaRequest.get('tipo_contrato_necesidad', $.param({
+        necesidadesCrudRequest.get('tipo_contrato_necesidad', $.param({// parametro desde necesidades crud
             limit: -1,
-            query: 'Estado:true'
+            query: 'Activo:true'
         })).then(function (response) {
             self.tipo_contrato_data = response.data;
         });
 
-        $http.get("scripts/models/marco_legal.json")
+        $http.get("scripts/models/marco_legal.json") // texto info de seccion marco legal por ahora local
             .then(function (response) {
 
                 self.MarcoLegalNecesidadText = $sce.trustAsHtml(response.data.common_text);
 
             });
 
-        self.agregar_ffapropiacion = function (apropiacion) {
-            if (apropiacion == undefined) {
-                return
+        // Se carga JSON con los tipos de servicio local, no hay servicio
+        $http.get("scripts/models/tipo_servicio.json")
+            .then(function (response) {
+                self.TiposServicios = response.data;
+
+            });
+
+        self.agregar_ffapropiacion = function (apropiacion) { // agregar rubros en financiacion
+            if (apropiacion === undefined) {
+                return;
             }
+            self.apSelected = true;
+            self.apSelectedOb = apropiacion;
             var Fap = {
-                aprop: apropiacion,
-                Apropiacion: apropiacion.Id,
+                Apropiacion: apropiacion,
+                RubroId: apropiacion.Codigo,
                 MontoPorApropiacion: 0,
+                Metas: [],
+                Fuentes: [],
+                Productos: []
             };
 
-            // Busca si en f_apropiacion ya existe el elemento que intenta agregarse, comparandolo con su id
+            // Busca si en Rubros ya existe el elemento que intenta agregarse, comparandolo con su id
             // si lo que devuelve filter es un arreglo mayor que 0, significa que el elemento a agregar ya existe
             // por lo tanto devuelve un mensaje de alerta
-            if (self.f_apropiacion.filter(function (element) { return element.Apropiacion === apropiacion.Id; }).length > 0) {
+            if (self.Rubros.filter(function (element) { return element.RubroId === apropiacion.Codigo; }).length > 0) {
+
                 swal(
                     'Apropiación ya agregada',
-                    'El rubro: <b>' + Fap.aprop.Rubro.Nombre + '</b> ya ha sido agregado',
+                    'El rubro: <b>' + Fap.RubroId + ": " + Fap.Apropiacion.Nombre + '</b> ya ha sido agregado',
                     'warning'
                 );
                 // Por el contrario, si el tamaño del arreglo que devuelve filter es menor a 0
                 // significa que no encontró ningún elemento que coincida con el id y agrega el objeto al arreglo
             } else {
-                self.f_apropiacion.push(Fap);
+                self.Rubros.push(Fap);
             }
 
         };
 
-        self.eliminarRubro = function (rubro) {
-            for (var i = 0; i < self.f_apropiacion.length; i++) {
-                if (self.f_apropiacion[i] === rubro) {
-                    self.f_apropiacion.splice(i, 1);
+
+
+        self.meta_necesidad = {
+            Meta: self.meta,
+            Actividades: self.actividades,
+            MontoPorMeta: 0
+        };
+        self.addProductoCatalogo = function () { // añadir productos de catalogo en compra o compra serv
+            if (!self.producto_catalogo.Cantidad>0 || !self.producto_catalogo.Valor>0) {
+                swal({
+                    type: 'error',
+                    title: 'Por favor, ingrese un valor y cantidad válidos y mayores a 0.',
+                    showConfirmButton: true,
+                })
+                return
+            }
+            self.ProductosCatalogoNecesidad.filter(function (e) {
+                return e.CatalogoId === self.producto_catalogo.CatalogoId;
+            }).length > 0 || !self.producto_catalogo.CatalogoId ?
+                swal({
+                    type: 'error',
+                    title: 'El producto ya fue agregado',
+                    showConfirmButton: true,
+                }) :
+                self.ProductosCatalogoNecesidad.push(self.producto_catalogo);
+            self.cerrarModalProducto();
+            self.producto_catalogo = {};
+            self.producto_catalogo.RequisitosMinimos = [];
+        }
+
+        self.cerrarModalProducto = function() { // cerrar form productos catalogo
+            $("#modalProducto").modal("hide");
+            $(".modal-backdrop").remove();
+        }
+
+        self.eliminarRubro = function (rubro) { //quitar producto
+            for (var i = 0; i < self.Rubros.length; i += 1) {
+                if (self.Rubros[i] === rubro) {
+                    self.Rubros.splice(i, 1);
                 }
             }
 
         };
 
-        self.eliminarRequisito = function (requisito) {
-            for (var i = 0; i < self.requisitos_minimos.length; i++) {
-                if (self.requisitos_minimos[i] === requisito) {
-                    self.requisitos_minimos.splice(i, 1);
+        self.eliminarRequisito = function (requisito) { // quitar requisito minimo de un producto
+            for (var i = 0; i < self.producto_catalogo.RequisitosMinimos.length; i += 1) {
+                if (self.producto_catalogo.RequisitosMinimos[i] === requisito) {
+                    self.producto_catalogo.RequisitosMinimos.splice(i, 1);
                 }
             }
         };
 
-        self.eliminarActividad = function (actividad) {
-            for (var i = 0; i < self.ActividadEspecifica.length; i++) {
-                if (self.ActividadEspecifica[i] === actividad) {
-                    self.ActividadEspecifica.splice(i, 1);
+        self.eliminarActividad = function (actividad) { // quitar act especifica
+            for (var i = 0; i < self.ActividadEspecificaNecesidad.length; i += 1) {
+                if (self.ActividadEspecificaNecesidad[i] === actividad) {
+                    self.ActividadEspecificaNecesidad.splice(i, 1);
                 }
             }
         };
 
-        $scope.$watch('solicitudNecesidad.f_apropiacion', function () {
-            self.f_valor = 0;
+        self.eliminarRequisitoMinimo = function (rm) { // quitar requisito minimo de la necesidad
+            for (var i = 0; i < self.RequisitoMinimoNecesidad.length; i += 1) {
+                if (self.RequisitoMinimoNecesidad[i] === rm) {
+                    self.RequisitoMinimoNecesidad.splice(i, 1);
+                }
+            }
+        };
 
-            for (var i = 0; i < self.f_apropiacion.length; i++) {
-                self.f_apropiacion[i].MontoPorApropiacion = 0;
-                if (self.f_apropiacion[i].fuentes !== undefined) {
-                    for (var k = 0; k < self.f_apropiacion[i].fuentes.length; k++) {
-                        self.f_apropiacion[i].MontoPorApropiacion += self.f_apropiacion[i].fuentes[k].MontoParcial;
+        $scope.$watch('solicitudNecesidad.Rubros', function () { // se hace la sumatoria de valores hasta el rubro, desde montos parciales fuentes
+            self.Necesidad.Valor = 0;
+
+            for (var i = 0; i < self.Rubros.length; i++) {
+                self.Rubros[i].MontoPorApropiacion = 0;
+                self.Rubros[i].MontoFuentes = 0;
+                self.Rubros[i].MontoProductos = 0;
+                self.Rubros[i].MontoMeta = 0;
+                // calculo valor case inversion
+                if (self.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'I') {
+                    if (self.Rubros[i].Metas.length > 0 && self.Rubros[i].Metas[0].Actividades) {
+                        self.Rubros[i].MontoPorApropiacion += self.Rubros[i].Metas[0].MontoPorMeta;
                     }
                 }
-                self.f_valor += self.f_apropiacion[i].MontoPorApropiacion;
+
+                // case Funcionamiento
+                if (self.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'F') {
+                    if (self.Rubros[i].Fuentes.length > 0) {
+                        for (var index = 0; index < self.Rubros[i].Fuentes.length; index++) {
+                            self.Rubros[i].MontoFuentes += self.Rubros[i].Fuentes[index].MontoParcial;
+
+                        }
+                    }
+                    self.Rubros[i].MontoPorApropiacion = self.Rubros[i].MontoFuentes;
+                }
+
+                self.Necesidad.Valor += self.Rubros[i].MontoPorApropiacion;
             }
         }, true);
 
-        $scope.$watch('solicitudNecesidad.productos', function () {
+        $scope.$watch('solicitudNecesidad.servicio_valor', function () { // calculo compra y serv 
+            self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
+        }, true)
+
+        self.getPorcIVAbyId = function (id) { //trae porcentaje iva con id
+            if (id && self.iva_data && self.iva_data.length > 0) {
+                return self.iva_data.filter(function (iva) { return iva.Id === id; })[0].Tarifa
+            } else {
+                return 0;
+            }
+        }
+
+        $scope.$watch('solicitudNecesidad.producto_catalogo', function () { // activar modal y preparar producto cuando se selecciona desde tabla
+            if (self.producto_catalogo.CatalogoId && self.producto_catalogo !== {}) {
+                $("#modalProducto").modal();
+            }
+            self.producto_catalogo.Subtotal = (self.producto_catalogo.Valor * self.producto_catalogo.Cantidad) || 0;
+            var tIva = self.getPorcIVAbyId(self.producto_catalogo.Iva);
+            self.producto_catalogo.ValorIVA = (self.producto_catalogo.Subtotal * (tIva / 100)) || 0;
+            self.producto_catalogo.preciomasIVA = self.producto_catalogo.Subtotal + self.producto_catalogo.ValorIVA || 0;
+
+
+        }, true)
+
+        $scope.$watch('solicitudNecesidad.ProductosCatalogoNecesidad', function () { // hacer los calculos de productos catalogo para el valor 
             self.valorTotalEspecificaciones = 0;
-            for (var i = 0; i < self.productos.length; i++) {
-                self.valorTotalEspecificaciones += ((self.productos[i].Valor * 0.19) + self.productos[i].Valor) * self.productos[i].Cantidad;
-            }
+            self.subtotalEspecificaciones = 0;
+            self.valorIVA = 0;
+            self.ProductosCatalogoNecesidad.forEach(function (producto) {
+                self.subtotalEspecificaciones += producto.Subtotal;
+            });
+            self.ProductosCatalogoNecesidad.forEach(function (producto) {
+                self.valorIVA += producto.ValorIVA;
+            });
+            self.valorTotalEspecificaciones = self.valorIVA + self.subtotalEspecificaciones;
+            self.valor_compra_servicio = self.servicio_valor + self.valorTotalEspecificaciones;
         }, true);
 
-        $scope.$watch('solicitudNecesidad.necesidad.TipoContratoNecesidad.Id', function () {
-            if (self.necesidad && self.necesidad.TipoContratoNecesidad.Id === 1 /* tipo compra */) {
+        $scope.$watchGroup(['solicitudNecesidad.DetalleServicioNecesidad.Valor', 'solicitudNecesidad.DetalleServicioNecesidad.IvaId'], function () {
+            //solo si es serv o compra y serv
+            if (self.Necesidad.TipoContratoNecesidadId && (self.Necesidad.TipoContratoNecesidadId.Id === 5 || self.Necesidad.TipoContratoNecesidadId.Id === 4)) {
+                var tIva = self.getPorcIVAbyId(self.DetalleServicioNecesidad.IvaId) || 0;
+                self.val_iva = (self.DetalleServicioNecesidad.Valor * tIva) / 100 ;
+                self.DetalleServicioNecesidad.Total = self.val_iva + self.DetalleServicioNecesidad.Valor;
+                self.servicio_valor = self.DetalleServicioNecesidad.Total;
+            }
+ 
+        }, true);
+
+        $scope.$watch('solicitudNecesidad.Necesidad.Valor',function() {
+            // si es una CPS
+            if(self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 2) {
+                self.servicio_valor = self.Necesidad.Valor;
+
+            }
+        },true)
+
+        $scope.$watch('solicitudNecesidad.Necesidad.TipoContratoNecesidadId', function () {
+            //reiniciar objetos cuando se encuentre en curso
+            self.ResetObjects();
+            if (self.Necesidad.TipoContratoNecesidadId && (self.Necesidad.TipoContratoNecesidadId.Id === 1 || self.Necesidad.TipoContratoNecesidadId.Id === 4) /* tipo compra o compra y servicio */) {
                 self.MostrarTotalEspc = true;
             } else {
                 self.MostrarTotalEspc = false;
             }
-
+            //prestacion serv
+            if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 2) {
+                self.Necesidad.Valor ? self.servicio_valor = self.Necesidad.Valor : _;
+                self.DetallePrestacionServicioNecesidad.Cantidad = 1;
+            }
+            // serv
+            if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 5) {
+                self.servicio_valor = self.Necesidad.Valor;
+                //self.DetalleServicioNecesidad.Valor = self.Necesidad.Valor;
+            }
+            // compra y serv
+            if (self.Necesidad.TipoContratoNecesidadId && self.Necesidad.TipoContratoNecesidadId.Id === 4) {
+                self.servicio_valor = self.DetalleServicioNecesidad.Valor;
+            }
             self.valorTotalEspecificaciones = 0;
-            self.productos = [];
+            // self.ProductosCatalogoNecesidad = [];
+            self.requisitos_minimos = [];
         }, true);
 
         self.agregarActEsp = function (actividad) {
             var a = {};
             a.Descripcion = actividad;
-            self.ActividadEspecifica.push(a);
+            self.ActividadEspecificaNecesidad.push(a);
+        };
+
+        self.agregarReqMin = function (rm) {
+            var a = {};
+            a.Descripcion = rm;
+            self.RequisitoMinimoNecesidad.push(a);
         };
 
         self.quitar_act_esp = function (i) {
             self.ActividadEspecifica.splice(i, 1);
         };
 
-        self.submitForm = function (form) {
+        self.submitForm = function (form,completado) { //enviar formulario, completado define si es guardado parcial o total
             if (form.$valid) {
-                self.crear_solicitud();
+                self.enviando=true;
+                self.crear_solicitud(completado);
             } else {
                 swal(
                     'Faltan datos en el formulario',
                     'Completa todos los datos obligatorios del formulario',
                     'warning'
                 ).then(function (event) {
+                    console.info(event)
                     var e = angular.element('.ng-invalid-required')[2];
                     e.focus(); // para que enfoque el elemento
-                    e.classList.add("ng-dirty") //para que se vea rojo
+                    e.classList.add("ng-dirty"); //para que se vea rojo
                 })
-            }
+            };
         };
 
-        self.crear_solicitud = function () {
-            self.actividades_economicas_id = self.actividades_economicas.map(function (ae) { return { ActividadEconomica: ae.Codigo } });
-            self.marcos_legales = self.documentos.map(function (d) { return { MarcoLegal: d } });
-
-            // if (self.necesidad.TipoContratoNecesidad) {
-            //     if (self.f_valor !== self.valorTotalEspecificaciones && self.necesidad.TipoContratoNecesidad.Id === 1 /*tipo compra*/) {
-            //         swal(
-            //             'Error',
-            //             'El valor del contrato (' + self.valorTotalEspecificaciones + ') debe ser igual que el de la financiación(' + self.f_valor + ')',
-            //             'warning'
-            //         );
-            //         return;
-            //     }
-            // }
-
-            self.f_apropiaciones = [];
-            self.productos_apropiaciones = [];
-            self.f_apropiacion
-                .filter(function (fap) { return fap.fuentes !== undefined })
-                .forEach(function (fap) {
-                    fap.fuentes.forEach(function (fuente) {
-                        var f = {
-                            Apropiacion: fap.Apropiacion,
-                            MontoParcial: fuente.MontoParcial,
-                            FuenteFinanciamiento: fuente.FuenteFinanciamiento.Id,
-                        };
-                        self.f_apropiaciones.push(f);
-                    });
-                    //Construye objeto relación producto-rubro para persistir
-                    if (fap.productos && fap.productos.length > 0) {
-                        fap.productos.forEach(function (producto) {
-                            var prod = {
-                                ProductoRubro: producto.Id,
-                                Apropiacion: fap.Apropiacion
-                            };
-                            self.productos_apropiaciones.push(prod);
-                        })
+        self.crear_solicitud = function (completado) {
+            if(self.Necesidad.TipoNecesidadId.Id===2 || !completado){//servicios publicos o incompleta
+                self.Necesidad.TipoContratoNecesidadId = { Id: 3 };
+            }
+            if (!completado) {
+                self.Necesidad.JustificacionRechazo=1; //guardado parcial
+            } else {
+                self.Necesidad.JustificacionRechazo=0; //guardado total 
+            }
+            self.ActividadEconomicaNecesidad = self.actividades_economicas_id //mapear lista de ids
+            self.Necesidad.ModalidadSeleccionId = { Id: 8 } // mod otra
+            self.Necesidad.EstadoNecesidadId = { Id: 8 } // estado guardada
+            self.Necesidad.FechaSolicitud = new Date()
+            self.TrNecesidad = {
+                Necesidad: self.Necesidad,
+                DetalleServicioNecesidad: self.DetalleServicioNecesidad,
+                DetallePrestacionServicioNecesidad: self.DetallePrestacionServicioNecesidad,
+                ProductosCatalogoNecesidad: self.ProductosCatalogoNecesidad.map(function (p) { // ajuste a estructura crud
+                    return {
+                        CatalogoId: p.CatalogoId,
+                        UnidadId: p.UnidadId || p.Unidad.Id,
+                        IvaId: p.IvaId || p.Iva,
+                        Cantidad: p.Cantidad,
+                        Valor: p.Valor,
+                        RequisitosMinimos: p.RequisitosMinimos || []
                     }
-                });
+                }),
+                MarcoLegalNecesidad: self.MarcoLegalNecesidad,
+                ActividadEspecificaNecesidad: self.ActividadEspecificaNecesidad,
+                RequisitoMinimoNecesidad: self.RequisitoMinimoNecesidad,
+                ActividadEconomicaNecesidad: self.ActividadEconomicaNecesidad,
+                Rubros: self.Rubros
 
-            self.necesidad.Valor = self.f_valor;
+            }
+            delete self.Necesidad.DependenciaNecesidadId.Id; // cuando sea edicion para que no falle post
 
-            self.tr_necesidad = {
-                Necesidad: self.necesidad,
-                ActividadEspecifica: self.ActividadEspecifica,
-                ActividadEconomicaNecesidad: self.actividades_economicas_id,
-                MarcoLegalNecesidad: self.marcos_legales,
-                Ffapropiacion: self.f_apropiaciones,
-                DependenciaNecesidad: self.dep_ned,
-                DetalleServicioNecesidad: self.detalle_servicio_necesidad,
-                ProductosNecesidad: self.productos_apropiaciones
-            };
 
-            var NecesidadHandle = function (response) {
-                self.alerta_necesidad = response.data;
-                if ((response.status !== 200 || self.alerta_necesidad !== "Ok") && typeof (self.alerta_necesidad) === "string") {
-                    swal({
-                        title: '',
-                        type: 'error',
-                        text: self.alerta_necesidad,
-                        showCloseButton: true,
-                        confirmButtonText: $translate.instant("CERRAR")
-                    });
-                    return;
-                }
-                if (self.alerta_necesidad.Type === "error" && typeof (self.alerta_necesidad.Body) === "string") {
-                    swal({
-                        title: '',
-                        type: 'error',
-                        text: self.alerta_necesidad.Body,
-                        showCloseButton: true,
-                        confirmButtonText: $translate.instant("CERRAR")
-                    });
-                    return;
-                }
-                if (typeof (self.alerta_necesidad) === "string")
-                    self.alerta_necesidad = { Type: "success" }
-
+            var NecesidadHandle = function (response, type) { // funcion de alerta a partir de response 
                 var templateAlert = "<table class='table table-bordered'><th>" +
-                    $translate.instant('NO_NECESIDAD') + "</th><th>" +
                     $translate.instant('UNIDAD_EJECUTORA') + "</th><th>" +
                     $translate.instant('DEPENDENCIA_DESTINO') + "</th><th>" +
                     $translate.instant('TIPO_CONTRATO') + "</th><th>" +
                     $translate.instant('VALOR') + "</th>";
 
-                var forEachResponse = function (data) {
-                    if (data.Type === "error")
-                        templateAlert += "<tr class='danger'>";
-                    else
-                        templateAlert += "<tr class='" + data.Type + "'>";
 
-                    var n = typeof (data.Body) === "object" ? data.Body.Necesidad : self.necesidad;
+                self.alerta_necesidad = response.data;
+
+                if (response.status > 300) {
+                    swal({
+                        title: 'Error Registro Necesidad',
+                        type: 'error',
+                        text: JSON.stringify(self.alerta_necesidad),
+                        showCloseButton: true,
+                        confirmButtonText: $translate.instant("CERRAR")
+                    });
+                    return;
+                }
+
+
+                var forEachResponse = function (response) { //mostrar tabla
+                    if (response.status > 300) {
+                        templateAlert += "<tr class='danger'>";
+                    } else {
+                        templateAlert += "<tr class='success'>";
+                    }
+
+                    var n = typeof (response.data) === "object" ? response.data.Necesidad : self.Necesidad;
 
                     templateAlert +=
-                        "<td>" + n.NumeroElaboracion + "</td>" +
-                        "<td>" + self.unidad_ejecutora_data.filter(function (u) { return u.Id === n.UnidadEjecutora })[0].Nombre + "</td>" +
-                        "<td>" + self.dependencia_data.filter(function (dd) { return dd.Id === self.dependencia_destino })[0].Nombre + "</td>" +
-                        "<td>" + (n.TipoContratoNecesidad.Nombre ? n.TipoContratoNecesidad.Nombre : '') + "</td>" +
+                        "<td>" + self.unidad_ejecutora_data.filter(function (u) { return u.Id === n.AreaFuncional; })[0].Nombre + "</td>" +
+                        "<td>" + self.dependencia_data.filter(function (dd) { return dd.Id === self.dependencia_destino; })[0].Nombre + "</td>" +
+                        "<td>" + (n.TipoContratoNecesidadId.Nombre ? n.TipoContratoNecesidadId.Nombre : '') + "</td>" +
                         "<td>" + $filter('currency')(n.Valor) + "</td>";
 
                     templateAlert += "</tr>";
 
-                    if (self.avance) {
-                        self.avance.Necesidad = { Id: n.Id }
-                        administrativaRequest.put('necesidad_proceso_externo/', self.avance.Id, self.avance);
-                    }
-                }
+                };
 
                 forEachResponse(self.alerta_necesidad);
 
                 templateAlert = templateAlert + "</table>";
                 swal({
-                    title: '',
-                    type: self.alerta_necesidad.Type,
+                    title: 'Se ha creado el borrador de Necesidad N°'+  response.data.Necesidad.ConsecutivoSolicitud ,
+                    text: 'A continuación encontrará el resumen de los datos ingresados.',
+                    type: "success",
                     width: 800,
                     html: templateAlert,
                     showCloseButton: true,
                     confirmButtonText: $translate.instant("CERRAR")
                 });
-                if (self.alerta_necesidad.Type === "success") {
+                if (response.status < 300) { // borrar los objetos y redirigir a la lista de necesidades
+                    self.emptyStorage();
                     $window.location.href = '#/necesidades';
                 }
             };
 
-            if (self.IdNecesidad) {
-                if (self.tr_necesidad.Necesidad.EstadoNecesidad.Id != necesidadService.EstadoNecesidadType.Rechazada.Id) {
+            if (self.IdNecesidad && self.TrNecesidad.Necesidad.EstadoNecesidadId.Id !== necesidadService.EstadoNecesidadType.Guardada.Id) {
+                if (self.TrNecesidad.Necesidad.EstadoNecesidadId.Id === necesidadService.EstadoNecesidadType.Rechazada.Id) {
                     swal(
                         'Error',
-                        'La necesidad no se puede editar, estado de la necesidad: (' + self.tr_necesidad.Necesidad.EstadoNecesidad.Nombre + ')',
+                        'La necesidad no se puede editar, estado de la necesidad: (' + self.TrNecesidad.Necesidad.EstadoNecesidadId.Nombre + ')',
                         'warning'
                     );
                     return;
                 }
-                self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Modificada;
-                administrativaRequest.put("tr_necesidad", self.IdNecesidad, self.tr_necesidad).then(NecesidadHandle)
+                self.TrNecesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Modificada;
+                planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
+                    NecesidadHandle(r); //alertar y redirigir o mostrar error 
+                }).catch(function (e) {
+                    console.info(e)
+                })
             } else {
-                self.tr_necesidad.Necesidad.EstadoNecesidad = necesidadService.EstadoNecesidadType.Solicitada;
-                administrativaRequest.post("tr_necesidad", self.tr_necesidad).then(NecesidadHandle)
+                self.TrNecesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Guardada;
+                // validacion de financiacion vs especificaciones
+                var especificaciones_valido = false;
+                if (self.Necesidad.TipoNecesidadId.Id === 2 || !completado) { // serv publicos o guardada parcial
+                    especificaciones_valido = true; // no validate 
+                    self.ValidarFinanciacion() || !completado ? planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
+                        NecesidadHandle(r);
+                    }).catch(function (e) {
+                        console.info(e)
+                    }) : _;
+                    return;
+                } else {
+                    switch (self.Necesidad.TipoContratoNecesidadId.Id) {
+                        case 1:
+                            especificaciones_valido = self.Necesidad.Valor === self.valorTotalEspecificaciones;
+                            break;
+                        case 2:
+                            especificaciones_valido = self.Necesidad.Valor === self.servicio_valor && self.DetallePrestacionServicioNecesidad.PerfilId && self.DetallePrestacionServicioNecesidad.NucleoConocimientoId;
+                            break;
+                        case 4:
+                            especificaciones_valido = self.Necesidad.Valor === (self.valorTotalEspecificaciones + self.servicio_valor) && self.DetalleServicioNecesidad.TipoServicioId;
+                            break;
+                        case 5:
+                            especificaciones_valido = self.Necesidad.Valor === self.servicio_valor && self.DetalleServicioNecesidad.TipoServicioId;
+                            break;
+                    }
+
+
+                    if (especificaciones_valido) {
+                        planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
+                            NecesidadHandle(r);
+                        }).catch(function (e) {
+                            console.info(e)
+                        })
+                    } else {
+                        switch (self.Necesidad.TipoContratoNecesidadId.Id) { // alertas dependiendo de tipo contrato
+                            case 1:
+                                swal(necesidadService.AlertaErrorEspecificaciones.Compra)
+                                break;
+                            case 2:
+                                swal(necesidadService.AlertaErrorEspecificaciones.CPS)
+                                break;
+                            case 4:
+                                swal(necesidadService.AlertaErrorEspecificaciones.CompraServicio)
+                                break;
+                            case 5:
+                                swal(necesidadService.AlertaErrorEspecificaciones.Servicio)
+                                break;
+                        }
+                    }
+
+                }
             }
         };
 
+        self.ValidarFinanciacion = function () {
+            var fin_valid = self.Rubros.length > 0&& self.Necesidad.Valor>0;
+            self.Rubros.forEach(function (ap) {
+                // CASE INVERSION
+                if (self.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'I') {
+                    fin_valid = fin_valid && ap.MontoMeta <= ap.Apropiacion.ValorActual && ap.MontoPorApropiacion>0;
+                } else {
+                    //CASE FUNCIONAMIENTO
+                    ap.Fuentes.length===0 ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).agregarFuente):_;
+                    fin_valid = fin_valid && ap.MontoFuentes <= ap.Apropiacion.ValorActual && ap.Fuentes.length>0 && ap.MontoPorApropiacion>0;
+                }
+                ap.MontoFuentes > ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
-        self.ResetNecesidad = function () {
-            var TipoNecesidad = self.necesidad.TipoNecesidad.Id;
-            necesidadService.initNecesidad().then(function (trNecesidad) {
-                self.necesidad = trNecesidad.Necesidad;
-                self.necesidad.TipoNecesidad = { Id: parseInt(TipoNecesidad) };
-                self.CambiarTipoNecesidad(TipoNecesidad);
             });
+            !fin_valid ? swal(necesidadService.getAlertaFinanciacion(0).errorFinanciacion) : swal({
+                title: 'Financiación balanceada',
+                type: 'success',
+                text: 'Los valores de financiación están en igualdad',
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR")
+            })
+            return fin_valid;
+        }
 
+        self.ResetNecesidad = function () { // limpiar form
+            self.emptyStorage();
+            self.ResetObjects();
+            necesidadService.getFullNecesidad().then(function (res) {
+                var TipoNecesidad = self.Necesidad.TipoNecesidadId;
+                var DuracionNecesidad = self.Necesidad.TipoDuracionNecesidadId
+                self.recibirNecesidad(res);
+                self.Necesidad.TipoNecesidadId = TipoNecesidad;
+                self.Necesidad.TipoDuracionNecesidadId = DuracionNecesidad;
+            });
         };
+
+        self.ResetObjects = function() { //limpiar variables
+            if(self.elaborando_necesidad===true){
+                self.DetalleServicioNecesidad = {};
+                self.DetallePrestacionServicioNecesidad = {};
+                self.ProductosCatalogoNecesidad = [];
+                self.ActividadEspecificaNecesidad = [];
+                self.RequisitoMinimoNecesidad = [];
+                self.ActividadEconomicaNecesidad = [];
+                self.producto_catalogo = {};
+                self.producto_catalogo.RequisitosMinimos = [];
+            }
+        }
 
         // Control de visualizacion de los campos individuales en el formulario
         self.CambiarTipoNecesidad = function (TipoNecesidad) {
             self.forms = _.merge({}, self.estructura.init.forms);
             self.fields = _.merge({}, self.estructura.init);
-
             self.TipoNecesidadType = ["", "Contratacion", "", "Avances", "", "", "ServiciosPublicos"];
-
             _.merge(self.forms, self.estructura[self.TipoNecesidadType[TipoNecesidad]].forms);
-            _.merge(self.fields, self.estructura[self.TipoNecesidadType[TipoNecesidad]])
-            self.necesidad.TipoContratoNecesidad = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
+            _.merge(self.fields, self.estructura[self.TipoNecesidadType[TipoNecesidad]]);
+            self.Necesidad.TipoContratoNecesidadId = { Id: 3 }; //Tipo Contrato Necesidad: No Aplica
+            if(self.f.elaborando_necesidad===true) {
+                self.DetalleServicioNecesidad = {};
+                self.DetallePrestacionServicioNecesidad = {};
+                self.ProductosCatalogoNecesidad = [];
+                self.ActividadEspecificaNecesidad = [];
+                self.RequisitoMinimoNecesidad = [];
+                self.ActividadEconomicaNecesidad = [];
+                self.producto_catalogo = {};
+                self.producto_catalogo.RequisitosMinimos = []; 
+            }
         };
+        //control avance y retroceso en el formulario
+        self.CambiarForm = function (form) {
+            switch (form) {
+                case 'general':
+                    self.FormularioSeleccionado = 0;
+                    break;
+                case 'financiacion':
+                    if (ValidarSeccion('general')) {
+                        self.SeccionesFormulario.financiacion.activo = true;
+                        self.elaborando_necesidad=true;
+                        self.FormularioSeleccionado = 1;
+                        break;
+                    }
+                    else {
+                        self.AlertSeccion('General');
+                        break;
+                    }
+                case 'legal':
+                    if (ValidarSeccion('financiacion')) {
+                        self.SeccionesFormulario.legal.activo = true;
+                        self.FormularioSeleccionado = 2;
+                        break;
+                    }
+                    else {
+                        break;
+                    }
+                case 'contratacion':
+                    if (ValidarSeccion('legal')) {
+                        self.SeccionesFormulario.contratacion.activo = true;
+                        self.FormularioSeleccionado = 3;
+                        break;
+                    }
+                    else {
+                        self.AlertSeccion('Legal');
+                        break;
+                    }
+            }
+        };
+
+        $scope.$watch('solicitudNecesidad.FormularioSeleccionado', function () { 
+            // animar cambio de step y ubicar en la parte superior
+            $('body, html, #mainapp').animate({ scrollTop: 0 }, "slow");
+        }, true)
+
+        function ValidarSeccion(form) {
+            var n = self.solicitudNecesidad;
+            switch (form) {
+                case 'general':
+                    return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
+                case 'financiacion':
+                    var val = self.ValidarFinanciacion()
+                    if (self.IdNecesidad) { return val; }
+                    return val && document.getElementById("f_financiacion").classList.contains('ng-valid');
+                case 'legal':
+                    return !document.getElementById("f_legal").classList.contains('ng-invalid');
+                case 'contratacion':
+                    return true;
+            }
+        };
+
+        self.AlertSeccion = function (seccion) {
+            swal({
+                title: 'Sección ' + seccion + ' incompleta',
+                type: 'error',
+                text: 'Por favor, complete la sección: ' + seccion,
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR")
+            });
+        };
+
+
+
 
     });

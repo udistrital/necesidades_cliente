@@ -1,0 +1,16 @@
+version: "3.4"
+
+services:
+  client:
+    build:
+      context: ./genoas_build
+    image: ${SERVICE_NAME}
+    container_name: ${SERVICE_NAME} 
+    env_file:
+      - .env
+    command: sh -c 'npm dedupe;npm install; bower install; grunt serve'
+    ports:
+      - '${PORT}:${PORT}'
+      - '35729:35729'
+    volumes:
+      - ./:/app
