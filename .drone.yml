@@ -67,7 +67,7 @@ steps:
       event:
       - push
 
-    - name: publish_s3_master
+  - name: publish_s3_master
     image: plugins/s3
     settings:
       bucket: cliente-prod
