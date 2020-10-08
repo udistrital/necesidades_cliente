@@ -8,26 +8,57 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function (administrativaRequest, coreRequest, agoraRequest, oikosRequest, financieraRequest, adminMidRequest) {
+  .service('necesidadService', function ($translate, administrativaRequest, planCuentasRequest, necesidadesCrudRequest, planCuentasMidRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
 
 
 
-    administrativaRequest.get('estado_necesidad', $.param({})).then(function (response) {
-      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado"];
+    necesidadesCrudRequest.get('estado_necesidad', $.param({})).then(function (response) {
+      var keys = ["Solicitada", "Aprobada", "Rechazada", "Anulada", "Modificada", "Enviada", "CdpSolicitado", "Guardada", "CDPExpedido", "CDPAprobado"];
       keys.forEach(function (v, i) {
         self.EstadoNecesidadType[v] = response.data[i];
       });
     });
+
+    self.AlertaErrorEspecificaciones = {
+      Compra: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que el valor total de la compra sea igual al valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      CPS: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que ha seleccionado perfil, área y núcleo de conocimiento.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      CompraServicio: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que ha seleccionado el tipo de servicio y que la suma del valor del servicio más el total de la compra coincida con el valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      },
+      Servicio: {
+        title: 'Error en el valor de especificaciones',
+        type: 'error',
+        text: 'Verifique que ha seleccionado el tipo de servicio y que el valor ingresado para el servicio coincida con el valor de financiación.',
+        showCloseButton: true,
+        confirmButtonText: $translate.instant("CERRAR")
+      }
+    }
 
     self.calculo_total_dias = function (anos, meses, dias) {
       anos = anos == undefined ? 0 : anos;
       meses = meses == undefined ? 0 : meses;
       dias = dias == undefined ? 0 : dias;
 
-      return ((parseInt(anos) * 360) + (parseInt(meses) * 30) + parseInt(dias));
+      return ((parseInt(anos, 10) * 360) + (parseInt(meses, 10) * 30) + parseInt(dias, 10));
     };
 
     self.calculo_total_dias_rev = function (DiasDuracion) {
@@ -41,14 +72,39 @@ angular.module('contractualClienteApp')
       return data;
     };
 
-    //Obtiene todo el jefe de dependencia demendiendo del id del jefe o la dependencia, si idOrDep es true, se utilizará el id del jefe
+    self.get_info_dependencia = function (id_jefe_dependencia) {
+      var out = { jefe_dependencia: {}, persona: {}, dependencia: {} };
+      return new Promise(function (resolve, reject) {
+        if (!id_jefe_dependencia) {
+          reject(out);
+        }
+        coreAmazonRequest.get('jefe_dependencia/' + id_jefe_dependencia).then(function (response_jefe_dependencia) {
+          out.jefe_dependencia = response_jefe_dependencia.data;
+
+          agoraRequest.get('informacion_persona_natural/' + response_jefe_dependencia.data.TerceroId).then(function (response_persona_natural) {
+            out.persona = response_persona_natural.data;
+
+            oikosRequest.get('dependencia', $.param({
+              query: 'Id:' + response_jefe_dependencia.data.DependenciaId
+            })).then(function (response_dependencia) {
+              out.dependencia = response_dependencia.data[0];
+              resolve(out);
+            });
+          });
+        });
+      });
+    };
+
+    //Obtiene todo el jefe de dependencia teniendo del id del jefe o la dependencia, si idOrDep es true, se utilizará el id del jefe
     self.getJefeDependencia = function (idDependencia, idOrDep) {
       var out = { JefeDependencia: {}, Persona: {} }
       return new Promise(function (resolve, reject) {
-        if (!idDependencia) reject(out);
+        if (!idDependencia) {
+          reject(out);
+        }
 
-        coreRequest.get('jefe_dependencia', $.param({
-          query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia) + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
+        coreAmazonRequest.get('jefe_dependencia', $.param({
+          query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD')),
           limit: -1,
         })).then(function (response) {
           out.JefeDependencia = response.data[0]; //TODO: cambiar el criterio para tomar en cuenta el periodo de validez del jefe
@@ -61,7 +117,24 @@ angular.module('contractualClienteApp')
           out.Persona = response.data[0];
           resolve(out);
         }).catch(function (error) {
-          reject(error);
+          // console.error(error);
+        });
+      });
+    };
+
+
+    self.getInfoPersonaNatural = function (idPersona) {
+      var out = { Persona: {} }
+      return new Promise(function (resolve, reject) {
+          return agoraRequest.get('informacion_persona_natural', $.param({
+            query: 'Id:' + idPersona,
+            limit: -1
+          })
+        ).then(function (response) {
+          out.Persona = response.data[0];
+          resolve(out);
+        }).catch(function (error) {
+          // console.error(error);
         });
       });
     };
@@ -81,7 +154,9 @@ angular.module('contractualClienteApp')
     self.getApropiacionesData = function (Ffapropiacion) {
       var apropiaciones_data = [];
       return new Promise(function (resolve, reject) {
-        if (Ffapropiacion.length === 0) resolve([]);
+        if (Ffapropiacion.length === 0) {
+          resolve([]);
+        }
         Ffapropiacion.map(function (ap, i, arr) {
           financieraRequest.get('apropiacion', $.param({
             query: 'Id:' + ap.Apropiacion
@@ -95,19 +170,6 @@ angular.module('contractualClienteApp')
       });
     };
 
-    self.getAllFuentesFinanciacion = function (idApropiacion, dependencia) {
-      return new Promise(function (resolve, reject) {
-        financieraRequest.get('fuente_financiamiento_apropiacion', $.param({
-          query: 'Apropiacion:' + idApropiacion + ',Dependencia:' + dependencia
-        })).then(function (response) {
-          resolve(
-            response.data.map(function (fa) {
-              return fa.FuenteFinanciamiento;
-            })
-          );
-        })
-      });
-    };
 
 
     self.groupBy = function (list, keyGetter) {
@@ -124,47 +186,40 @@ angular.module('contractualClienteApp')
       return map;
     }
 
-    self.groupByApropiacion = function (f_apropiaciones, incluirFuentes) {
-      // agrupar por ID apropiacion
-      var tmp = self.groupBy(f_apropiaciones, function (apro) { return apro.Apropiacion });
-      var f_apropiacion = [];
+    self.getAlertaFinanciacion = function (codigoRubro) {
+      return {
+        fuentesMayorQueRubro: {
+          title: 'Error Valor Fuentes Rubro ' + codigoRubro,
+          type: 'error',
+          text: 'Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo del rubro.',
+          showCloseButton: true,
+          confirmButtonText: $translate.instant("CERRAR")
+        },
+        agregarFuente: {
+          title: 'Error Valor Fuentes Rubro ' + codigoRubro,
+          type: 'error',
+          text: 'Debe agregar al menos una fuente al rubro.',
+          showCloseButton: true,
+          confirmButtonText: $translate.instant("CERRAR")
+        },
+        errorFinanciacion: {
+          title: 'Error Sección Financiación',
+          type: 'error',
+          text: 'Verifique los valores de financiación.',
+          showCloseButton: true,
+          confirmButtonText: $translate.instant("CERRAR")
+        },
+        productosDiferenteAFuentes: {
+          title: 'Error Valor Productos Rubro ' + codigoRubro,
+          type: 'error',
+          text: 'Verifique los valores de productos, la suma debe ser igual a la suma de las fuentes.',
+          showCloseButton: true,
+          confirmButtonText: $translate.instant("CERRAR")
+        }
+      }
+    }
 
-      //crear cada una de las apropiaciones con sus respectivo array de fuentes
-      return new Promise(function (resolve, reject) {
 
-        var counter = 0;
-        tmp.forEach(function (apropiacion, idApropiacion) {
-          var monto = 0;
-
-          new Promise(function (resolve, reject) {
-            var fuentes = [];
-            apropiacion.forEach(function (fuente, i) {
-              monto += fuente.MontoParcial;
-              if (incluirFuentes) {
-                financieraRequest.get('fuente_financiamiento', $.param({
-                  query: 'Id:' + fuente.FuenteFinanciamiento
-                })).then(function (response) {
-                  fuentes.push({ Monto: fuente.MontoParcial, FuenteFinanciamiento: response.data[0] })
-                  if (i === apropiacion.length - 1) resolve(fuentes);
-                })
-              } else {
-                fuentes.push({ Monto: fuente.MontoParcial, FuenteFinanciamiento: { Id: fuente.FuenteFinanciamiento } });
-                if (i === apropiacion.length - 1) resolve(fuentes);
-              }
-            });
-          }).then(function (fuentes) {
-            f_apropiacion.push({
-              Apropiacion: idApropiacion,
-              fuentes: fuentes,
-              initFuentes: fuentes,
-              Monto: monto
-            });
-            if (counter === tmp.size - 1) resolve(f_apropiacion);
-            counter++;
-          })
-        });
-      })
-    };
 
     self.getParametroEstandar = function () {
       return agoraRequest.get('parametro_estandar', $.param({
@@ -173,77 +228,12 @@ angular.module('contractualClienteApp')
       }));
     }
 
+
     self.initNecesidad = function (IdNecesidad) {
       var trNecesidad = {};
-      if (IdNecesidad) {
-        return administrativaRequest.get('necesidad', $.param({
-          query: 'Id:' + IdNecesidad
-        })).then(function (response) {
-          trNecesidad.Necesidad = response.data[0];
-          return new Promise(function (resolve, reject) {
-            if (trNecesidad.Necesidad.TipoContratoNecesidad.Id === 2) { // Tipo Servicio
-              administrativaRequest.get('detalle_servicio_necesidad', $.param({
-                query: 'Necesidad:' + IdNecesidad
-              })).then(function (response) {
-                trNecesidad.DetalleServicioNecesidad = response.data[0];
-
-                return administrativaRequest.get('actividad_especifica', $.param({
-                  query: 'Necesidad:' + IdNecesidad
-                }))
-              }).then(function (response) {
-                trNecesidad.ActividadEspecifica = response.data;
-
-                return administrativaRequest.get('actividad_economica_necesidad', $.param({
-                  query: 'Necesidad:' + IdNecesidad
-                }))
-              }).then(function (response) {
-                trNecesidad.ActividadEconomicaNecesidad = response.data;
-                resolve("OK");
-              });
-            } else resolve("Ok");
-          }).then(function (response) {
-              
-            return adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + IdNecesidad).then(function (response) {
-              trNecesidad.Ffapropiacion = response.data;
-
-              return administrativaRequest.get('marco_legal_necesidad', $.param({
-                query: 'Necesidad:' + IdNecesidad
-              }))
-            }).then(function (response) {
-              trNecesidad.MarcoLegalNecesidad = response.data;
-
-              return administrativaRequest.get('dependencia_necesidad', $.param({
-                query: 'Necesidad:' + IdNecesidad
-              }))
-            }).then(function (response) {
-              trNecesidad.DependenciaNecesidad = response.data[0];
-
-              return coreRequest.get('jefe_dependencia', $.param({
-                query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaDestino + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
-                limit: -1,
-              }))
-            }).then(function (response) {
-              trNecesidad.DependenciaNecesidadDestino = response.data[0].DependenciaId;
-
-              return coreRequest.get('jefe_dependencia', $.param({
-                query: "Id:" + trNecesidad.DependenciaNecesidad.JefeDependenciaSolicitante + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
-                limit: -1,
-              }))
-            }).then(function (response) {
-              trNecesidad.DependenciaNecesidadSolicitante = response.data[0].DependenciaId;
-
-              return coreRequest.get('jefe_dependencia', $.param({
-                query: "TerceroId:" + trNecesidad.DependenciaNecesidad.OrdenadorGasto + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD'),
-                limit: -1
-              }))
-            }).then(function (response) {
-              trNecesidad.RolOrdenadorGasto = response.data[0].DependenciaId;
-              return new Promise(function (resolve, reject) {
-                resolve(trNecesidad);
-              });
-            });
-          });
-        });
+      var trNecesidadPC = [];
+      var t = false
+      if (IdNecesidad && t) {
 
 
       } else {
@@ -264,12 +254,52 @@ angular.module('contractualClienteApp')
         });
 
         return new Promise(function (resolve, reject) {
-          resolve(trNecesidad);
+          resolve([trNecesidad, trNecesidadPC]);
         });
       }
 
 
     };
+
+    //funcion que reemplaza initnecesidad usando plan cuentas mid
+    self.getFullNecesidad = function (idNecesidad) {
+      if (idNecesidad) {
+        return planCuentasMidRequest.get('necesidad/getfullnecesidad/' + idNecesidad)
+      }
+      else {
+        // localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
+        // console.info(JSON.parse(localStorage.getItem("necesidad")))
+        return new Promise(function (resolve, reject) {
+          //Datos iniciales necesarios
+          var EmptyNecesidad = {
+            DependenciaNecesidadId: {
+              InterventorId: undefined,
+              JefeDepDestinoId: undefined,
+              JefeDepSolicitanteId: undefined,
+              SupervisorId: undefined
+            },
+            Vigencia: 2019 + "",
+            Valor: 0,
+            DiasDuracion: 0,
+
+          }
+          // revisar si existen objetos de necesidad guardados en el localstorage para devolverlos
+          resolve({
+            Necesidad: (localStorage.getItem("Necesidad") === null) ? EmptyNecesidad : JSON.parse(localStorage.getItem("Necesidad")),
+            DetalleServicioNecesidad: (localStorage.getItem("DetalleServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetalleServicioNecesidad")),
+            DetallePrestacionServicioNecesidad: (localStorage.getItem("DetallePrestacionServicioNecesidad") === null) ? {} : JSON.parse(localStorage.getItem("DetallePrestacionServicioNecesidad")),
+            ProductosCatalogoNecesidad: (localStorage.getItem("ProductosCatalogoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ProductosCatalogoNecesidad")),
+            MarcoLegalNecesidad: (localStorage.getItem("MarcoLegalNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("MarcoLegalNecesidad")),
+            ActividadEspecificaNecesidad: (localStorage.getItem("ActividadEspecificaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEspecificaNecesidad")),
+            RequisitoMinimoNecesidad: (localStorage.getItem("RequisitoMinimoNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("RequisitoMinimoNecesidad")),
+            ActividadEconomicaNecesidad: (localStorage.getItem("ActividadEconomicaNecesidad") === null) ? [] : JSON.parse(localStorage.getItem("ActividadEconomicaNecesidad")),
+            Rubros: (localStorage.getItem("Rubros") === null) ? [] : JSON.parse(localStorage.getItem("Rubros"))
+          });
+        });
+      }
+
+    }
+
 
     return self;
   });

@@ -9,24 +9,25 @@
  */
 angular.module('contractualClienteApp')
   .controller('PdfnecesidadCtrl', function (pdfMakerNecesidadesService, $scope, $routeParams, necesidadService) {
-    self = this;
+    var self = this;
 
     $scope.IdNecesidad = $scope.IdNecesidad;
 
     self.generarNecesidad = function (IdNecesidad) {
       necesidadService.initNecesidad(IdNecesidad).then(function (trNecesidad) {
+        trNecesidad=trNecesidad[0];
         $scope.trNecesidad = trNecesidad;
 
         pdfMakerNecesidadesService.docDefinition($scope.trNecesidad).then(function (docDefinition) {
-          var a = pdfMake.createPdf(docDefinition)
+          var a = pdfMake.createPdf(docDefinition);
           a.getDataUrl(function (outDoc) {
             document.querySelector('#vistaPDF').src = outDoc;
           });
-        })
+        });
 
 
-      })
-    }
+      });
+    };
     self.generarNecesidad($scope.IdNecesidad);
 
   });

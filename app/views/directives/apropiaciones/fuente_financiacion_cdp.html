@@ -1,0 +1,43 @@
+
+      <ul class="list-unstyled"  ng-repeat="item in fuenteFinanciacionCdp.resumen_afectacion_presupuestal">
+        <hr class="hr-primary">
+          <li><b>{{'RUBRO' | translate}}:</b> {{item[0].Apropiacion.Rubro.Codigo+" / "+item[0].Apropiacion.Rubro.Nombre}}
+          <ul>
+            <li ng-show="item[0].FuenteFinanciamiento.Id !== 0" ><b>{{'FUENTES_AFECTADAS' | translate}}:</b>
+
+              <ul ng-repeat="fuente in item">
+
+                <li>{{fuente.FuenteFinanciamiento.Codigo + " / "+fuente.FuenteFinanciamiento.Nombre + " "}}
+                  <ul>
+                    <li><b>{{'VALOR_AFECTACION' | translate}}:</b> {{" "+fuente.Valor|currency}}</li>
+                    <li><b>{{'TOTAL_COMPROMETIDO' | translate}}:</b> {{" "+fuente.Comprometido|currency}}
+                      <ul type="circle">
+                          <li><b>{{'TOTAL_ANULADO_RP' | translate}}:</b> {{" "+fuente.AnuladoRp|currency}}</b></li>
+                      </ul>
+                    </li>
+                    <li><b>{{'TOTAL_ANULADO' | translate}}:</b> {{" "+fuente.Anulado|currency}}</li>
+                    <li><b>{{'SALDO' | translate}}:</b> {{" "+fuente.Saldo|currency}}</li>
+                  </ul>
+                </li>
+
+              </ul>
+
+            </li>
+            <li ng-show="item[0].FuenteFinanciamiento.Id === 0" ><b>{{'VALOR_AFECTACION_FUNCIONAMIENTO' | translate}}:</b>
+
+              <ul ng-repeat="fuente in item">
+
+                <li><b>{{'VALOR_AFECTACION' | translate}}:</b> {{" "+fuente.Valor|currency}}</li>
+                <li><b>{{'TOTAL_COMPROMETIDO' | translate}}:</b> {{" "+fuente.Comprometido|currency}}
+                  <ul type="circle">
+                      <li><b>{{'TOTAL_ANULADO_RP' | translate}}:</b> {{" "+fuente.AnuladoRp|currency}}</b></li>
+                  </ul>
+                </li>
+                <li><b>{{'TOTAL_ANULADO' | translate}}:</b> {{" "+fuente.Anulado|currency}}</li>
+                <li><b>{{'SALDO' | translate}}:</b> {{" "+fuente.Saldo|currency}}</li>
+          </li>
+          </ul>
+
+
+
+      </ul>

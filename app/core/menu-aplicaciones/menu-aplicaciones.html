@@ -1,0 +1,18 @@
+
+<div id="menu-aplicaciones" ng-class="claseAppContainer.clase">
+        <div ng-class="claseAppContainer.scrollClase">
+          <article ng-repeat="categoria in categorias" class="card">
+            <div class="title-app-menu-div" ng-style="{'background-color': categoria.color}">
+              <h5 class="categoria-title" >{{categoria.nombre}}</h5>
+            </div>
+            <div class="app-image-container">
+              <div ng-repeat="aplicacion in categoria.aplicaciones" class="image-application" (click)="redirect(aplicacion.url)">
+                  <img class="menu-app" id="{{aplicacion.estilo}}">
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="catalogo-button-container">
+          <i id="catalogo-button-icon" class="fa fa-home"></i>
+        </div>
+      </div>

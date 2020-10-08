@@ -102,10 +102,10 @@ angular.module('contractualClienteApp')
                                             data.SolicitudTipoAvance = { Id: tipo.Id };
                                             data.RequisitoTipoAvance = { Id: data.Id };
                                             if (data.RequisitoAvance.EtapaAvance.Id === 1) { //Solicitud
-                                                sol++;
+                                                sol += 1;
                                             }
                                             if (data.RequisitoAvance.EtapaAvance.Id === 2) { //Legalización
-                                                leg++;
+                                                leg += 1;
                                             }
                                             tipo.n_solicitar = sol;
                                             tipo.n_legalizar = leg;

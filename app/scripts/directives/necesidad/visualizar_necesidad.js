@@ -1,5 +1,9 @@
 'use strict';
 
+
+//import { ConsoleReporter } from "jasmine";
+
+
 /**
  * @ngdoc directive
  * @name contractualClienteApp.directive:necesidad/visualizarNecesidad
@@ -14,102 +18,139 @@ angular.module('contractualClienteApp')
                 vigencia: '=',
                 numero: '=',
                 estado: '=',
+                modalidadSel: '=?',
+                tipoContrato: '=',
+                necesidad: '=?'
             },
             templateUrl: 'views/directives/necesidad/visualizar_necesidad.html',
-            controller: function (financieraRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreRequest, adminMidRequest, $scope) {
+            controller: function (financieraRequest, metasRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreAmazonRequest, necesidadesCrudRequest, planCuentasRequest, $scope) {
                 var self = this;
                 self.verJustificacion = false;
                 self.justificaciones_rechazo = [];
                 self.v_necesidad = null;
                 self.solicitud_disponibilidad = null;
+                self.modalidadSel = {};
+                var metas = {};
 
-                $scope.$watch('[vigencia,numero]', function () {
+                $scope.$watch('necesidad', function () {
+                    if (!$scope.necesidad) {
+                        return
+                    }
+                    self.verJustificacion = null;
                     self.cargar_necesidad();
+                    if ($scope.necesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === 'F') {
+                        self.funcionamiento = true;
+                    } else {
+                        self.funcionamiento = false;
+                    }
+
+                    if ($scope.necesidad.Necesidad.EstadoNecesidadId.CodigoAbreviacionn === 'R') {
+                        necesidadesCrudRequest.get('necesidad_rechazada', $.param({
+                            query: 'NecesidadId:' + $scope.necesidad.Necesidad.Id
+                        })).then(function (response) {
+                            if (response.data !== null && response.status === 200) {
+                                self.verJustificacion = response.data;
+                            }
+                        });
+                    }
+                    if (["CDPE", "CDPA"].includes($scope.necesidad.Necesidad.EstadoNecesidadId.CodigoAbreviacionn)) {
+                        planCuentasRequest.get('solicitudesCDP/?query=necesidad:' + $scope.necesidad.Necesidad.Id).then(function (response) {
+                            if (response.status === 200) {
+                                var id_sol_cdp = response.data.Body[0]._id;
+                                planCuentasRequest.get('documento_presupuestal/' + $scope.necesidad.Necesidad.Vigencia + '/' + $scope.necesidad.Necesidad.AreaFuncional + '?query=tipo:cdp,data.solicitud_cdp:' + id_sol_cdp).then(function (res) {
+                                    $scope.necesidad.documento_cdp = res.data.Body[0];
+                                })
+                            }
+                        })
+
+                    }
                 });
 
-                self.cargar_necesidad = function () {
-                    self.verJustificacion = [
-                        necesidadService.EstadoNecesidadType.Anulada.Id,
-                        necesidadService.EstadoNecesidadType.Rechazada.Id,
-                        necesidadService.EstadoNecesidadType.Modificada.Id,
-                    ].includes($scope.estado.Id);
+                $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
+                    $scope.modalidadSel = self.modalidadSel;
+                });
 
-                    administrativaRequest.get('necesidad', $.param({
-                        query: "NumeroElaboracion:" + $scope.numero + ",Vigencia:" + $scope.vigencia
-                    })).then(function (response) {
-                        self.v_necesidad = response.data[0];
-                        if (self.verJustificacion) {
-                            administrativaRequest.get('necesidad_rechazada', $.param({
-                                query: "Necesidad:" + response.data[0].Id,
-                                fields: "Justificacion,Fecha"
-                            })).then(function (response) {
-                                self.justificaciones_rechazo = response.data ? response.data : [{ Justificacion: "", Fecha: "" }];
-                            });
-                        }
-                        administrativaRequest.get('marco_legal_necesidad', $.param({
-                            query: "Necesidad:" + response.data[0].Id,
-                            fields: "MarcoLegal"
-                        })).then(function (response) {
-                            self.marco_legal = response.data;
-                        });
-                        adminMidRequest.get('solicitud_necesidad/fuente_apropiacion_necesidad/' + self.v_necesidad.Id).then(function (response) {
-                            self.ff_necesidad = response.data;
-                        });
-
-                        administrativaRequest.get('solicitud_disponibilidad', $.param({
-                            query: "Necesidad:" + response.data[0].Id,
-                        })).then(function (response) {
-                            self.solicitud_disponibilidad =  
-                            (response.data != null && response.data.length > 0) ?
-                                response.data[0]: {Numero: ''};
-                        });
-
-                        administrativaRequest.get('dependencia_necesidad', $.param({
-                            query: "Necesidad:" + response.data[0].Id,
-                            fields: "JefeDependenciaSolicitante,JefeDependenciaDestino,OrdenadorGasto"
-                        })).then(function (response) {
-                            self.dependencias = response.data[0];
-
-                            coreRequest.get('jefe_dependencia', $.param({
-                                query: 'Id:' + response.data[0].JefeDependenciaSolicitante
-                            })).then(function (response) {
-                                agoraRequest.get('informacion_persona_natural', $.param({
-                                    query: 'Id:' + response.data[0].TerceroId
-                                })).then(function (response2) {
-                                    self.jefe_dependencia_solicitante = response2.data[0];
-                                });
-                                oikosRequest.get('dependencia', $.param({
-                                    query: 'Id:' + response.data[0].DependenciaId
-                                })).then(function (response3) {
-                                    self.dependencia_solicitante = response3.data[0];
-                                });
-                            });
-
-                            coreRequest.get('jefe_dependencia', $.param({
-                                query: 'Id:' + response.data[0].JefeDependenciaDestino
-                            })).then(function (response) {
-                                agoraRequest.get('informacion_persona_natural', $.param({
-                                    query: 'Id:' + response.data[0].TerceroId
-                                })).then(function (response2) {
-                                    self.jefe_dependencia_destino = response2.data[0];
-                                });
-                                oikosRequest.get('dependencia', $.param({
-                                    query: 'Id:' + response.data[0].DependenciaId
-                                })).then(function (response3) {
-                                    self.dependencia_destino = response3.data[0];
-                                });
-                            });
-
-
-                            agoraRequest.get('informacion_persona_natural', $.param({
-                                query: 'Id:' + response.data[0].OrdenadorGasto
-                            })).then(function (response) {
-                                self.ordenador_gasto = response.data[0];
-                            });
+                function get_jefe_dependencia(id_jefe_dependencia, solicitante) {
+                    coreAmazonRequest.get('jefe_dependencia', $.param({
+                        query: 'Id:' + id_jefe_dependencia
+                    })).then(function (response_jefe_dependencia) {
+                        agoraRequest.get('informacion_persona_natural', $.param({
+                            query: 'Id:' + response_jefe_dependencia.data[0].TerceroId
+                        })).then(function (response_persona_natural) {
+                            if (response_persona_natural.data !== null && response_persona_natural.status === 200) {
+                                if (solicitante) {
+                                    self.jefe_dependencia_solicitante = response_persona_natural.data[0];
+                                } else {
+                                    self.jefe_dependencia_destino = response_persona_natural.data[0];
+                                }
+                            }
                         });
                     });
-                };
+                }
 
+                function get_dependencia(id_jefe_dependencia, solicitante) {
+                    coreAmazonRequest.get('jefe_dependencia', $.param({
+                        query: 'Id:' + id_jefe_dependencia
+                    })).then(function (response_jefe_dependencia) {
+                        oikosRequest.get('dependencia', $.param({
+                            query: 'Id:' + response_jefe_dependencia.data[0].DependenciaId
+                        })).then(function (response_dependencia) {
+                            if (response_dependencia.data !== null && response_dependencia.status === 200) {
+                                if (solicitante) {
+                                    self.dependencia_solicitante = response_dependencia.data[0];
+
+                                    metasRequest.get('plan_adquisiciones/' + $scope.necesidad.Necesidad.Vigencia +
+                                        "/" + response_dependencia.data[0].Id).then(function (response) {
+
+                                            if (response.data !== null && response.status === 200) {
+                                                metas = response.data.metas;
+                                                $scope.necesidad.Rubros.forEach(get_informacion_meta);
+                                            }
+                                        });
+                                } else {
+                                    self.dependencia_destino = response_dependencia.data[0];
+                                }
+                            }
+                        });
+                    });
+                }
+
+                function get_informacion_meta(rubro) {
+                    rubro.Metas ? rubro.Metas.forEach(function (meta) {
+                        meta.InfoMeta = metas.actividades.find(function (item) {
+                            return item.meta_id === meta.MetaId
+                        });
+                        meta.Actividades.forEach(function (actividad) {
+                            actividad.InfoActividad = metas.actividades.find(function (item) {
+                                return actividad.ActividadId === item.actividad_id
+                            });
+                        });
+                    }) : _;
+                }
+
+
+                self.cargar_necesidad = function () {
+                    self.marco_legal = $scope.necesidad.MarcoLegalNecesidad;
+                    self.v_necesidad = $scope.necesidad.Necesidad;
+                    self.rubros = $scope.necesidad.Rubros;
+
+                    // Jefes de dependencias
+                    get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId, true);
+                    get_jefe_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
+                    //Información de dependencias
+                    get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId, true);
+                    get_dependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, false);
+                    // Información del ordenador de gasto
+                    necesidadService.getJefeDependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId, true).then(function (response) {
+                        self.ordenador_gasto = response.Persona;
+                    });
+
+                    if ($scope.necesidad.Necesidad.TipoContratoId && $scope.necesidad.Necesidad.TipoContratoId !== 0) {
+                        agoraRequest.get('tipo_contrato/' + $scope.necesidad.Necesidad.TipoContratoId).then(function (response) {
+                            self.v_necesidad.TipoContratoId = response.data;
+                        });
+                    }
+                };
             },
             controllerAs: 'd_visualizarNecesidad'
         };

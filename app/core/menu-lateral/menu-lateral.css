@@ -1,0 +1,142 @@
+
+.btn-primary {
+  color: #fff;
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+#inicio {
+  color: black;
+  background: white;
+  font-family: opensans;
+}
+.container-body {
+  overflow-y: scroll;
+  display: flex;
+  width: calc(100% - 44px);  
+  height: calc(-140px + 100vh);
+  z-index: 2;
+  flex-wrap: wrap;
+}
+
+.container-body-off {
+  overflow-y: scroll;
+  display: flex;
+  width: calc(100% - 260px);
+  height: calc(-140px + 100vh);
+  z-index: 2;
+  flex-wrap: wrap;
+}
+
+.container-app {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
+}
+
+.container-view {
+  width: 100%;
+  height: calc(-140px + 100vh);
+}
+
+.main-container-sidebar{
+  width: 260px;
+  z-index: 3;
+  height: calc(-140px + 100vh);
+  background-color: var(--primary);
+}
+
+.main-container-sidebar-off {
+  width: 44px;
+  height: calc(-140px + 100vh);
+  background-color: var(--primary);
+}
+
+.sidebar_off {
+  display: block;
+}
+
+.menulateral-icon-container{
+  width: 25px;
+}
+
+.menulateral-text{
+  width: 170px;
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.menulateral-text.oculto{
+  display: none;
+}
+
+.menulateral-icon {
+  font-size: 20px;
+  width: 20px;
+  color: white;
+}
+
+.content-menu {
+  background-color: var(--primary);
+  height: 100%;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 10px 15px 10px 10px;
+  border-top: 1px solid #fff;
+}
+
+.opcion-down::before {
+  position: absolute;
+  left: 240px;
+  font-family: "FontAwesome";
+  content: "\f107";
+}
+
+.opcion-left::before {
+  position: absolute;
+  left: 240px;
+  font-family: "FontAwesome";
+  content: "\f104";
+}
+
+.opcion-up::before {
+  position: absolute;
+  left: 240px;
+  font-family: "FontAwesome";
+  content: "\f106";
+}
+
+.content-menu > div {
+  border-color: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.content-options > div {
+  font-size: 1.7rem;
+  border-color: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+
+.content-menu > div:focus {
+  outline: 0;
+  /* background-color: #fff;
+  color: #000; */
+}
+
+.content-menu > div:hover {
+  outline: 0;
+  /* background-color: #fff;
+  color: #000; */
+}
+
+.content-menu-off {
+  display: none;
+}

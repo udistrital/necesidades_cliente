@@ -435,9 +435,16 @@ body {
   margin-right: 5px;
 }
 
+.panel-body {
+  height: auto;
+  /* overflow-y: scroll; */
+  overflow: hidden;
+}
+
 .chat-panel .panel-body {
-  height: 350px;
-  overflow-y: scroll;
+  height: 550px;
+  /* overflow-y: scroll; */
+  overflow: hidden;
 }
 
 .login-panel {
@@ -588,4 +595,12 @@ table.dataTable thead .sorting:after {
   color: white;
   background-color: rgba(0, 62, 101, 1);
   border-color: #ddd;
+}
+
+textarea {
+  resize: none;
+}
+
+.titleNecesidad {
+  color: #8ae7d3;
 }

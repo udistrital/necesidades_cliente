@@ -1,0 +1,21 @@
+<div id="notificaciones" ng-class="claseContainer.clase">
+    <div ng-cloak layout-gt-sm="row" layout="column">
+        <div flex-gt-sm="100" flex class="notificacion-input">
+            <input type="text" class="form-control" ng-model="buscador" placeholder="Filtrar Notificación">
+        </div>
+    </div>
+    <br>
+    <div class="notifications-container">
+        <div class="notification-item" ng-repeat="m in notificacion.log | filter:{ $: buscador}"
+         id="{{m.Estado}}" ng-click="redirect_url(m)">
+            <div class="notifications-image-container">
+                <div class="menu-app" id="{{m.EstiloIcono}}"></div>
+            </div>
+            <div class="notifications-text-container">
+                <p> {{m.Alias}} </p>
+                <p> {{m.Content.Message.Message}} </p>
+                <p am-time-ago="m.FechaCreacion"> </p>
+            </div>
+        </div>
+    </div>
+</div>

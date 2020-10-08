@@ -1,0 +1,191 @@
+<div class="panel panel-primary panel-body">
+    <h2 class="page-header" align="center">{{'LISTA_CDP' | translate}}</h2>
+    <div class="panel-body">
+        <!-- ui-grid-selection -->
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-md-4 col-md-offset-1">
+                            <label for="select_vigencia" class="col-form-label">{{'VIGENCIA' | translate}} </label>
+                            <br>
+                            <select class="form-control" name="select_vigencia" id="select_vigencia" ng-model="cdpConsulta.Vigencia" ng-model-options="{ updateOn: 'default', debounce: { default: 500} }">
+                          <option ng-repeat="option in cdpConsulta.years" value="{{option}}">{{option}}</option>
+                    </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="tipo_ingreso">{{'FECHA_INICIO' | translate}}</label><br>
+                            <md-datepicker ng-model="cdpConsulta.fechaInicio" md-placeholder="{{'FECHA_INICIO' | translate}}" flex md-current-view="year" md-min-date="cdpConsulta.fechamin" md-max-date="cdpConsulta.fechamax"></md-datepicker>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="tipo_ingreso">{{'FECHA_FINAL' | translate}}</label><br>
+                            <md-datepicker ng-model="cdpConsulta.fechaFin" md-placeholder="{{'FECHA_FINAL' | translate}}" flex md-current-view="year" md-min-date="cdpConsulta.fechamin" md-max-date="cdpConsulta.fechamax"></md-datepicker>
+                        </div>
+                        <div class="col-md-1">
+                            <br>
+                            <a type="button" name="button" ng-click="cdpConsulta.filtrarListaCdp()" class="fa fa-search btn btn-info btn-outline" aria-hidden="true"></a>
+                        </div>
+                        <hr>
+                        <div class="col-md-4 col-md-offset-1">
+                        <br>
+                            <div ng-if="cdpConsulta.ver_boton_reservas">
+                            <a id="btnFenecidos" name="btnFenecidos"  ng-click="cdpConsulta.verReservas()">{{'VER_RESERVAS' | translate}}</a>
+                           </div>
+                           <div ng-if="!cdpConsulta.ver_boton_reservas">
+                           <a id="btnFenecidos" name="btnFenecidos"  ng-click="cdpConsulta.volver_a_vigencia()">{{'VOLVER_VIGENCIA_ACTUAL' | translate}}</a>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <!--ng-if="!load" loadingcircle load="load"></loadingcircle-->
+
+            <h2 class="titulo_secundario" ng-show="cdpConsulta.ver_titulo_reservas" align="center">{{'LISTA_RESERVAS' | translate }}</h2>
+            <br>
+            <div ui-grid="cdpConsulta.gridOptions" ui-grid-auto-fit-columns ui-grid-pagination ui-grid-auto-resize class="myGrid">
+              <div class="watermark" ng-show="!cdpConsulta.hayData">{{'NO_DATA'| translate}}</div>
+              <div class="watermark" ng-show="cdpConsulta.cargando">{{'CARGANDO'| translate}}   <i class="fa fa-spin fa-spinner"></i></div>
+          </div>
+
+    </div>
+</div>
+
+<div id="myModal" class="modal fade col-md-12" role="dialog">
+
+
+    <div class="modal-content col-md-offset-1 col-md-10">
+        <div class="modal-header">
+            <button type="button" class="btn btn-outline btn-danger btn-xs pull-right" data-dismiss="modal">&times</button><br>
+        </div>
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="page-header">{{'REPORTES.CDP' | translate}} No {{cdpConsulta.cdp.NumeroDisponibilidad}} de {{cdpConsulta.cdp.Vigencia}}</h3>
+                    <div align="right">{{'FECHA_REGISTRO' | translate}}: {{cdpConsulta.cdp.FechaRegistro | date:"yyyy-MM-dd":"UTC"}}</div>
+                </div>
+                <div class="panel-body">
+                    <div ng-if = "cdpConsulta.cdp.DisponibilidadProcesoExterno[0].TipoDisponibilidad.Id==1">
+                    <h4 class="text-info">{{'DATOS_NECESIDAD' | translate}}</h4>
+
+                        <table class="table text-justify">
+                            <tr>
+                                <th>{{'NECESIDAD_NO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Solicitud.SolicitudDisponibilidad.Necesidad.Numero}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'ESTADO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Estado.Nombre}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'DEPENDENCIA_SOLICITANTE' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Solicitud.DependenciaSolicitante.Nombre}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'JEFE_DEPENDENCIA' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Solicitud.DependenciaSolicitante.InfoJefeDependencia.PrimerApellido + ' ' + cdpConsulta.cdp.Solicitud.DependenciaSolicitante.InfoJefeDependencia.SegundoApellido + ' ' + cdpConsulta.cdp.Solicitud.DependenciaSolicitante.InfoJefeDependencia.PrimerNombre
+                                    + ' '+ cdpConsulta.cdp.Solicitud.DependenciaSolicitante.InfoJefeDependencia.SegundoNombre + ' '}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'DEPENDENCIA_DESTINO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Solicitud.DependenciaDestino.Nombre}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'RESPONSABLE_SELECCION_PRESUPUESTO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Responsable.PrimerApellido + ' ' + cdpConsulta.cdp.Responsable.SegundoApellido + ' ' + cdpConsulta.cdp.Responsable.PrimerNombre + ' '+ cdpConsulta.cdp.Responsable.SegundoNombre + ' '}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'OBJETO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Solicitud.SolicitudDisponibilidad.Necesidad.Objeto}}</td>
+                            </tr>
+                        </table>
+                        <hr>
+                    </div>
+                    <div ng-if = "cdpConsulta.cdp.DisponibilidadProcesoExterno[0].TipoDisponibilidad.Id==2">
+                    <h4 class="text-info">{{'DATOS_MOVIMIENTO' | translate}}</h4>
+
+                        <table class="table text-justify">
+                            <tr>
+                                <th>{{'NO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Solicitud.NumeroMovimiento}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'ESTADO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Estado.Nombre}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'RESPONSABLE_SELECCION_PRESUPUESTO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Responsable.PrimerApellido + ' ' + cdpConsulta.cdp.Responsable.SegundoApellido + ' ' + cdpConsulta.cdp.Responsable.PrimerNombre + ' '+ cdpConsulta.cdp.Responsable.SegundoNombre + ' '}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'OBJETO' | translate}}: </th>
+                                <td>{{cdpConsulta.cdp.Solicitud.Descripcion}}</td>
+                            </tr>
+                        </table>
+                        <hr>
+                    </div>
+                        <h4 class="text-info">{{'AFECTACION_PRESUPUESTAL' | translate}}</h4>
+                        <fuente-financiacion-cdp cdp="cdpConsulta.cdp.Id" apropiacion="apropiaciones" resumen="cdpConsulta.rubros_afectados"></fuente-financiacion-cdp>
+                        <form class="form-ctrl" ng-show="cdpConsulta.anular">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="panel-title">
+                                        {{'ANULACION_CDP_TITULO_FORM' | translate}}
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>{{'MOTIVO_ANULACION_CDP' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <textarea class="form-control" id="txtMotivo" name="txtMotivo" ng-model="cdpConsulta.motivo"></textarea>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-3 ">
+                                            <label>{{'TIPO_ANULACION' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <select class="form-control" ng-model="cdpConsulta.tipoAnulacion" ng-options="o as o.Nombre for o in cdpConsulta.tiposAnulacion">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div ng-hide="cdpConsulta.tipoAnulacion.Id == 2 || cdpConsulta.tipoAnulacion.Id == 3" class="row">
+                                        <div class="col-md-3 ">
+                                            <label>{{'SELECCION_RUBRO' | translate}}</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <select class="form-control" ng-model="cdpConsulta.Rubro_sel" ng-options="o as o.Apropiacion.Rubro.Nombre+'/'+o.FuenteFinanciamiento.Codigo +'/'+o.FuenteFinanciamiento.Descripcion for o in cdpConsulta.rubros_afectados">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div ng-hide="cdpConsulta.tipoAnulacion.Id == 2 || cdpConsulta.tipoAnulacion.Id == 3" class="row">
+                                        <div class="col-md-3">
+                                            <label class="control-label" for="txtValor">{{'VALOR' | translate}}</label>
+                                        </div>
+
+                                        <div class="col-md-9">
+                                            <input id="txtValor" name="txtValor" type="text" placeholder="Valor que desea anular" class="form-control" ng-model="cdpConsulta.Valor" ui-money-mask="2">
+                                        </div>
+                                    </div>
+                                    <!-- Button (Double) -->
+                                    <br>
+
+                                    <center>
+                                        <button id="btnAnular" name="btnAnular" class="btn btn-success btn-outline" ng-click="cdpConsulta.anularDisponibilidad()">{{'BTN.SOLICITAR' | translate}}</button>
+                                    </center>
+                                </div>
+                            </div>
+                        </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
