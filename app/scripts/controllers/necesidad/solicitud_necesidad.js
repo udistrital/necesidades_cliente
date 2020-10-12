@@ -134,8 +134,9 @@ angular.module('contractualClienteApp')
             res.data ? trNecesidad = res.data.Body : trNecesidad = res; // identifica si viene del mid o es nuevo
             self.Necesidad = trNecesidad.Necesidad;
             if (self.Necesidad.DependenciaNecesidadId) {
-                self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
+                 self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId).then(function (response) {
                     self.dependencia_solicitante = response.dependencia.Id; // traer dependencias partiendo de jefe de dependencia almacenado en necesidad
+                
                 }) : _;
                 self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId ? necesidadService.get_info_dependencia(self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId).then(function (response) {
                     self.dependencia_destino = response.dependencia.Id;
@@ -832,6 +833,7 @@ angular.module('contractualClienteApp')
         };
 
         self.submitForm = function (form,completado) { //enviar formulario, completado define si es guardado parcial o total
+            
             if (form.$valid) {
                 self.enviando=true;
                 self.crear_solicitud(completado);
@@ -850,6 +852,7 @@ angular.module('contractualClienteApp')
         };
 
         self.crear_solicitud = function (completado) {
+            
             if(self.Necesidad.TipoNecesidadId.Id===2 || !completado){//servicios publicos o incompleta
                 self.Necesidad.TipoContratoNecesidadId = { Id: 3 };
             }
@@ -965,8 +968,10 @@ angular.module('contractualClienteApp')
                 // validacion de financiacion vs especificaciones
                 var especificaciones_valido = false;
                 if (self.Necesidad.TipoNecesidadId.Id === 2 || !completado) { // serv publicos o guardada parcial
-                    especificaciones_valido = true; // no validate 
-                    self.ValidarFinanciacion() || !completado ? planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
+                    if(self.dependencia_data !== undefined){
+                        especificaciones_valido = true; // no validate 
+                    }
+                    self.ValidarFinanciacion(especificaciones_valido) || !completado ? planCuentasMidRequest.post('necesidad/post_full_necesidad/', self.TrNecesidad).then(function (r) {
                         NecesidadHandle(r);
                     }).catch(function (e) {
                         console.info(e)
@@ -1016,7 +1021,7 @@ angular.module('contractualClienteApp')
             }
         };
 
-        self.ValidarFinanciacion = function () {
+        self.ValidarFinanciacion = function (valido) {
             var fin_valid = self.Rubros.length > 0&& self.Necesidad.Valor>0;
             self.Rubros.forEach(function (ap) {
                 // CASE INVERSION
@@ -1030,13 +1035,26 @@ angular.module('contractualClienteApp')
                 ap.MontoFuentes > ap.Apropiacion.ValorActual ? swal(necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo).fuentesMayorQueRubro) : _;
 
             });
-            !fin_valid ? swal(necesidadService.getAlertaFinanciacion(0).errorFinanciacion) : swal({
+            if (!fin_valid && !valido){
+                swal(necesidadService.getAlertaFinanciacion(0).errorFinanciacion)
+            } else {
+                swal({
+                    title: 'Financiación balanceada',
+                    type: 'success',
+                    text: 'Los valores de financiación están en igualdad',
+                    showCloseButton: true,
+                    confirmButtonText: $translate.instant("CERRAR")
+                });
+            }
+
+            
+            /* !fin_valid ? swal(necesidadService.getAlertaFinanciacion(0).errorFinanciacion) : swal({
                 title: 'Financiación balanceada',
                 type: 'success',
                 text: 'Los valores de financiación están en igualdad',
                 showCloseButton: true,
                 confirmButtonText: $translate.instant("CERRAR")
-            })
+            }); */
             return fin_valid;
         }
 
@@ -1098,6 +1116,7 @@ angular.module('contractualClienteApp')
                         break;
                     }
                     else {
+                        console.log("Esto se activa cuando no están los campos completos")
                         self.AlertSeccion('General');
                         break;
                     }
@@ -1132,7 +1151,7 @@ angular.module('contractualClienteApp')
             var n = self.solicitudNecesidad;
             switch (form) {
                 case 'general':
-                    return (document.getElementById("f_general").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
+                    return (document.getElementById("f_responsables").classList.contains('ng-valid') && document.getElementById("f_general").classList.contains('ng-valid'));
                 case 'financiacion':
                     var val = self.ValidarFinanciacion()
                     if (self.IdNecesidad) { return val; }

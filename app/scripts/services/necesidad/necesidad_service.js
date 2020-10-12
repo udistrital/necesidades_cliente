@@ -98,38 +98,48 @@ angular.module('contractualClienteApp')
     //Obtiene todo el jefe de dependencia teniendo del id del jefe o la dependencia, si idOrDep es true, se utilizará el id del jefe
     self.getJefeDependencia = function (idDependencia, idOrDep) {
       var out = { JefeDependencia: {}, Persona: {} }
-      return new Promise(function (resolve, reject) {
+      var promise = new Promise(function (resolve, reject) {
         if (!idDependencia) {
           reject(out);
         }
-
         coreAmazonRequest.get('jefe_dependencia', $.param({
           query: (idOrDep ? "Id:" + idDependencia : "DependenciaId:" + idDependencia + ',FechaInicio__lte:' + moment().format('YYYY-MM-DD') + ',FechaFin__gte:' + moment().format('YYYY-MM-DD')),
           limit: -1,
         })).then(function (response) {
-          out.JefeDependencia = response.data[0]; //TODO: cambiar el criterio para tomar en cuenta el periodo de validez del jefe
+          if (response.data !== undefined) {
+            out.JefeDependencia = response.data[0]; //TODO: cambiar el criterio para tomar en cuenta el periodo de validez del jefe
 
-          return agoraRequest.get('informacion_persona_natural', $.param({
-            query: 'Id:' + response.data[0].TerceroId,
-            limit: -1
-          }))
+            return agoraRequest.get('informacion_persona_natural', $.param({
+              query: 'Id:' + response.data[0].TerceroId,
+              limit: -1
+            }))
+          } else {
+            return undefined
+          }
         }).then(function (response) {
-          out.Persona = response.data[0];
-          resolve(out);
-        }).catch(function (error) {
-          // console.error(error);
+            out.Persona = response.data[0];
+            resolve(out);
+        }).catch( function(error) {
+          swal({
+            title: 'No se pueden cargar los datos',
+            type: 'error',
+            text: JSON.stringify(self.alerta_necesidad),
+            showCloseButton: true,
+            confirmButtonText: $translate.instant("CERRAR")
+        });
         });
       });
+      return promise;
     };
 
 
     self.getInfoPersonaNatural = function (idPersona) {
       var out = { Persona: {} }
       return new Promise(function (resolve, reject) {
-          return agoraRequest.get('informacion_persona_natural', $.param({
-            query: 'Id:' + idPersona,
-            limit: -1
-          })
+        return agoraRequest.get('informacion_persona_natural', $.param({
+          query: 'Id:' + idPersona,
+          limit: -1
+        })
         ).then(function (response) {
           out.Persona = response.data[0];
           resolve(out);
