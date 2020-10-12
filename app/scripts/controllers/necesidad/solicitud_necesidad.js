@@ -1046,15 +1046,6 @@ angular.module('contractualClienteApp')
                     confirmButtonText: $translate.instant("CERRAR")
                 });
             }
-
-            
-            /* !fin_valid ? swal(necesidadService.getAlertaFinanciacion(0).errorFinanciacion) : swal({
-                title: 'Financiación balanceada',
-                type: 'success',
-                text: 'Los valores de financiación están en igualdad',
-                showCloseButton: true,
-                confirmButtonText: $translate.instant("CERRAR")
-            }); */
             return fin_valid;
         }
 
@@ -1116,7 +1107,6 @@ angular.module('contractualClienteApp')
                         break;
                     }
                     else {
-                        console.log("Esto se activa cuando no están los campos completos")
                         self.AlertSeccion('General');
                         break;
                     }
