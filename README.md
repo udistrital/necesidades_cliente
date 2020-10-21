@@ -1,63 +1,85 @@
 # necesidades-cliente
 
 En este repositorio se encuentra el cliente del modulo de resoluciones.
-Se hace uso de :
-* [Angular JS](https://angularjs.org/)
-* [Bootstrap 3](https://getbootstrap.com/docs/3.3/)
-* [Angular JS generator](https://github.com/fabianLeon/oas)
-* [Node.js en la versión estable](https://nodejs.org/en/)
 
-## Configuración del proyecto
+## Especificaciones Técnicas
 
-* Clonar el repositorio: 
+### Tecnologías Implementadas y Versiones
+* [ngxAdmin](https://github.com/akveo/ngx-admin)
+* [Angular 8.0](https://angular.io/)
+* [Bootstrap 4](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
+* [Nebular 4](https://akveo.github.io/nebular/4.6.0/)
+
+### Variables de Entorno
 ```shell
-    https://github.com/udistrital/necesidades-cliente
+# En Pipeline
+SLACK_AND_WEBHOOK: WEBHOOK de Slack Grupo ci-covid-serverles
+AWS_ACCESS_KEY_ID: llave de acceso ID Usuario AWS
+AWS_SECRET_ACCESS_KEY: Secreto de Usuario AWS
 ```
-* entrar a la carpeta del repositorio: 
-```shell 
-    cd necesidades-cliente
+### Ejecución del Proyecto
+
+Clonar el proyecto del repositorio de git
+```bash
+# clone the project
+git clone https://github.com/udistrital/necesidades-cliente.git
+# enter the project directory
+cd necesidades-cliente
+```
+Iniciar el servidor en local
+```bash
+# install dependency
+npx npm install
+or
+npm install
+# start server
+npx ng serve
+# Whenever you want to change the port just run
+npx ng dev --port = 9528
 ```
 
-* Instalar yo, grunt, bower y generator- karma y generator-oas
-```shell 
-    npm install -g grunt-cli bower yo generator-karma generator-oas
-```
-* Instalar dependencias
-```shell 
-    npm install
-```
-```shell 
-    bower install
-```
-
-## Ejecución del proyecto
-
-Para ejcutar el proyecto localmente se debe verificar en el archivo “config.js”, ubicado en la carpeta app/scripts/services/, que las apis estén correactamente configuradas y que estén deplegadas.
-
-El cliente corre ejecutando la siguiente linea: 
-```
-    grunt serve
+Linter
+```bash
+# Angular linter
+npm run lint
+# run linter and auto fix
+npm run lint:fix
+# run linter on styles
+npm run lint:styles
+# run lint UI
+npm run lint:ci
 ```
 
-***Se recomienda ejecutar el cliente antes de abrir el proyecto de visual code ya que a veces genera problemas.***
+### Ejecución Dockerfile
+```bash
+# Does not apply
+```
+### Ejecución docker-compose
+```bash
+# Does not apply
+```
+### Ejecución Pruebas
 
-Para crear el build de la aplicación:
+Pruebas unitarias powered by Jest
+```bash
+# run unit test
+npm run test
+# Runt linter + unit test
+npm run test:ui
 ```
-    grunt build
-```
-El cliente se depliega en el 9000; : [Modulo de necesidades](http://0.0.0.0:9000/#/necesidades).
 
-## Pruebas unitaras
+## Estado CI
 
-La pruebas se relizan con [karma](https://karma-runner.github.io/latest/index.html), ejecutar el comando:
-```
-    grunt test
-```
+| Develop | Relese 0.0.1 | Master |
+| -- | -- | -- |
+| [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/develop)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/release/0.0.1)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) |
 
 ## Licencia
 
-[licencia](LICENSE)
+This file is part of necesidades-cliente
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+necesidades-cliente is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (atSara Sampaio your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+necesidades-cliente is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with necesidades-cliente. If not, see https://www.gnu.org/licenses/.
