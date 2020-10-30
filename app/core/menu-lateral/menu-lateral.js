@@ -45,7 +45,7 @@ angular.module('core')
                             behaviorTheme.initMenu(response.data);
                             $scope.menu = behaviorTheme.menu;
                         } else {
-                            let datosMenu = [
+                            const datosMenu = [
                                 {
                                     "Id": 362,
                                     "Nombre": "Gestion de necesidades",
