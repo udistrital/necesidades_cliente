@@ -11,6 +11,7 @@ angular.module('contractualClienteApp')
         return {
             restrict: 'E',
             scope: {
+                elemento: '=',
                 producto_catalogo: '=ngModel'
             },
             templateUrl: 'views/directives/catalogos_elementos/lista_subgrupos_catalogos.html',
@@ -38,22 +39,22 @@ angular.module('contractualClienteApp')
                         }
                     },
                     {
-                        field: 'Nombre',
+                        field: 'Descripcion',
                         displayName: $translate.instant('PRODUCTOS'),
                         headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                         cellTooltip: function (row) {
-                            return row.entity.Nombre;
+                            return row.entity.Descripcion;
                         }
                     }
                     ]
                 };
-                self.loadData = function () {
+                self.loadData = function (elemento) {
                     //administrativaRequest.get('catalogo_elemento',$.param({
                         catalogoRequest.get('elemento', $.param({
-                        query: "SubgrupoId.Id:19",
-                        fields: 'Id,Nombre',
-                        limit: -1,
-                        sortby: "Nombre",
+                        query: "Descripcion__contains:"+elemento,
+                        fields: 'Id,Descripcion',
+                        limit: 10,
+                        sortby: "Descripcion",
                         order: "asc",
                     })).then(function (response) {
                         self.gridOptions.data = response.data;
@@ -68,11 +69,11 @@ angular.module('contractualClienteApp')
                         }
                     });
                 }
-                self.loadData();
+                self.loadData($scope.elemento);
                 self.gridOptions.onRegisterApi = function (gridApi) {
                     self.gridApi = gridApi;
                     self.gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                        $scope.producto_catalogo ={CatalogoId: row.entity.Id, ElementoNombre: row.entity.Nombre,RequisitosMinimos: []};
+                        $scope.producto_catalogo ={CatalogoId: row.entity.Id, ElementoNombre: row.entity.Descripcion,RequisitosMinimos: []};
                     });
 
                 };
