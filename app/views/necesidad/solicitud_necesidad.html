@@ -719,8 +719,15 @@
                 <!-- Tipo contrato necesidad === (compra || Compra y Servicio || Servicio)-->
                 <div class="form-group"
                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4">
-                  <div class="row">
-                    <lista-subgrupos-catalogos ng-model="solicitudNecesidad.producto_catalogo">
+                  <br></br>
+                  <label >Producto</label>
+                  <div style="text-align: center;">
+                    <input type="text" class="form-control" minlength = "3"  placeholder="Producto" ng-model="nombreProducto"/>
+                    <br></br>
+                    <button type="button" class="btn btn-primary btn-outline" ng-click="producto = nombreProducto" ng-init="producto=''">Buscar</button>
+                  </div>
+                  <div class="row" ng-if="producto == nombreProducto" >
+                    <lista-subgrupos-catalogos ng-model="solicitudNecesidad.producto_catalogo" elemento=producto>
                     </lista-subgrupos-catalogos>
                   </div>
 

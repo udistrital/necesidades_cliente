@@ -1164,6 +1164,4 @@ angular.module('contractualClienteApp')
         };
 
 
-
-
     });
