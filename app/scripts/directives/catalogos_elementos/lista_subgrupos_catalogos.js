@@ -53,7 +53,7 @@ angular.module('contractualClienteApp')
                         catalogoRequest.get('elemento', $.param({
                         query: "Descripcion__contains:"+elemento,
                         fields: 'Id,Descripcion',
-                        limit: 10,
+                        limit: 15,
                         sortby: "Descripcion",
                         order: "asc",
                     })).then(function (response) {
