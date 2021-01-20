@@ -531,10 +531,9 @@ angular.module('contractualClienteApp')
         });
 
 
-        agoraRequest.get('unidad', $.param({ // parametro desde adm, unidad producto
+        parametrosRequest.get('parametro', $.param({ // parametro desde adm, unidad producto
             limit: -1,
-            sortby: "Unidad",
-            order: "asc",
+            query: "TipoParametroId.AreaTipoId.Id:4"
         })).then(function (response) {
             self.unidad_data = response.data;
         });
