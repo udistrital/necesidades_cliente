@@ -537,7 +537,7 @@
                   <div class="col-md-4" ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===2">
                     <label class=" control-label">{{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</label>
                     <select class="form-control" ng-model="solicitudNecesidad.nucleoarea"
-                      ng-options="nucleoa.Id as nucleoa.Nombre for nucleoa in solicitudNecesidad.nucleo_area_data">
+                      ng-options="nucleoa.NumeroOrden as nucleoa.Nombre for nucleoa in solicitudNecesidad.nucleo_area_data">
                       <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"EL_TIPO_DE" | translate}}
                         {{"NUCLEO_CONOCIMIENTO_AREA" | translate}}</option>
                     </select>

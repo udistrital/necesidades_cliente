@@ -9,7 +9,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest,catalogoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest, parametrosRequest,catalogoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
         var self = this;
         //inicializar Necesidad
         self.Necesidad = {
@@ -169,12 +169,13 @@ angular.module('contractualClienteApp')
                     limit: -1
                 })).then(function (response) {
                     if(response.data[0]!= undefined){
-                        self.DetallePrestacionServicioNecesidad.NucleoId = response.data[0].AreaConocimientoId.Id;
-                        parametrosGobiernoRequest.get('area_conocimiento', $.param({ 
+                        self.DetallePrestacionServicioNecesidad.NucleoId = response.data[0].AreaConocimientoId.Nombre;
+                        parametrosRequest.get('parametro', $.param({ 
                             limit: -1,
-                            query: 'Id:'+ self.DetallePrestacionServicioNecesidad.NucleoId
+                            query: 'TipoParametroId:4,Activo:true,Nombre:'+ self.DetallePrestacionServicioNecesidad.NucleoId
                         })).then(function (response2) {
-                             self.nucleoarea=response2.data[0].Id;
+                            console.log(response2);
+                             self.nucleoarea=response2.data.Data[0].NumeroOrden;
                              
                         });    
                     }
@@ -467,11 +468,12 @@ angular.module('contractualClienteApp')
             self.valor_total = (self.especificaciones.Valor * self.especificaciones.Cantidad) + self.valor_iva;
         }, true);
 
-        parametrosGobiernoRequest.get('area_conocimiento', $.param({ //Primer Select NAC
+        parametrosRequest.get('parametro', $.param({ //Primer Select NAC
             limit: -1,
-            query: 'Activo:true'
+            query: 'TipoParametroId:4,Activo:true'
         })).then(function (response) {
-            self.nucleo_area_data = response.data;
+            console.log(response);
+            self.nucleo_area_data = response.data.Data;
         });
 
 
@@ -482,6 +484,7 @@ angular.module('contractualClienteApp')
                     query: 'AreaConocimientoId.Id:' + self.nucleoarea,
                     limit: -1
                 })).then(function (response) {
+                    console.log(response, self.nucleoarea)
                     self.nucleo_conocimiento_data = response.data;
                 }) : _;
         }, true);
