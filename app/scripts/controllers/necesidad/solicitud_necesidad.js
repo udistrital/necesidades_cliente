@@ -174,7 +174,7 @@ angular.module('contractualClienteApp')
                             limit: -1,
                             query: 'TipoParametroId:4,Activo:true,Nombre:'+ self.DetallePrestacionServicioNecesidad.NucleoId
                         })).then(function (response2) {
-                            console.log(response2);
+
                              self.nucleoarea=response2.data.Data[0].NumeroOrden;
                              
                         });    
@@ -472,7 +472,7 @@ angular.module('contractualClienteApp')
             limit: -1,
             query: 'TipoParametroId:4,Activo:true'
         })).then(function (response) {
-            console.log(response);
+
             self.nucleo_area_data = response.data.Data;
         });
 
@@ -484,7 +484,7 @@ angular.module('contractualClienteApp')
                     query: 'AreaConocimientoId.Id:' + self.nucleoarea,
                     limit: -1
                 })).then(function (response) {
-                    console.log(response, self.nucleoarea)
+
                     self.nucleo_conocimiento_data = response.data;
                 }) : _;
         }, true);
