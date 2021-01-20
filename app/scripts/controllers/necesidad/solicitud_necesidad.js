@@ -569,10 +569,11 @@ angular.module('contractualClienteApp')
         });
         //-----
 
-        administrativaRequest.get('modalidad_seleccion', $.param({ //modalidad seleccion
+        parametrosRequest.get('parametro', $.param({ //modalidad seleccion
             limit: -1,
             sortby: "NumeroOrden",
             order: "asc",
+            query: "TipoParametroId:11"
         })).then(function (response) {
             self.modalidad_data = response.data;
         });
