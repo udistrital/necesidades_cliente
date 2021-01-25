@@ -47,11 +47,11 @@ angular.module('contractualClienteApp')
 
             });
         };
-        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
+        parametrosRequest.get('parametro_periodo', $.param({ // traer datos de iva y ponerlos en productos y servivios
             limit: -1,
-            query: 'Activo:true'
+            query: 'ParametroId.TipoParametroId.Id:12,PeriodoId.Activo:true'
         })).then(function (response) {
-            self.iva_data=response.data;
+            self.iva_data= self.transformIvaData(response.data.Data);
         });
 
         necesidadService.getParametroEstandar().then(function (response) {
@@ -256,7 +256,21 @@ angular.module('contractualClienteApp')
 
         self.cargarDatosNecesidades(self.offset, self.query);
 
-
+        self.transformIvaData = function(data) { // Transformar datos de IVA
+            if (data) {
+                return data.map(function (element) {
+                    const datos = JSON.parse(element.Valor);
+                    element.Tarifa = datos.Tarifa;
+                    element.PorcentajeAplicacion = datos.PorcentajeAplicacion;
+                    element.BaseUvt = datos.BaseUvt;
+                    element.BasePesos = datos.BasePesos;
+                    element.ImpuestoId = element.ParametroId;
+                    return element;
+                })
+            } else {
+                return undefined;
+            }
+        }
 
         self.aprobar_solicitud = function () {
             self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Solicitada;

@@ -189,11 +189,13 @@ angular.module('contractualClienteApp')
 
 
             self.ProductosCatalogoNecesidad = trNecesidad.ProductosCatalogoNecesidad || [];
-            parametrosGobiernoRequest.get('vigencia_impuesto', $.param({ // traer datos de iva y ponerlos en productos y servivios
+
+            parametrosRequest.get('parametro_periodo', $.param({ // traer datos de iva y ponerlos en productos y servivios
                 limit: -1,
-                query: 'Activo:true'
+                query: 'ParametroId.TipoParametroId.Id:12,PeriodoId.Activo:true'
             })).then(function (response) {
-                self.iva_data = response.data;
+
+                self.iva_data = self.transformIvaData(response.data.Data);
                 self.ProductosCatalogoNecesidad.forEach(function (prod) {
                     prod.RequisitosMinimos===null ? prod.RequisitosMinimos=[]:_;
                     catalogoRequest.get('elemento', $.param({
@@ -206,11 +208,11 @@ angular.module('contractualClienteApp')
                         prod.ElementoNombre = response.data[0].Nombre;
                     });
                     if (self.iva_data != undefined) { // calculo valores iva
+
                         var tIva = self.getPorcIVAbyId(prod.IvaId);
                         prod.Subtotal = prod.Cantidad * prod.Valor;
                         prod.ValorIVA = (prod.Subtotal * (tIva / 100)) || 0;
                         prod.preciomasIVA = prod.Subtotal + prod.ValorIVA || 0;
-
 
                     }
                 });
@@ -535,7 +537,8 @@ angular.module('contractualClienteApp')
             limit: -1,
             query: "TipoParametroId.AreaTipoId.Id:4"
         })).then(function (response) {
-            self.unidad_data = response.data;
+
+            self.unidad_data = response.data.Data;
         });
 
 
@@ -574,7 +577,7 @@ angular.module('contractualClienteApp')
             order: "asc",
             query: "TipoParametroId:11"
         })).then(function (response) {
-            self.modalidad_data = response.data;
+            self.modalidad_data = response.data.Data;
         });
 
         necesidadesCrudRequest.get('tipo_financiacion_necesidad', $.param({// parametro desde necesidades crud
@@ -744,6 +747,21 @@ angular.module('contractualClienteApp')
                 return self.iva_data.filter(function (iva) { return iva.Id === id; })[0].Tarifa
             } else {
                 return 0;
+            }
+        }
+        self.transformIvaData = function(data) { // Transformar datos de IVA
+            if (data) {
+                return data.map(function (element) {
+                    const datos = JSON.parse(element.Valor);
+                    element.Tarifa = datos.Tarifa;
+                    element.PorcentajeAplicacion = datos.PorcentajeAplicacion;
+                    element.BaseUvt = datos.BaseUvt;
+                    element.BasePesos = datos.BasePesos;
+                    element.ImpuestoId = element.ParametroId;
+                    return element;
+                })
+            } else {
+                return undefined;
             }
         }
 
