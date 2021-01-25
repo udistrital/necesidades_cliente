@@ -537,8 +537,7 @@ angular.module('contractualClienteApp')
             limit: -1,
             query: "TipoParametroId.AreaTipoId.Id:4"
         })).then(function (response) {
-
-            self.unidad_data = response.data.Data;
+            self.unidad_data = self.transformUnidad(response.data.Data);
         });
 
 
@@ -758,6 +757,16 @@ angular.module('contractualClienteApp')
                     element.BaseUvt = datos.BaseUvt;
                     element.BasePesos = datos.BasePesos;
                     element.ImpuestoId = element.ParametroId;
+                    return element;
+                })
+            } else {
+                return undefined;
+            }
+        }
+        self.transformUnidad = function(data) { // Transformar datos de IVA
+            if (data) {
+                return data.map(function (element) {
+                    element.Unidad = element.Nombre
                     return element;
                 })
             } else {
