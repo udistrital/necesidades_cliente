@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest,catalogoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest, parametrosRequest,catalogoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -191,12 +191,12 @@ angular.module('contractualClienteApp')
                             if (nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
                                 nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre="";
                                 nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea="";
-                                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-                                    query: 'Id:' + nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                                parametrosRequest.get('parametro', $.param({
+                                    query: 'TipoParametroId:4,Id:' + nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
                                     limit: -1
                                 })).then(function (response) {
-                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre=response.data[0].Nombre;
-                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea=response.data[0].AreaConocimientoId.Nombre;
+                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre=response.data.Data[0].Nombre;
+                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea=response.data.Data[0].ParametroPadreId.Nombre;
                                 })
 
                             }

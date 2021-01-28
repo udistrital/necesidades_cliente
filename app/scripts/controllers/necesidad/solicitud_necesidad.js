@@ -164,18 +164,19 @@ angular.module('contractualClienteApp')
 
             // CPS Nucleo Area y Nucleo Area Conocimiento
             if(self.DetallePrestacionServicioNecesidad && self.DetallePrestacionServicioNecesidad.NucleoConocimientoId){
-                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-                    query: 'Id:' + self.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                parametrosRequest.get('parametro', $.param({
+                    query: 'TipoParametroId:4,Activo:true,Id:' + self.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
                     limit: -1
                 })).then(function (response) {
-                    if(response.data[0]!= undefined){
-                        self.DetallePrestacionServicioNecesidad.NucleoId = response.data[0].AreaConocimientoId.Nombre;
+
+                    if(response.data.Data[0]!= undefined){
+                        self.DetallePrestacionServicioNecesidad.NucleoId = response.data.Data[0].ParametroPadre.Id;
                         parametrosRequest.get('parametro', $.param({ 
                             limit: -1,
-                            query: 'TipoParametroId:4,Activo:true,Nombre:'+ self.DetallePrestacionServicioNecesidad.NucleoId
+                            query: 'TipoParametroId:4,ParametroPadreId__isnull:true,Activo:true,Id:'+ self.DetallePrestacionServicioNecesidad.NucleoId
                         })).then(function (response2) {
 
-                             self.nucleoarea=response2.data.Data[0].NumeroOrden;
+                             self.nucleoarea=response2.data.Data[0].Id;
                              
                         });    
                     }
@@ -315,12 +316,12 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
             if (!self.detalle_servicio_necesidad) { return; }
-            parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-                query: 'Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
+            parametrosRequest.get('parametro', $.param({
+                query: 'TipoParametroId:4,Id:' + self.detalle_servicio_necesidad.NucleoConocimiento,
                 limit: -1
             })).then(function (response) {
                 if (response.data !== null && response.data.lenght > 0) {
-                    self.nucleoarea = response.data[0].AreaConocimientoId.Id;
+                    self.nucleoarea = response.data.Data[0].ParametroPadreId.Id;
                 }
 
             }).catch(function (err) {
@@ -472,7 +473,7 @@ angular.module('contractualClienteApp')
 
         parametrosRequest.get('parametro', $.param({ //Primer Select NAC
             limit: -1,
-            query: 'TipoParametroId:4,Activo:true'
+            query: 'TipoParametroId:4,ParametroPadreId__isnull:true,Activo:true'
         })).then(function (response) {
 
             self.nucleo_area_data = response.data.Data;
@@ -482,12 +483,12 @@ angular.module('contractualClienteApp')
 
         $scope.$watch('solicitudNecesidad.nucleoarea', function () { // trae nucleo con dependiendo del area
             self.nucleoarea ?
-                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-                    query: 'AreaConocimientoId.Id:' + self.nucleoarea,
+                parametrosRequest.get('parametro', $.param({
+                    query: 'TipoParametroId:4,Activo:true,ParametroPadreId.Id:' + self.nucleoarea,
                     limit: -1
                 })).then(function (response) {
 
-                    self.nucleo_conocimiento_data = response.data;
+                    self.nucleo_conocimiento_data = response.data.Data;
                 }) : _;
         }, true);
 
@@ -535,7 +536,7 @@ angular.module('contractualClienteApp')
 
         parametrosRequest.get('parametro', $.param({ // parametro desde adm, unidad producto
             limit: -1,
-            query: "TipoParametroId.AreaTipoId.Id:4"
+            query: "TipoParametroId.AreaTipoId.Id:4, Activo:true"
         })).then(function (response) {
             self.unidad_data = self.transformUnidad(response.data.Data);
         });
@@ -574,7 +575,7 @@ angular.module('contractualClienteApp')
             limit: -1,
             sortby: "NumeroOrden",
             order: "asc",
-            query: "TipoParametroId:11"
+            query: "TipoParametroId:11,Activo:true"
         })).then(function (response) {
             self.modalidad_data = response.data.Data;
         });
