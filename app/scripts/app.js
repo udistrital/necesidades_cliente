@@ -49,6 +49,7 @@ angular
         'coreService',
         'coreAmazonService',
         'parametrosGobiernoService',
+        'parametrosService',
         'administrativaService',
         'agoraService',
         'oikosService',

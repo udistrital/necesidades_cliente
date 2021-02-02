@@ -757,7 +757,7 @@
                                 <select
                                   ng-if="solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===1 || solicitudNecesidad.Necesidad.TipoContratoNecesidadId.Id===4"
                                   class="form-control" ng-model="solicitudNecesidad.producto_catalogo.Unidad"
-                                  ng-options="unidad as unidad.Unidad for unidad in solicitudNecesidad.unidad_data"
+                                  ng-options="unidad as unidad.Nombre for unidad in solicitudNecesidad.unidad_data"
                                   required>
                                   <option value="" disabled selected>{{"SELECCIONAR" | translate}}
                                     {{"UNIDAD_MEDIDA" | translate}}</option>
