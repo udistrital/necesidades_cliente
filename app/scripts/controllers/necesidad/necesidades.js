@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest,catalogoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest, parametrosRequest,catalogoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -47,11 +47,11 @@ angular.module('contractualClienteApp')
 
             });
         };
-        parametrosGobiernoRequest.get('vigencia_impuesto', $.param({
+        parametrosRequest.get('parametro_periodo', $.param({ // traer datos de iva y ponerlos en productos y servivios
             limit: -1,
-            query: 'Activo:true'
+            query: 'ParametroId.TipoParametroId.Id:12,PeriodoId.Activo:true'
         })).then(function (response) {
-            self.iva_data=response.data;
+            self.iva_data= self.transformIvaData(response.data.Data);
         });
 
         necesidadService.getParametroEstandar().then(function (response) {
@@ -191,12 +191,12 @@ angular.module('contractualClienteApp')
                             if (nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
                                 nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre="";
                                 nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea="";
-                                parametrosGobiernoRequest.get('nucleo_basico_conocimiento', $.param({
-                                    query: 'Id:' + nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
+                                parametrosRequest.get('parametro', $.param({
+                                    query: 'TipoParametroId:4,Id:' + nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId,
                                     limit: -1
                                 })).then(function (response) {
-                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre=response.data[0].Nombre;
-                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea=response.data[0].AreaConocimientoId.Nombre;
+                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre=response.data.Data[0].Nombre;
+                                    nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea=response.data.Data[0].ParametroPadreId.Nombre;
                                 })
 
                             }
@@ -256,7 +256,21 @@ angular.module('contractualClienteApp')
 
         self.cargarDatosNecesidades(self.offset, self.query);
 
-
+        self.transformIvaData = function(data) { // Transformar datos de IVA
+            if (data) {
+                return data.map(function (element) {
+                    const datos = JSON.parse(element.Valor);
+                    element.Tarifa = datos.Tarifa;
+                    element.PorcentajeAplicacion = datos.PorcentajeAplicacion;
+                    element.BaseUvt = datos.BaseUvt;
+                    element.BasePesos = datos.BasePesos;
+                    element.ImpuestoId = element.ParametroId;
+                    return element;
+                })
+            } else {
+                return undefined;
+            }
+        }
 
         self.aprobar_solicitud = function () {
             self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Solicitada;
