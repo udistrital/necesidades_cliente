@@ -152,6 +152,7 @@ angular.module('contractualClienteApp')
     self.getAllDependencias = function () {
       return new Promise(function (resolve, reject) {
         oikosRequest.get('dependencia', $.param({
+          query: "Activo:true",
           limit: -1,
           sortby: "Nombre",
           order: "asc",
