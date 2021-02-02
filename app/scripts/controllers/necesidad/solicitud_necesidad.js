@@ -536,7 +536,7 @@ angular.module('contractualClienteApp')
 
         parametrosRequest.get('parametro', $.param({ // parametro desde adm, unidad producto
             limit: -1,
-            query: "TipoParametroId.AreaTipoId.Id:4, Activo:true"
+            query: "TipoParametroId.AreaTipoId.Id:4,Activo:true"
         })).then(function (response) {
             self.unidad_data = self.transformUnidad(response.data.Data);
         });
