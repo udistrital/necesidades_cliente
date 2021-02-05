@@ -24,12 +24,10 @@ angular.module('contractualClienteApp')
     }, {
       nombre: "Derechos Pecuniarios",
       link: "#/"
-    },
-    //  {
-    //   nombre: "Sistema de Notificaciones",
-    //   link: "#/"
-    // }, 
-    {
+    }, {
+      nombre: "Sistema de Notificaciones",
+      link: "#/"
+    }, {
       nombre: "CSU",
       link: "#/"
     }, {

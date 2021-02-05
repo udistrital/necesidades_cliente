@@ -8,14 +8,14 @@
  */
 angular.module('core')
     .controller('menuLateralCtrl',
-        function ($location, CONF, $window, $scope, $rootScope, token_service, configuracionRequest, $translate, $route, behaviorTheme) {
+        function ($location, CONF, $window, $scope, $rootScope, token_service, configuracionRequest, notificacion, $translate, $route, behaviorTheme) {
 
             $scope.language = {
                 es: "btn btn-primary btn-circle btn-outline active",
                 en: "btn btn-primary btn-circle btn-outline"
             };
 
-            // $scope.notificacion = notificacion;
+            $scope.notificacion = notificacion;
             $scope.actual = "";
             $scope.token_service = token_service;
             $scope.sidebarClases = behaviorTheme.sidebar;
