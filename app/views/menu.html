@@ -58,8 +58,7 @@
                                         <a ng-click="redirect_url('/' + nivel_4.Url)"
                                             ng-if="nivel_4.TipoOpcion === 'Menú' ">
                                             {{nivel_4.Nombre}}
-                                        </a>
-                                    </li>
+                                        </a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -69,16 +68,16 @@
 
             <!-- /.dropdown Notifications-->
             <li class="dropdown ">
-                <!-- <a class=" notificacion_vista dropdown-toggle " data-toggle="dropdown"
+                <a class=" notificacion_vista dropdown-toggle " data-toggle="dropdown"
                     ng-if="notificacion.no_vistos()> 0">
                     <i class="fa fa-bell fa-fw faa-ring animated"></i>{{notificacion.no_vistos()}}
                     <i class="fa fa-caret-down"></i>
-                </a> -->
-                <!-- <a class="dropdown-toggle" data-toggle="dropdown" ng-if="notificacion.no_vistos() == 0">
+                </a>
+                <a class="dropdown-toggle" data-toggle="dropdown" ng-if="notificacion.no_vistos() == 0">
                     <i class="fa fa-bell fa-fw"></i>
                     <i class="fa fa-caret-down"></i>
-                </a> -->
-                <!-- <ul class="dropdown-menu dropdown-alerts">
+                </a>
+                <ul class="dropdown-menu dropdown-alerts">
                     <li ng-repeat=" notificacion in notificacion.log | limitTo:6">
                         <a ng-click="notificacion.viewed = true">
                             <div>
@@ -100,7 +99,7 @@
                             <i class="fa fa-angle-right"></i>
                         </a>
                     </li>
-                </ul> -->
+                </ul>
                 <!-- /.dropdown -->
             <li class="dropdown" ng-if="token_service.live_token()">
                 <a class="dropdown-toggle" data-toggle="dropdown">
