@@ -4,15 +4,15 @@
         <div id="{{app_large}}" class="logo-header" ng-style="{'display': sidebarClases.containerLogoCollapsedClase}"> </div>
     </div>
     <div class="header-buttons-container">
-        <div class="header-button-apps-container" ng-click="toogleAplicaciones()">
+        <!-- <div class="header-button-apps-container" ng-click="toogleAplicaciones()">
             <i id="header-user-icon" class="fa fa-th-large"></i>
-        </div>
-        <div class="header-button-notification" ng-click="togglenotify()">
+        </div> -->
+        <!-- <div class="header-button-notification" ng-click="togglenotify()">
             <i class="fa fa-bell-o"></i>
             <div class="header-badge" *ngIf="notificacion">
                 {{ notificacion.no_vistos }}
             </div>
-        </div>
+        </div> -->
         <div class="header-button-user-container" ng-click="toogleCerrarSesion()" ng-show="token_service.live_token()">
             <i id="header-user-icon" class="fa fa-user-o"></i>
             <p class="user-info">{{token.sub}}</p>
