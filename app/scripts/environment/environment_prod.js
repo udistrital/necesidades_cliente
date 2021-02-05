@@ -13,7 +13,7 @@ angular.module('contractualClienteApp')
         APP: "kronos",
         APP_MENU: "Necesidades",
         GENERAL: {
-            WSO2_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services/", // NO ESTA URL EN PREPROD
+            WSO2_SERVICE: "", // NO ESTA URL EN PREPROD
             ADMINISTRATIVA_MID_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_mid_api/v1/",
             ADMINISTRATIVA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_crud_api/v1/",
             ADMINISTRATIVA_PRUEBAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_amazon_api/v1/",
