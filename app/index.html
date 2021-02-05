@@ -38,7 +38,7 @@
     <link rel="stylesheet" href="core/header/header.css">
     <link rel="stylesheet" href="core/menu-lateral/menu-lateral.css">
     <link rel="stylesheet" href="core/menu-aplicaciones/menu-aplicaciones.css">
-    <link rel="stylesheet" href="core/notificaciones/notificaciones.css">
+    <!-- <link rel="stylesheet" href="core/notificaciones/notificaciones.css"> -->
     <link rel="stylesheet" href="core/css/ui-grid.css">
     <link rel="stylesheet" href="https://pruebasassets.portaloas.udistrital.edu.co/nix-style.css">
     <link rel="stylesheet" href="https://pruebasassets.portaloas.udistrital.edu.co/oas-style.css">
@@ -66,9 +66,9 @@
                 <div ng-if="isLogin" class="body-container-menuaplicaciones"
                     ng-include="'core/menu-aplicaciones/menu-aplicaciones.html'" ng-controller="menuaplicacionesCtrl">
                 </div>
-                <div ng-if="isLogin" class="body-container-notificaciones"
+                <!-- <div ng-if="isLogin" class="body-container-notificaciones"
                     ng-include="'core/notificaciones/notificaciones.html'" ng-controller="notificacionesCtrl">
-                </div>
+                </div> -->
                 <div ng-if="isLogin" class="container-app">
                     <div id="menu-sidebar-container" ng-class="sidebarClases.sidebarContainerClase" ng-controller="headerCtrl">
                         <div id="menu-sidebar" ng-include="'core/menu-lateral/menu-lateral.html'"
@@ -153,8 +153,8 @@
     <script src="core/menu-lateral/menu-lateral.js"></script>
     <script src="core/menu-lateral/opciones-component/opciones-directive.js"></script>
     <script src="core/menu-aplicaciones/menu-aplicaciones.js"></script>
-    <script src="core/notificaciones/notificaciones.js"></script>
-    <script src="core/services/notificacion.js"></script>
+    <!-- <script src="core/notificaciones/notificaciones.js"></script> -->
+    <!-- <script src="core/services/notificacion.js"></script> -->
     <script src="core/services/theme.js"></script>
     <script src="core/services/implicit_token.js"></script>
     <!-- endbuild -->

@@ -6,6 +6,6 @@ angular.module('core', [
   'requestService',
   'implicitToken',
   'ngWebSocket',
-  'notificacionService',
+  // 'notificacionService',
   'themeService',
 ])

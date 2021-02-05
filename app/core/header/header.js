@@ -11,7 +11,7 @@
 
 angular.module('core')
     .controller('headerCtrl',
-        function (token_service, CONF, behaviorTheme, $scope, notificacion) {
+        function (token_service, CONF, behaviorTheme, $scope) {
 
             $scope.token_service = token_service;
 
@@ -20,7 +20,7 @@ angular.module('core')
 
             if (token_service.live_token()) {
                 $scope.isLogin = true;
-                $scope.notificacion = notificacion;
+                // $scope.notificacion = notificacion;
                 $scope.token = token_service.getPayload();
             } else {
                 $scope.isLogin = false;
@@ -42,12 +42,12 @@ angular.module('core')
                 behaviorTheme.toogleAplicacion();
             }
 
-            $scope.togglenotify = function () {
-                if (!behaviorTheme.notificacion.open) {
-                    notificacion.changeStateNoView();
-                }
-                behaviorTheme.toogleNotificacion();
-            }
+            // $scope.togglenotify = function () {
+            //     if (!behaviorTheme.notificacion.open) {
+            //         notificacion.changeStateNoView();
+            //     }
+            //     behaviorTheme.toogleNotificacion();
+            // }
 
             $scope.sidebarEvent = function () {
                 behaviorTheme.toogleSidebar();
