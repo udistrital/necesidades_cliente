@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('contractualClienteApp')
-    .controller('menuCtrl', function ($location, $window, $q, requestRequest, $scope, token_service, $translate, $route, $mdSidenav, configuracionRequest, $rootScope, $http) {
+    .controller('menuCtrl', function ($location, $window, $q, requestRequest, $scope, token_service, notificacion, $translate, $route, $mdSidenav, configuracionRequest, $rootScope, $http) {
         var self = this;
         $scope.token_service = token_service;
         $scope.$on('$routeChangeStart', function (scope, next, current) {
@@ -31,7 +31,7 @@ angular.module('contractualClienteApp')
             es: "btn btn-primary btn-circle btn-outline active",
             en: "btn btn-primary btn-circle btn-outline"
         };
-        // $scope.notificacion = notificacion;
+        $scope.notificacion = notificacion;
         $scope.actual = "";
 
         $scope.breadcrumb = [];
@@ -105,13 +105,13 @@ angular.module('contractualClienteApp')
         };
 
         if (self.perfil !== undefined) {
-            // $scope.notificacion.get_crud('notify', $.param({
-            //     query: "NotificacionConfiguracion.NotificacionConfiguracionPerfil.Perfil.Nombre__in:" + self.perfil.join('|') + "&sortby=id&order=asc&limit=-1"
-            // }))
-            //     .then(function (response) {
-            //         if (response.data !== null) {
-            //         }
-            //     });
+            $scope.notificacion.get_crud('notify', $.param({
+                query: "NotificacionConfiguracion.NotificacionConfiguracionPerfil.Perfil.Nombre__in:" + self.perfil.join('|') + "&sortby=id&order=asc&limit=-1"
+            }))
+                .then(function (response) {
+                    if (response.data !== null) {
+                    }
+                });
         }
 
         if ($scope.token_service.live_token()) {
