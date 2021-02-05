@@ -43,10 +43,10 @@ angular.module('themeService', [])
                 scroll: false,
                 scrollClase : 'container-aplicativos'
             },
-            notificacion: {
-                open:false,
-                clase: 'notificacion_container'
-            },
+            // notificacion: {
+            //     open:false,
+            //     clase: 'notificacion_container'
+            // },
             menu: [],
             initMenu: function (menu) {
                 methods.menu = menu;
@@ -137,24 +137,24 @@ angular.module('themeService', [])
                 return methods.menu;
             },
 
-            toogleNotificacion: function () {
-                if (methods.aplicacion.open) {
-                    methods.toogleAplicacion();
-                }
-                methods.notificacion.open = !methods.notificacion.open;
-                if (methods.notificacion.open) {
-                    methods.notificacion.clase = 'notificacion_container menu_is_active';
-                }else {
-                    methods.notificacion.clase = 'notificacion_container';
-                }
-            },
+            // toogleNotificacion: function () {
+            //     if (methods.aplicacion.open) {
+            //         methods.toogleAplicacion();
+            //     }
+            //     methods.notificacion.open = !methods.notificacion.open;
+            //     if (methods.notificacion.open) {
+            //         methods.notificacion.clase = 'notificacion_container menu_is_active';
+            //     }else {
+            //         methods.notificacion.clase = 'notificacion_container';
+            //     }
+            // },
 
 
             toogleAplicacion: function () {
                 var containerApps=document.getElementById('menu-aplicaciones')
                 methods.aplicacion.scroll = $(containerApps).hasScrollBar();
                 if (methods.notificacion.open) {
-                    methods.toogleNotificacion();
+                    // methods.toogleNotificacion();
                 }
                 if(!methods.aplicacion.scroll){
                     methods.aplicacion.scrollClase = "container-aplicativos";
