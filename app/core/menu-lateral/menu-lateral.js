@@ -40,18 +40,66 @@ angular.module('core')
 
                     roles = roles.replace(/,/g, '%2C');
                     configuracionRequest.get('menu_opcion_padre/ArbolMenus/' + roles + '/' + CONF.APP_MENU, '').then(function (response) {
-
-                        $rootScope.menu = response.data;
-                        behaviorTheme.initMenu(response.data);
-                        $scope.menu = behaviorTheme.menu;
-
+                        if (response.data !== null) {
+                            $rootScope.menu = response.data
+                            behaviorTheme.initMenu(response.data);
+                            $scope.menu = behaviorTheme.menu;
+                        } else {
+                            const datosMenu = [
+                                {
+                                    "Id": 362,
+                                    "Nombre": "Gestion de necesidades",
+                                    "Url": "",
+                                    "TipoOpcion": "Menú",
+                                    "Opciones": [
+                                        {
+                                            "Id": 363,
+                                            "Nombre": "Solicitud de necesidad",
+                                            "Url": "necesidad/solicitud_necesidad",
+                                            "TipoOpcion": "Menú",
+                                            "Opciones": null,
+                                            "$$hashKey": "object:64"
+                                        },
+                                        {
+                                            "Id": 364,
+                                            "Nombre": "Consultar necesidad",
+                                            "Url": "necesidades",
+                                            "TipoOpcion": "Menú",
+                                            "Opciones": null,
+                                            "$$hashKey": "object:65"
+                                        }
+                                    ],
+                                    "$$hashKey": "object:53"
+                                },
+                                {
+                                    "Id": 365,
+                                    "Nombre": "Editar necesidad",
+                                    "Url": "necesidad/solicitud_necesidad/:IdNecesidad",
+                                    "TipoOpcion": "Acción",
+                                    "Opciones": null,
+                                    "$$hashKey": "object:54"
+                                },
+                                {
+                                    "Id": 366,
+                                    "Nombre": "main",
+                                    "Url": "/",
+                                    "TipoOpcion": "Acción",
+                                    "Opciones": null,
+                                    "$$hashKey": "object:55"
+                                }
+                            ]
+                            response.data = datosMenu
+                            $rootScope.menu = response.data;
+                            behaviorTheme.initMenu(response.data);
+                            $scope.menu = behaviorTheme.menu;
+                        }
                     })
                         .catch(
                             function (response) {
+                                console.log('Respuesta catch', response)
                                 $rootScope.menu = response.data;
                                 behaviorTheme.initMenu(response.data);
                                 $scope.menu = behaviorTheme.menu;
-
                             });
                 }
             }
