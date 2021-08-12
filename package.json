@@ -44,7 +44,7 @@
   "scripts": {
     "test": "karma start test/karma.conf.js",
     "test:legacy": "grunt test",
-    "install": "bower install -F",
+    "prepare": "bower install -F",
     "serve": "grunt serve",
     "build": "grunt build"
   },
