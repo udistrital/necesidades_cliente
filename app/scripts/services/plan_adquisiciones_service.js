@@ -11,7 +11,7 @@ angular.module('planAdquisicionService',[])
   .service('planAdquisicionRequest', function ($http, $q, token_service, CONF) {
     // Service logic
     // ...
-    var path = CONF.GENERAL.PLAN_ADQUISICIONES_SERVICE;
+    var path = CONF.GENERAL.PLAN_ADQUISICIONES_CRUD_SERVICE;
     // Public API here
     var cancelSearch; //defer object
     return {
