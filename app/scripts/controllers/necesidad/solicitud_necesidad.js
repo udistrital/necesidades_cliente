@@ -53,7 +53,6 @@ angular.module('contractualClienteApp')
 
         // obtener vigencia, provisional
         self.fecha_actual = new Date();
-        self.vigencia = "2019";
         self.deepCopy = function (obj) {
             return JSON.parse(JSON.stringify(obj));
         };
@@ -110,7 +109,7 @@ angular.module('contractualClienteApp')
         };
 
         //Carga los planes de adquisicion de Plan de adquisiciones
-        planAdquisicionRequest.get("Plan_adquisiciones").then(function(res) {
+        planAdquisicionRequest.get("Plan_adquisiciones?limit=-1").then(function(res) {
             if(res.data.Body !== null){
                 self.planes_anuales=res.data;
             }

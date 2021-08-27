@@ -83,18 +83,14 @@ angular
             metasRequest
               .get(
                 "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-                  "3-11-002-11-25" +
+                  $scope.apropiacion.RubroId +
                   ",RegistroPlanAdquisicionesActividadId__RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia:" +
-                  "2020"
+                  $scope.apropiacion.Apropiacion.Vigencia
               )
               .then(function (res) {
-                console.log("Scope", $scope, "Data", res.data);
-                //consolevar tempmetas = res.data.metas.actividades.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}); // falta un filter por rubro
-                //var tempmetas = res.data.filter(function(a){return a.rubro===$scope.apropiacion.RubroId}); // falta un filter por rubro
-                //var tempmetas = res.data;
                 self.metas = [];
                 res.data.map((meta) => {
-                  console.log("META", meta)
+                  console.log("META", meta);
                   let metaSchema = {
                     Id: meta.RegistroPlanAdquisicionesActividadId.ActividadId
                       .MetaId.Id,
@@ -153,7 +149,7 @@ angular
                     act.MetaID = act.meta_id;
                     act.FuentesActividad
                       ? act.FuentesActividad.forEach(function (f) {
-                        console.log("F", f)
+                          console.log("F", f);
                           f.FuenteId = f.FuenteId || f.fuente_financiamiento;
                           if (
                             parseFloat(f.MontoParcial) >
@@ -289,7 +285,7 @@ angular
               "/" +
               actividadid*/
             "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-              "3-11-002-11-25" +
+              $scope.apropiacion.RubroId +
               ",RegistroPlanAdquisicionesActividadId__ActividadId__Id:" +
               "1"
           );
@@ -299,9 +295,9 @@ angular
           metasRequest
             .get(
               "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-                "3-11-002-11-25" +
+                $scope.apropiacion.RubroId +
                 ",RegistroPlanAdquisicionesActividadId__RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia:" +
-                "2020"
+                $scope.apropiacion.Apropiacion.Vigencia
             )
             // FIXME: Se encuentra esa linea que no trae necesariamente
             //el número de dependencia solicitante se espera que los rubros
@@ -322,8 +318,14 @@ angular
 
                 if (self.gridOptions.data.length > 0) {
                   self.gridOptions.data.forEach((uniqueActividad) => {
-                    console.log("UNIQUEACTIVIDAD", uniqueActividad.actividad_id);
-                    console.log("ACTIVIDADSCHEMA", actividadSchema.actividad_id);
+                    console.log(
+                      "UNIQUEACTIVIDAD",
+                      uniqueActividad.actividad_id
+                    );
+                    console.log(
+                      "ACTIVIDADSCHEMA",
+                      actividadSchema.actividad_id
+                    );
                     if (
                       uniqueActividad.actividad_id !=
                       actividadSchema.actividad_id
@@ -335,8 +337,10 @@ angular
                   self.gridOptions.data.push(actividadSchema);
                 }
 
-                self.gridOptions.data = Array.from(new Set(self.gridOptions.data));
-                console.log("GRIDUNIQUE", self.gridOptions.data)
+                self.gridOptions.data = Array.from(
+                  new Set(self.gridOptions.data)
+                );
+                console.log("GRIDUNIQUE", self.gridOptions.data);
               });
               /*response.data.metas.actividades
                 .filter(function (a) {

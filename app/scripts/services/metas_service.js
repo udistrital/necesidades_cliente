@@ -11,7 +11,7 @@ angular.module('metasService', [])
     .service('metasRequest', function ($http, $q, token_service, CONF) {
         // AngularJS will instantiate a singleton by calling "new" on this function
         //var path = CONF.GENERAL.METAS_SERVICE;
-        var path = CONF.GENERAL.PLAN_ADQUISISIONES_CRUD_SERVICE;
+        var path = CONF.GENERAL.PLAN_ADQUISICIONES_CRUD_SERVICE;
         // Public API here
         var cancelSearch; //defer object
         return { 

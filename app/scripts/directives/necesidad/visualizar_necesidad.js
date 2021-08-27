@@ -98,7 +98,7 @@ angular.module('contractualClienteApp')
                             if (response_dependencia.data !== null && response_dependencia.status === 200) {
                                 if (solicitante) {
                                     self.dependencia_solicitante = response_dependencia.data[0];
-
+                                    //TODO: Arreglar llamado a metasRequest
                                     metasRequest.get('plan_adquisiciones/' + $scope.necesidad.Necesidad.Vigencia +
                                         "/" + response_dependencia.data[0].Id).then(function (response) {
 
