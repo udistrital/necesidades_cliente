@@ -10,11 +10,20 @@
 angular.module('metasService', [])
     .service('metasRequest', function ($http, $q, token_service, CONF) {
         // AngularJS will instantiate a singleton by calling "new" on this function
-        var path = CONF.GENERAL.METAS_SERVICE;
+        //var path = CONF.GENERAL.METAS_SERVICE;
+        var path = CONF.GENERAL.PLAN_ADQUISISIONES_CRUD_SERVICE;
         // Public API here
         var cancelSearch; //defer object
-        return {
-            get: function (tabla, params) {
+        return { 
+            get: function (query) { 
+                // FIXME: ?query=Activo:true,Rubro:3-00-991-00
+                console.log("PATH REQ", path + 'Registro_inversion_actividad-Fuente_financiamiento' + query);
+                return $http.get(path + 'Registro_inversion_actividad-Fuente_financiamiento' + query);
+            },
+            getActividad: function (query) {
+                
+            }
+            /*get: function (tabla, params) {
                 cancelSearch = $q.defer();
                 if (params === undefined) {
                     return $http.get(path + tabla, [{ timeout: cancelSearch.promise }, token_service.setting_bearer.headers]);
@@ -33,6 +42,6 @@ angular.module('metasService', [])
             },
             cancel: function () {
                 return cancelSearch.resolve('search aborted');
-            }
+            }*/
         };
     });
