@@ -116,7 +116,6 @@ angular
         );
 
         self.actualiza_rubros = function () {
-          console.log($scope);
           planCuentasRequest
             .get(
               "arbol_rubro_apropiacion/get_hojas/" +
@@ -125,7 +124,6 @@ angular
                 $scope.vigencia
             )
             .then(function (response) {
-              console.log({response});
               if (response.data.Body !== null) {
                 response.data.Body = response.data.Body.filter(function (a) {
                   // funcion para filtrar rubros por codigo

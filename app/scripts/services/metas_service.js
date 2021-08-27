@@ -16,13 +16,8 @@ angular.module('metasService', [])
         var cancelSearch; //defer object
         return { 
             get: function (query) { 
-                // FIXME: ?query=Activo:true,Rubro:3-00-991-00
-                console.log("PATH REQ", path + 'Registro_inversion_actividad-Fuente_financiamiento' + query);
                 return $http.get(path + 'Registro_inversion_actividad-Fuente_financiamiento' + query);
             },
-            getActividad: function (query) {
-                
-            }
             /*get: function (tabla, params) {
                 cancelSearch = $q.defer();
                 if (params === undefined) {

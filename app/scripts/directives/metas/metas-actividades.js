@@ -78,19 +78,16 @@ angular
         self.cargarMetas = function () {
           if ($scope.dependenciasolicitante) {
             //TODO: Cambiar la solicitud de las metas por la URL correcta
-            //metasRequest.get('plan_aduisiciones/2019/'+ $scope.dependenciasolicitante.toString()).then(
-            //$scope.apropiacion.RubroId = "3-11-002-11-25";
             metasRequest
               .get(
                 "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-                  $scope.apropiacion.RubroId +
+                  $scope.apropiacion.RubroId /*+
                   ",RegistroPlanAdquisicionesActividadId__RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia:" +
-                  $scope.apropiacion.Apropiacion.Vigencia
+                  $scope.apropiacion.Apropiacion.Vigencia*/
               )
               .then(function (res) {
                 self.metas = [];
                 res.data.map((meta) => {
-                  console.log("META", meta);
                   let metaSchema = {
                     Id: meta.RegistroPlanAdquisicionesActividadId.ActividadId
                       .MetaId.Id,
@@ -111,12 +108,6 @@ angular
 
                   //self.metas.push(metaSchema);
                 });
-
-                console.log("Metas?", self.metas);
-
-                /*tempmetas.forEach(function (act) {
-                  (self.metas.filter(function (m) { return (m.Id === act.meta_id); }).length === 0) ? self.metas.push({ Id: act.meta_id, Nombre: act.meta }) : _;
-                })*/
                 if ($scope.apropiacion.Metas.length > 0) {
                   self.meta = $scope.apropiacion.Metas[0].MetaId;
                 }
@@ -285,9 +276,9 @@ angular
               "/" +
               actividadid*/
             "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-              $scope.apropiacion.RubroId +
+              $scope.apropiacion.RubroId /*+
               ",RegistroPlanAdquisicionesActividadId__ActividadId__Id:" +
-              "1"
+              "1"*/
           );
         };
 
@@ -295,9 +286,9 @@ angular
           metasRequest
             .get(
               "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-                $scope.apropiacion.RubroId +
+                $scope.apropiacion.RubroId /*+
                 ",RegistroPlanAdquisicionesActividadId__RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia:" +
-                $scope.apropiacion.Apropiacion.Vigencia
+                $scope.apropiacion.Apropiacion.Vigencia*/
             )
             // FIXME: Se encuentra esa linea que no trae necesariamente
             //el número de dependencia solicitante se espera que los rubros
@@ -318,14 +309,6 @@ angular
 
                 if (self.gridOptions.data.length > 0) {
                   self.gridOptions.data.forEach((uniqueActividad) => {
-                    console.log(
-                      "UNIQUEACTIVIDAD",
-                      uniqueActividad.actividad_id
-                    );
-                    console.log(
-                      "ACTIVIDADSCHEMA",
-                      actividadSchema.actividad_id
-                    );
                     if (
                       uniqueActividad.actividad_id !=
                       actividadSchema.actividad_id
@@ -340,7 +323,6 @@ angular
                 self.gridOptions.data = Array.from(
                   new Set(self.gridOptions.data)
                 );
-                console.log("GRIDUNIQUE", self.gridOptions.data);
               });
               /*response.data.metas.actividades
                 .filter(function (a) {
