@@ -25,6 +25,7 @@ angular.module('contractualClienteApp')
             CATALOGO_ARKA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/catalogo_elementos_crud/v1/",
             PLAN_CUENTAS_MID_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mid/v1/',
             PLAN_CUENTAS_MONGO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mongo_crud/v1/',
+            PLAN_ADQUISICIONES_CRUD_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_adquisiciones_crud/v1/',
             NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/",
             METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/",
             PLAN_ADQUISISIONES_CRUD_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_adquisiciones_crud/v1/',

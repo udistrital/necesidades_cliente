@@ -9,7 +9,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest, parametrosRequest,catalogoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest, parametrosRequest,catalogoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService, planAdquisicionRequest) {
         var self = this;
         //inicializar Necesidad
         self.Necesidad = {
@@ -20,8 +20,7 @@ angular.module('contractualClienteApp')
                 SupervisorId: undefined
             },
             Vigencia: new Date().getFullYear() + "",
-            Valor: 0,
-
+            Valor: 0
         }
         //inicializar objetos necesidad
         self.DetalleServicioNecesidad = {};
@@ -82,11 +81,7 @@ angular.module('contractualClienteApp')
         self.FormularioSeleccionado = 0;
         self.tipoInterventor = false;
 
-        // para mostrar select de plan adquisicion, no existe servicio
-        self.planes_anuales = [{
-            Id: 1,
-            Nombre: "Plan de Adquisición 2019"
-        }];
+        self.planes_anuales = [{}];
 
         self.duracionEspecialMap = {
             duracion: [true, false, false, undefined],
@@ -114,6 +109,12 @@ angular.module('contractualClienteApp')
             }
         };
 
+        //Carga los planes de adquisicion de Plan de adquisiciones
+        planAdquisicionRequest.get("Plan_adquisiciones").then(function(res) {
+            if(res.data.Body !== null){
+                self.planes_anuales=res.data;
+            }
+        });
 
         // El tipo de solicitud de contrato
         self.duracionEspecialFunc = function (especial) {// calculo de unidades de tiempo
@@ -169,7 +170,7 @@ angular.module('contractualClienteApp')
                     limit: -1
                 })).then(function (response) {
 
-                    if(response.data.Data[0]!= undefined){
+                    if(response.data.Data[0]!== undefined){
                         self.DetallePrestacionServicioNecesidad.NucleoId = response.data.Data[0].ParametroPadre.Id;
                         parametrosRequest.get('parametro', $.param({ 
                             limit: -1,
@@ -208,7 +209,7 @@ angular.module('contractualClienteApp')
                     })).then(function (response) {
                         prod.ElementoNombre = response.data[0].Nombre;
                     });
-                    if (self.iva_data != undefined) { // calculo valores iva
+                    if (self.iva_data !== undefined) { // calculo valores iva
 
                         var tIva = self.getPorcIVAbyId(prod.IvaId);
                         prod.Subtotal = prod.Cantidad * prod.Valor;
@@ -259,9 +260,8 @@ angular.module('contractualClienteApp')
                 self.dependencia_supervisor=undefined; 
                 self.rol_ordenador_gasto=undefined;
             }
-        }
+        });
 
-        );
         // watchers para actualizar informacion en el localstorage
         $scope.$watch('solicitudNecesidad.Necesidad', function () {
             localStorage.setItem("Necesidad", JSON.stringify(self.Necesidad));
@@ -312,7 +312,6 @@ angular.module('contractualClienteApp')
                 self.emptyStorage();
             }
         });
-
 
         $scope.$watch('solicitudNecesidad.detalle_servicio_necesidad.NucleoConocimiento', function () {
             if (!self.detalle_servicio_necesidad) { return; }
@@ -557,7 +556,7 @@ angular.module('contractualClienteApp')
             self.interventor_data = response.data;
             self.persona_data = response.data.filter(function (p) {
                 self.jefes_dep_data.data.forEach(function (i) {
-                    if (p.Id == i.TerceroId) {
+                    if (p.Id === i.TerceroId) {
                         arrJD.push(p);
                     }
 
