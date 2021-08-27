@@ -10,6 +10,7 @@ steps:
     branch:
     - develop
     - feature/*
+    - hotfix/*
     - release/*
     event:
     - push
@@ -22,21 +23,27 @@ steps:
     branch:
     - develop
     - feature/*
+    - hotfix/*
     - release/*
     event:
     - push
 
-- name: check_commits
-  image: jjvargass/qa_develoment:latest
-  commands:
-  - python /app/check_commits.py
-  when:
-    branch:
-    - develop
-    - feature/*
-    - release/*
-    event:
-    - push
+# SCRIPT NO OBJETIVO:
+# No tiene en cuenta un intervalo de commits sino un intervalo de
+# fechas, y adicionalmente está contando mal los commit multilinea.
+# Step comentado hasta que se corrija lo anterior
+# - name: check_commits
+#   image: jjvargass/qa_develoment:latest
+#   commands:
+#   - python /app/check_commits.py
+#   when:
+#     branch:
+#     - develop
+#     - feature/*
+#     - hotfix/*
+#     - release/*
+#     event:
+#     - push
 
 # - name: prueba-unitarias
 #   image: node:12.6.0
@@ -67,6 +74,8 @@ steps:
     branch:
     - develop
     - feature/*
+    - hotfix/*
+    - master
     - release/*
     event:
     - push
@@ -82,6 +91,8 @@ steps:
    - grunt build
   when:
     branch:
+    - develop
+    - feature/*
     - release/*
     event:
     - push
@@ -98,6 +109,7 @@ steps:
   when:
     branch:
     - master
+    - hotfix/*
     event:
     - push
 
