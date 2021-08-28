@@ -78,13 +78,10 @@ angular
         self.cargarMetas = function () {
           if ($scope.dependenciasolicitante) {
             //TODO: Cambiar la solicitud de las metas por la URL correcta
+            const QUERY = "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
+            $scope.apropiacion.RubroId;
             metasRequest
-              .get(
-                "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-                  $scope.apropiacion.RubroId /*+
-                  ",RegistroPlanAdquisicionesActividadId__RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia:" +
-                  $scope.apropiacion.Apropiacion.Vigencia*/
-              )
+              .get(QUERY)      
               .then(function (res) {
                 self.metas = [];
                 res.data.map((meta) => {
@@ -98,7 +95,7 @@ angular
 
                   if (self.metas.length > 0) {
                     self.metas.forEach((uniqueMeta) => {
-                      if (uniqueMeta.Id != metaSchema.Id) {
+                      if (uniqueMeta.Id !== metaSchema.Id) {
                         self.metas.push(metaSchema);
                       }
                     });
@@ -140,7 +137,6 @@ angular
                     act.MetaID = act.meta_id;
                     act.FuentesActividad
                       ? act.FuentesActividad.forEach(function (f) {
-                          console.log("F", f);
                           f.FuenteId = f.FuenteId || f.fuente_financiamiento;
                           if (
                             parseFloat(f.MontoParcial) >
@@ -241,7 +237,6 @@ angular
           }
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             self.actividades = self.gridApi.selection.getSelectedRows();
-            console.log("SELF ACTIVIDADES", self.actividades);
             self.actividades.forEach(function (a) {
               self
                 .getFuentesActividad(
@@ -252,11 +247,9 @@ angular
                 )
                 .then(function (res) {
                   var fuentesact = res.data ? res.data : [];
-                  console.log("FUENTESACT", fuentesact);
                   a.FuentesActividad
                     ? (a.FuentesActividad = a.FuentesActividad)
                     : (a.FuentesActividad = fuentesact);
-                  console.log(res);
                 });
             });
             $scope.metas[0].Actividades = self.actividades;
@@ -268,31 +261,19 @@ angular
           rubro,
           actividadid
         ) {
-          return metasRequest.get(
-            /*"plan_adquisiciones_fuentes_financiamiento//" +
-              dependencia +
-              "/" +
-              rubro +
-              "/" +
-              actividadid*/
-            "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-              $scope.apropiacion.RubroId /*+
-              ",RegistroPlanAdquisicionesActividadId__ActividadId__Id:" +
-              "1"*/
-          );
+          const QUERY = "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
+          $scope.apropiacion.RubroId;
+          return metasRequest.get(QUERY);
         };
 
         self.loadActividades = function () {
+          const QUERY = "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
+          $scope.apropiacion.RubroId;
           metasRequest
-            .get(
-              "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-                $scope.apropiacion.RubroId /*+
-                ",RegistroPlanAdquisicionesActividadId__RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia:" +
-                $scope.apropiacion.Apropiacion.Vigencia*/
-            )
+          .get(QUERY)
             // FIXME: Se encuentra esa linea que no trae necesariamente
-            //el número de dependencia solicitante se espera que los rubros
-            //que están en la tabla ya tengan ese filtro $scope.dependenciasolicitante.toString()
+            // el número de dependencia solicitante se espera que los rubros
+            // que están en la tabla ya tengan ese filtro $scope.dependenciasolicitante.toString()
             .then(function (res) {
               self.gridOptions.data = [];
               res.data.map((actividad) => {
@@ -310,7 +291,7 @@ angular
                 if (self.gridOptions.data.length > 0) {
                   self.gridOptions.data.forEach((uniqueActividad) => {
                     if (
-                      uniqueActividad.actividad_id !=
+                      uniqueActividad.actividad_id !==
                       actividadSchema.actividad_id
                     ) {
                       self.gridOptions.data.push(actividadSchema);
@@ -324,6 +305,7 @@ angular
                   new Set(self.gridOptions.data)
                 );
               });
+              // TODO: Se espera relizar una revisión profunda del código antes de eliminarlo
               /*response.data.metas.actividades
                 .filter(function (a) {
                   return a.rubro === $scope.apropiacion.RubroId;

@@ -81,8 +81,8 @@ angular
           ["unidadejecutora", "tipofinanciacion"],
           function () {
             if (
-              $scope.unidadejecutora != undefined &&
-              $scope.tipofinanciacion != undefined
+              $scope.unidadejecutora !== undefined &&
+              $scope.tipofinanciacion !== undefined
             ) {
               // UD inversion
               if (

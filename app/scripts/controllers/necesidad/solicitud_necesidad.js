@@ -80,7 +80,7 @@ angular.module('contractualClienteApp')
         self.FormularioSeleccionado = 0;
         self.tipoInterventor = false;
 
-        self.planes_anuales = [{}];
+        self.planes_anuales = [];
 
         self.duracionEspecialMap = {
             duracion: [true, false, false, undefined],
@@ -169,7 +169,7 @@ angular.module('contractualClienteApp')
                     limit: -1
                 })).then(function (response) {
 
-                    if(response.data.Data[0]!== undefined){
+                    if(response.data.Data[0] !== undefined){
                         self.DetallePrestacionServicioNecesidad.NucleoId = response.data.Data[0].ParametroPadre.Id;
                         parametrosRequest.get('parametro', $.param({ 
                             limit: -1,
