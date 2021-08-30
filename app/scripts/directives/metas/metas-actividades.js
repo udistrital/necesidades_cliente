@@ -84,8 +84,8 @@ angular
               .get(QUERY)      
               .then(function (res) {
                 self.metas = [];
-                res.data.map((meta) => {
-                  let metaSchema = {
+                res.data.map(function(meta) {
+                  const metaSchema = {
                     Id: meta.RegistroPlanAdquisicionesActividadId.ActividadId
                       .MetaId.Id,
                     Nombre:
@@ -94,7 +94,7 @@ angular
                   };
 
                   if (self.metas.length > 0) {
-                    self.metas.forEach((uniqueMeta) => {
+                    self.metas.forEach(function(uniqueMeta) {
                       if (uniqueMeta.Id !== metaSchema.Id) {
                         self.metas.push(metaSchema);
                       }
@@ -276,9 +276,8 @@ angular
             // que están en la tabla ya tengan ese filtro $scope.dependenciasolicitante.toString()
             .then(function (res) {
               self.gridOptions.data = [];
-              res.data.map((actividad) => {
-                console.log("Datos dentro", res.data);
-                let actividadSchema = {
+              res.data.map(function(actividad) {
+                const actividadSchema = {
                   actividad_id:
                     actividad.RegistroPlanAdquisicionesActividadId.Id,
                   actividad:
@@ -289,7 +288,7 @@ angular
                 };
 
                 if (self.gridOptions.data.length > 0) {
-                  self.gridOptions.data.forEach((uniqueActividad) => {
+                  self.gridOptions.data.forEach(function(uniqueActividad) {
                     if (
                       uniqueActividad.actividad_id !==
                       actividadSchema.actividad_id
@@ -391,8 +390,8 @@ angular
           "[d_metasActividades.gridOptions.paginationPageSize, d_metasActividades.gridOptions.data]",
           function () {
             if (
-              (self.gridOptions.data.length <=
-                self.gridOptions.paginationPageSize ||
+              ((self.gridOptions.data.length <=
+                self.gridOptions.paginationPageSize) ||
                 self.gridOptions.paginationPageSize === null) &&
               self.gridOptions.data.length > 0
             ) {
