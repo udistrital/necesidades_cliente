@@ -10,7 +10,7 @@
                 </p>
                 <div>
                     <ul>
-                        <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas | orderBy:Id:true">
+                        <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas">
                             <input type="radio" name="name" value="{{meta.Id}}" ng-model="d_metasActividades.meta"
                                 ng-click="d_metasActividades.ResetMeta()" required />{{ meta.Id }}, {{ meta.Nombre }}
                         </li>

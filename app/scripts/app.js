@@ -44,6 +44,7 @@ angular
         'financieraService',
         'planCuentasService',
         'planCuentasMidService',
+        'planAdquisicionService',
         'metasService',
         'catalogoService',
         'coreService',
