@@ -70,9 +70,9 @@ npm run test:ui
 
 ## Estado CI
 
-| Develop | Relese 0.0.1 | Master |
+| Develop | Relese 0.1.0 | Master |
 | -- | -- | -- |
-| [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/develop)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/release/0.0.1)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) |
+| [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/develop)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/release/0.1.0)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) |
 
 ## Licencia
 
