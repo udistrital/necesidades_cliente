@@ -256,7 +256,7 @@
                   <label class="control-label">{{"UNIDAD_EJECUTORA" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
                   <select class="form-control" ng-model="solicitudNecesidad.Necesidad.AreaFuncional"
-                    ng-options="ue.Id as ue.Nombre for ue in solicitudNecesidad.unidad_ejecutora_data" required>
+                    ng-options="ue.Id as ue.Nombre for ue in solicitudNecesidad.area_funcional_data" required>
                     <option value="" disabled selected>{{"SELECCIONAR" | translate}}
                       {{"UNIDAD_EJECUTORA" | translate}}</option>
                   </select>

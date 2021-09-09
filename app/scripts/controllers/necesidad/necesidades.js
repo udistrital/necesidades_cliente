@@ -24,7 +24,7 @@ angular.module('contractualClienteApp')
         self.modalidadSel = {};
         self.TipoContrato = {};
         // self.unidadE = "";
-        // self.unidadE = self.unidad_ejecutora_data.filter(function(a){
+        // self.unidadE = self.area_funcional_data.filter(function(a){
         //     if(a.Id === row.entity.UnidadEjecutora){
         //         return a.Nombre;
         //     }
@@ -35,10 +35,12 @@ angular.module('contractualClienteApp')
                     self.buttons = data;
                 }); */
 
-        self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }];
-
+        self.area_funcional_data = [{ Id: 1, Nombre: 'Rector' }, 
+                                    { Id: 2, Nombre: 'Convenios' },
+                                    { Id: 3, Nombre: 'IDEXUD' }];
+                                    
         self.buscarUE = function (idUE) {
-            self.unidad_ejecutora_data.filter(function (e) {
+            self.area_funcional_data.filter(function (e) {
                 if (idUE === e.Id) {
                     return e.Nombre;
                 } else {
