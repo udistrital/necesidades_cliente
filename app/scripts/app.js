@@ -70,6 +70,8 @@ angular
         'ngMaterial',
         'md-steppers',
         'implicitToken',
+        'terceroCrudService',
+        'terceroMidService',
         'core'
     ])
     .run(function (amMoment) {

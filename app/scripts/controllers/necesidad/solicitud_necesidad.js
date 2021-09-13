@@ -31,7 +31,9 @@ angular
       $routeParams,
       necesidadService,
       planAdquisicionRequest,
-      configuracionRequest
+      configuracionRequest,
+      terceroCrudRequest,
+      terceroMidRequest
     ) {
       var self = this;
       //inicializar Necesidad
@@ -131,6 +133,21 @@ angular
           completado: true,
         },
       };
+
+      //Se asigna la lista de dependencias asociados al usuario o tercero que ingreso
+      terceroMidRequest
+        .get(
+          "propiedad/dependencia/" + window.localStorage.getItem("idTercero")
+        )
+        .then(function (Dependencias) {
+          //trae lista dependencias
+          if (Dependencias.data !== null) {
+            self.dependencia_soli_data = Dependencias;
+            console.log(Dependencias);
+          } else {
+            console.log("No tiene dependencias relacionadas");
+          }
+        });
 
       // El tipo de solicitud de contrato
       self.duracionEspecialFunc = function (especial) {
