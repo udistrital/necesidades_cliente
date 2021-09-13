@@ -769,7 +769,7 @@ angular
                                 // Carga los planes de adquisicion desde Plan de adquisiciones y que correspondan
                                 // al plan de adquisición activo para el área seleccionada.
                                 const QUERY =
-                                    "?sortby=FechaCreacion&order=desc&limit=-1&query=Descripcion:" +
+                                    "?sortby=FechaCreacion&order=desc&limit=-1&query=Id:" +
                                     plan_adquisiciones;
                                 planAdquisicionRequest
                                     .get("Plan_adquisiciones" + QUERY)
@@ -784,7 +784,7 @@ angular
                                     res.data[0].Valor
                                 ).plan_adquisiciones_general;
                                 const QUERY =
-                                    "?sortby=FechaCreacion&order=desc&limit=-1&query=Descripcion:" +
+                                    "?sortby=FechaCreacion&order=desc&limit=-1&query=Id:" +
                                     plan_adquisiciones;
                                 // Carga los planes de adquisicion desde Plan de adquisiciones y que correspondan
                                 // al plan de adquisición activo para el área seleccionada.
