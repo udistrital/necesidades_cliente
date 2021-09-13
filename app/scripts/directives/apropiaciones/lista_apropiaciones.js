@@ -119,14 +119,15 @@ angular
           planCuentasRequest
             .get(
               "arbol_rubro_apropiacion/get_hojas/" +
-                $scope.unidadejecutora +
-                "/" +
-                $scope.vigencia
+              //$scope.unidadejecutora +
+              "1" +
+              "/" +
+              $scope.vigencia
             )
             .then(function (response) {
               if (response.data.Body !== null) {
                 response.data.Body = response.data.Body.filter(function (a) {
-                  // funcion para filtrar rubros por codigo
+                  // Función para filtrar rubros por código
                   return a.Codigo.startsWith($scope.tipo);
                 });
                 self.gridOptions.data = response.data.Body.sort(function (
