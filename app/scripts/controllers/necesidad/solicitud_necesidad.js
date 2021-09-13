@@ -9,7 +9,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest, parametrosRequest,catalogoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService, planAdquisicionRequest) {
+    .controller('SolicitudNecesidadCtrl', function (administrativaRequest, necesidadesCrudRequest, planCuentasRequest, planCuentasMidRequest, $scope, $sce, $http, $filter, $window , agoraRequest, parametrosGobiernoRequest, parametrosRequest,catalogoRequest, coreAmazonRequest, $translate, $routeParams, necesidadService, planAdquisicionRequest, terceroCrudRequest, terceroMidRequest) {
         var self = this;
         //inicializar Necesidad
         self.Necesidad = {
@@ -107,6 +107,16 @@ angular.module('contractualClienteApp')
                 completado: true,
             }
         };
+
+        //Se asigna la lista de dependencias asociados al usuario o tercero que ingreso
+        terceroMidRequest.get("propiedad/dependencia/"+window.localStorage.getItem("idTercero")).then(function (Dependencias) { //trae lista dependencias
+            if(Dependencias.data !== null){
+                self.dependencia_soli_data = Dependencias;
+                console.log(Dependencias)
+            } else {
+                console.log("No tiene dependencias relacionadas")
+            }
+        });
 
         //Carga los planes de adquisicion de Plan de adquisiciones
         planAdquisicionRequest.get("Plan_adquisiciones?limit=-1").then(function(res) {
