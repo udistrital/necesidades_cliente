@@ -110,7 +110,7 @@ angular.module('contractualClienteApp')
         };
 
         //Se asigna la lista de dependencias asociados al usuario o tercero que ingreso
-        terceroMidRequest.get("propiedad/dependecia/"+window.localStorage.getItem("idTercero")).then(function (Dependencias) { //trae lista dependencias
+        terceroMidRequest.get("propiedad/dependencia/"+window.localStorage.getItem("idTercero")).then(function (Dependencias) { //trae lista dependencias
             if(Dependencias.data !== null){
                 self.dependencia_soli_data = Dependencias;
                 console.log(Dependencias)
