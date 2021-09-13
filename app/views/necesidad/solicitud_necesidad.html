@@ -119,7 +119,7 @@
                   <label for="dep_solicitante" class="control-label">{{"DEPENDENCIA_SOLICITANTE" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
                   <select class="form-control" ng-model="solicitudNecesidad.dependencia_solicitante"
-                    ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_data" required>
+                    ng-options="depd.Id as depd.Nombre for depd in solicitudNecesidad.dependencia_soli_data" required>
                     <option value="" disabled selected>{{"SELECCIONAR" | translate}}
                       {{"DEPENDENCIA_SOLICITANTE" | translate}}</option>
                   </select>
