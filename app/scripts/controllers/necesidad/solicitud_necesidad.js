@@ -779,7 +779,7 @@ angular
           if (self.Necesidad.AreaFuncional) {
             const QUERY = "?query=Id:29";
             configuracionRequest.get("parametro", QUERY).then(function (res) {
-              if (self.Necesidad.AreaFuncional === 3) {
+              if (self.Necesidad.AreaFuncional === 2) {
                 const plan_adquisiciones = JSON.parse(
                   res.data[0].Valor
                 ).plan_adquisiciones_idexud;
