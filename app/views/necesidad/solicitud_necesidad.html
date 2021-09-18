@@ -236,7 +236,8 @@
                   <small>*{{"OBLIGATORIO" | translate}}</small>
                   <select class="form-control" ng-model="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId"
                     ng-options="tipof.Nombre for tipof in solicitudNecesidad.tipo_financiacion_data track by tipof.Id"
-                    required>
+                    required
+                    ng-disabled="disableTipoFinanciacion">
                     <option value="" disabled selected>{{"SELECCIONAR" | translate}}
                       {{"TIPO_FINANCIACION" | translate}}</option>
                   </select>
@@ -246,8 +247,10 @@
                   <label class="control-label">{{"PLAN_ANUAL_ADQUISICIONES" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
                   <select class="form-control" ng-model="solicitudNecesidad.vigencia"
-                    ng-options="pa.Vigencia as pa.Descripcion for pa  in solicitudNecesidad.planes_anuales" required>
-                    <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" |
+                    ng-options="pa.Descripcion for pa in solicitudNecesidad.planes_anuales track by pa.Id"
+                    required
+                    ng-disabled="disabledSelect">
+                  <option value="">{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" |
                                   translate}}</option>
                   </select>
                 </div>

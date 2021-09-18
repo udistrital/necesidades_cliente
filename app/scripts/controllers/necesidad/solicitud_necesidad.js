@@ -105,7 +105,7 @@ angular
       self.FormularioSeleccionado = 0;
       self.tipoInterventor = false;
 
-      self.planes_anuales = [];
+      // self.planes_anuales = ['Prueba'];
 
       self.duracionEspecialMap = {
         duracion: [true, false, false, undefined],
@@ -143,7 +143,7 @@ angular
           //trae lista dependencias
           if (Dependencias.data !== null) {
             self.dependencia_soli_data = Dependencias.data;
-            console.log(Dependencias);
+            // console.log(Dependencias);
           } else {
             console.log("No tiene dependencias relacionadas");
           }
@@ -779,7 +779,10 @@ angular
           if (self.Necesidad.AreaFuncional) {
             const QUERY = "?query=Id:29";
             configuracionRequest.get("parametro", QUERY).then(function (res) {
-              if (self.Necesidad.AreaFuncional === 2) {
+              if (self.Necesidad.AreaFuncional === undefined) {
+              } else if (self.Necesidad.AreaFuncional === 2) {
+                $scope.disabledSelect = true;
+                $scope.disableTipoFinanciacion = true;
                 const plan_adquisiciones = JSON.parse(
                   res.data[0].Valor
                 ).plan_adquisiciones_idexud;
@@ -793,10 +796,16 @@ angular
                   .then(function (res) {
                     if (res.data.Body !== null) {
                       self.planes_anuales = res.data;
+                      $scope.solicitudNecesidad.vigencia =
+                        $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
+                $scope.solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId =
+                  $scope.solicitudNecesidad.tipo_financiacion_data[0];
                 return JSON.parse(res.data[0].Valor).plan_adquisiciones_idexud;
               } else {
+                $scope.disabledSelect = false;
+                $scope.disableTipoFinanciacion = false;
                 const plan_adquisiciones = JSON.parse(
                   res.data[0].Valor
                 ).plan_adquisiciones_general;
@@ -810,11 +819,17 @@ angular
                   .then(function (res) {
                     if (res.data.Body !== null) {
                       self.planes_anuales = res.data;
+                      $scope.solicitudNecesidad.vigencia =
+                        $scope.solicitudNecesidad.planes_anuales[0];
+                      
                     }
                   });
                 return JSON.parse(res.data[0].Valor).plan_adquisiciones_general;
               }
             });
+          } else {
+            $scope.disableTipoFinanciacion = true;
+            $scope.disabledSelect = true;
           }
         },
         true

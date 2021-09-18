@@ -80,6 +80,7 @@ angular
         $scope.$watchGroup(
           ["unidadejecutora", "tipofinanciacion"],
           function () {
+            var actualizar = false;
             if (
               $scope.unidadejecutora !== undefined &&
               $scope.tipofinanciacion !== undefined
@@ -90,25 +91,33 @@ angular
                 $scope.tipofinanciacion.Id === 1
               ) {
                 $scope.tipo = "3-03";
+                actualizar = true;
                 // UD funcionamiento
-              } else if (
+              }
+              if (
                 $scope.unidadejecutora === 1 &&
                 $scope.tipofinanciacion.Id === 2
               ) {
                 $scope.tipo = "3-01";
+                actualizar = true;
                 // IDEXUD inversion, no existen
-              } else if (
+              }
+              if (
                 $scope.unidadejecutora === 2 &&
                 $scope.tipofinanciacion.Id === 1
               ) {
                 $scope.tipo = "XYZ";
                 // IDEXUD funcionamiento
-              } else if (
+              } 
+              if (
                 $scope.unidadejecutora === 2 &&
                 $scope.tipofinanciacion.Id === 2
               ) {
                 $scope.tipo = "3-00-991";
+                actualizar = true;
               }
+            }
+            if(actualizar) {
               self.actualiza_rubros();
             }
           },
@@ -122,7 +131,7 @@ angular
               //$scope.unidadejecutora +
               "1" +
               "/" +
-              $scope.vigencia
+              $scope.vigencia.Vigencia
             )
             .then(function (response) {
               if (response.data.Body !== null) {
