@@ -142,7 +142,7 @@ angular
         .then(function (Dependencias) {
           //trae lista dependencias
           if (Dependencias.data !== null) {
-            self.dependencia_soli_data = Dependencias;
+            self.dependencia_soli_data = Dependencias.data;
             // console.log(Dependencias);
           } else {
             console.log("No tiene dependencias relacionadas");
