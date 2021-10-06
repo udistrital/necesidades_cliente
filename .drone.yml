@@ -3,6 +3,7 @@ name: oas_cliente_ci
 
 steps:
 - name: check_readme
+  failure: ignore
   image: jjvargass/qa_develoment:latest
   commands:
   - python /app/check_readme.py
@@ -16,6 +17,7 @@ steps:
     - push
 
 - name: check_branch
+  failure: ignore
   image: jjvargass/qa_develoment:latest
   commands:
   - python /app/check_branch.py -H ${DRONE_GIT_HTTP_URL}
@@ -31,29 +33,36 @@ steps:
 # SCRIPT NO OBJETIVO:
 # No tiene en cuenta un intervalo de commits sino un intervalo de
 # fechas, y adicionalmente está contando mal los commit multilinea.
-# Step comentado hasta que se corrija lo anterior
-# - name: check_commits
-#   image: jjvargass/qa_develoment:latest
-#   commands:
-#   - python /app/check_commits.py
-#   when:
-#     branch:
-#     - develop
-#     - feature/*
-#     - hotfix/*
-#     - release/*
-#     event:
-#     - push
+# Step ignorado, aunque deberá ajustarse la imágen docker
+- name: check_commits
+  failure: ignore
+  image: jjvargass/qa_develoment:latest
+  commands:
+    - python /app/check_commits.py
+  when:
+    branch:
+      - develop
+      - feature/*
+      - hotfix/*
+      - release/*
+    event:
+      - push
 
-# - name: prueba-unitarias
-#   image: node:12.6.0
-#   commands:
-#   - npm i
-#   - npm run test
-#   when:
-#     branch:
-#     - unitest
-#
+- name: prueba-unitarias
+  failure: ignore
+  image: node:10
+  commands:
+    - npm i
+    - npm run test
+  when:
+    branch:
+      - develop
+      - feature/*
+      - hotfix/*
+      - master
+      - release/*
+      - unitest
+
 # - name:  pruebas-linter
 #   image: node:12.6.0
 #   commands:
