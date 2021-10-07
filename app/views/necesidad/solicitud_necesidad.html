@@ -247,7 +247,7 @@
                   <label class="control-label">{{"PLAN_ANUAL_ADQUISICIONES" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
                   <select class="form-control" ng-model="solicitudNecesidad.vigencia"
-                    ng-options="pa.Descripcion for pa in solicitudNecesidad.planes_anuales track by pa.Id"
+                    ng-options="pa.descripcion for pa in solicitudNecesidad.planes_anuales track by pa.id"
                     required
                     ng-disabled="disabledSelect">
                   <option value="">{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" |

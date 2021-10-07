@@ -131,7 +131,7 @@ angular
               //$scope.unidadejecutora +
               "1" +
               "/" +
-              $scope.vigencia.Vigencia
+              $scope.vigencia.vigencia
             )
             .then(function (response) {
               if (response.data.Body !== null) {
