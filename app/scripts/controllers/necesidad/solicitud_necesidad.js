@@ -786,7 +786,7 @@ angular
                 ).plan_adquisiciones_idexud;
                 // Carga los planes de adquisicion desde Plan de adquisiciones y que correspondan
                 // al plan de adquisición activo para el área seleccionada.
-                const QUERY = `/${plan_adquisiciones}`;
+                const QUERY = '/'+plan_adquisiciones;
                 planAdquisicionRequest
                   .get('Plan_adquisiciones_mongo' + QUERY)
                   .then(function (res) {
@@ -804,7 +804,7 @@ angular
                 const plan_adquisiciones = JSON.parse(
                   res.data[0].Valor
                 ).plan_adquisiciones_general;
-                const QUERY = `/${plan_adquisiciones}`;
+                const QUERY = '/'+plan_adquisiciones;
                 // Carga los planes de adquisicion desde Plan de adquisiciones y que correspondan
                 // al plan de adquisición activo para el área seleccionada.
                 planAdquisicionRequest
