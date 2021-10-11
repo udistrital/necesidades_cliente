@@ -105,8 +105,6 @@ angular
       self.FormularioSeleccionado = 0;
       self.tipoInterventor = false;
 
-      // self.planes_anuales = ['Prueba'];
-
       self.duracionEspecialMap = {
         duracion: [true, false, false, undefined],
         unico_pago: [true, true, false, undefined],
@@ -788,20 +786,17 @@ angular
                 ).plan_adquisiciones_idexud;
                 // Carga los planes de adquisicion desde Plan de adquisiciones y que correspondan
                 // al plan de adquisición activo para el área seleccionada.
-                const QUERY =
-                  "?sortby=FechaCreacion&order=desc&limit=-1&query=Id:" +
-                  plan_adquisiciones;
+                const QUERY = '/'+plan_adquisiciones;
                 planAdquisicionRequest
-                  .get("Plan_adquisiciones" + QUERY)
+                  .get('Plan_adquisiciones_mongo' + QUERY)
                   .then(function (res) {
-                    if (res.data.Body !== null) {
-                      self.planes_anuales = res.data;
-                      $scope.solicitudNecesidad.vigencia =
-                        $scope.solicitudNecesidad.planes_anuales[0];
+                    if (res.data !== null) {
+                      self.planes_anuales = [];
+                      self.planes_anuales.push(res.data);
+                      $scope.solicitudNecesidad.vigencia = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
-                $scope.solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId =
-                  $scope.solicitudNecesidad.tipo_financiacion_data[0];
+                $scope.solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId = $scope.solicitudNecesidad.tipo_financiacion_data[0];
                 return JSON.parse(res.data[0].Valor).plan_adquisiciones_idexud;
               } else {
                 $scope.disabledSelect = false;
@@ -809,19 +804,16 @@ angular
                 const plan_adquisiciones = JSON.parse(
                   res.data[0].Valor
                 ).plan_adquisiciones_general;
-                const QUERY =
-                  "?sortby=FechaCreacion&order=desc&limit=-1&query=Id:" +
-                  plan_adquisiciones;
+                const QUERY = '/'+plan_adquisiciones;
                 // Carga los planes de adquisicion desde Plan de adquisiciones y que correspondan
                 // al plan de adquisición activo para el área seleccionada.
                 planAdquisicionRequest
-                  .get("Plan_adquisiciones" + QUERY)
+                  .get('Plan_adquisiciones_mongo' + QUERY)
                   .then(function (res) {
-                    if (res.data.Body !== null) {
-                      self.planes_anuales = res.data;
-                      $scope.solicitudNecesidad.vigencia =
-                        $scope.solicitudNecesidad.planes_anuales[0];
-                      
+                    if (res.data !== null) {
+                      self.planes_anuales = [];
+                      self.planes_anuales.push(res.data);
+                      $scope.solicitudNecesidad.vigencia = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
                 return JSON.parse(res.data[0].Valor).plan_adquisiciones_general;
