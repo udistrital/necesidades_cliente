@@ -29,7 +29,6 @@ angular.module('contractualClienteApp')
             PARAMETROS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros/v1/", // PARAMETROS NUEVOS
             OIKOS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/oikos_crud_api/v1/",
             ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
-            CONTRATO_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_jbpm/v1/", // NO ESTA URL EN PREPROD
             NOTIFICACION_WS: "wss://pruebasapi.portaloas.udistrital.edu.co:8116/ws/join",
             TERCEROS_CRUD: "https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_crud/v1/",
             TERCEROS_MID: "https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_mid/v1/",
