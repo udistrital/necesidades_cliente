@@ -11,7 +11,7 @@ angular.module('contractualClienteApp')
     .factory("contrato", function() {
         return {};
     })
-    .controller('RpSolicitudPersonasCtrl', function($window, $filter, gridOptionsService, contratoRequest, requestRequest, administrativaRequest, $scope, contrato, resolucion, financieraRequest, financieraMidRequest, amazonAdministrativaRequest, adminMidRequest, $translate, disponibilidad, resolucionRequest) {
+    .controller('RpSolicitudPersonasCtrl', function($window, $filter, gridOptionsService, requestRequest, administrativaRequest, $scope, contrato, resolucion, financieraRequest, financieraMidRequest, amazonAdministrativaRequest, adminMidRequest, $translate, disponibilidad, resolucionRequest) {
         var self = this;
         self.offset = 0;
         self.filter = '';

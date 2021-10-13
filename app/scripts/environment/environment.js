@@ -13,8 +13,6 @@ angular.module('contractualClienteApp')
         APP: "kronos",
         APP_MENU: "Necesidades",
         GENERAL: {
-            //no wso2
-            WSO2_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services/", // NO ESTA URL EN PREPROD
             ADMINISTRATIVA_MID_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_mid_api/v1/",
             ADMINISTRATIVA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_crud_api/v1/",
             ADMINISTRATIVA_PRUEBAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_amazon_api/v1/",
@@ -28,12 +26,10 @@ angular.module('contractualClienteApp')
             // PLAN_CUENTAS_MONGO_SERVICE: 'http://localhost:8080/v1/',
             PLAN_ADQUISICIONES_CRUD_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_adquisiciones_crud/v1/',
             NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/",
-            METAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/bodega_jbpm/v1/",
             MODELS_SERVICE: "scripts/models/",
             PARAMETROS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros/v1/", // PARAMETROS NUEVOS
             OIKOS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/oikos_crud_api/v1/",
             ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
-            CONTRATO_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_jbpm/v1/", // NO ESTA URL EN PREPROD
             NOTIFICACION_WS: "wss://pruebasapi.portaloas.udistrital.edu.co:8116/ws/join",
             TERCEROS_CRUD: "https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_crud/v1/",
             TERCEROS_MID: "https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_mid/v1/",
