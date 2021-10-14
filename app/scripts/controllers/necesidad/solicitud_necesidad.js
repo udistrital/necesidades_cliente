@@ -793,7 +793,8 @@ angular
                     if (res.data !== null) {
                       self.planes_anuales = [];
                       self.planes_anuales.push(res.data);
-                      $scope.solicitudNecesidad.vigencia = $scope.solicitudNecesidad.planes_anuales[0];
+                      $scope.solicitudNecesidad.vigencia = res.data.vigencia;
+                      $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
                 $scope.solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId = $scope.solicitudNecesidad.tipo_financiacion_data[0];
@@ -813,7 +814,8 @@ angular
                     if (res.data !== null) {
                       self.planes_anuales = [];
                       self.planes_anuales.push(res.data);
-                      $scope.solicitudNecesidad.vigencia = $scope.solicitudNecesidad.planes_anuales[0];
+                      $scope.solicitudNecesidad.vigencia = res.data.vigencia;
+                      $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];   
                     }
                   });
                 return JSON.parse(res.data[0].Valor).plan_adquisiciones_general;

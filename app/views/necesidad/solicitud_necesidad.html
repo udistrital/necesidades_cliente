@@ -246,12 +246,11 @@
                 <div class="col-md-6" ng-show="solicitudNecesidad.fields.General.PlanAnualAdquisiciones">
                   <label class="control-label">{{"PLAN_ANUAL_ADQUISICIONES" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
-                  <select class="form-control" ng-model="solicitudNecesidad.vigencia"
+                  <select class="form-control" ng-model="solicitudNecesidad.planadquisicion"
                     ng-options="pa.descripcion for pa in solicitudNecesidad.planes_anuales track by pa.id"
                     required
                     ng-disabled="disabledSelect">
-                  <option value="">{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" |
-                                  translate}}</option>
+                  <option value="">{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" | translate}}</option>
                   </select>
                 </div>
 
@@ -327,11 +326,14 @@
 
                   <div>
                     <div class="form-group" ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre">
-                      <lista-apropiaciones vigencia="solicitudNecesidad.vigencia"
+                      <lista-apropiaciones 
+                        vigencia="solicitudNecesidad.vigencia"
                         tipo="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre=='Inversion'?'3-3':'3-1'"
                         apropiacion="solicitudNecesidad.apro"
                         unidadejecutora="solicitudNecesidad.Necesidad.AreaFuncional"
-                        tipofinanciacion=solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId selhijos="true">
+                        tipofinanciacion="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId"
+                        selhijos="true"
+                        planadquisicion="solicitudNecesidad.planadquisicion">
                       </lista-apropiaciones>
                       <div style="text-align:center;">
                         <button type="button" class="btn btn-success btn-outline"

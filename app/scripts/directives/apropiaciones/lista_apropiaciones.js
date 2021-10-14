@@ -18,6 +18,7 @@ angular
         unidadejecutora: "=",
         tipofinanciacion: "=",
         selhijos: "=?",
+        planadquisicion: "=",
       },
 
       templateUrl: "views/directives/apropiaciones/lista_apropiaciones.html",
@@ -31,7 +32,7 @@ angular
 
           columnDefs: [
             {
-              field: "Codigo",
+              field: "RubroInfo.Codigo",
               displayName: $translate.instant("CODIGO_RUBRO"),
               headerCellClass: $scope.highlightFilteredHeader + "text-center ",
               cellClass: function (row, col) {
@@ -41,10 +42,10 @@ angular
                   return "unbold";
                 }
               },
-              width: "15%",
+              width: "25%",
             },
             {
-              field: "Nombre",
+              field: "RubroInfo.Nombre",
               displayName: $translate.instant("NOMBRE_RUBRO"),
               headerCellClass: $scope.highlightFilteredHeader + "text-center ",
               cellTooltip: function (row) {
@@ -57,10 +58,10 @@ angular
                   return "unbold";
                 }
               },
-              width: "40%",
+              width: "50%",
             },
             {
-              field: "ValorActual",
+              field: "RubroInfo.ValorInicial",
               displayName: $translate.instant("VALOR_U"),
               cellFilter: "currency",
               // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',
@@ -72,19 +73,21 @@ angular
                   return "money";
                 }
               },
-              width: "40%",
+              width: "20%",
             },
           ],
         };
 
         $scope.$watchGroup(
-          ["unidadejecutora", "tipofinanciacion"],
+          ["unidadejecutora", "tipofinanciacion", "planadquisicion"],
           function () {
-            var actualizar = false;
+            var actualizar = false;            
             if (
               $scope.unidadejecutora !== undefined &&
-              $scope.tipofinanciacion !== undefined
+              $scope.tipofinanciacion !== undefined && 
+              $scope.planadquisicion !== undefined
             ) {
+
               // UD inversion
               if (
                 $scope.unidadejecutora === 1 &&
@@ -92,7 +95,8 @@ angular
               ) {
                 $scope.tipo = "3-03";
                 actualizar = true;
-                // UD funcionamiento
+
+              // UD funcionamiento
               }
               if (
                 $scope.unidadejecutora === 1 &&
@@ -100,20 +104,22 @@ angular
               ) {
                 $scope.tipo = "3-01";
                 actualizar = true;
-                // IDEXUD inversion, no existen
+
+              // IDEXUD inversion, no existen
               }
               if (
                 $scope.unidadejecutora === 2 &&
                 $scope.tipofinanciacion.Id === 1
               ) {
                 $scope.tipo = "XYZ";
-                // IDEXUD funcionamiento
+
+              // IDEXUD funcionamiento
               } 
               if (
                 $scope.unidadejecutora === 2 &&
                 $scope.tipofinanciacion.Id === 2
               ) {
-                $scope.tipo = "3-00-991";
+                $scope.tipo = "3-00"; // ! Cambiado de 3-00-991 a 3-00
                 actualizar = true;
               }
             }
@@ -125,16 +131,25 @@ angular
         );
 
         self.actualiza_rubros = function () {
-          planCuentasRequest
+          $scope.planadquisicion.registroplanadquisiciones.forEach(function(item){
+            if(item.Fuente === $scope.tipo){
+              console.log(item.datos);
+              self.gridOptions.data = item.datos;
+            }
+          });
+          console.log(self.gridOptions.data);
+          /*planCuentasRequest
             .get(
               "arbol_rubro_apropiacion/get_hojas/" +
-              //$scope.unidadejecutora +
+              // $scope.unidadejecutora +
+              // ! Se debe hacer el llamado a la Unidad Ejecutora correspondiente 
               "1" +
               "/" +
-              $scope.vigencia.vigencia
+              $scope.vigencia
             )
             .then(function (response) {
               if (response.data.Body !== null) {
+                console.log("Cuerpo filtrado", response.data.Body);
                 response.data.Body = response.data.Body.filter(function (a) {
                   // Función para filtrar rubros por código
                   return a.Codigo.startsWith($scope.tipo);
@@ -151,6 +166,8 @@ angular
                   }
                   return 0;
                 });
+
+                console.log("GridOptionsData: ", self.gridOptions.data);
                 self.max_level = 0;
                 var level = 0;
                 // for (var i = 0; i < self.gridOptions.data.length; i += 1) {
@@ -169,7 +186,7 @@ angular
               } else {
                 self.gridOptions.data = [];
               }
-            });
+            });*/
         };
 
         self.gridOptions.onRegisterApi = function (gridApi) {
