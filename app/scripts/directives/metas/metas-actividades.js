@@ -42,7 +42,7 @@ angular
           columnDefs: [
             {
               field: "actividad_id",
-              displayName: "Código",
+              displayName: $translate.instant('CODIGO'),
               width: "20%",
               headerCellClass:
                 $scope.highlightFilteredHeader + "text-center text-info",
@@ -77,40 +77,27 @@ angular
 
         self.cargarMetas = function () {
           if ($scope.dependenciasolicitante) {
-            //TODO: Cambiar la solicitud de las metas por la URL correcta
-            const QUERY = "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-            $scope.apropiacion.RubroId;
-            metasRequest
-              .get(QUERY)      
-              .then(function (res) {
-                self.metas = [];
-                res.data.map(function(meta) {
-                  const metaSchema = {
-                    Id: meta.RegistroPlanAdquisicionesActividadId.ActividadId
-                      .MetaId.Id,
-                    Nombre:
-                      meta.RegistroPlanAdquisicionesActividadId.ActividadId
-                        .MetaId.Nombre,
-                  };
-
-                  if (self.metas.length > 0) {
-                    self.metas.forEach(function(uniqueMeta) {
-                      if (uniqueMeta.Id !== metaSchema.Id) {
-                        self.metas.push(metaSchema);
-                      }
-                    });
-                  } else {
+            self.metas = [];
+            $scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-metas_asociadas"].forEach(function(item){
+              const metaSchema = {
+                Id: item.MetaId.Id,
+                Nombre: item.MetaId.Nombre,
+              };
+              if (self.metas.length > 0) {
+                self.metas.forEach(function(uniqueMeta) {
+                  if (uniqueMeta.Id !== metaSchema.Id) {
                     self.metas.push(metaSchema);
                   }
-
-                  //self.metas.push(metaSchema);
                 });
-                if ($scope.apropiacion.Metas.length > 0) {
-                  self.meta = $scope.apropiacion.Metas[0].MetaId;
-                }
-                self.editando = true;
-              });
-          }
+              } else {
+                self.metas.push(metaSchema);
+              }
+            });
+            if ($scope.apropiacion.Metas.length > 0) {
+              self.meta = $scope.apropiacion.Metas[0].MetaId;
+            }
+            self.editando = true;
+          };
         };
 
         $scope.$watchGroup(
@@ -131,17 +118,14 @@ angular
           function () {
             self.MontoPorMeta = 0;
             if (self.actividades !== undefined) {
-              self.actividades
-                ? self.actividades.forEach(function (act) {
+              self.actividades ? self.actividades.forEach(function (act) {
                     act.ActividadId = act.actividad_id;
-                    act.MetaID = act.meta_id;
-                    act.FuentesActividad
-                      ? act.FuentesActividad.forEach(function (f) {
+                    // act.MetaID = act.meta_id;
+                    act.FuentesActividad ? act.FuentesActividad.forEach(function (f) {
                           f.FuenteId = f.FuenteId || f.fuente_financiamiento;
                           if (
                             parseFloat(f.MontoParcial) >
-                            parseFloat(f.valor_fuente_financiamiento) -
-                              parseFloat(f.saldo_comprometido)
+                            parseFloat(f.valor_fuente_financiamiento) - parseFloat(f.saldo_comprometido)
                           ) {
                             swal({
                               title:
@@ -178,10 +162,7 @@ angular
         $scope.$watch("d_metasActividades.meta", function () {
           if (self.meta !== undefined) {
             $scope.metas[0] ? _ : ($scope.metas = [{ MetaId: self.meta }]);
-            $scope.metas[0].Actividades &&
-            $scope.metas[0].Actividades.length > 0
-              ? _
-              : ($scope.metas = [{ MetaId: self.meta }]);
+            $scope.metas[0].Actividades && $scope.metas[0].Actividades.length > 0 ? _ : ($scope.metas = [{ MetaId: self.meta }]);
             self.loadActividades();
           }
         });
@@ -238,72 +219,55 @@ angular
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             self.actividades = self.gridApi.selection.getSelectedRows();
             self.actividades.forEach(function (a) {
-              self
-                .getFuentesActividad(
-                  $scope.vigencia,
-                  a.dependencia,
-                  a.rubro,
-                  a.actividad_id
-                )
-                .then(function (res) {
-                  var fuentesact = res.data ? res.data : [];
-                  a.FuentesActividad
-                    ? (a.FuentesActividad = a.FuentesActividad)
-                    : (a.FuentesActividad = fuentesact);
-                });
+              var fuentesact = self.getFuentesActividad(a.actividad_id);
+              a.FuentesActividad ? (a.FuentesActividad = a.FuentesActividad) : (a.FuentesActividad = fuentesact);
             });
             $scope.metas[0].Actividades = self.actividades;
           });
         };
-        self.getFuentesActividad = function (
-          vigencia,
-          dependencia,
-          rubro,
-          actividadid
-        ) {
-          const QUERY = "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-          $scope.apropiacion.RubroId;
-          return metasRequest.get(QUERY);
+
+        self.getFuentesActividad = function (actividadid) {
+          var fuentes = [];
+          $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function(item) {
+            if(actividadid == item.actividad.Id){
+              fuentes = item.FuentesFinanciamiento;
+            }
+          })
+          return fuentes;
         };
 
         self.loadActividades = function () {
-          const QUERY = "?query=Activo:true,RegistroPlanAdquisicionesActividadId__ActividadId__MetaId__Rubro:" +
-          $scope.apropiacion.RubroId;
-          metasRequest
+          self.gridOptions.data = [];
+          $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function(item) {
+            if(item.actividad.MetaId.Id == $scope.d_metasActividades.meta){
+              const actividadSchema = {
+                actividad_id: item.actividad.Id,
+                actividad: item.actividad.Nombre,
+                valor_actividad: item.Valor,
+              };
+
+              if (self.gridOptions.data.length > 0) {
+                self.gridOptions.data.forEach(function(uniqueActividad) {
+                  if (uniqueActividad.actividad_id !== actividadSchema.actividad_id) {
+                    self.gridOptions.data.push(actividadSchema);
+                  }
+                });
+              } else {
+                self.gridOptions.data.push(actividadSchema);
+              }
+    
+              self.gridOptions.data = Array.from(
+                new Set(self.gridOptions.data)
+              );
+            };
+          });
+          /*metasRequest
           .get(QUERY)
             // FIXME: Se encuentra esa linea que no trae necesariamente
             // el número de dependencia solicitante se espera que los rubros
             // que están en la tabla ya tengan ese filtro $scope.dependenciasolicitante.toString()
             .then(function (res) {
-              self.gridOptions.data = [];
-              res.data.map(function(actividad) {
-                const actividadSchema = {
-                  actividad_id:
-                    actividad.RegistroPlanAdquisicionesActividadId.Id,
-                  actividad:
-                    actividad.RegistroPlanAdquisicionesActividadId.ActividadId
-                      .Nombre,
-                  valor_actividad:
-                    actividad.RegistroPlanAdquisicionesActividadId.Valor,
-                };
-
-                if (self.gridOptions.data.length > 0) {
-                  self.gridOptions.data.forEach(function(uniqueActividad) {
-                    if (
-                      uniqueActividad.actividad_id !==
-                      actividadSchema.actividad_id
-                    ) {
-                      self.gridOptions.data.push(actividadSchema);
-                    }
-                  });
-                } else {
-                  self.gridOptions.data.push(actividadSchema);
-                }
-
-                self.gridOptions.data = Array.from(
-                  new Set(self.gridOptions.data)
-                );
-              });
+              });*/
               // TODO: Se espera relizar una revisión profunda del código antes de eliminarlo
               /*response.data.metas.actividades
                 .filter(function (a) {
@@ -315,8 +279,8 @@ angular
                   }).length === 0
                     ? self.gridOptions.data.push(act)
                     : _;
-                });
-              self.gridApi.grid.modifyRows(self.gridOptions.data);
+                });*/
+              /*self.gridApi.grid.modifyRows(self.gridOptions.data);
               if ($scope.apropiacion.Metas[0].Actividades) {
                 $scope.apropiacion.Metas[0].Actividades.forEach(function (act) {
                   var tmp = self.gridOptions.data.filter(function (e) {
@@ -329,7 +293,7 @@ angular
                 });
                 self.actividades = $scope.apropiacion.Metas[0].Actividades;
               }*/
-            });
+          //!OJO  });
           /*.then(function () {
               // Se inicializa el grid api para seleccionar
               /*if (
@@ -373,8 +337,8 @@ angular
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch("actividades", function () {
-          $scope.actividades
-            ? $scope.actividades.forEach(function (act) {
+          console.log("SCOPE INVERSIÓN: ", $scope);
+          $scope.actividades ? $scope.actividades.forEach(function (act) {
                 var tmp = self.gridOptions.data.filter(function (e) {
                   return e.actividad_id !== act.ActividadId;
                 });
