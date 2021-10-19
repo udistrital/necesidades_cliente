@@ -385,7 +385,7 @@
                               <div class="list-group-item" ng-repeat="fu in ap.Fuentes track by fu.FuenteId">
                                 <div class="row">
                                   <label class="text-warning col-sm-4 titleActividad">{{"FUENTE" | translate}}:
-                                    {{fu.FuenteId}}</label>
+                                    {{fu.FuenteId}} - {{fu.Nombre}}</label>
                                   <input class="col-sm-8 money" type="text"
                                     ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
                                     ng-model="fu.MontoParcial" ui-money-mask="2">
@@ -402,7 +402,7 @@
                         class="row">
                         <div class="col-md-6">
                           <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Productos"
-                            initProductoapropiacion="ap.initProductos"></productos-apropiacion>
+                            initProductoapropiacion="ap.initProductos" apropiacion="ap"></productos-apropiacion>
                         </div>
 
                         <div class="col-md-6">
@@ -410,7 +410,7 @@
                                 <div class="panel-body">
                                   <div class="list-group-item" ng-repeat="prod in ap.Productos track by prod.ProductoId">
                                     <label class="text-warning titleActividad"><p>{{"PRODUCTO" | translate}}:
-                                        {{prod.Nombre}}</p></label>
+                                        {{prod.Codigo}} - {{prod.Nombre}}</p></label>
                                     <br>
                                   </div>
                                 </div>
