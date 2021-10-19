@@ -350,8 +350,7 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                       </button>
 
-                      <h3><span class="text-success">Rubro: {{$index+1}}.</span> {{ap.Codigo}}
-                        {{ap.Apropiacion.Nombre}}</h3>
+                      <h3><span class="text-success">Rubro: {{$index+1}}.</span> {{ap.Apropiacion.Codigo}} - {{ap.Apropiacion.Descripcion}}</h3>
                       <br>
                       <div class="row"
                         ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='I'">

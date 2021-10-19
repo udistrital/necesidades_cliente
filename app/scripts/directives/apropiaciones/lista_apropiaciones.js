@@ -32,7 +32,7 @@ angular
 
           columnDefs: [
             {
-              field: "RubroInfo.Codigo",
+              field: "Codigo",
               displayName: $translate.instant("CODIGO_RUBRO"),
               headerCellClass: $scope.highlightFilteredHeader + "text-center ",
               cellClass: function (row, col) {
@@ -45,7 +45,7 @@ angular
               width: "25%",
             },
             {
-              field: "RubroInfo.Nombre",
+              field: "Nombre",
               displayName: $translate.instant("NOMBRE_RUBRO"),
               headerCellClass: $scope.highlightFilteredHeader + "text-center ",
               cellTooltip: function (row) {
@@ -61,7 +61,7 @@ angular
               width: "50%",
             },
             {
-              field: "RubroInfo.ValorInicial",
+              field: "ValorInicial",
               displayName: $translate.instant("VALOR_U"),
               cellFilter: "currency",
               // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',
@@ -131,13 +131,15 @@ angular
         );
 
         self.actualiza_rubros = function () {
+          self.gridOptions.data = [];
           $scope.planadquisicion.registroplanadquisiciones.forEach(function(item){
             if(item.Fuente === $scope.tipo){
-              console.log(item.datos);
-              self.gridOptions.data = item.datos;
+              item.datos.forEach(function(info){
+                info.RubroInfo.datos = info.datos;
+                self.gridOptions.data.push(info.RubroInfo);
+              }) 
             }
           });
-          console.log(self.gridOptions.data);
           /*planCuentasRequest
             .get(
               "arbol_rubro_apropiacion/get_hojas/" +
