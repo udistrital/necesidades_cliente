@@ -14,6 +14,7 @@ angular.module('contractualClienteApp')
         rubro: '=',
         productoapropiacion: '=',
         initProductoapropiacion: '=?',
+        apropiacion: "=",
       },
       templateUrl: 'views/directives/apropiaciones/productos_apropiacion.html',
       controller: function ($scope, $translate) {
@@ -30,11 +31,30 @@ angular.module('contractualClienteApp')
           enableVerticalScrollbar: 0,
           enableSelectAll: true,
           columnDefs: [{
+            field: 'Codigo',
+            displayName: $translate.instant('CODIGO'),
+            width: "15%",
+            headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+            cellTooltip: function (row) {
+              return row.entity.Codigo;
+            }
+          },
+          {
             field: 'Nombre',
-            displayName: $translate.instant('PRODUCTOS'),
+            displayName: $translate.instant('NOMBRE'),
+            width: "75%",
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
               return row.entity.Nombre;
+            }
+          },
+          {
+            field: 'PorcentajeDistribucion',
+            displayName: '% Dist.',
+            width: "15%",
+            headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+            cellTooltip: function (row) {
+              return row.entity.PorcentajeDistribucion;
             }
           }
           ]
@@ -58,11 +78,30 @@ angular.module('contractualClienteApp')
           idProductos.push(id);
         }
 
-        Promise.all(idProductos.map(function(id){
-          return planCuentasRequest.get('producto/'+id).then(function(response){
+        Promise.all($scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-productos_asociados"].map(function(item){
+            const productoSchema = {
+              Nombre: item.ProductoData.Nombre,
+              Codigo: item.ProductoData.Codigo,
+              PorcentajeDistribucion: item.PorcentajeDistribucion,
+              Id: item.ProductoAsociadoId,
+            }
+
+            if (productosData.length > 0) {
+              productosData.forEach(function(uniqueProducto) {
+                if (uniqueProducto.Id !== productoSchema.Id) {
+                  productosData.push(productoSchema);
+                }
+              });
+            } else {
+              productosData.push(productoSchema);
+            }
+
+          return productosData;
+          /*return planCuentasRequest.get('producto/'+id).then(function(response){
             (response.data.Body !== null) ? productosData.push(response.data.Body) : console.info('no encontre producto: '+id);
-          })
+          })*/
         })).then(function (t) {
+          self.gridOptions.data = [];
           self.gridOptions.data = productosData;
           var gridOptData = self.gridOptions.data;
           gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _;
@@ -94,4 +133,6 @@ angular.module('contractualClienteApp')
       },
       controllerAs: 'd_productosApropiacion'
     };
+
+    console.log($scope);
   });
