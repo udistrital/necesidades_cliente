@@ -105,9 +105,6 @@ angular.module('contractualClienteApp')
           self.editando = true;
           self.fuenteapropiacion = $scope.fuenteapropiacion;
         }, true)
-        /*planCuentasRequest.get('fuente_financiamiento/fuente_financiamiento_apropiacion/' + $scope.apropiacion.Apropiacion.Codigo+"/"+ $scope.apropiacion.Apropiacion.Vigencia + "/"+$scope.apropiacion.Apropiacion.UnidadEjecutora ).then(function (response) {
-          gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _;
-        })*/
 
         $scope.$watch('[d_fuentesApropiacion.gridOptions.paginationPageSize, d_fuentesApropiacion.gridOptions.data]', function () {
           if ((self.gridOptions.data.length <= self.gridOptions.paginationPageSize || self.gridOptions.paginationPageSize === null) && self.gridOptions.data.length > 0) {

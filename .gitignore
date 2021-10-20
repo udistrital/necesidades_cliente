@@ -8,4 +8,3 @@
 .sonar/.sonar_lock
 # Provisional - Cuando se cambie de bower a NPM o YARN deberá restablecerce/cambiarse
 package-lock.json
-evironment.js.local

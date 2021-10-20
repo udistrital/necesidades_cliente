@@ -119,7 +119,7 @@ angular
                 $scope.unidadejecutora === 2 &&
                 $scope.tipofinanciacion.Id === 2
               ) {
-                $scope.tipo = "3-00"; // ! Cambiado de 3-00-991 a 3-00
+                $scope.tipo = "3-00";
                 actualizar = true;
               }
             }
@@ -140,55 +140,6 @@ angular
               })
             }
           });
-          /*planCuentasRequest
-            .get(
-              "arbol_rubro_apropiacion/get_hojas/" +
-              // $scope.unidadejecutora +
-              // ! Se debe hacer el llamado a la Unidad Ejecutora correspondiente
-              "1" +
-              "/" +
-              $scope.vigencia
-            )
-            .then(function (response) {
-              if (response.data.Body !== null) {
-                console.log("Cuerpo filtrado", response.data.Body);
-                response.data.Body = response.data.Body.filter(function (a) {
-                  // Función para filtrar rubros por código
-                  return a.Codigo.startsWith($scope.tipo);
-                });
-                self.gridOptions.data = response.data.Body.sort(function (
-                  a,
-                  b
-                ) {
-                  if (a.Codigo < b.Codigo) {
-                    return -1;
-                  }
-                  if (a.Codigo > b.Codigo) {
-                    return 1;
-                  }
-                  return 0;
-                });
-
-                console.log("GridOptionsData: ", self.gridOptions.data);
-                self.max_level = 0;
-                var level = 0;
-                // for (var i = 0; i < self.gridOptions.data.length; i += 1) {
-                //     level = (self.gridOptions.data[i].Codigo.match(/-/g) || []).length;
-                //     if (level > self.max_level) {
-                //         self.max_level = level;
-                //     }
-                // }
-
-                // for (var j = 0; j < self.gridOptions.data.length; j += 1) {
-                //     level = (self.gridOptions.data[j].Codigo.match(/-/g) || []).length;
-                //     if (level < self.max_level) {
-                //         self.gridOptions.data[j].$$treeLevel = level;
-                //     }
-                // }
-              } else {
-                self.gridOptions.data = [];
-              }
-            });*/
         };
 
         self.gridOptions.onRegisterApi = function (gridApi) {

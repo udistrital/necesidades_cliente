@@ -1616,6 +1616,8 @@ angular
           ) {
             fin_valid =
               fin_valid &&
+              // !Validar en el futuro dado que la actual apropiación no trae ese ValorActual
+              // !Se deja comentada para poder realizar la solicitud de necesidad momentáneamente
               // ap.MontoMeta <= ap.Apropiacion.ValorActual &&
               ap.MontoPorApropiacion > 0;
           } else {
@@ -1628,6 +1630,8 @@ angular
               : _;
             fin_valid =
               fin_valid &&
+              // !Validar en el futuro dado que la actual apropiación no trae ese ValorActual
+              // !Se deja comentada para poder realizar la solicitud de necesidad momentáneamente
               // ap.MontoFuentes <= ap.Apropiacion.ValorActual &&
               ap.Fuentes.length > 0 &&
               ap.MontoPorApropiacion > 0;
