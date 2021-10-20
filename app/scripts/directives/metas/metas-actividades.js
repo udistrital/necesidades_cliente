@@ -301,7 +301,6 @@ angular
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch("actividades", function () {
-          console.log("SCOPE INVERSIÓN: ", $scope);
           $scope.actividades ? $scope.actividades.forEach(function (act) {
             var tmp = self.gridOptions.data.filter(function (e) {
               return e.actividad_id !== act.ActividadId;

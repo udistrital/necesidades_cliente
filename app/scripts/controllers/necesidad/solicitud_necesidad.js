@@ -141,8 +141,8 @@ angular
           //trae lista dependencias
           if (Dependencias.data !== null) {
             self.dependencia_soli_data = Dependencias.data;
-            // console.log(Dependencias);
           } else {
+            // !¿Cambiar por un Swal?
             console.log("No tiene dependencias relacionadas");
           }
         });
@@ -1007,7 +1007,6 @@ angular
           Fuentes: [],
           Productos: [],
         };
-
         // Busca si en Rubros ya existe el elemento que intenta agregarse, comparandolo con su id
         // si lo que devuelve filter es un arreglo mayor que 0, significa que el elemento a agregar ya existe
         // por lo tanto devuelve un mensaje de alerta
@@ -1616,9 +1615,7 @@ angular
           ) {
             fin_valid =
               fin_valid &&
-              // !Validar en el futuro dado que la actual apropiación no trae ese ValorActual
-              // !Se deja comentada para poder realizar la solicitud de necesidad momentáneamente
-              // ap.MontoMeta <= ap.Apropiacion.ValorActual &&
+              ap.MontoMeta <= ap.Apropiacion.ValorActual &&
               ap.MontoPorApropiacion > 0;
           } else {
             //CASE FUNCIONAMIENTO
@@ -1630,9 +1627,7 @@ angular
               : _;
             fin_valid =
               fin_valid &&
-              // !Validar en el futuro dado que la actual apropiación no trae ese ValorActual
-              // !Se deja comentada para poder realizar la solicitud de necesidad momentáneamente
-              // ap.MontoFuentes <= ap.Apropiacion.ValorActual &&
+              ap.MontoFuentes <= ap.Apropiacion.ValorActual &&
               ap.Fuentes.length > 0 &&
               ap.MontoPorApropiacion > 0;
           }

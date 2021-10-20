@@ -136,6 +136,7 @@ angular
             if(item.Fuente === $scope.tipo){
               item.datos.forEach(function(info){
                 info.RubroInfo.datos = info.datos;
+                info.RubroInfo.ValorActual = info.RubroInfo.ValorInicial;
                 self.gridOptions.data.push(info.RubroInfo);
               })
             }

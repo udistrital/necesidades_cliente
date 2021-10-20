@@ -73,15 +73,11 @@ angular.module('contractualClienteApp')
             }
           })
         }
-
-        console.log($scope);
-
         self.gridOptions.data = [];
         $scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData ? self.gridOptions.data.push($scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData) : _;
 
         var gridOptData = self.gridOptions.data;
 
-        console.log(gridOptData);
         // !Verificar línea porque self.gridApi es undefined, sin embargo, al parecer la línea no afecta la funcionalidad
         // gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _;
 

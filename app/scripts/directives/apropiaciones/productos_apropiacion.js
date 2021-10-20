@@ -130,6 +130,4 @@ angular.module('contractualClienteApp')
       },
       controllerAs: 'd_productosApropiacion'
     };
-
-    console.log($scope);
   });
