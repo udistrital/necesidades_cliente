@@ -815,7 +815,7 @@ angular
                       self.planes_anuales = [];
                       self.planes_anuales.push(res.data);
                       $scope.solicitudNecesidad.vigencia = res.data.vigencia;
-                      $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];   
+                      $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
                 return JSON.parse(res.data[0].Valor).plan_adquisiciones_general;
@@ -1616,7 +1616,7 @@ angular
           ) {
             fin_valid =
               fin_valid &&
-              ap.MontoMeta <= ap.Apropiacion.ValorActual &&
+              // ap.MontoMeta <= ap.Apropiacion.ValorActual &&
               ap.MontoPorApropiacion > 0;
           } else {
             //CASE FUNCIONAMIENTO
@@ -1628,7 +1628,7 @@ angular
               : _;
             fin_valid =
               fin_valid &&
-              ap.MontoFuentes <= ap.Apropiacion.ValorActual &&
+              // ap.MontoFuentes <= ap.Apropiacion.ValorActual &&
               ap.Fuentes.length > 0 &&
               ap.MontoPorApropiacion > 0;
           }

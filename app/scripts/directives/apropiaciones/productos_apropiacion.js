@@ -97,15 +97,12 @@ angular.module('contractualClienteApp')
             }
 
           return productosData;
-          /*return planCuentasRequest.get('producto/'+id).then(function(response){
-            (response.data.Body !== null) ? productosData.push(response.data.Body) : console.info('no encontre producto: '+id);
-          })*/
         })).then(function (t) {
           self.gridOptions.data = [];
           self.gridOptions.data = productosData;
           var gridOptData = self.gridOptions.data;
           gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _;
-          
+
 
           $scope.$watch('initProductoApropiacion', function () {
             self.productoapropiacion = [];

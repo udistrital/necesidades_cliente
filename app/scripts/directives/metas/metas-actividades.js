@@ -78,25 +78,37 @@ angular
         self.cargarMetas = function () {
           if ($scope.dependenciasolicitante) {
             self.metas = [];
-            $scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-metas_asociadas"].forEach(function(item){
-              const metaSchema = {
-                Id: item.MetaId.Id,
-                Nombre: item.MetaId.Nombre,
-              };
-              if (self.metas.length > 0) {
-                self.metas.forEach(function(uniqueMeta) {
-                  if (uniqueMeta.Id !== metaSchema.Id) {
-                    self.metas.push(metaSchema);
-                  }
-                });
-              } else {
-                self.metas.push(metaSchema);
+            try {
+              $scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-metas_asociadas"].forEach(function (item) {
+                const metaSchema = {
+                  Id: item.MetaId.Id,
+                  Nombre: item.MetaId.Nombre,
+                };
+                if (self.metas.length > 0) {
+                  self.metas.forEach(function (uniqueMeta) {
+                    if (uniqueMeta.Id !== metaSchema.Id) {
+                      self.metas.push(metaSchema);
+                    }
+                  });
+                } else {
+                  self.metas.push(metaSchema);
+                }
+              });
+            } catch (error) {
+              swal({
+                title:
+                  "Error Metas",
+                type: "error",
+                text: "No se ha podido traer el arreglo de metas desde el plan de adquisiciones - " + error.message,
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR"),
+              });
+            } finally {
+              if ($scope.apropiacion.Metas.length > 0) {
+                self.meta = $scope.apropiacion.Metas[0].MetaId;
               }
-            });
-            if ($scope.apropiacion.Metas.length > 0) {
-              self.meta = $scope.apropiacion.Metas[0].MetaId;
+              self.editando = true;
             }
-            self.editando = true;
           };
         };
 
@@ -119,32 +131,31 @@ angular
             self.MontoPorMeta = 0;
             if (self.actividades !== undefined) {
               self.actividades ? self.actividades.forEach(function (act) {
-                    act.ActividadId = act.actividad_id;
-                    // act.MetaID = act.meta_id;
-                    act.FuentesActividad ? act.FuentesActividad.forEach(function (f) {
-                          f.FuenteId = f.FuenteId || f.fuente_financiamiento;
-                          if (
-                            parseFloat(f.MontoParcial) >
-                            parseFloat(f.valor_fuente_financiamiento) - parseFloat(f.saldo_comprometido)
-                          ) {
-                            swal({
-                              title:
-                                "Error Valor Fuentes de Financiamiento " +
-                                f.FuenteId +
-                                " actividad: " +
-                                act.actividad_id,
-                              type: "error",
-                              text: "Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo asignado.",
-                              showCloseButton: true,
-                              confirmButtonText: $translate.instant("CERRAR"),
-                            });
-                            f.MontoParcial = 0;
-                          } else {
-                            self.MontoPorMeta += f.MontoParcial;
-                          }
-                        })
-                      : _;
-                  })
+                act.ActividadId = act.actividad_id;
+                act.FuentesActividad ? act.FuentesActividad.forEach(function (f) {
+                  f.FuenteId = f.FuenteId || f.fuente_financiamiento;
+                  if (
+                    parseFloat(f.MontoParcial) >
+                    parseFloat(f.valor_fuente_financiamiento) - parseFloat(f.saldo_comprometido)
+                  ) {
+                    swal({
+                      title:
+                        "Error Valor Fuentes de Financiamiento " +
+                        f.FuenteId +
+                        " actividad: " +
+                        act.actividad_id,
+                      type: "error",
+                      text: "Verifique los valores de fuentes de financiamiento, la suma no puede superar el saldo asignado.",
+                      showCloseButton: true,
+                      confirmButtonText: $translate.instant("CERRAR"),
+                    });
+                    f.MontoParcial = 0;
+                  } else {
+                    self.MontoPorMeta += f.MontoParcial;
+                  }
+                })
+                  : _;
+              })
                 : _;
             }
             $scope.metas.length > 0
@@ -228,124 +239,77 @@ angular
 
         self.getFuentesActividad = function (actividadid) {
           var fuentes = [];
-          $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function(item) {
-            if(actividadid == item.actividad.Id){
-              fuentes = item.FuentesFinanciamiento;
-            }
-          })
-          return fuentes;
+          try {
+            $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function (item) {
+              if (actividadid == item.actividad.Id) {
+                fuentes = item.FuentesFinanciamiento;
+              }
+            })
+          } catch (error) {
+            swal({
+              title: "Error Fuentes",
+              type: "error",
+              text: "No se ha podido acceder a las fuentes del plan de adquisiciones" + error.message,
+              showCloseButton: true,
+              confirmButtonText: $translate.instant("CERRAR"),
+            });
+          } finally {
+            return fuentes;
+          }
         };
 
         self.loadActividades = function () {
           self.gridOptions.data = [];
-          $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function(item) {
-            if(item.actividad.MetaId.Id == $scope.d_metasActividades.meta){
-              const actividadSchema = {
-                actividad_id: item.actividad.Id,
-                actividad: item.actividad.Nombre,
-                valor_actividad: item.Valor,
-              };
+          try {
+            $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function (item) {
+              if (item.actividad.MetaId.Id == $scope.d_metasActividades.meta) {
+                const actividadSchema = {
+                  actividad_id: item.actividad.Id,
+                  actividad: item.actividad.Nombre,
+                  valor_actividad: item.Valor,
+                };
 
-              if (self.gridOptions.data.length > 0) {
-                self.gridOptions.data.forEach(function(uniqueActividad) {
-                  if (uniqueActividad.actividad_id !== actividadSchema.actividad_id) {
-                    self.gridOptions.data.push(actividadSchema);
-                  }
-                });
-              } else {
-                self.gridOptions.data.push(actividadSchema);
-              }
-    
-              self.gridOptions.data = Array.from(
-                new Set(self.gridOptions.data)
-              );
-            };
-          });
-          /*metasRequest
-          .get(QUERY)
-            // FIXME: Se encuentra esa linea que no trae necesariamente
-            // el número de dependencia solicitante se espera que los rubros
-            // que están en la tabla ya tengan ese filtro $scope.dependenciasolicitante.toString()
-            .then(function (res) {
-              });*/
-              // TODO: Se espera relizar una revisión profunda del código antes de eliminarlo
-              /*response.data.metas.actividades
-                .filter(function (a) {
-                  return a.rubro === $scope.apropiacion.RubroId;
-                })
-                .forEach(function (act) {
-                  self.gridOptions.data.filter(function (a) {
-                    return a.actividad_id === act.actividad_id;
-                  }).length === 0
-                    ? self.gridOptions.data.push(act)
-                    : _;
-                });*/
-              /*self.gridApi.grid.modifyRows(self.gridOptions.data);
-              if ($scope.apropiacion.Metas[0].Actividades) {
-                $scope.apropiacion.Metas[0].Actividades.forEach(function (act) {
-                  var tmp = self.gridOptions.data.filter(function (e) {
-                    return e.actividad_id == act.ActividadId;
-                  });
-                  if (tmp.length > 0) {
-                    self.gridApi.selection.selectRow(tmp[0]);
-                    act = _.merge(act, tmp[0]); //seleccionar las filas
-                  }
-                });
-                self.actividades = $scope.apropiacion.Metas[0].Actividades;
-              }*/
-          //!OJO  });
-          /*.then(function () {
-              // Se inicializa el grid api para seleccionar
-              /*if (
-                $scope.dependenciasolicitante !== undefined &&
-                $scope.dependenciadestino !== undefined
-              ) {
-                self.gridOptions.data = self.gridOptions.data.filter(function (
-                  m
-                ) {
-                  return (
-                    m.meta_id === self.meta &&
-                    (m.dependencia ===
-                      $scope.dependenciasolicitante.toString() ||
-                      m.dependencia === $scope.dependenciadestino.toString())
-                  );
-                });
                 if (self.gridOptions.data.length > 0) {
-                  self.gridApi.grid.modifyRows(self.gridOptions.data);
-                } else {
-                  swal({
-                    title: "¡No hay actividades!",
-                    type: "error",
-                    text: "Las dependencias no están asociadas a la meta seleccionada.Por favor seleccione otra meta",
-                    showCloseButton: true,
-                    confirmButtonText: "CERRAR",
+                  self.gridOptions.data.forEach(function (uniqueActividad) {
+                    if (uniqueActividad.actividad_id !== actividadSchema.actividad_id) {
+                      self.gridOptions.data.push(actividadSchema);
+                    }
                   });
+                } else {
+                  self.gridOptions.data.push(actividadSchema);
                 }
-              } else {
-                self.gridOptions.data = [];
-                self.gridApi.grid.modifyRows(self.gridOptions.data);
-                swal({
-                  title: "¡No hay Dependencias Seleccionadas!",
-                  type: "error",
-                  text: "Las dependencias no han sido seleccionadas",
-                  showCloseButton: true,
-                  confirmButtonText: "CERRAR",
-                });
-              }
-            });*/
+
+                self.gridOptions.data = Array.from(
+                  new Set(self.gridOptions.data)
+                );
+              };
+            });
+          } catch (error) {
+            swal({
+              title: "Error Actividades",
+              type: "error",
+              text: "No se ha podido acceder a las actividades del plan de adquisiciones" + error.message,
+              showCloseButton: true,
+              confirmButtonText: $translate.instant("CERRAR"),
+            });
+          } finally {
+            self.gridOptions.data = Array.from(
+              new Set(self.gridOptions.data)
+            );
+          }
         };
 
         // se observa cambios en actividades para seleccionar las respectivas filas en la tabla
         $scope.$watch("actividades", function () {
           console.log("SCOPE INVERSIÓN: ", $scope);
           $scope.actividades ? $scope.actividades.forEach(function (act) {
-                var tmp = self.gridOptions.data.filter(function (e) {
-                  return e.actividad_id !== act.ActividadId;
-                });
-                if (tmp.length > 0) {
-                  self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
-                }
-              })
+            var tmp = self.gridOptions.data.filter(function (e) {
+              return e.actividad_id !== act.ActividadId;
+            });
+            if (tmp.length > 0) {
+              self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
+            }
+          })
             : _;
           self.actividades = $scope.actividades;
         });
@@ -369,7 +333,7 @@ angular
               $scope.gridHeight =
                 self.gridOptions.rowHeight * 3 +
                 self.gridOptions.paginationPageSize *
-                  self.gridOptions.rowHeight;
+                self.gridOptions.rowHeight;
               self.gridOptions.enablePaginationControls = true;
             }
           },

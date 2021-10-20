@@ -250,7 +250,7 @@
                     ng-options="pa.descripcion for pa in solicitudNecesidad.planes_anuales track by pa.id"
                     required
                     ng-disabled="disabledSelect">
-                  <option value="">{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" | translate}}</option>
+                  <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" | translate}}</option>
                   </select>
                 </div>
 
@@ -326,7 +326,7 @@
 
                   <div>
                     <div class="form-group" ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre">
-                      <lista-apropiaciones 
+                      <lista-apropiaciones
                         vigencia="solicitudNecesidad.vigencia"
                         tipo="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre=='Inversion'?'3-3':'3-1'"
                         apropiacion="solicitudNecesidad.apro"
@@ -951,7 +951,7 @@
   </div>
 </div>
 <!-- <pre>Nec:{{ solicitudNecesidad.Necesidad | json}}
-  
+
   ML:{{ solicitudNecesidad.MarcoLegalNecesidad | json}}
 
   Rb:{{ solicitudNecesidad.Rubros | json}}
@@ -959,7 +959,7 @@
   PC:{{solicitudNecesidad.ProductosCatalogoNecesidad | json}}
 
   DS:{{solicitudNecesidad.DetalleServicioNecesidad | json}}
- 
+
 
   CPS:{{solicitudNecesidad.DetallePrestacionServicioNecesidad | json}}
 
@@ -970,7 +970,7 @@
   dep: {{solicitudNecesidad.dependencia_solicitante }} : {{solicitudNecesidad.dependencia_destino}}
 
   Tr:{{solicitudNecesidad.TrNecesidad | json}}
-  
+
 </pre> -->
 
 

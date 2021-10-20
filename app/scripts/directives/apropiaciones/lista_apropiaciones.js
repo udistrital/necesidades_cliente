@@ -81,10 +81,10 @@ angular
         $scope.$watchGroup(
           ["unidadejecutora", "tipofinanciacion", "planadquisicion"],
           function () {
-            var actualizar = false;            
+            var actualizar = false;
             if (
               $scope.unidadejecutora !== undefined &&
-              $scope.tipofinanciacion !== undefined && 
+              $scope.tipofinanciacion !== undefined &&
               $scope.planadquisicion !== undefined
             ) {
 
@@ -114,7 +114,7 @@ angular
                 $scope.tipo = "XYZ";
 
               // IDEXUD funcionamiento
-              } 
+              }
               if (
                 $scope.unidadejecutora === 2 &&
                 $scope.tipofinanciacion.Id === 2
@@ -137,14 +137,14 @@ angular
               item.datos.forEach(function(info){
                 info.RubroInfo.datos = info.datos;
                 self.gridOptions.data.push(info.RubroInfo);
-              }) 
+              })
             }
           });
           /*planCuentasRequest
             .get(
               "arbol_rubro_apropiacion/get_hojas/" +
               // $scope.unidadejecutora +
-              // ! Se debe hacer el llamado a la Unidad Ejecutora correspondiente 
+              // ! Se debe hacer el llamado a la Unidad Ejecutora correspondiente
               "1" +
               "/" +
               $scope.vigencia

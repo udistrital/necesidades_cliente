@@ -31,28 +31,28 @@ angular.module('contractualClienteApp')
           enableHorizontalScrollbar: 0,
           enableVerticalScrollbar: 0,
           enableSelectAll: true,
-          columnDefs: [{
-            field: 'Nombre',
-            displayName: $translate.instant('FUENTE'),
-            headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-            cellTooltip: function (row) {
-              return row.entity.Nombre
-            }
-          }
-            ,
-          {
-            field: 'ValorActual',
-            displayName: $translate.instant('VALOR'),
-            cellFilter: 'currency',
-            headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
-            cellClass: function (row, col) {
-              return 'money'
+          columnDefs: [
+            {
+              field: 'Nombre',
+              displayName: $translate.instant('FUENTE'),
+              headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+              cellTooltip: function (row) {
+                return row.entity.Nombre
+              }
             },
-            cellTooltip: function (row) {
-              return row.entity.ValorActual || 0;
+            {
+              field: 'ValorActual',
+              displayName: $translate.instant('VALOR'),
+              cellFilter: 'currency',
+              headerCellClass: $scope.highlightFilteredHeader + 'text-center ',
+              cellClass: function (row, col) {
+                return 'money'
+              },
+              cellTooltip: function (row) {
+                return row.entity.ValorActual || 0;
+              },
+              width: '40%'
             },
-            width: '40%'
-          }
           ]
         }
 
@@ -67,7 +67,7 @@ angular.module('contractualClienteApp')
                   $scope.fuenteapropiacion.filter(function (f) { return f.FuenteId === e.Codigo })[0].Saldo = e.ValorActual;
                   return $scope.fuenteapropiacion.filter(function (f) { return f.FuenteId === e.Codigo })[0];
                 } else {
-                  return { FuenteId: e.Codigo, Saldo: e.ValorActual, Nombre: e.Nombre};
+                  return { FuenteId: e.Codigo, Saldo: e.ValorActual, Nombre: e.Nombre };
                 }
               });
             }
@@ -83,8 +83,8 @@ angular.module('contractualClienteApp')
 
         console.log(gridOptData);
         // !Verificar línea porque self.gridApi es undefined, sin embargo, al parecer la línea no afecta la funcionalidad
-        // gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _; 
-        
+        // gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _;
+
         $scope.$watch('fuenteapropiacion', function () {
           $scope.fuenteapropiacion ? $scope.fuenteapropiacion.forEach(function (fuente) {
             if (fuente.MontoParcial && fuente.Saldo && fuente.MontoParcial > fuente.Saldo) {
