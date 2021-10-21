@@ -60,7 +60,6 @@ angular
         'necesidadesCrudService',
         'amazonAdministrativaService',
         'academicaService',
-        'contratoService',
         'gridOptionsService',
         'configuracionService',
         'requestService',
