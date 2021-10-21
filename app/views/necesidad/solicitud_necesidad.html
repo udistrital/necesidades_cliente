@@ -246,12 +246,11 @@
                 <div class="col-md-6" ng-show="solicitudNecesidad.fields.General.PlanAnualAdquisiciones">
                   <label class="control-label">{{"PLAN_ANUAL_ADQUISICIONES" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
-                  <select class="form-control" ng-model="solicitudNecesidad.vigencia"
+                  <select class="form-control" ng-model="solicitudNecesidad.planadquisicion"
                     ng-options="pa.descripcion for pa in solicitudNecesidad.planes_anuales track by pa.id"
                     required
                     ng-disabled="disabledSelect">
-                  <option value="">{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" |
-                                  translate}}</option>
+                  <option value="" disabled selected>{{"SELECCIONAR" | translate}} {{"PLAN_ANUAL_ADQUISICIONES" | translate}}</option>
                   </select>
                 </div>
 
@@ -327,11 +326,14 @@
 
                   <div>
                     <div class="form-group" ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre">
-                      <lista-apropiaciones vigencia="solicitudNecesidad.vigencia"
+                      <lista-apropiaciones
+                        vigencia="solicitudNecesidad.vigencia"
                         tipo="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre=='Inversion'?'3-3':'3-1'"
                         apropiacion="solicitudNecesidad.apro"
                         unidadejecutora="solicitudNecesidad.Necesidad.AreaFuncional"
-                        tipofinanciacion=solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId selhijos="true">
+                        tipofinanciacion="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId"
+                        selhijos="true"
+                        planadquisicion="solicitudNecesidad.planadquisicion">
                       </lista-apropiaciones>
                       <div style="text-align:center;">
                         <button type="button" class="btn btn-success btn-outline"
@@ -348,8 +350,7 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                       </button>
 
-                      <h3><span class="text-success">Rubro: {{$index+1}}.</span> {{ap.Codigo}}
-                        {{ap.Apropiacion.Nombre}}</h3>
+                      <h3><span class="text-success">Rubro: {{$index+1}}.</span> {{ap.Apropiacion.Codigo}} - {{ap.Apropiacion.Descripcion}}</h3>
                       <br>
                       <div class="row"
                         ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='I'">
@@ -384,7 +385,7 @@
                               <div class="list-group-item" ng-repeat="fu in ap.Fuentes track by fu.FuenteId">
                                 <div class="row">
                                   <label class="text-warning col-sm-4 titleActividad">{{"FUENTE" | translate}}:
-                                    {{fu.FuenteId}}</label>
+                                    {{fu.FuenteId}} - {{fu.Nombre}}</label>
                                   <input class="col-sm-8 money" type="text"
                                     ng-init="fu.MontoParcial = fu.MontoParcial ? fu.MontoParcial : 0"
                                     ng-model="fu.MontoParcial" ui-money-mask="2">
@@ -401,7 +402,7 @@
                         class="row">
                         <div class="col-md-6">
                           <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Productos"
-                            initProductoapropiacion="ap.initProductos"></productos-apropiacion>
+                            initProductoapropiacion="ap.initProductos" apropiacion="ap"></productos-apropiacion>
                         </div>
 
                         <div class="col-md-6">
@@ -409,7 +410,7 @@
                                 <div class="panel-body">
                                   <div class="list-group-item" ng-repeat="prod in ap.Productos track by prod.ProductoId">
                                     <label class="text-warning titleActividad"><p>{{"PRODUCTO" | translate}}:
-                                        {{prod.Nombre}}</p></label>
+                                        {{prod.Codigo}} - {{prod.Nombre}}</p></label>
                                     <br>
                                   </div>
                                 </div>
@@ -949,29 +950,4 @@
     </md-steppers>
   </div>
 </div>
-<!-- <pre>Nec:{{ solicitudNecesidad.Necesidad | json}}
-  
-  ML:{{ solicitudNecesidad.MarcoLegalNecesidad | json}}
-
-  Rb:{{ solicitudNecesidad.Rubros | json}}
-
-  PC:{{solicitudNecesidad.ProductosCatalogoNecesidad | json}}
-
-  DS:{{solicitudNecesidad.DetalleServicioNecesidad | json}}
- 
-
-  CPS:{{solicitudNecesidad.DetallePrestacionServicioNecesidad | json}}
-
-  AE:{{solicitudNecesidad.ActividadEspecificaNecesidad | json}}
-
-  AEc:{{solicitudNecesidad.actividades_economicas_id | json}}
-
-  dep: {{solicitudNecesidad.dependencia_solicitante }} : {{solicitudNecesidad.dependencia_destino}}
-
-  Tr:{{solicitudNecesidad.TrNecesidad | json}}
-  
-</pre> -->
-
-
-
 </html>

@@ -141,9 +141,14 @@ angular
           //trae lista dependencias
           if (Dependencias.data !== null) {
             self.dependencia_soli_data = Dependencias.data;
-            // console.log(Dependencias);
           } else {
-            console.log("No tiene dependencias relacionadas");
+            swal({
+              title: "Sin dependencias",
+              type: "error",
+              text: "No tiene dependencias relacionadas",
+              showCloseButton: true,
+              confirmButtonText: $translate.instant("CERRAR"),
+            });
           }
         });
 
@@ -793,7 +798,8 @@ angular
                     if (res.data !== null) {
                       self.planes_anuales = [];
                       self.planes_anuales.push(res.data);
-                      $scope.solicitudNecesidad.vigencia = $scope.solicitudNecesidad.planes_anuales[0];
+                      $scope.solicitudNecesidad.vigencia = res.data.vigencia;
+                      $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
                 $scope.solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId = $scope.solicitudNecesidad.tipo_financiacion_data[0];
@@ -813,7 +819,8 @@ angular
                     if (res.data !== null) {
                       self.planes_anuales = [];
                       self.planes_anuales.push(res.data);
-                      $scope.solicitudNecesidad.vigencia = $scope.solicitudNecesidad.planes_anuales[0];
+                      $scope.solicitudNecesidad.vigencia = res.data.vigencia;
+                      $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
                 return JSON.parse(res.data[0].Valor).plan_adquisiciones_general;
@@ -1005,7 +1012,6 @@ angular
           Fuentes: [],
           Productos: [],
         };
-
         // Busca si en Rubros ya existe el elemento que intenta agregarse, comparandolo con su id
         // si lo que devuelve filter es un arreglo mayor que 0, significa que el elemento a agregar ya existe
         // por lo tanto devuelve un mensaje de alerta

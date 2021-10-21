@@ -181,8 +181,6 @@ angular.module('contractualClienteApp')
       });
     };
 
-
-
     self.groupBy = function (list, keyGetter) {
       var map = new Map();
       list.forEach(function (item) {

@@ -12,7 +12,7 @@
                     <ul>
                         <li style="list-style-type:none" ng-repeat="meta in d_metasActividades.metas">
                             <input type="radio" name="name" value="{{meta.Id}}" ng-model="d_metasActividades.meta"
-                                ng-click="d_metasActividades.ResetMeta()" required />{{ meta.Id }}, {{ meta.Nombre }}
+                                ng-click="d_metasActividades.ResetMeta()" required />{{ meta.Id }} - {{ meta.Nombre }}
                         </li>
                     </ul>
                 </div>
@@ -31,11 +31,10 @@
             </div>
             <div class="panel-body">
                 <div ng-repeat="actividad in d_metasActividades.actividades">
-                    <div class="row"><text class="titleActividad">{{actividad.actividad_id}}
-                            {{ actividad.actividad}}</text>
+                    <div class="row"><span class="titleActividad">{{actividad.actividad_id}} - {{ actividad.actividad}}</span>
                         <div class="row" ng-repeat="fuente in actividad.FuentesActividad">
                             <div class="col-md-6">
-                                <label>Fuente de financiamiento: {{fuente.FuenteId}}</label>
+                                <label>Fuente de financiamiento: {{fuente.FuenteFinanciamiento}} - {{fuente.Nombre}}</label>
                                 <input class="money" type="text"
                                     ng-init="fuente.MontoParcial = fuente.MontoParcial ? fuente.MontoParcial : 0"
                                     ng-model="fuente.MontoParcial" ui-money-mask="2">
@@ -43,8 +42,7 @@
                             <div class="col-md-6">
                                 <label>Saldo Fuente Financiamiento:
                                     <input type="text" class="form-control money"
-                                        ng-model="fuente.valor_fuente_financiamiento" ui-money-mask="2" disabled>
-                                    <!-- <span class="money">{{ fuente.valor_fuente_financiamiento | currency }}</span></label> -->
+                                        ng-model="fuente.ValorAsignado" ui-money-mask="2" disabled>
                                 </label>
                             </div>
                         </div>
