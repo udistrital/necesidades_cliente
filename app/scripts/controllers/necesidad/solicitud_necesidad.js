@@ -142,8 +142,13 @@ angular
           if (Dependencias.data !== null) {
             self.dependencia_soli_data = Dependencias.data;
           } else {
-            // !¿Cambiar por un Swal?
-            console.log("No tiene dependencias relacionadas");
+            swal({
+              title: "Sin dependencias",
+              type: "error",
+              text: "No tiene dependencias relacionadas",
+              showCloseButton: true,
+              confirmButtonText: $translate.instant("CERRAR"),
+            });
           }
         });
 
