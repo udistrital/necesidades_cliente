@@ -44,7 +44,6 @@ angular
           JefeDepSolicitanteId: undefined,
           SupervisorId: undefined,
         },
-        Vigencia: new Date().getFullYear() + "",
         Valor: 0,
       };
       //inicializar objetos necesidad
@@ -799,6 +798,7 @@ angular
                       self.planes_anuales = [];
                       self.planes_anuales.push(res.data);
                       $scope.solicitudNecesidad.vigencia = res.data.vigencia;
+                      self.Necesidad.Vigencia = res.data.vigencia.toString();
                       $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
@@ -820,6 +820,7 @@ angular
                       self.planes_anuales = [];
                       self.planes_anuales.push(res.data);
                       $scope.solicitudNecesidad.vigencia = res.data.vigencia;
+                      self.Necesidad.Vigencia = res.data.vigencia.toString();
                       $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
