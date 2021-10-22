@@ -15,7 +15,6 @@ angular.module('contractualClienteApp')
         return {
             restrict: 'E',
             scope: {
-                vigencia: '=',
                 numero: '=',
                 estado: '=',
                 modalidadSel: '=?',
