@@ -22,7 +22,7 @@ angular.module('contractualClienteApp')
                 necesidad: '=?'
             },
             templateUrl: 'views/directives/necesidad/visualizar_necesidad.html',
-            controller: function (financieraRequest, metasRequest, administrativaRequest, agoraRequest, oikosRequest, necesidadService, coreAmazonRequest, necesidadesCrudRequest, planCuentasRequest, $scope) {
+            controller: function (metasRequest, agoraRequest, oikosRequest, necesidadService, coreAmazonRequest, necesidadesCrudRequest, planCuentasRequest, $scope) {
                 var self = this;
                 self.verJustificacion = false;
                 self.justificaciones_rechazo = [];
