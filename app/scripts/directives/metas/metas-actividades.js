@@ -240,16 +240,36 @@ angular
         self.getFuentesActividad = function (actividadid) {
           var fuentes = [];
           try {
-            $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function (item) {
-              if (actividadid == item.actividad.Id) {
-                fuentes = item.FuentesFinanciamiento;
+            $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function (act) {
+              if (actividadid == act.actividad.Id) {
+                if (act.FuentesFinanciamiento.length > 0) {
+                  act.FuentesFinanciamiento.map((fuente) => {
+                    console.log("Fuente Antes", fuente);
+                    const fuenteSchema = {
+                      FuenteId: fuente.FuenteFinanciamiento,
+                      ValorAsignado: fuente.ValorAsignado,
+                      Nombre: fuente.Nombre
+                    }
+
+                    if (fuentes.length > 0) {
+                      fuentes.forEach(function (uniqueFuente) {
+                        if (uniqueFuente.Id !== fuenteSchema.FuenteId) {
+                          fuentes.push(fuenteSchema);
+                        }
+                      });
+                    } else {
+                      fuentes.push(fuenteSchema);
+                    }
+                  })
+                }
+                console.log(fuentes);
               }
             })
           } catch (error) {
             swal({
               title: "Error Fuentes",
               type: "error",
-              text: "No se ha podido acceder a las fuentes del plan de adquisiciones" + error.message,
+              text: "No se ha podido acceder a las fuentes del plan de adquisiciones " + error.message,
               showCloseButton: true,
               confirmButtonText: $translate.instant("CERRAR"),
             });
@@ -264,7 +284,7 @@ angular
             $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function (item) {
               if (item.actividad.MetaId.Id == $scope.d_metasActividades.meta) {
                 const actividadSchema = {
-                  actividad_id: item.actividad.Id,
+                  actividad_id: item.actividad.Id.toString(),
                   actividad: item.actividad.Nombre,
                   valor_actividad: item.Valor,
                 };
