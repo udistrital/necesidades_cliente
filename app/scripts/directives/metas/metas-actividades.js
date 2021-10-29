@@ -241,10 +241,9 @@ angular
           var fuentes = [];
           try {
             $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function (act) {
-              if (actividadid == act.actividad.Id) {
+              if (actividadid === act.actividad.Id) {
                 if (act.FuentesFinanciamiento.length > 0) {
                   act.FuentesFinanciamiento.map(function (fuente) {
-                    console.log("Fuente Antes", fuente);
                     const fuenteSchema = {
                       FuenteId: fuente.FuenteFinanciamiento,
                       ValorAsignado: fuente.ValorAsignado,
@@ -262,7 +261,6 @@ angular
                     }
                   })
                 }
-                console.log(fuentes);
               }
             })
           } catch (error) {
