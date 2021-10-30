@@ -83,7 +83,7 @@ angular.module('contractualClienteApp')
               Nombre: item.ProductoData.Nombre,
               Codigo: item.ProductoData.Codigo,
               PorcentajeDistribucion: item.PorcentajeDistribucion,
-              Id: item.ProductoAsociadoId,
+              _id: item.ProductoAsociadoId,
             }
 
             if (productosData.length > 0) {
