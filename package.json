@@ -44,8 +44,7 @@
   "scripts": {
     "test": "karma start test/karma.conf.js",
     "serve": "grunt serve",
-    "build": "grunt build",
-    "postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'bower_components', 'junction') } catch (e) { }\""
+    "build": "grunt build"
   },
   "dependencies": {
     "angular-cookies": "^1.7.8",
