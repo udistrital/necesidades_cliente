@@ -5,40 +5,48 @@ En este repositorio se encuentra el cliente del modulo de resoluciones.
 ## Especificaciones Técnicas
 
 ### Tecnologías Implementadas y Versiones
-* [ngxAdmin](https://github.com/akveo/ngx-admin)
-* [Angular 8.0](https://angular.io/)
-* [Bootstrap 4](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
-* [Nebular 4](https://akveo.github.io/nebular/4.6.0/)
+
+* [Angular JS](https://angularjs.org/)
+* [Bootstrap 3](https://getbootstrap.com/docs/3.3/)
+* [Angular JS generator](https://github.com/fabianLeon/oas)
+* ~~[Node.js en la versión estable](https://nodejs.org/en/)~~
 
 ### Variables de Entorno
+
 ```shell
 # En Pipeline
-SLACK_AND_WEBHOOK: WEBHOOK de Slack Grupo ci-covid-serverles
 AWS_ACCESS_KEY_ID: llave de acceso ID Usuario AWS
 AWS_SECRET_ACCESS_KEY: Secreto de Usuario AWS
 ```
+
 ### Ejecución del Proyecto
 
 Clonar el proyecto del repositorio de git
+
 ```bash
 # clone the project
 git clone https://github.com/udistrital/necesidades-cliente.git
 # enter the project directory
 cd necesidades-cliente
 ```
+
 Iniciar el servidor en local
+
 ```bash
 # install dependency
-npx npm install
-or
 npm install
+
 # start server
-npx ng serve
-# Whenever you want to change the port just run
-npx ng dev --port = 9528
+npm start
 ```
 
+El cliente se depliega en el 9000; : [Modulo de necesidades](http://0.0.0.0:9000/#/necesidades).
+
+**TO-DO: Configurar npm o grunt para lint!**
+
+<!--
 Linter
+
 ```bash
 # Angular linter
 npm run lint
@@ -49,24 +57,45 @@ npm run lint:styles
 # run lint UI
 npm run lint:ci
 ```
+-->
+
+Para crear el build de la aplicación:
+
+```bash
+npm run build
+```
 
 ### Ejecución Dockerfile
+
 ```bash
 # Does not apply
 ```
+
 ### Ejecución docker-compose
+
 ```bash
 # Does not apply
 ```
+
 ### Ejecución Pruebas
 
+La pruebas se relizan con [karma](https://karma-runner.github.io/latest/index.html), ejecutar el comando:
+
+```bash
+npm run test:legacy
+```
+
+**TO-DO: Revisar si vale la pena pasar a [Jest.js](https://jestjs.io/)**
+<!--
 Pruebas unitarias powered by Jest
+
 ```bash
 # run unit test
 npm run test
 # Runt linter + unit test
 npm run test:ui
 ```
+-->
 
 ## Estado CI
 
@@ -82,4 +111,4 @@ necesidades-cliente is free software: you can redistribute it and/or modify it u
 
 necesidades-cliente is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with necesidades-cliente. If not, see https://www.gnu.org/licenses/.
+You should have received a copy of the GNU General Public License along with necesidades-cliente. If not, see [LICENSE](LICENSE).
