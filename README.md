@@ -9,7 +9,8 @@ En este repositorio se encuentra el cliente del modulo de resoluciones.
 * [Angular JS](https://angularjs.org/)
 * [Bootstrap 3](https://getbootstrap.com/docs/3.3/)
 * [Angular JS generator](https://github.com/fabianLeon/oas)
-* ~~[Node.js en la versión estable](https://nodejs.org/en/)~~
+* [Node.js ~~en la versión estable~~](https://nodejs.org/en/)
+* [yarn](https://classic.yarnpkg.com/lang/en/docs/install/)
 
 ### Variables de Entorno
 
@@ -34,35 +35,35 @@ Iniciar el servidor en local
 
 ```bash
 # install dependency
-npm install
+yarn
 
 # start server
-npm start
+yarn run serve
 ```
 
 El cliente se depliega en el 9000; : [Modulo de necesidades](http://0.0.0.0:9000/#/necesidades).
 
-**TO-DO: Configurar npm o grunt para lint!**
+**TO-DO: Configurar yarn o grunt para lint!**
 
 <!--
 Linter
 
 ```bash
 # Angular linter
-npm run lint
+yarn run lint
 # run linter and auto fix
-npm run lint:fix
+yarn run lint:fix
 # run linter on styles
-npm run lint:styles
+yarn run lint:styles
 # run lint UI
-npm run lint:ci
+yarn run lint:ci
 ```
 -->
 
 Para crear el build de la aplicación:
 
 ```bash
-npm run build
+yarn run build
 ```
 
 ### Ejecución Dockerfile
@@ -74,7 +75,7 @@ npm run build
 ### Ejecución docker-compose
 
 ```bash
-# Does not apply
+docker-compose up
 ```
 
 ### Ejecución Pruebas
@@ -82,7 +83,13 @@ npm run build
 La pruebas se relizan con [karma](https://karma-runner.github.io/latest/index.html), ejecutar el comando:
 
 ```bash
-npm run test:legacy
+yarn run test:legacy
+```
+
+Alternativamente:
+
+```bash
+yarn run test
 ```
 
 **TO-DO: Revisar si vale la pena pasar a [Jest.js](https://jestjs.io/)**
@@ -91,9 +98,9 @@ Pruebas unitarias powered by Jest
 
 ```bash
 # run unit test
-npm run test
+yarn test
 # Runt linter + unit test
-npm run test:ui
+yarn run test:ui
 ```
 -->
 
