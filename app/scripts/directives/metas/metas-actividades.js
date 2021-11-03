@@ -263,7 +263,7 @@ angular
                 }
               }
             })
-            console.log(fuentes);
+            // console.log(fuentes);
           } catch (error) {
             swal({
               title: "Error Fuentes",
