@@ -238,10 +238,10 @@ angular
         };
 
         self.getFuentesActividad = function (actividadid) {
-          var fuentes = [];
+          let fuentes = [];
           try {
             $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function (act) {
-              if (actividadid === act.actividad.Id) {
+              if (Number(actividadid) === act.actividad.Id) {
                 if (act.FuentesFinanciamiento.length > 0) {
                   act.FuentesFinanciamiento.map(function (fuente) {
                     const fuenteSchema = {
@@ -263,6 +263,7 @@ angular
                 }
               }
             })
+            console.log(fuentes);
           } catch (error) {
             swal({
               title: "Error Fuentes",
