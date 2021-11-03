@@ -238,7 +238,7 @@ angular
         };
 
         self.getFuentesActividad = function (actividadid) {
-          let fuentes = [];
+          var fuentes = [];
           try {
             $scope.apropiacion.Apropiacion.datos[0]["registro_plan_adquisiciones-actividad"].forEach(function (act) {
               if (Number(actividadid) === act.actividad.Id) {
