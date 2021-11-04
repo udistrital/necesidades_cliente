@@ -80,7 +80,6 @@ angular.module('contractualClienteApp')
 
         Promise.all($scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-productos_asociados"]).then(function (productos) {
           productos.map(function (item) {
-            console.log({ item });
 
             const productoSchema = {
               Nombre: item.ProductoData.Nombre,
