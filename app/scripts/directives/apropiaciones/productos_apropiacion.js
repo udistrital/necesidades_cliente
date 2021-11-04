@@ -64,21 +64,23 @@ angular.module('contractualClienteApp')
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             $scope.productoapropiacion = self.gridApi.selection.getSelectedRows();
-            $scope.productoapropiacion.forEach(function(p){
-              p.ProductoId=p._id
-              p.MontoParcial=0
+            $scope.productoapropiacion.forEach(function (p) {
+              p.ProductoId = p._id
+              p.MontoParcial = 0
             })
           });
         };
 
 
-        var idProductos=[];
-        var productosData=[];
-        for(var id in $scope.rubro.Productos){
+        var idProductos = [];
+        var productosData = [];
+        for (var id in $scope.rubro.Productos) {
           idProductos.push(id);
         }
 
-        Promise.all($scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-productos_asociados"].map(function(item){
+        Promise.all($scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-productos_asociados"]).then(function (productos) {
+          productos.map(function (item) {
+
             const productoSchema = {
               Nombre: item.ProductoData.Nombre,
               Codigo: item.ProductoData.Codigo,
@@ -87,17 +89,16 @@ angular.module('contractualClienteApp')
             }
 
             if (productosData.length > 0) {
-              productosData.forEach(function(uniqueProducto) {
-                if (uniqueProducto.Id !== productoSchema.Id) {
-                  productosData.push(productoSchema);
-                }
-              });
+              if(!productosData.some(function(uniqueProducto) {
+                return productoSchema._id === uniqueProducto._id;
+              })){
+                productosData.push(productoSchema);
+              }
             } else {
               productosData.push(productoSchema);
             }
+          })
 
-          return productosData;
-        })).then(function (t) {
           self.gridOptions.data = [];
           self.gridOptions.data = productosData;
           var gridOptData = self.gridOptions.data;
@@ -112,7 +113,7 @@ angular.module('contractualClienteApp')
                 $scope.productoapropiacion.push(tmp[0]); //enriquecer productos
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }
-            }): _;
+            }) : _;
           });
         });
 
