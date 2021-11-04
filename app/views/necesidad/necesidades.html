@@ -20,7 +20,12 @@
   <!-- Modal content-->
   <div class="modal-content col-md-10 col-md-offset-1" style="margin-top: 5%">
     <div class="modal-body" ng-if="necesidades.g_necesidad!=undefined">
-      <visualizar-necesidad necesidad="necesidades.necesidad" numero="necesidades.numero_el" estado="necesidades.g_necesidad.EstadoNecesidadId" modalidadSel="necesidades.modalidadSel" tipoContrato="necesidades.tipoContrato">
+      <visualizar-necesidad
+        necesidad="necesidades.necesidad"
+        numero="necesidades.numero_el"
+        estado="necesidades.g_necesidad.EstadoNecesidadId"
+        modalidadSel="necesidades.modalidadSel"
+        tipoContrato="necesidades.tipoContrato">
       </visualizar-necesidad>
       <div class="panel panel-default" ng-show="necesidades.necesidad.Necesidad.EstadoNecesidadId.Id===1">
           <div class="panel-body">
