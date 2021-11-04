@@ -90,11 +90,9 @@ angular.module('contractualClienteApp')
             }
 
             if (productosData.length > 0) {
-              if(productosData.some(function(uniqueProducto) {
+              if(!productosData.some(function(uniqueProducto) {
                 return productoSchema._id === uniqueProducto._id;
               })){
-
-              } else {
                 productosData.push(productoSchema);
               }
             } else {
