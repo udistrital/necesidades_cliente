@@ -8,7 +8,7 @@
           </div>
           <div class="panel-body">
               <div ui-grid="necesidades.gridOptions" ui-grid-selection ui-grid-pagination class="grid"></div>
-          </div>          
+          </div>
         </div>
       </div>
 
@@ -20,7 +20,12 @@
   <!-- Modal content-->
   <div class="modal-content col-md-10 col-md-offset-1" style="margin-top: 5%">
     <div class="modal-body" ng-if="necesidades.g_necesidad!=undefined">
-      <visualizar-necesidad necesidad="necesidades.necesidad" vigencia="necesidades.vigencia" numero="necesidades.numero_el" estado="necesidades.g_necesidad.EstadoNecesidadId" modalidadSel="necesidades.modalidadSel" tipoContrato="necesidades.tipoContrato">
+      <visualizar-necesidad
+        necesidad="necesidades.necesidad"
+        numero="necesidades.numero_el"
+        estado="necesidades.g_necesidad.EstadoNecesidadId"
+        modalidadSel="necesidades.modalidadSel"
+        tipoContrato="necesidades.tipoContrato">
       </visualizar-necesidad>
       <div class="panel panel-default" ng-show="necesidades.necesidad.Necesidad.EstadoNecesidadId.Id===1">
           <div class="panel-body">
@@ -33,21 +38,21 @@
                     <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
                   </select>
                 </div>
-          
-                
+
+
                 <div class="row">
                   <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
-                  <select ng-show="true" class="form-control" 
+                  <select ng-show="true" class="form-control"
                     ng-options="tc as tc.Id+'-'+tc.TipoContrato for tc in necesidades.tipo_contrato_data track by tc.Id" ng-model="necesidades.TipoContrato"
                     required>
                     <option value="">{{"SELECCIONAR" | translate}} {{"TIPO_CONTRATO_NECESIDAD" | translate}}</option>
                   </select>
                 </div>
           </div>
-          
+
       </div>
 
- 
+
     </div>
 
 
@@ -70,4 +75,3 @@
   </div>
 
 </div>
-
