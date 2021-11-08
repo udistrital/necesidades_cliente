@@ -74,7 +74,7 @@ angular.module('contractualClienteApp')
           })
         }
         self.gridOptions.data = [];
-        $scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData ? self.gridOptions.data.push($scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData) : _;
+        $scope.apropiacion.Fuentes ? self.gridOptions.data.push($scope.apropiacion.Fuentes) : _;
 
         var gridOptData = self.gridOptions.data;
 

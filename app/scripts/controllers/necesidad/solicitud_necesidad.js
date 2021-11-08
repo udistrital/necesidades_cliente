@@ -13,9 +13,7 @@ angular
   .controller(
     "SolicitudNecesidadCtrl",
     function (
-      administrativaRequest,
       necesidadesCrudRequest,
-      planCuentasRequest,
       planCuentasMidRequest,
       $scope,
       $sce,
@@ -23,7 +21,6 @@ angular
       $filter,
       $window,
       agoraRequest,
-      parametrosGobiernoRequest,
       parametrosRequest,
       catalogoRequest,
       coreAmazonRequest,
@@ -32,7 +29,6 @@ angular
       necesidadService,
       planAdquisicionRequest,
       configuracionRequest,
-      terceroCrudRequest,
       terceroMidRequest
     ) {
       var self = this;
@@ -163,7 +159,6 @@ angular
         if (!s) {
           return;
         }
-
         self.ver_duracion_fecha = s[0];
       };
 
@@ -177,24 +172,16 @@ angular
         res.data ? (trNecesidad = res.data.Body) : (trNecesidad = res); // identifica si viene del mid o es nuevo
         self.Necesidad = trNecesidad.Necesidad;
         if (self.Necesidad.DependenciaNecesidadId) {
-          self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId
-            ? necesidadService
-                .get_info_dependencia(
-                  self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId
-                )
-                .then(function (response) {
-                  self.dependencia_solicitante = response.dependencia.Id; // traer dependencias partiendo de jefe de dependencia almacenado en necesidad
-                })
-            : _;
-          self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId
-            ? necesidadService
-                .get_info_dependencia(
-                  self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId
-                )
-                .then(function (response) {
-                  self.dependencia_destino = response.dependencia.Id;
-                })
-            : _;
+          self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId ? necesidadService.get_info_dependencia(
+            self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId
+          ).then(function (response) {
+            self.dependencia_solicitante = response.dependencia.Id; // traer dependencias partiendo de jefe de dependencia almacenado en necesidad
+          }): _;
+          self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId ? necesidadService.get_info_dependencia(
+            self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId
+          ).then(function (response) {
+            self.dependencia_destino = response.dependencia.Id;
+          }): _;
 
           self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId
             ? necesidadService

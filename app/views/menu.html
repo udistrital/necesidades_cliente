@@ -66,7 +66,7 @@
                 </ul>
             </li>
 
-            <!-- /.dropdown Notifications-->
+          <!-- /.dropdown Notifications-->
             <li class="dropdown ">
                 <a class=" notificacion_vista dropdown-toggle " data-toggle="dropdown"
                     ng-if="notificacion.no_vistos()> 0">
@@ -136,7 +136,6 @@
     <!-- /.navbar-top-links -->
     <!-- /.navbar-static-side -->
 </nav>
-<!-- <div id="loading-bar-container"></div> -->
 <ul class="breadcrumb">
     <li ng-repeat="option in breadcrumb" ng-if="option === ''" class="breadcrumb-item">
         <a href="#"><i class="fa fa-home" aria-hidden="true"></i>{{option}}</a>
@@ -147,10 +146,6 @@
     <li ng-repeat="option in breadcrumb" ng-if="$last" class="breadcrumb-item active">
         {{option}}
     </li>
-    <!-- <div class="pull-right" style="margin-top:-6px">
-        <a id="es" name="es" class="{{language.es}}" ng-click="changeLanguage('es')"></i> es</a>
-        <a id="en" mane="en" class="{{language.en}}" ng-click="changeLanguage('en')"></i> en</a>
-    </div> -->
 </ul>
 <div layout="column" ng-cloak>
     <section layout="row" flex>

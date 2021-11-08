@@ -117,7 +117,7 @@ angular
           function () {
             if (
               $scope.apropiacion.Apropiacion !== undefined &&
-              $scope.dependenciasolicitante !== undefined
+              $scope.dependenciasolicitante !== undefined && $scope.apropiacion && $scope.apropiacion.Apropiacion && $scope.apropiacion.Apropiacion.datos
             ) {
               self.cargarMetas();
             }
@@ -171,7 +171,7 @@ angular
         };
 
         $scope.$watch("d_metasActividades.meta", function () {
-          if (self.meta !== undefined) {
+          if (self.meta !== undefined && $scope.apropiacion && $scope.apropiacion.Apropiacion && $scope.apropiacion.Apropiacion.datos) {
             $scope.metas[0] ? _ : ($scope.metas = [{ MetaId: self.meta }]);
             $scope.metas[0].Actividades && $scope.metas[0].Actividades.length > 0 ? _ : ($scope.metas = [{ MetaId: self.meta }]);
             self.loadActividades();
