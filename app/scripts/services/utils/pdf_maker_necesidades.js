@@ -15,6 +15,7 @@ angular.module('contractualClienteApp')
                 var dependenciaData = [];
                 var apropiacionesData = [];
                 var perfil_data = [];
+                var TiposServicios;
 
                 $http.get("scripts/models/imagen.json").then(function (response) {
                     imagen = response.data;
@@ -35,6 +36,10 @@ angular.module('contractualClienteApp')
                     }else{
                       apropiacionesData = undefined;
                     }
+
+                    $http.get("scripts/models/tipo_servicio.json").then(function (response) {
+                      TiposServicios = response.data;
+                    });
                     return necesidadService.getParametroEstandar();
                 }).then(function (response) {
                   debugger;
@@ -44,11 +49,7 @@ angular.module('contractualClienteApp')
                     var dependenciaSolicitante = dependenciaData.filter(function (d) { return d.Id === jefeDependenciaSolicitante.JefeDependencia.DependenciaId })[0]
                     var perfil;
                     if(trNecesidad.DetalleServicioNecesidad && trNecesidad.DetalleServicioNecesidad.TipoServicioId){
-                      perfil = trNecesidad.DetalleServicioNecesidad ? perfil_data.filter(function (d) {
-                        return d.Id === trNecesidad.DetalleServicioNecesidad.TipoServicioId
-                      })[0] : {
-                          ValorParametro: ""
-                      };
+                      perfil = trNecesidad.DetalleServicioNecesidad ? TiposServicios.find(element => element.ID == trNecesidad.DetalleServicioNecesidad.TipoServicioId): {ValorParametro: ""};
                     }else if(trNecesidad.DetallePrestacionServicioNecesidad && trNecesidad.DetallePrestacionServicioNecesidad.PerfilId){
                       perfil = trNecesidad.DetallePrestacionServicioNecesidad ? perfil_data.filter(function (d) {
                         return d.Id === trNecesidad.DetallePrestacionServicioNecesidad.PerfilId
@@ -58,6 +59,7 @@ angular.module('contractualClienteApp')
                     }
                     resolve({
                         header: function (currentPage, pageCount) {
+                          debugger;
                             return {
                                 style: ['header', "p"],
                                 margin: [0, 0, 0, 15],
@@ -130,7 +132,8 @@ angular.module('contractualClienteApp')
                                                         ["Descripción", "", "Cantidad", "Unidad"],
                                                         [
                                                             ["Cod. 1", "Especificación:"],
-                                                            [{text: perfil.ValorParametro, bold: true}, "Actividades:",
+                                                            [{text: perfil.ValorParametro ?
+                                                              perfil.ValorParametro : perfil.DESCRIPCION ? perfil.DESCRIPCION:"", bold: true}, "Actividades:",
                                                             {
                                                                 text: trNecesidad.ActividadEspecificaNecesidad ?
                                                                     trNecesidad.ActividadEspecificaNecesidad.map(function (ae, i) { return (i + 1).toString() + '. ' + ae.Descripcion + '.'}).join('\n \n') : "Ninguna", alignment: "justify"
@@ -271,7 +274,8 @@ angular.module('contractualClienteApp')
                                                     body: [
                                                         ["Secuencia", "Requisito", "Observaciones"],
                                                         [ trNecesidad.RequisitoMinimoNecesidad ? trNecesidad.RequisitoMinimoNecesidad.map(function (rmn, i) { return (i + 1).toString()}).join('\n \n') : "",
-                                                          {text: trNecesidad.RequisitoMinimoNecesidad ? trNecesidad.RequisitoMinimoNecesidad.map(function (rmn, i) { return  perfil.ValorParametro}).join('\n \n') : "" , bold: true},
+                                                          {text: trNecesidad.RequisitoMinimoNecesidad ? trNecesidad.RequisitoMinimoNecesidad.map(function (rmn, i) { return  perfil.ValorParametro ?
+                                                            perfil.ValorParametro : perfil.DESCRIPCION ? perfil.DESCRIPCION:""}).join('\n \n') : "" , bold: true},
                                                           trNecesidad.RequisitoMinimoNecesidad ? trNecesidad.RequisitoMinimoNecesidad.map(function (rmn, i) { return rmn.Descripcion + '.'}).join('\n \n') : "" ]
                                                     ]
                                                 }
