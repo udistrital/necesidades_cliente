@@ -49,7 +49,7 @@ angular.module('contractualClienteApp')
                     var dependenciaSolicitante = dependenciaData.filter(function (d) { return d.Id === jefeDependenciaSolicitante.JefeDependencia.DependenciaId })[0]
                     var perfil;
                     if(trNecesidad.DetalleServicioNecesidad && trNecesidad.DetalleServicioNecesidad.TipoServicioId){
-                      perfil = trNecesidad.DetalleServicioNecesidad ? TiposServicios.find(element => element.ID == trNecesidad.DetalleServicioNecesidad.TipoServicioId): {ValorParametro: ""};
+                      perfil = trNecesidad.DetalleServicioNecesidad ? TiposServicios.find(function(element){return element.ID == trNecesidad.DetalleServicioNecesidad.TipoServicioId}): {ValorParametro: ""};
                     }else if(trNecesidad.DetallePrestacionServicioNecesidad && trNecesidad.DetallePrestacionServicioNecesidad.PerfilId){
                       perfil = trNecesidad.DetallePrestacionServicioNecesidad ? perfil_data.filter(function (d) {
                         return d.Id === trNecesidad.DetallePrestacionServicioNecesidad.PerfilId
