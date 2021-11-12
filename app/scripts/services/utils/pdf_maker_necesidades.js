@@ -42,7 +42,6 @@ angular.module('contractualClienteApp')
                     });
                     return necesidadService.getParametroEstandar();
                 }).then(function (response) {
-                  debugger;
                     perfil_data = response.data;
 
                     var dependenciaDestino = dependenciaData.filter(function (d) { return d.Id === jefeDependenciaDestino.JefeDependencia.DependenciaId })[0]
@@ -59,7 +58,6 @@ angular.module('contractualClienteApp')
                     }
                     resolve({
                         header: function (currentPage, pageCount) {
-                          debugger;
                             return {
                                 style: ['header', "p"],
                                 margin: [0, 0, 0, 15],
