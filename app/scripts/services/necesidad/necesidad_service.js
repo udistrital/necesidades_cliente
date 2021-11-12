@@ -273,7 +273,7 @@ angular.module('contractualClienteApp')
     //funcion que reemplaza initnecesidad usando plan cuentas mid
     self.getFullNecesidad = function (idNecesidad) {
       if (idNecesidad) {
-        return planCuentasMidRequest.get('necesidad/getfullnecesidad/' + idNecesidad)
+        return planCuentasMidRequest.get('necesidad/getfullnecesidad/' + idNecesidad);
       }
       else {
         // localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
