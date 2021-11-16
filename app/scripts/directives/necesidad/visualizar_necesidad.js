@@ -30,7 +30,7 @@ angular.module('contractualClienteApp')
                 self.solicitud_disponibilidad = null;
                 self.modalidadSel = {};
                 var metas = {};
-                self.dataDias;
+                self.dataDias = null;
 
                 $scope.$watch('necesidad', function () {
 
