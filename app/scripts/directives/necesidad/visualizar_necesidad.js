@@ -78,7 +78,6 @@ angular.module('contractualClienteApp')
                         })
                       })
                     });
-                    debugger;
                     var dataDias = necesidadService.calculo_total_dias_rev($scope.necesidad.Necesidad.DiasDuracion);
                     self.dataDias = dataDias;
                 });
