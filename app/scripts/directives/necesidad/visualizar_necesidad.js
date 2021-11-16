@@ -30,8 +30,10 @@ angular.module('contractualClienteApp')
                 self.solicitud_disponibilidad = null;
                 self.modalidadSel = {};
                 var metas = {};
+                self.dataDias = null;
 
                 $scope.$watch('necesidad', function () {
+
                     if (!$scope.necesidad) {
                         return
                     }
@@ -61,8 +63,23 @@ angular.module('contractualClienteApp')
                                 })
                             }
                         })
-
                     }
+                    $scope.necesidad.Rubros.map(function(r){
+                      r.Metas.map(function(res){
+                        metasRequest.get("Meta/"+res.MetaId).then(function(resp){
+                          res.Nombre = resp.data.Nombre;
+                        })
+                        res.Actividades.map(function(resa){
+
+                          metasRequest.get("Actividad/"+resa.ActividadId).then(function(resp){
+
+                            resa.Nombre = resp.data.Nombre;
+                          })
+                        })
+                      })
+                    });
+                    var dataDias = necesidadService.calculo_total_dias_rev($scope.necesidad.Necesidad.DiasDuracion);
+                    self.dataDias = dataDias;
                 });
 
                 $scope.$watch('d_visualizarNecesidad.modalidadSel', function () {
