@@ -15,7 +15,7 @@ angular.module('metasService', [])
         var cancelSearch; //defer object
         return {
             get: function (query) {
-                return $http.get(path + 'Registro_inversion_actividad-Fuente_financiamiento/' + query);
+                return $http.get(path + query);
             },
         };
     });
