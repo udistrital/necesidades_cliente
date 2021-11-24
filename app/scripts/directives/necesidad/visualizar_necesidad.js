@@ -30,6 +30,7 @@ angular.module('contractualClienteApp')
                 self.solicitud_disponibilidad = null;
                 self.modalidadSel = {};
                 var metas = {};
+                var actividades = {};
                 self.dataDias = null;
 
                 $scope.$watch('necesidad', function () {
@@ -115,12 +116,20 @@ angular.module('contractualClienteApp')
                                 if (solicitante) {
                                     self.dependencia_solicitante = response_dependencia.data[0];
                                     //TODO: Arreglar llamado a metasRequest
-                                    metasRequest.get('plan_adquisiciones/' + $scope.necesidad.Necesidad.Vigencia +
-                                        "/" + response_dependencia.data[0].Id).then(function (response) {
-
+                                    metasRequest.get('Registro_plan_adquisiciones-Metas_Asociadas?query=RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia%3A' + $scope.necesidad.Necesidad.Vigencia +
+                                        "%2CRegistroPlanAdquisicionesId__ResponsableId%3A" + response_dependencia.data[0].Id + "&limit=-1").then(function (response) {
                                             if (response.data !== null && response.status === 200) {
-                                                metas = response.data.metas;
-                                                $scope.necesidad.Rubros.forEach(get_informacion_meta);
+                                                metas = response.data.Data.map(function(met){
+                                                  metasRequest.get("Actividad?query=MetaId__Id%3A"+met.MetaId.Id).then(function(response2){
+                                                    if (response2.data !== null && response2.status === 200) {
+                                                      actividades = response2.data.map(function(act){
+                                                        return act;
+                                                      });
+                                                      $scope.necesidad.Rubros.forEach(get_informacion_meta);
+                                                    }
+                                                  })
+                                                  return met.MetaId;
+                                                });
                                             }
                                         });
                                 } else {
@@ -133,12 +142,12 @@ angular.module('contractualClienteApp')
 
                 function get_informacion_meta(rubro) {
                     rubro.Metas ? rubro.Metas.forEach(function (meta) {
-                        meta.InfoMeta = metas.actividades.find(function (item) {
-                            return item.meta_id === meta.MetaId
+                        meta.InfoMeta = metas.map(function (item) {
+                            return item.meta_id === meta.Id;
                         });
                         meta.Actividades.forEach(function (actividad) {
-                            actividad.InfoActividad = metas.actividades.find(function (item) {
-                                return actividad.ActividadId === item.actividad_id
+                            actividad.InfoActividad = actividades.map(function (item) {
+                                return actividad.ActividadId === item.Id;
                             });
                         });
                     }) : _;
