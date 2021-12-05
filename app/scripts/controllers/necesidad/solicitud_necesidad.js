@@ -196,15 +196,13 @@ angular
           if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {
             //verifica si es supervisor o interventor
             self.tipoInterventor = false;
-            self.Necesidad.DependenciaNecesidadId.SupervisorId
-              ? necesidadService
-                  .get_info_dependencia(
-                    self.Necesidad.DependenciaNecesidadId.SupervisorId
-                  )
-                  .then(function (response) {
-                    self.dependencia_supervisor = response.dependencia.Id;
-                  })
-              : _;
+            if (self.Necesidad.DependenciaNecesidadId.SupervisorId) {
+              necesidadService.get_info_dependencia(
+                self.Necesidad.DependenciaNecesidadId.SupervisorId
+              ).then(function (response) {
+                self.dependencia_supervisor = response.dependencia.Id;
+              });
+            }
           } else {
             self.tipoInterventor = true;
             self.Necesidad.DependenciaNecesidadId.InterventorId
