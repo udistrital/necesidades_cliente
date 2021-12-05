@@ -184,11 +184,13 @@ angular
             self.dependencia_destino = response.dependencia.Id;
           }): _;
 
-          self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId ? necesidadService.get_info_dependencia(
-            self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId
-          ).then(function (response) {
-            self.rol_ordenador_gasto = response.dependencia.Id;
-          }): _;
+          if (self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId) {
+            necesidadService
+            .get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId)
+            .then(function (response) {
+                self.rol_ordenador_gasto = response.dependencia.Id;
+            });
+          }
           if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {//verifica si es supervisor o interventor
             self.tipoInterventor = false;
             self.Necesidad.DependenciaNecesidadId.SupervisorId ? necesidadService.get_info_dependencia(
@@ -198,9 +200,10 @@ angular
             }): _;
           } else {
             self.tipoInterventor = true;
-            self.Necesidad.DependenciaNecesidadId.InterventorId ? (self.dependencia_supervisor = necesidadService.getInfoPersonaNatural(
-              self.Necesidad.DependenciaNecesidadId.InterventorId
-            )): _;
+            if (self.Necesidad.DependenciaNecesidadId.InterventorId) {
+              self.dependencia_supervisor = necesidadService
+                .getInfoPersonaNatural( self.Necesidad.DependenciaNecesidadId.InterventorId );
+            }
           }
         }
         self.DetalleServicioNecesidad =
@@ -314,9 +317,13 @@ angular
         self.tempRubros.forEach(function (r) {
           r.Fuentes === null ? (r.Fuentes = []) : _;
           r.Apropiacion = r.Apropiacion || r.InfoRubro;
-          r.Productos ? r.Productos.forEach(function (p) {
-            p.InfoProducto ? (p = _.merge(p, p.InfoProducto)) : _; // mezclar la info de productos de plan cuentas con la de necesidades
-          }): _;
+          if (r.Productos) {
+            r.Productos.forEach( function (p) {
+              if (p.InfoProducto) {
+                p = _.merge(p, p.InfoProducto); // mezclar la info de productos de plan cuentas con la de necesidades
+              }
+            });
+          }
         });
 
         self.documentos = trNecesidad.MarcoLegalNecesidad

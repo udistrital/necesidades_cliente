@@ -116,8 +116,9 @@ angular.module('contractualClienteApp')
                                 if (solicitante) {
                                     self.dependencia_solicitante = response_dependencia.data[0];
                                     //TODO: Arreglar llamado a metasRequest
-                                    metasRequest.get('Registro_plan_adquisiciones-Metas_Asociadas?query=RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia%3A' + $scope.necesidad.Necesidad.Vigencia +
-                                        "%2CRegistroPlanAdquisicionesId__ResponsableId%3A" + response_dependencia.data[0].Id + "&limit=-1").then(function (response) {
+                                    const queryMetas = 'Registro_plan_adquisiciones-Metas_Asociadas?query=RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia%3A' + $scope.necesidad.Necesidad.Vigencia +
+                                    "%2CRegistroPlanAdquisicionesId__ResponsableId%3A" + response_dependencia.data[0].Id + "&limit=-1";
+                                    metasRequest.get(queryMetas).then(function (response) {
                                             if (response.data !== null && response.status === 200) {
                                                 metas = response.data.Data.map(function(met){
                                                   metasRequest.get("Actividad?query=MetaId__Id%3A"+met.MetaId.Id).then(function(response2){
@@ -141,16 +142,18 @@ angular.module('contractualClienteApp')
                 }
 
                 function get_informacion_meta(rubro) {
-                    rubro.Metas ? rubro.Metas.forEach(function (meta) {
-                        meta.InfoMeta = metas.map(function (item) {
-                            return item.meta_id === meta.Id;
-                        });
-                        meta.Actividades.forEach(function (actividad) {
-                            actividad.InfoActividad = actividades.map(function (item) {
-                                return actividad.ActividadId === item.Id;
+                    if(rubro.Metas){
+                        rubro.Metas.forEach(function (meta) {
+                            meta.InfoMeta = metas.map(function (item) {
+                                return item;
                             });
-                        });
-                    }) : _;
+                            meta.Actividades.forEach(function (actividad) {
+                                actividad.InfoActividad = actividades.map(function (item) {
+                                    return item;
+                                });
+                            });
+                        })
+                    }
                 }
 
 
