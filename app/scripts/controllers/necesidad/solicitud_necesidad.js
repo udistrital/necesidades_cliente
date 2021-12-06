@@ -51,6 +51,7 @@ angular
       self.RequisitoMinimoNecesidad = [];
       self.ActividadEconomicaNecesidad = [];
       self.Rubros = [];
+      self.tempRubros = [];
 
       // se obtiene idnecesidad de la ruta
       self.IdNecesidad = $routeParams.IdNecesidad;
@@ -81,6 +82,7 @@ angular
       self.dias = 0;
 
       self.enviando = false;
+      self.mostrarFinanciacion = false;
 
       self.DuracionEspecial = "unico_pago";
       self.fecha = new Date();
@@ -168,8 +170,7 @@ angular
 
       self.recibirNecesidad = function (res) {
         // recibir el objeto del mid o un nuevo objeto y realizar mapeo correspondiente
-        var trNecesidad;
-        res.data ? (trNecesidad = res.data.Body) : (trNecesidad = res); // identifica si viene del mid o es nuevo
+        var trNecesidad = res.data ?  res.data.Body : res; // identifica si viene del mid o es nuevo
         self.Necesidad = trNecesidad.Necesidad;
         if (self.Necesidad.DependenciaNecesidadId) {
           self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId ? necesidadService.get_info_dependencia(
@@ -183,36 +184,28 @@ angular
             self.dependencia_destino = response.dependencia.Id;
           }): _;
 
-          self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId
-            ? necesidadService
-                .get_info_dependencia(
-                  self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId
-                )
-                .then(function (response) {
-                  self.rol_ordenador_gasto = response.dependencia.Id;
-                })
-            : _;
-
-          if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {
-            //verifica si es supervisor o interventor
+          if (self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId) {
+            necesidadService
+            .get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId)
+            .then(function (response) {
+                self.rol_ordenador_gasto = response.dependencia.Id;
+            });
+          }
+          if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {//verifica si es supervisor o interventor
             self.tipoInterventor = false;
-            self.Necesidad.DependenciaNecesidadId.SupervisorId
-              ? necesidadService
-                  .get_info_dependencia(
-                    self.Necesidad.DependenciaNecesidadId.SupervisorId
-                  )
-                  .then(function (response) {
-                    self.dependencia_supervisor = response.dependencia.Id;
-                  })
-              : _;
+            if (self.Necesidad.DependenciaNecesidadId.SupervisorId) {
+              necesidadService.get_info_dependencia(
+                self.Necesidad.DependenciaNecesidadId.SupervisorId
+              ).then(function (response) {
+                self.dependencia_supervisor = response.dependencia.Id;
+              });
+            }
           } else {
             self.tipoInterventor = true;
-            self.Necesidad.DependenciaNecesidadId.InterventorId
-              ? (self.dependencia_supervisor =
-                  necesidadService.getInfoPersonaNatural(
-                    self.Necesidad.DependenciaNecesidadId.InterventorId
-                  ))
-              : _;
+            if (self.Necesidad.DependenciaNecesidadId.InterventorId) {
+              self.dependencia_supervisor = necesidadService
+                .getInfoPersonaNatural( self.Necesidad.DependenciaNecesidadId.InterventorId );
+            }
           }
         }
         self.DetalleServicioNecesidad =
@@ -239,7 +232,7 @@ angular
             .then(function (response) {
               if (response.data.Data[0] !== undefined) {
                 self.DetallePrestacionServicioNecesidad.NucleoId =
-                  response.data.Data[0].ParametroPadre.Id;
+                  response.data.Data[0].ParametroPadreId;
                 parametrosRequest
                   .get(
                     "parametro",
@@ -247,7 +240,7 @@ angular
                       limit: -1,
                       query:
                         "TipoParametroId:4,ParametroPadreId__isnull:true,Activo:true,Id:" +
-                        self.DetallePrestacionServicioNecesidad.NucleoId,
+                        self.DetallePrestacionServicioNecesidad.NucleoId.Id,
                     })
                   )
                   .then(function (response2) {
@@ -313,7 +306,6 @@ angular
               ? (self.servicio_valor = self.DetalleServicioNecesidad.Total)
               : _;
           });
-
         self.MarcoLegalNecesidad = trNecesidad.MarcoLegalNecesidad || [];
         self.ActividadEspecificaNecesidad =
           trNecesidad.ActividadEspecificaNecesidad || [];
@@ -322,16 +314,20 @@ angular
         self.actividades_economicas_id =
           trNecesidad.ActividadEconomicaNecesidad || [];
         self.ActividadEconomicaNecesidad = [];
-        self.Rubros = trNecesidad.Rubros || [];
-        self.Rubros.forEach(function (r) {
+
+        self.tempRubros = trNecesidad.Rubros || [];
+        self.tempRubros.forEach(function (r) {
           r.Fuentes === null ? (r.Fuentes = []) : _;
           r.Apropiacion = r.Apropiacion || r.InfoRubro;
-          r.Productos
-            ? r.Productos.forEach(function (p) {
-                p.InfoProducto ? (p = _.merge(p, p.InfoProducto)) : _; // mezclar la info de productos de plan cuentas con la de necesidades
-              })
-            : _;
+          if (r.Productos) {
+            r.Productos.forEach( function (p) {
+              if (p.InfoProducto) {
+                p = _.merge(p, p.InfoProducto); // mezclar la info de productos de plan cuentas con la de necesidades
+              }
+            });
+          }
         });
+
         self.documentos = trNecesidad.MarcoLegalNecesidad
           ? trNecesidad.MarcoLegalNecesidad.map(function (d) {
               return d.MarcoLegalId;
@@ -1718,6 +1714,7 @@ angular
               self.SeccionesFormulario.financiacion.activo = true;
               self.elaborando_necesidad = true;
               self.FormularioSeleccionado = 1;
+              self.mostrarFinanciacion = true;
               break;
             } else {
               self.AlertSeccion("General");
