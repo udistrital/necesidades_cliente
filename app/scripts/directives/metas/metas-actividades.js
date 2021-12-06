@@ -23,7 +23,9 @@ angular
       templateUrl: "views/directives/metas/metas-actividades.html",
       controller: function ($scope) {
         var self = this;
-        self.actividades = $scope.actividades;
+        self.actividades = $scope.metas.map(function(act){
+          return act.Actividades;
+        });
         self.meta = undefined;
         self.cargainicial = true;
         self.MontoPorMeta = 0;
