@@ -115,7 +115,6 @@ angular.module('contractualClienteApp')
                             if (response_dependencia.data !== null && response_dependencia.status === 200) {
                                 if (solicitante) {
                                     self.dependencia_solicitante = response_dependencia.data[0];
-                                    //TODO: Arreglar llamado a metasRequest
                                     const queryMetas = 'Registro_plan_adquisiciones-Metas_Asociadas?query=RegistroPlanAdquisicionesId__PlanAdquisicionesId__Vigencia%3A' + $scope.necesidad.Necesidad.Vigencia +
                                     "%2CRegistroPlanAdquisicionesId__ResponsableId%3A" + response_dependencia.data[0].Id + "&limit=-1";
                                     metasRequest.get(queryMetas).then(function (response) {
