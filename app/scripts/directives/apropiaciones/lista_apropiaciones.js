@@ -8,7 +8,7 @@
  */
 angular
   .module("contractualClienteApp")
-  .directive("listaApropiaciones", function (planCuentasRequest, $translate) {
+  .directive("listaApropiaciones", function (movimientosCrudRequest, $translate) {
     return {
       restrict: "E",
       scope: {
@@ -61,7 +61,7 @@ angular
               width: "50%",
             },
             {
-              field: "ValorInicial",
+              field: "ValorActual",
               displayName: $translate.instant("VALOR_U"),
               cellFilter: "currency",
               // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',
@@ -136,7 +136,40 @@ angular
             if(item.Fuente === $scope.tipo){
               item.datos.forEach(function(info){
                 info.RubroInfo.datos = info.datos;
-                info.RubroInfo.ValorActual = info.RubroInfo.ValorInicial;
+                var Cuen_Pre = "";
+                var Movimiento={};
+                var saldo = 0;
+                var rubroMov= null;
+                var actividadIdMov= null;
+                var fuenteIdMov= null;
+                info.datos.forEach(function(rubro){
+                  if($scope.tipofinanciacion.Id === 1){
+                    rubroMov = rubro.RubroId;
+                    rubro["registro_plan_adquisiciones-actividad"].forEach(function(actividad){
+                      actividadIdMov = actividad.actividad.Id;
+                      actividad.FuentesFinanciamiento.forEach(function(fuente){
+                        fuenteIdMov = fuente.FuenteFinanciamiento;
+                        debugger;
+                        Cuen_Pre = "{\"RubroId\":\""+ rubroMov +"\",\"FuenteFinanciamientoId\":\""+ fuenteIdMov +"\",\"ActividadId\":\""+ actividadIdMov +"\"}";
+                        Movimiento.Cuen_Pre =Cuen_Pre;
+                        var jsonCompleto = JSON.stringify(Movimiento);
+                        movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",jsonCompleto).then(function(response){
+                          saldo = saldo + response.Saldo;
+                        });
+                      })
+                    })
+                  }else{
+                    rubroMov = rubro.RubroId;
+                    fuenteIdMov = FuenteFinanciamientoId;
+                    Cuen_Pre = "{\"RubroId\":\""+ rubroMov +"\",\"FuenteFinanciamientoId\":\""+ fuenteIdMov +"\"}";
+                    Movimiento.Cuen_Pre =Cuen_Pre;
+                    var jsonCompleto = JSON.stringify(Movimiento);
+                    movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",jsonCompleto).then(function(response){
+                      saldo = saldo + response.Saldo;
+                    });
+                  }
+                })
+                info.RubroInfo.ValorActual = saldo;
                 self.gridOptions.data.push(info.RubroInfo);
               })
             }
