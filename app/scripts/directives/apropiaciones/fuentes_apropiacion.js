@@ -75,6 +75,9 @@ angular.module('contractualClienteApp')
           })
         }
         self.gridOptions.data = [];
+        if($scope.movimiento){
+          $scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData.ValorActual = $scope.movimiento.Saldo;
+        }
         $scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData ? self.gridOptions.data.push($scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData) : _;
 
         var gridOptData = self.gridOptions.data;
