@@ -52,6 +52,7 @@ angular
       self.ActividadEconomicaNecesidad = [];
       self.Rubros = [];
       self.tempRubros = [];
+      self.movimiento = [];
 
       // se obtiene idnecesidad de la ruta
       self.IdNecesidad = $routeParams.IdNecesidad;
@@ -355,6 +356,12 @@ angular
           self.dependencia_supervisor = undefined;
           self.rol_ordenador_gasto = undefined;
         }
+      });
+
+
+      //Receptor de Movimiento
+      $scope.$on('pasomovimiento', function (event, args) {
+        self.movimiento = args;
       });
 
       // watchers para actualizar informacion en el localstorage

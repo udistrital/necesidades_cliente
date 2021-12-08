@@ -139,6 +139,8 @@ angular
                 var Cuen_Pre = "";
                 var Movimiento={};
                 var saldo = 0;
+                var jsonCompleto;
+                var arreglo =[];
                 var rubroMov= null;
                 var actividadIdMov= null;
                 var fuenteIdMov= null;
@@ -148,33 +150,47 @@ angular
                     rubro["registro_plan_adquisiciones-actividad"].forEach(function(actividad){
                       actividadIdMov = actividad.actividad.Id;
                       actividad.FuentesFinanciamiento.forEach(function(fuente){
-                        fuenteIdMov = fuente.FuenteFinanciamiento;
                         debugger;
-                        Cuen_Pre = "{\"RubroId\":\""+ rubroMov +"\",\"FuenteFinanciamientoId\":\""+ fuenteIdMov +"\",\"ActividadId\":\""+ actividadIdMov +"\"}";
-                        Movimiento.Cuen_Pre =Cuen_Pre;
-                        var jsonCompleto = JSON.stringify(Movimiento);
-                        movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",jsonCompleto).then(function(response){
-                          saldo = saldo + response.Saldo;
+                        fuenteIdMov = fuente.FuenteFinanciamiento;
+                        Cuen_Pre = JSON.stringify({
+                          RubroId:rubroMov,
+                          ActividadId:actividadIdMov.toString(),
+                          FuenteFinanciamientoId:fuenteIdMov
                         });
+                        Movimiento.Cuen_Pre =Cuen_Pre;
+                        arreglo.push(Movimiento);
                       })
                     })
                   }else{
                     rubroMov = rubro.RubroId;
-                    fuenteIdMov = FuenteFinanciamientoId;
-                    Cuen_Pre = "{\"RubroId\":\""+ rubroMov +"\",\"FuenteFinanciamientoId\":\""+ fuenteIdMov +"\"}";
-                    Movimiento.Cuen_Pre =Cuen_Pre;
-                    var jsonCompleto = JSON.stringify(Movimiento);
-                    movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",jsonCompleto).then(function(response){
-                      saldo = saldo + response.Saldo;
+                    fuenteIdMov = rubro.FuenteFinanciamientoId;
+                    Cuen_Pre = JSON.stringify({
+                      RubroId:rubroMov,
+                      FuenteFinanciamientoId:fuenteIdMov
                     });
+                    Movimiento.Cuen_Pre =Cuen_Pre;
+                    arreglo.push(Movimiento);
                   }
                 })
-                info.RubroInfo.ValorActual = saldo;
-                self.gridOptions.data.push(info.RubroInfo);
+                jsonCompleto = JSON.stringify(arreglo);
+                movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",jsonCompleto).then(function(respuestamov){
+                  if(respuestamov.data){
+                    $scope.movimiento = respuestamov.data;
+                    respuestamov.data.forEach(function(movimiento){
+                      saldo = saldo + movimiento.Saldo;
+                    })
+                    info.RubroInfo.ValorActual = saldo;
+                    self.gridOptions.data.push(info.RubroInfo);
+                  }
+                });
               })
             }
           });
         };
+
+        $scope.$watch('movimiento', function () {
+          $scope.$emit('pasomovimiento',$scope.movimiento);
+        });
 
         self.gridOptions.onRegisterApi = function (gridApi) {
           //set gridApi on scope
