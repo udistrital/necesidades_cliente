@@ -378,7 +378,8 @@
                         <div class="col-md-6"
                           ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='F'">
                           <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Fuentes"
-                            dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
+                            dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId"
+                            movimiento="solicitudNecesidad.movimiento">
                           </fuentes-apropiacion>
                         </div>
                         <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Funcionamiento'"
