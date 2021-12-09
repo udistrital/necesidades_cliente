@@ -137,13 +137,13 @@ angular
               item.datos.forEach(function(info){
                 info.RubroInfo.datos = info.datos;
                 var Cuen_Pre = "";
-                var Movimiento={};
+                var Movimiento ={};
                 var saldo = 0;
                 var jsonCompleto;
                 var arreglo =[];
-                var rubroMov= null;
-                var actividadIdMov= null;
-                var fuenteIdMov= null;
+                var rubroMov = null;
+                var actividadIdMov = null;
+                var fuenteIdMov = null;
                 info.datos.forEach(function(rubro){
                   if($scope.tipofinanciacion.Id === 1){
                     rubroMov = rubro.RubroId;
@@ -157,7 +157,7 @@ angular
                           ActividadId:actividadIdMov.toString(),
                           FuenteFinanciamientoId:fuenteIdMov
                         });
-                        Movimiento.Cuen_Pre =Cuen_Pre;
+                        Movimiento.Cuen_Pre = Cuen_Pre;
                         arreglo.push(Movimiento);
                       })
                     })
@@ -168,12 +168,13 @@ angular
                       RubroId:rubroMov,
                       FuenteFinanciamientoId:fuenteIdMov
                     });
-                    Movimiento.Cuen_Pre =Cuen_Pre;
+                    Movimiento.Cuen_Pre = Cuen_Pre;
                     arreglo.push(Movimiento);
                   }
                 })
                 jsonCompleto = JSON.stringify(arreglo);
-                movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",jsonCompleto).then(function(respuestamov){
+                movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",
+                  jsonCompleto).then(function(respuestamov){
                   if(respuestamov.data){
                     $scope.movimiento = respuestamov.data;
                     respuestamov.data.forEach(function(movimiento){

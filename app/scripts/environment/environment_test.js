@@ -26,6 +26,7 @@ angular.module('contractualClienteApp')
             PLAN_ADQUISICIONES_CRUD_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_adquisiciones_crud/v1/',
             NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/",
             MODELS_SERVICE: "scripts/models/",
+            MOVIMIENTOS_CRUD: "https://autenticacion.portaloas.udistrital.edu.co/apioas/movimientos_crud/v1/",
             PARAMETROS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros/v1/", // PARAMETROS NUEVOS
             OIKOS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/oikos_crud_api/v1/",
             ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
