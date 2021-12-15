@@ -13,8 +13,7 @@ angular.module('contractualClienteApp')
       scope: {
         apropiacion: '=',
         fuenteapropiacion: '=',
-        dependenciasolicitante: '=',
-        movimiento: '='
+        dependenciasolicitante: '='
       },
       templateUrl: 'views/directives/apropiaciones/fuentes_apropiacion.html',
       controller: function ($scope, $translate) {

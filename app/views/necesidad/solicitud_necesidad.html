@@ -371,15 +371,15 @@
                           dependenciasolicitante="solicitudNecesidad.dependencia_solicitante"
                           dependenciadestino="solicitudNecesidad.dependencia_destino"
                           vigencia="solicitudNecesidad.Necesidad.Vigencia"
-                          apropiacionTemp="solicitudNecesidad.tempRubros">
+                          apropiacionTemp="solicitudNecesidad.tempRubros"
+                          movimiento="solicitudNecesidad.movimiento">
                         </metas-actividades>
                       </div>
                       <div class="row">
                         <div class="col-md-6"
                           ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='F'">
                           <fuentes-apropiacion apropiacion="ap" fuenteapropiacion="ap.Fuentes"
-                            dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId"
-                            movimiento="solicitudNecesidad.movimiento">
+                            dependenciasolicitante="solicitudNecesidad.dependencia_solicitante_data.DependenciaId">
                           </fuentes-apropiacion>
                         </div>
                         <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.Nombre==='Funcionamiento'"

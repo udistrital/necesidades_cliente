@@ -150,13 +150,13 @@ angular
                     rubro["registro_plan_adquisiciones-actividad"].forEach(function(actividad){
                       actividadIdMov = actividad.actividad.Id;
                       actividad.FuentesFinanciamiento.forEach(function(fuente){
-                        debugger;
                         fuenteIdMov = fuente.FuenteFinanciamiento;
                         Cuen_Pre = JSON.stringify({
                           RubroId:rubroMov,
                           ActividadId:actividadIdMov.toString(),
                           FuenteFinanciamientoId:fuenteIdMov
                         });
+                        Movimiento = {};
                         Movimiento.Cuen_Pre = Cuen_Pre;
                         arreglo.push(Movimiento);
                       })
