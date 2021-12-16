@@ -128,18 +128,17 @@ angular
           true
         );
 
-        $scope.$watch(
-          "d_metasActividades.actividades",
-          function () {
+        $scope.$watch("d_metasActividades.actividades",function () {
             self.MontoPorMeta = 0;
             if (self.actividades !== undefined) {
               self.actividades ? self.actividades.forEach(function (act) {
                 act.ActividadId = act.actividad_id;
                 act.FuentesActividad ? act.FuentesActividad.forEach(function (f) {
+                  debugger;
                   f.FuenteId = f.FuenteId || f.fuente_financiamiento;
                   if (
                     parseFloat(f.MontoParcial) >
-                    parseFloat(f.valor_fuente_financiamiento) - parseFloat(f.saldo_comprometido)
+                    parseFloat(f.ValorAsignado)
                   ) {
                     swal({
                       title:
@@ -285,10 +284,13 @@ angular
         self.loadActividades = function () {
           self.gridOptions.data = [];
           try {
-            var temp = 0;
+            var contador = 0;
             $scope.apropiacion.Apropiacion.datos.forEach(function (itemactividad) {
               itemactividad["registro_plan_adquisiciones-actividad"].forEach(function (item){
-                item.FuentesFinanciamiento[0].ValorAsignado = $scope.movimiento[temp].Saldo;
+                item.FuentesFinanciamiento.forEach(function (fuente){
+                  fuente.ValorAsignado = $scope.movimiento[contador].Saldo;
+                  contador=contador+1;
+                })
                 if (item.actividad.MetaId.Id == $scope.d_metasActividades.meta) {
                   const actividadSchema = {
                     actividad_id: item.actividad.Id.toString(),
@@ -310,7 +312,6 @@ angular
                     new Set(self.gridOptions.data)
                   );
                 };
-                temp=temp+1;
               })
             });
           } catch (error) {
