@@ -35,7 +35,7 @@
                         <div class="row" ng-repeat="fuente in actividad.FuentesActividad">
                             <div class="col-md-6">
                                 <label>Fuente de financiamiento: {{fuente.FuenteId}} - {{fuente.Nombre}}</label>
-                                <input class="money" type="text"
+                                <input class="money" type="text" ng-prop-disabled="fuente.ValorAsignado <= 0"
                                     ng-init="fuente.MontoParcial = fuente.MontoParcial ? fuente.MontoParcial : 0"
                                     ng-model="fuente.MontoParcial" ui-money-mask="2">
                             </div>
