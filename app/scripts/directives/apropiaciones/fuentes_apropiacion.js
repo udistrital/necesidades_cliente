@@ -13,7 +13,8 @@ angular.module('contractualClienteApp')
       scope: {
         apropiacion: '=',
         fuenteapropiacion: '=',
-        dependenciasolicitante: '='
+        dependenciasolicitante: '=',
+        movimiento: "=",
       },
       templateUrl: 'views/directives/apropiaciones/fuentes_apropiacion.html',
       controller: function ($scope, $translate) {
@@ -75,7 +76,7 @@ angular.module('contractualClienteApp')
         }
         self.gridOptions.data = [];
         if($scope.movimiento){
-          $scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData.ValorActual = $scope.movimiento.Saldo;
+          $scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData.ValorActual = $scope.movimiento[0].Saldo;
         }
         $scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData ? self.gridOptions.data.push($scope.apropiacion.Apropiacion.datos[0].FuenteFinanciamientoData) : _;
 
