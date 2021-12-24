@@ -8,7 +8,7 @@
  */
 angular
   .module("contractualClienteApp")
-  .directive("listaApropiaciones", function (planCuentasRequest, $translate) {
+  .directive("listaApropiaciones", function (movimientosCrudRequest, $translate) {
     return {
       restrict: "E",
       scope: {
@@ -61,7 +61,7 @@ angular
               width: "50%",
             },
             {
-              field: "ValorInicial",
+              field: "ValorActual",
               displayName: $translate.instant("VALOR_U"),
               cellFilter: "currency",
               // cellTemplate: '<div align="right">{{data.ApropiacionInicial | currency}}</div>',
@@ -136,12 +136,62 @@ angular
             if(item.Fuente === $scope.tipo){
               item.datos.forEach(function(info){
                 info.RubroInfo.datos = info.datos;
-                info.RubroInfo.ValorActual = info.RubroInfo.ValorInicial;
-                self.gridOptions.data.push(info.RubroInfo);
+                var Cuen_Pre = "";
+                var Movimiento ={};
+                var saldo = 0;
+                var jsonCompleto;
+                var arreglo =[];
+                var rubroMov = null;
+                var actividadIdMov = null;
+                var fuenteIdMov = null;
+                info.datos.forEach(function(rubro){
+                  if($scope.tipofinanciacion.Id === 1){
+                    rubroMov = rubro.RubroId;
+                    rubro["registro_plan_adquisiciones-actividad"].forEach(function(actividad){
+                      actividadIdMov = actividad.actividad.Id;
+                      actividad.FuentesFinanciamiento.forEach(function(fuente){
+                        fuenteIdMov = fuente.FuenteFinanciamiento;
+                        Cuen_Pre = JSON.stringify({
+                          RubroId:rubroMov,
+                          ActividadId:actividadIdMov.toString(),
+                          FuenteFinanciamientoId:fuenteIdMov
+                        });
+                        Movimiento = {};
+                        Movimiento.Cuen_Pre = Cuen_Pre;
+                        arreglo.push(Movimiento);
+                      })
+                    })
+                  }else{
+                    rubroMov = rubro.RubroId;
+                    fuenteIdMov = rubro.FuenteFinanciamientoId;
+                    Cuen_Pre = JSON.stringify({
+                      RubroId:rubroMov,
+                      FuenteFinanciamientoId:fuenteIdMov
+                    });
+                    Movimiento.Cuen_Pre = Cuen_Pre;
+                    arreglo.push(Movimiento);
+                  }
+                })
+                jsonCompleto = JSON.stringify(arreglo);
+                movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",
+                  jsonCompleto).then(function(respuestamov){
+                  if(respuestamov.data){
+                    $scope.movimiento = respuestamov.data;
+                    respuestamov.data.forEach(function(movimiento){
+                      saldo = saldo + movimiento.Saldo;
+                    })
+                    info.RubroInfo.ValorActual = saldo;
+                    self.gridOptions.data.push(info.RubroInfo);
+                  }
+                });
               })
             }
           });
         };
+
+        $scope.$watch('movimiento', function () {
+          $scope.$emit('pasomovimiento',$scope.movimiento);
+        });
 
         self.gridOptions.onRegisterApi = function (gridApi) {
           //set gridApi on scope

@@ -185,6 +185,7 @@ var text_es = {
     //visualizar_necesidad
     DE: "de",
     MONTO: "Monto",
+    CREAR_PDF:"CREAR PDF",
 
     //SOLICITUD RP
     SALIR: "Salir",
@@ -852,7 +853,7 @@ var text_es = {
     NAME_CONTR: "NOMBRE CONTRATISTA",
     DOCUMENTO: "DOCUMENTO",
     CAR_SUPER: "CARGO SUPERVISOR",
-    
+
     //Módulo aprobación pago
     TITULO_APRO_PAGO: "APROBACIÓN PAGO",
     NOM_ORDENADOR: "NOMBRE ORDENADOR DEL GASTO",

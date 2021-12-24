@@ -22,11 +22,11 @@ angular.module('contractualClienteApp')
             PARAMETROS_GOBIERNO_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros_gobierno/v1/",
             CATALOGO_ARKA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/catalogo_elementos_crud/v1/",
             PLAN_CUENTAS_MID_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mid/v1/',
-            // PLAN_CUENTAS_MID_SERVICE: 'http://localhost:8081/v1/',
             PLAN_CUENTAS_MONGO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_cuentas_mongo_crud/v1/',
             PLAN_ADQUISICIONES_CRUD_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_adquisiciones_crud/v1/',
             NECESIDADES_CRUD_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/necesidades_crud/v1/",
             MODELS_SERVICE: "scripts/models/",
+            MOVIMIENTOS_CRUD: "https://autenticacion.portaloas.udistrital.edu.co/apioas/movimientos_crud/v1/",
             PARAMETROS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros/v1/", // PARAMETROS NUEVOS
             OIKOS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/oikos_crud_api/v1/",
             ARGO_NOSQL_SERVICE: "http://10.20.2.43:8083/v1/", // NO ESTA URL EN PREPROD
@@ -47,6 +47,3 @@ angular.module('contractualClienteApp')
             },
         },
     });
-
-    
-

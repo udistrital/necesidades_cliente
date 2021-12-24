@@ -19,6 +19,7 @@ angular.module('contractualClienteApp')
             EditarNecesidad: true,
             SolicitarCDP: true,
             AprobarCDP: true,
+            CrearPDF: true
         };
 
         self.modalidadSel = {};
@@ -212,7 +213,7 @@ angular.module('contractualClienteApp')
                             self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
                             self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
                             self.verBotonAprobarCDPNecesidad = necesidadService.EstadoNecesidadType.CDPExpedido.Id === necesidad.EstadoNecesidadId.Id && self.buttons.AprobarCDP;
-
+                            self.verBotonCrearPDFNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.CrearPDF;
                             $("#myModal").modal();
                         }
                     });
@@ -308,10 +309,10 @@ angular.module('contractualClienteApp')
             self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
             self.necesidad.Necesidad.ModalidadSeleccionId = self.modalidadSel;
             self.necesidad.Necesidad.TipoContratoId = self.TipoContrato.Id;
-            self.necesidad.Necesidad.ConsecutivoNecesidad=self.necesidad.Necesidad.Id+16;
-
+            self.necesidad.Necesidad.ConsecutivoNecesidad = self.necesidad.Necesidad.Id;
             necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
-                if (l.data !== undefined) {
+              console.log(l.headers());
+                if (l.data !== undefined && l.data.Id !== 0) {
                     swal(
                         {
                              title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
@@ -321,7 +322,7 @@ angular.module('contractualClienteApp')
                              showCloseButton: true,
                              confirmButtonText: $translate.instant("CERRAR")
                          }
-                     );
+                    );
                      self.cargarDatosNecesidades(self.offset, self.query);
                      $("#myModal").modal("hide");
                 } else {
@@ -415,6 +416,14 @@ angular.module('contractualClienteApp')
             $("#myModal").modal("hide");
             $('#myModal').on('hidden.bs.modal', function () {
                 $window.location.href = '#/necesidad/solicitud_necesidad/' + idNecesidad;
+            });
+        };
+
+        self.crear_pdf_necesidad = function () {
+            var idNecesidad = self.g_necesidad.Id;
+            $("#myModal").modal("hide");
+            $('#myModal').on('hidden.bs.modal', function () {
+                $window.location.href = '#/necesidad/necesidad-pdf/' + idNecesidad;
             });
         };
 

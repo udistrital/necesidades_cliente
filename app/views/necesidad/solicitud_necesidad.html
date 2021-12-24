@@ -235,15 +235,13 @@
 
               <div class="panel-body" ng-hide="general.open">
                 <div class="row form-group">
-                  <label class=" control-label">{{"TIPO_FINANCIACION" | translate}}</label>
+                  <label class="control-label">{{"UNIDAD_EJECUTORA" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
-                  <select class="form-control" ng-model="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId"
-                    ng-options="tipof.Nombre for tipof in solicitudNecesidad.tipo_financiacion_data track by tipof.Id"
-                    required
-                    ng-disabled="disableTipoFinanciacion">
+                  <select class="form-control" ng-model="solicitudNecesidad.Necesidad.AreaFuncional"
+                    ng-options="ue.Id as ue.Nombre for ue in solicitudNecesidad.area_funcional_data" required>
                     <option value="" disabled selected>
                       {{"SELECCIONAR" | translate}}
-                      {{"TIPO_FINANCIACION" | translate}}
+                      {{"UNIDAD_EJECUTORA" | translate}}
                     </option>
                   </select>
                 </div>
@@ -263,13 +261,15 @@
                 </div>
 
                 <div class="col-md-6" ng-if="solicitudNecesidad.fields.General.UnidadEjecutora">
-                  <label class="control-label">{{"UNIDAD_EJECUTORA" | translate}}</label>
+                  <label class=" control-label">{{"TIPO_FINANCIACION" | translate}}</label>
                   <small>*{{"OBLIGATORIO" | translate}}</small>
-                  <select class="form-control" ng-model="solicitudNecesidad.Necesidad.AreaFuncional"
-                    ng-options="ue.Id as ue.Nombre for ue in solicitudNecesidad.area_funcional_data" required>
+                  <select class="form-control" ng-model="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId"
+                    ng-options="tipof.Nombre for tipof in solicitudNecesidad.tipo_financiacion_data track by tipof.Id"
+                    required
+                    ng-disabled="disableTipoFinanciacion">
                     <option value="" disabled selected>
                       {{"SELECCIONAR" | translate}}
-                      {{"UNIDAD_EJECUTORA" | translate}}
+                      {{"TIPO_FINANCIACION" | translate}}
                     </option>
                   </select>
                 </div>
@@ -325,7 +325,7 @@
           <md-content>
             <!-- financiacion, se muestra solo si se completo general y si la unidad ejecutora esta seleccionada -->
             <ng-form id="f_financiacion" name="financiacion" class="form-group"
-              ng-if="solicitudNecesidad.forms.General && solicitudNecesidad.Necesidad.AreaFuncional!=undefined">
+              ng-if="solicitudNecesidad.mostrarFinanciacion && solicitudNecesidad.forms.General && solicitudNecesidad.Necesidad.AreaFuncional!=undefined">
               <legend class="text-primary" ng-click="solicitudNecesidad.validar_formu(financiacion)">
                 {{"FINANCIACION" | translate}}
                 <span class="fa fa-plus pull-right" ng-show="financiacion.open"></span>
@@ -346,7 +346,9 @@
                         unidadejecutora="solicitudNecesidad.Necesidad.AreaFuncional"
                         tipofinanciacion="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId"
                         selhijos="true"
-                        planadquisicion="solicitudNecesidad.planadquisicion"></lista-apropiaciones>
+                        planadquisicion="solicitudNecesidad.planadquisicion"
+                        mostrarmetas="solicitudNecesidad.mostrarmetas"
+                        ></lista-apropiaciones>
                       <div style="text-align:center;">
                         <button type="button" class="btn btn-success btn-outline"
                           ng-click="solicitudNecesidad.agregar_ffapropiacion(solicitudNecesidad.apro)">
@@ -363,10 +365,14 @@
                       <h3><span class="text-success">Rubro: {{$index+1}}.</span> {{ap.Apropiacion.Codigo}} - {{ap.Apropiacion.Descripcion}}</h3>
                       <br>
                       <div class="row" ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='I'">
-                        <metas-actividades apropiacion="ap" metas="ap.Metas"
+                        <metas-actividades
+                          apropiacion="ap"
+                          metas="ap.Metas"
                           dependenciasolicitante="solicitudNecesidad.dependencia_solicitante"
                           dependenciadestino="solicitudNecesidad.dependencia_destino"
-                          vigencia="solicitudNecesidad.Necesidad.Vigencia">
+                          vigencia="solicitudNecesidad.Necesidad.Vigencia"
+                          apropiacionTemp="solicitudNecesidad.tempRubros"
+                          movimiento="solicitudNecesidad.movimiento">
                         </metas-actividades>
                       </div>
                       <div class="row">
@@ -408,7 +414,12 @@
 
                       <div ng-if="solicitudNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion==='I'" class="row">
                         <div class="col-md-6">
-                          <productos-apropiacion rubro="ap.Apropiacion" productoapropiacion="ap.Productos"initProductoapropiacion="ap.initProductos" apropiacion="ap">
+                          <productos-apropiacion
+                            rubro="ap.Apropiacion"
+                            productoapropiacion="ap.Productos"
+                            initProductoapropiacion="ap.initProductos"
+                            apropiacion="ap"
+                            apropiacionTemp="solicitudNecesidad.tempRubros">
                           </productos-apropiacion>
                         </div>
                         <div class="col-md-6">

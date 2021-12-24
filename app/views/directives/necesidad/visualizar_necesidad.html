@@ -28,7 +28,7 @@
   <!-- Etiquetas info -->
   <div class="panel-body">
     <div class="text-info pull-right text-right">
-      <cite class=" "> {{vigencia|| '-'}}</cite><br>
+      <cite class=" "> {{vigencia|| d_visualizarNecesidad.v_necesidad.Vigencia}}</cite><br>
       <cite class=""> {{d_visualizarNecesidad.v_necesidad.FechaSolicitud | date:'dd-MMM-yyyy'}}</cite><br>
       <cite
         ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7"
@@ -95,7 +95,7 @@
         <!-- Duracion -->
         <h5 class="text-info">{{"DURACION" | translate}}</h5>
         <p class="text-muted text-justify">
-          {{d_visualizarNecesidad.v_necesidad.DiasDuracion}} dias
+          Años: {{d_visualizarNecesidad.dataDias.anos}} Meses: {{d_visualizarNecesidad.dataDias.meses}} Dias: {{d_visualizarNecesidad.dataDias.dias}}
         </p>
         <!-- Financiacion -->
         <h5 class="text-info">{{"FINANCIACION" | translate}}</h5>
@@ -113,22 +113,34 @@
                 <br>
                 <strong>Nombre:</strong> {{ rubro.InfoRubro.Nombre }}
                 <br>
-                <strong>Valor:</strong> {{ rubro.InfoRubro.ValorInicial | currency}}
-                <hr>
               </li>
+              <!-- Productos -->
+              <h5 class="text-info">{{"PRODUCTOS" | translate}}</h5>
+              <ul>
+                <li ng-repeat="producto in rubro.Productos">
+                  <strong>Nombre:</strong> {{producto.InfoProducto.Nombre}}
+                </li>
+              </ul>
+              <br>
               <!-- Metas -->
               <h5 class="text-info">{{"METAS" | translate}}</h5>
               <ul ng-repeat="meta in rubro.Metas">
-                <li><strong>Código:</strong>
-                  {{ meta.MetaId }}
+                <li>
+                  <strong>Código:</strong> {{ meta.MetaId }}
+                  <br>
+                  <strong>Nombre:</strong> {{meta.Nombre}}
+                  <br>
                   <p>{{ meta.InfoMeta.meta }}</p>
                   <hr>
                 </li>
                 <!-- Actividades -->
                 <h5 class="text-info">{{"ACTIVIDADES_META" | translate}}</h5>
                 <ul ng-repeat="act in meta.Actividades">
-                  <li><strong>Código:</strong>
-                    {{ act.ActividadId }}
+                  <li>
+                    <strong>Código:</strong> {{ act.ActividadId }}
+                    <br>
+                    <strong>Nombre:</strong> {{act.Nombre}}
+                    <br>
                     <p>{{ act.InfoActividad.actividad }}</p>
                     <hr>
                   </li>
@@ -148,14 +160,6 @@
                 </ul>
                 <br>
               </ul>
-              <!-- Productos -->
-              <p><strong ng-if="rubro.Productos.length>0">{{"PRODUCTOS" | translate}}</strong></p><br>
-              <ul>
-                <li ng-repeat="producto in rubro.Productos">
-                  {{producto.InfoProducto.Nombre}} <p><strong></strong></p>
-                </li>
-              </ul>
-              <br>
             </ul>
           </div>
         </div>
@@ -243,9 +247,15 @@
         <div ng-if="d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='S'||d_visualizarNecesidad.v_necesidad.TipoContratoNecesidadId.CodigoAbreviacion==='CS'">
             <p><strong>Detalle servicio</strong></p>
             <table class="table table-bordered tablaDetalle">
-              <tr class="bg-primary"><th>Tipo servicio</th><th>Valor IVA</th><th>Valor total servicio</th></tr>
+              <tr class="bg-primary">
+                <th>Tipo servicio</th>
+                <th>Valor Unitario</th>
+                <th>Valor IVA</th>
+                <th>Valor total servicio</th>
+              </tr>
               <tr>
                 <td>{{necesidad.DetalleServicioNecesidad.TipoServicioNombre}}</td>
+                <td class="money">{{necesidad.DetalleServicioNecesidad.Valor | currency}}</td>
                 <td class="money">{{necesidad.DetalleServicioNecesidad.valorIvaUnd | currency}}</td>
                 <td class="money">{{necesidad.DetalleServicioNecesidad.ValorTotal | currency}}</td>
               </tr>

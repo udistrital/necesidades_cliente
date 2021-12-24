@@ -12,6 +12,7 @@ angular.module('necesidadesCrudService', [])
         // Service logic
         // ...
         var path = CONF.GENERAL.NECESIDADES_CRUD_SERVICE;
+        var interceptor = CONF.GENERAL.PLAN_CUENTAS_MID_SERVICE;
 
         // Public API here
         return {
@@ -26,7 +27,7 @@ angular.module('necesidadesCrudService', [])
                 return $http.post(path + tabla, elemento, token_service.setting_bearer.headers);
             },
             put: function(tabla, id, elemento) {
-                return $http.put(path + tabla + "/" + id, elemento, token_service.setting_bearer.headers);
+                return $http.put(interceptor + tabla + "/" + id, elemento, token_service.setting_bearer.headers);
             },
             delete: function(tabla, id) {
                 return $http.delete(path + tabla + "/" + id, token_service.setting_bearer.headers);

@@ -71,6 +71,7 @@ angular
         'implicitToken',
         'terceroCrudService',
         'terceroMidService',
+        'movimientosCrudService',
         'core'
     ])
     .run(function (amMoment) {

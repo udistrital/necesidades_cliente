@@ -57,18 +57,26 @@
 
 
     <div class="modal-footer text-center">
-        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_solicitud()" ng-show="necesidades.verBotonAprobarSolicitud">{{"SOLICITAR"
-            | translate}}</button>
-      <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_necesidad()" ng-show="necesidades.verBotonAprobarNecesidad">{{"APROBAR"
-        | translate}}</button>
-      <button class="btn btn-warning" type="button" name="button" ng-click="necesidades.rechazar_necesidad()" ng-show="necesidades.verBotonRechazarNecesidad">{{"RECHAZAR"
-        | translate}}</button>
-      <button class="btn btn-success btn-outline" type="button" name="button" ng-show="necesidades.verBotonEditarNecesidad"
-        ng-click="necesidades.editar_necesidad()">{{"EDITAR_NECESIDAD" | translate}}</button>
-      <button class="btn btn-success btn-outline" type="button" name="button" ng-click="necesidades.solicitar_cdp()"
-        ng-show="necesidades.verBotonSolicidadCDPNecesidad">{{"SOLICITAR_CDP" | translate}}</button>
-      <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_cdp()"
-        ng-show="necesidades.verBotonAprobarCDPNecesidad">{{"APROBAR_CDP" | translate}}</button>
+        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_solicitud()"
+          ng-show="necesidades.verBotonAprobarSolicitud">{{"SOLICITAR"| translate}}</button>
+
+        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_necesidad()"
+          ng-show="necesidades.verBotonAprobarNecesidad">{{"APROBAR"| translate}}</button>
+
+        <button class="btn btn-warning" type="button" name="button" ng-click="necesidades.rechazar_necesidad()"
+        ng-show="necesidades.verBotonRechazarNecesidad">{{"RECHAZAR"| translate}}</button>
+
+        <button class="btn btn-success btn-outline" type="button" name="button" ng-click="necesidades.editar_necesidad()"
+          ng-show="necesidades.verBotonEditarNecesidad">{{"EDITAR_NECESIDAD" | translate}}</button>
+
+        <button class="btn btn-success btn-outline" type="button" name="button" ng-click="necesidades.solicitar_cdp()"
+          ng-show="necesidades.verBotonSolicidadCDPNecesidad">{{"SOLICITAR_CDP" | translate}}</button>
+
+        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_cdp()"
+          ng-show="necesidades.verBotonAprobarCDPNecesidad">{{"APROBAR_CDP" | translate}}</button>
+
+        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.crear_pdf_necesidad()"
+          ng-show="necesidades.verBotonCrearPDFNecesidad">{{"CREAR_PDF" | translate}}</button>
 
     </div>
 

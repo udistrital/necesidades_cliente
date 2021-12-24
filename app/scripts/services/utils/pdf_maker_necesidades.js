@@ -15,32 +15,47 @@ angular.module('contractualClienteApp')
                 var dependenciaData = [];
                 var apropiacionesData = [];
                 var perfil_data = [];
+                var TiposServicios;
 
                 $http.get("scripts/models/imagen.json").then(function (response) {
                     imagen = response.data;
 
-                    return necesidadService.getJefeDependencia(trNecesidad.DependenciaNecesidadDestino);
+                    return necesidadService.getJefeDependencia(trNecesidad.Necesidad.DependenciaNecesidadId.JefeDepDestinoId, true);
                 }).then(function (JD) {
                     jefeDependenciaDestino = JD;
 
-                    return necesidadService.getJefeDependencia(trNecesidad.DependenciaNecesidad.JefeDependenciaSolicitante, true);
+                    return necesidadService.getJefeDependencia(trNecesidad.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId, true);
                 }).then(function (JD) {
                     jefeDependenciaSolicitante = JD;
 
                     return necesidadService.getAllDependencias();
                 }).then(function (Dependencias) {
                     dependenciaData = Dependencias;
-                    apropiacionesData = trNecesidad.Ffapropiacion;
+                    if(trNecesidad && trNecesidad.Rubros && trNecesidad.Rubros[0]){
+                      apropiacionesData = trNecesidad.Rubros;
+                    }else{
+                      apropiacionesData = undefined;
+                    }
+
+                    $http.get("scripts/models/tipo_servicio.json").then(function (response) {
+                      TiposServicios = response.data;
+                    });
                     return necesidadService.getParametroEstandar();
                 }).then(function (response) {
                     perfil_data = response.data;
 
-                    var dependenciaDestino = dependenciaData.filter(function (d) { return d.Id === trNecesidad.DependenciaNecesidadDestino })[0]
-                    var dependenciaSolicitante = dependenciaData.filter(function (d) { return d.Id === trNecesidad.DependenciaNecesidadSolicitante })[0]
-                    var perfil = trNecesidad.DetalleServicioNecesidad ?
-                        perfil_data.filter(function (d) { return d.Id === trNecesidad.DetalleServicioNecesidad.Perfil })[0] :
-                        { ValorParametro: "" };
-
+                    var dependenciaDestino = dependenciaData.filter(function (d) { return d.Id === jefeDependenciaDestino.JefeDependencia.DependenciaId })[0]
+                    var dependenciaSolicitante = dependenciaData.filter(function (d) { return d.Id === jefeDependenciaSolicitante.JefeDependencia.DependenciaId })[0]
+                    var perfil;
+                    if(trNecesidad.DetalleServicioNecesidad && trNecesidad.DetalleServicioNecesidad.TipoServicioId){
+                      perfil = trNecesidad.DetalleServicioNecesidad ? TiposServicios.find(function(element){return element.ID == trNecesidad.DetalleServicioNecesidad.TipoServicioId}): {ValorParametro: ""};
+                    }else if(trNecesidad.DetallePrestacionServicioNecesidad && trNecesidad.DetallePrestacionServicioNecesidad.PerfilId){
+                      perfil = trNecesidad.DetallePrestacionServicioNecesidad ? perfil_data.filter(function (d) {
+                        return d.Id === trNecesidad.DetallePrestacionServicioNecesidad.PerfilId
+                      })[0] : {
+                          ValorParametro: ""
+                      };
+                    }
                     resolve({
                         header: function (currentPage, pageCount) {
                             return {
@@ -60,7 +75,7 @@ angular.module('contractualClienteApp')
                                                 alignment: 'center',
                                                 rowSpan: 4,
                                             },
-                                            { text: 'Solicitud Necesidad'.toUpperCase(), rowSpan: 4, margin: [0, 33, 0, 0], style: "headerTitle" },
+                                            { text: "Solicitud Necesidad".toUpperCase(), rowSpan: 4, margin: [0, 33, 0, 0], style: "headerTitle" },
                                             { text: "Dependencia Solicitante", style: "title1", border: [true, true, true, false] }
                                         ],
                                         [
@@ -74,8 +89,8 @@ angular.module('contractualClienteApp')
                                             {
                                                 alignment: 'center',
                                                 columns: [
-                                                    [{ text: "Vigencia", style: "title1" }, trNecesidad.Necesidad.Vigencia],
-                                                    [{ text: "No. Solicitud", style: "title1" }, trNecesidad.Necesidad.NumeroElaboracion]
+                                                    { text: "Vigencia " + trNecesidad.Necesidad.Vigencia, style: "title1" },
+                                                    { text: "No. Solicitud "+ trNecesidad.Necesidad.ConsecutivoSolicitud, style: "title1" }
                                                 ],
                                                 columnGap: 10
                                             }
@@ -83,8 +98,7 @@ angular.module('contractualClienteApp')
                                         [
                                             "",
                                             "",
-                                            "Página " + currentPage.toString() + " de " + pageCount,
-
+                                            { text:"Página " + currentPage.toString() + " de " + pageCount}
                                         ]
                                     ]
                                 }
@@ -116,10 +130,11 @@ angular.module('contractualClienteApp')
                                                         ["Descripción", "", "Cantidad", "Unidad"],
                                                         [
                                                             ["Cod. 1", "Especificación:"],
-                                                            [perfil.ValorParametro, "Actividad",
+                                                            [{text: perfil.ValorParametro ?
+                                                              perfil.ValorParametro : perfil.DESCRIPCION ? perfil.DESCRIPCION:"", bold: true}, "Actividades:",
                                                             {
-                                                                text: trNecesidad.ActividadEspecifica ?
-                                                                    trNecesidad.ActividadEspecifica.map(function (ae, i) { return (i + 1).toString() + '. ' + ae.Descripcion }).join('. ') : "Ninguna", alignment: "justify"
+                                                                text: trNecesidad.ActividadEspecificaNecesidad ?
+                                                                    trNecesidad.ActividadEspecificaNecesidad.map(function (ae, i) { return (i + 1).toString() + '. ' + ae.Descripcion + '.'}).join('\n \n') : "Ninguna", alignment: "justify"
                                                             }],
                                                             { text: 1, alignment: 'center' },
                                                             ""
@@ -184,9 +199,9 @@ angular.module('contractualClienteApp')
                                                     margin: [0, 0, 0, 5],
                                                     columnGap: 10,
                                                     columns: [
-                                                        { text: apg.Apropiacion.Rubro.Codigo, width: "auto" },
-                                                        { text: apg.Apropiacion.Rubro.Nombre.toUpperCase(), width: "*" },
-                                                        { text: $filter('currency')(apg.Monto, '$'), width: "auto" }
+                                                        { text: apg.InfoRubro.Codigo, width: "auto" },
+                                                        { text: apg.InfoRubro.Nombre.toUpperCase(), width: "*" },
+                                                        { text: $filter('currency')(apg.InfoRubro.ValorActual, '$'), width: "auto" }
                                                     ]
                                                 }].concat([
                                                     {
@@ -232,9 +247,9 @@ angular.module('contractualClienteApp')
                                                             columnGap: 10,
                                                             columns: [
                                                                 { text: "", width: "15%" },
-                                                                { text: p.ProductoRubroInfo[0].Producto.Nombre.toUpperCase() },
+                                                                { text: p.InfoProducto.Nombre.toUpperCase() },
                                                                 { text: "", width: "6%" },
-                                                                { text: p.ProductoRubroInfo[0].Producto.Descripcion },
+                                                                { text: p.InfoProducto.Descripcion },
                                                                 { text: "" },
                                                             ]
                                                         }
@@ -245,23 +260,10 @@ angular.module('contractualClienteApp')
                                         [{ style: "title1", text: "Marco Legal".toUpperCase() }],
                                         [{
                                             text: (trNecesidad.MarcoLegalNecesidad && trNecesidad.MarcoLegalNecesidad.length > 0) ?
-                                                trNecesidad.MarcoLegalNecesidad.map(function (ml, i) { return (i + 1).toString() + ". " + ml.MarcoLegal.NombreDocumento }).join("\n") : "Ninguno"
+                                                trNecesidad.MarcoLegalNecesidad.map(function (ml, i) { return (i + 1).toString() + ". " + ml.MarcoLegalId.NombreDocumento }).join("\n") : "Ninguno"
                                         }],
-                                        //TODO: agregar los requisitos minimos a la lógica de negocios
-                                        // [{ style: "title1", text: "Requisitos Mínimos".toUpperCase() }],
-                                        // [[
-                                        //     {
-                                        //         table: {
-                                        //             headerRows: 1,
-                                        //             widths: ["auto", "*", "*"],
-                                        //             body: [
-                                        //                 ["Secuencia", "Requisito", "Observaciones"],
-                                        //                 [1, "Técnico".toUpperCase(), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Malit profecta versatur nomine ocurreret multavit, officiis viveremus aeternum superstitio suspicor alia nostram, quando nostros congressus susceperant concederetur leguntur iam, vigiliae democritea tantopere causae, atilii plerumque ipsas potitur pertineant multis rem quaeri pro, legendum didicisse credere ex maluisset per videtis. Cur discordans praetereat aliae ruinae dirigentur orestem eodem, praetermittenda divinum. Collegisti, deteriora malint loquuntur officii cotidie finitas referri doleamus ambigua acute. Adhaesiones ratione beate arbitraretur detractis perdiscere, constituant hostis polyaeno. Diu concederetur."]
-                                        //             ]
-                                        //         }
-                                        //     }
-                                        // ]],
-                                        [{ style: "title1", text: "Anexos".toUpperCase() }],
+
+                                        [{ style: "title1", text: "Requisitos Mínimos".toUpperCase() }],
                                         [[
                                             {
                                                 table: {
@@ -269,10 +271,27 @@ angular.module('contractualClienteApp')
                                                     widths: ["auto", "*", "*"],
                                                     body: [
                                                         ["Secuencia", "Requisito", "Observaciones"],
+                                                        [ trNecesidad.RequisitoMinimoNecesidad ? trNecesidad.RequisitoMinimoNecesidad.map(function (rmn, i) { return (i + 1).toString()}).join('\n \n') : "",
+                                                          {text: trNecesidad.RequisitoMinimoNecesidad ? trNecesidad.RequisitoMinimoNecesidad.map(function (rmn, i) { return  perfil.ValorParametro ?
+                                                            perfil.ValorParametro : perfil.DESCRIPCION ? perfil.DESCRIPCION:""}).join('\n \n') : "" , bold: true},
+                                                          trNecesidad.RequisitoMinimoNecesidad ? trNecesidad.RequisitoMinimoNecesidad.map(function (rmn, i) { return rmn.Descripcion + '.'}).join('\n \n') : "" ]
                                                     ]
                                                 }
                                             }
                                         ]],
+                                        //TODO: agregar los Anexos a la lógica de negocios
+                                        //[{ style: "title1", text: "Anexos".toUpperCase() }],
+                                        //[[
+                                        //    {
+                                        //        table: {
+                                        //            headerRows: 1,
+                                        //            widths: ["auto", "*", "*"],
+                                        //            body: [
+                                        //                ["Secuencia", "Requisito", "Observaciones"]
+                                        //            ]
+                                        //        }
+                                        //    }
+                                        //]],
                                         [""],
                                         [{
                                             alignment: "center",
@@ -286,6 +305,7 @@ angular.module('contractualClienteApp')
                                                         jefeDependenciaSolicitante.Persona.SegundoApellido
                                                     ].join(" ").toUpperCase()
                                                 },
+                                                { bold: true, text: "___________________________________________________" },
                                                 { bold: true, text: "Firma del Responsable de la dependencia solicitante" }
                                             ]
                                         }]
@@ -293,7 +313,6 @@ angular.module('contractualClienteApp')
                                 }
                             }
                         ],
-
                         styles: {
                             header: {
                                 alignment: 'center',
@@ -323,12 +342,10 @@ angular.module('contractualClienteApp')
 
                         // by default we use portrait, you can change it to landscape if you wish
                         pageOrientation: 'portrait',
-
                     });
 
                 });
             });
         };
-
         return self;
     });
