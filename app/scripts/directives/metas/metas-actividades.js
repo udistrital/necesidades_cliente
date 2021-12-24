@@ -285,8 +285,8 @@ angular
           try {
             var contador = 0;
             $scope.apropiacion.Apropiacion.datos.forEach(function (itemactividad) {
-              var actcont = 0;
               itemactividad["registro_plan_adquisiciones-actividad"].forEach(function (item){
+                var actcont = 0;
                 item.FuentesFinanciamiento.forEach(function (fuente){
                   fuente.ValorAsignado = $scope.movimiento[contador].Saldo;
                   contador=contador+1;
