@@ -94,8 +94,11 @@
         </p>
         <!-- Duracion -->
         <h5 class="text-info">{{"DURACION" | translate}}</h5>
-        <p class="text-muted text-justify">
+        <p class="text-muted text-justify" ng-if="necesidad.Necesidad.TipoDuracionNecesidadId.CodigoAbreviacion==='D'">
           Años: {{d_visualizarNecesidad.dataDias.anos}} Meses: {{d_visualizarNecesidad.dataDias.meses}} Dias: {{d_visualizarNecesidad.dataDias.dias}}
+        </p>
+        <p class="text-muted text-justify" ng-if="necesidad.Necesidad.TipoDuracionNecesidadId.CodigoAbreviacion!=='D'">
+          Tipo: {{necesidad.Necesidad.TipoDuracionNecesidadId.Descripcion}}
         </p>
         <!-- Financiacion -->
         <h5 class="text-info">{{"FINANCIACION" | translate}}</h5>

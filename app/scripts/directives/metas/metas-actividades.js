@@ -134,7 +134,6 @@ angular
               self.actividades ? self.actividades.forEach(function (act) {
                 act.ActividadId = act.actividad_id;
                 act.FuentesActividad ? act.FuentesActividad.forEach(function (f) {
-                  debugger;
                   f.FuenteId = f.FuenteId || f.fuente_financiamiento;
                   if (
                     parseFloat(f.MontoParcial) >
@@ -287,15 +286,17 @@ angular
             var contador = 0;
             $scope.apropiacion.Apropiacion.datos.forEach(function (itemactividad) {
               itemactividad["registro_plan_adquisiciones-actividad"].forEach(function (item){
+                var actcont = 0;
                 item.FuentesFinanciamiento.forEach(function (fuente){
                   fuente.ValorAsignado = $scope.movimiento[contador].Saldo;
                   contador=contador+1;
+                  actcont=actcont+fuente.ValorAsignado;
                 })
                 if (item.actividad.MetaId.Id == $scope.d_metasActividades.meta) {
                   const actividadSchema = {
                     actividad_id: item.actividad.Id.toString(),
                     actividad: item.actividad.Nombre,
-                    valor_actividad: item.Valor,
+                    valor_actividad: actcont,
                   };
 
                   if (self.gridOptions.data.length > 0) {
