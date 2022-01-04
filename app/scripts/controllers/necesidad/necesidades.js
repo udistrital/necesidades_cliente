@@ -312,20 +312,32 @@ angular.module('contractualClienteApp')
             self.necesidad.Necesidad.ConsecutivoNecesidad = self.necesidad.Necesidad.Id;
             necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
               console.log(l.headers());
-                if (l.data !== undefined && l.data.Id !== 0) {
+                if (l.data !== undefined && l.data.Id !== 0 && l.status === 200) {
                     swal(
                         {
-                             title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
-                             text: 'La solicitud de necesidad '+self.necesidad.Necesidad.ConsecutivoSolicitud+' ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.ConsecutivoNecesidad ,
-                             type: "success",
-                             width: 600,
-                             showCloseButton: true,
-                             confirmButtonText: $translate.instant("CERRAR")
-                         }
+                          title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
+                          text: 'La solicitud de necesidad '+self.necesidad.Necesidad.ConsecutivoSolicitud+' ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.ConsecutivoNecesidad ,
+                          type: "success",
+                          width: 600,
+                          showCloseButton: true,
+                          confirmButtonText: $translate.instant("CERRAR")
+                        }
                     );
                      self.cargarDatosNecesidades(self.offset, self.query);
                      $("#myModal").modal("hide");
-                } else {
+                } else if(l.status === 452){
+                  swal(
+                    {
+                      title: 'No hay monto disponible en el Rubro '+self.necesidad.Rubros[0].RubroId,
+                      text: 'Se recomienda cambiar el rubro con un mayor monto que cubra el valor de la necesidad',
+                      type: "error",
+                      width: 600,
+                      showCloseButton: true,
+                      confirmButtonText: $translate.instant("CERRAR")
+                    }
+                  );
+                  $("#myModal").modal("hide");
+                }else{
                     swal(
                         $translate.instant("ERROR"),
                         $translate.instant("NECESIDAD_NO_APROBADA"),
