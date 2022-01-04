@@ -325,7 +325,7 @@ angular.module('contractualClienteApp')
                     );
                      self.cargarDatosNecesidades(self.offset, self.query);
                      $("#myModal").modal("hide");
-                } else if(l.status === 452){
+                } else if(l.status === 409){
                   swal(
                     {
                       title: 'No hay monto disponible en el Rubro '+self.necesidad.Rubros[0].RubroId,
