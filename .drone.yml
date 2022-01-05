@@ -103,7 +103,9 @@ steps:
   when:
     branch:
     - develop
+    - dependabot/**
     - feature/*
+    - hotfix/*
     - release/*
     event:
     - push
