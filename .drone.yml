@@ -57,8 +57,8 @@ steps:
   failure: ignore
   image: node:10
   commands:
-    - npm i
-    - npm run test
+    - yarn
+    - yarn run test
   when:
     branch:
       - develop
@@ -71,8 +71,8 @@ steps:
 # - name:  pruebas-linter
 #   image: node:12.6.0
 #   commands:
-#   - npm i
-#   - npm run lint
+#   - yarn
+#   - yarn run lint
 #   when:
 #     branch:
 #     - unitest
@@ -97,12 +97,9 @@ steps:
 - name: build_release
   image: node:10.7.0
   commands:
-   - npm install -g grunt-cli bower
-   - npm install natives
-   - npm install
-   - bower install --allow-root
+   - yarn
    - cp -f app/scripts/environment/environment_test.js app/scripts/environment/environment.js
-   - grunt build
+   - yarn run build
   when:
     branch:
     - develop
@@ -114,12 +111,9 @@ steps:
 - name: build_master
   image: node:10.7.0
   commands:
-   - npm install -g grunt-cli bower
-   - npm install natives
-   - npm install
-   - bower install --allow-root
+   - yarn
    - cp -f app/scripts/environment/environment_prod.js app/scripts/environment/environment.js
-   - grunt build
+   - yarn run build
   when:
     branch:
     - master
