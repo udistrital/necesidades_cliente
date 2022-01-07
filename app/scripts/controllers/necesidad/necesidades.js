@@ -306,13 +306,21 @@ angular.module('contractualClienteApp')
                 )
                 return
             }
-            self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
-            self.necesidad.Necesidad.ModalidadSeleccionId = self.modalidadSel;
-            self.necesidad.Necesidad.TipoContratoId = self.TipoContrato.Id;
-            self.necesidad.Necesidad.ConsecutivoNecesidad = self.necesidad.Necesidad.Id;
-            necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
+
+            const necesidadCopia=JSON.parse(JSON.stringify(self.necesidad.Necesidad));
+
+            necesidadCopia.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
+            necesidadCopia.ModalidadSeleccionId = self.modalidadSel;
+            necesidadCopia.TipoContratoId = self.TipoContrato.Id;
+            necesidadCopia.ConsecutivoNecesidad = self.necesidad.Necesidad.Id;
+
+            necesidadesCrudRequest.put('necesidad', necesidadCopia.Id, necesidadCopia).then(function (l) {
               console.log(l.headers());
                 if (l.data !== undefined && l.data.Id !== 0 && l.status === 200) {
+                    self.necesidad.Necesidad.EstadoNecesidadId = necesidadCopia.EstadoNecesidadId;
+                    self.necesidad.Necesidad.ModalidadSeleccionId = necesidadCopia.ModalidadSeleccionId;
+                    self.necesidad.Necesidad.TipoContratoId = necesidadCopia.TipoContratoId;
+                    self.necesidad.Necesidad.ConsecutivoNecesidad = necesidadCopia.ConsecutivoNecesidad;
                     swal(
                         {
                           title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
@@ -323,8 +331,8 @@ angular.module('contractualClienteApp')
                           confirmButtonText: $translate.instant("CERRAR")
                         }
                     );
-                     self.cargarDatosNecesidades(self.offset, self.query);
-                     $("#myModal").modal("hide");
+                    self.cargarDatosNecesidades(self.offset, self.query);
+                    $("#myModal").modal("hide");
                 } else if(l.status === 409){
                   swal(
                     {
@@ -337,7 +345,7 @@ angular.module('contractualClienteApp')
                     }
                   );
                   $("#myModal").modal("hide");
-                }else{
+                } else {
                     swal(
                         $translate.instant("ERROR"),
                         $translate.instant("NECESIDAD_NO_APROBADA"),
