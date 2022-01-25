@@ -790,7 +790,6 @@ angular
                       $scope.solicitudNecesidad.vigencia = res.data.vigencia;
                       self.Necesidad.Vigencia = res.data.vigencia.toString();
                       self.Necesidad.PlanAnualAdquisicionesId = res.data.id;
-                      console.log(self.Necesidad.PlanAnualAdquisicionesId);
                       $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
@@ -814,7 +813,6 @@ angular
                       $scope.solicitudNecesidad.vigencia = res.data.vigencia;
                       self.Necesidad.Vigencia = res.data.vigencia.toString();
                       self.Necesidad.PlanAnualAdquisicionesId = res.data.id;
-                      console.log(self.Necesidad.PlanAnualAdquisicionesId);
                       $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
@@ -1517,7 +1515,6 @@ angular
             );
             return;
           }
-          console.log("self.TrNecesidad 1: ", self.TrNecesidad)
           self.TrNecesidad.Necesidad.EstadoNecesidadId =
             necesidadService.EstadoNecesidadType.Modificada;
           planCuentasMidRequest
@@ -1538,7 +1535,6 @@ angular
             if (self.dependencia_data !== undefined) {
               especificaciones_valido = true; // no validate
             }
-            console.log("self.TrNecesidad 2: ", self.TrNecesidad)
             self.ValidarFinanciacion(especificaciones_valido) || !completado
               ? planCuentasMidRequest
                 .post("necesidad/post_full_necesidad/", self.TrNecesidad)
@@ -1574,7 +1570,6 @@ angular
                   self.DetalleServicioNecesidad.TipoServicioId;
                 break;
             }
-            console.log("self.TrNecesidad 3: ", self.TrNecesidad)
             if (especificaciones_valido) {
               planCuentasMidRequest
                 .post("necesidad/post_full_necesidad/", self.TrNecesidad)
