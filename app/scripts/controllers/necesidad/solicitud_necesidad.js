@@ -171,26 +171,26 @@ angular
 
       self.recibirNecesidad = function (res) {
         // recibir el objeto del mid o un nuevo objeto y realizar mapeo correspondiente
-        var trNecesidad = res.data ?  res.data.Body : res; // identifica si viene del mid o es nuevo
+        var trNecesidad = res.data ? res.data.Body : res; // identifica si viene del mid o es nuevo
         self.Necesidad = trNecesidad.Necesidad;
         if (self.Necesidad.DependenciaNecesidadId) {
           self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId ? necesidadService.get_info_dependencia(
             self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId
           ).then(function (response) {
             self.dependencia_solicitante = response.dependencia.Id; // traer dependencias partiendo de jefe de dependencia almacenado en necesidad
-          }): _;
+          }) : _;
           self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId ? necesidadService.get_info_dependencia(
             self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId
           ).then(function (response) {
             self.dependencia_destino = response.dependencia.Id;
-          }): _;
+          }) : _;
 
           if (self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId) {
             necesidadService
-            .get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId)
-            .then(function (response) {
+              .get_info_dependencia(self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId)
+              .then(function (response) {
                 self.rol_ordenador_gasto = response.dependencia.Id;
-            });
+              });
           }
           if (self.Necesidad.DependenciaNecesidadId.InterventorId === 0) {//verifica si es supervisor o interventor
             self.tipoInterventor = false;
@@ -205,7 +205,7 @@ angular
             self.tipoInterventor = true;
             if (self.Necesidad.DependenciaNecesidadId.InterventorId) {
               self.dependencia_supervisor = necesidadService
-                .getInfoPersonaNatural( self.Necesidad.DependenciaNecesidadId.InterventorId );
+                .getInfoPersonaNatural(self.Necesidad.DependenciaNecesidadId.InterventorId);
             }
           }
         }
@@ -301,7 +301,7 @@ angular
             self.val_iva = (self.DetalleServicioNecesidad.Valor * tIva) / 100;
             self.DetalleServicioNecesidad.Valor
               ? (self.DetalleServicioNecesidad.Total =
-                  self.val_iva + self.DetalleServicioNecesidad.Valor)
+                self.val_iva + self.DetalleServicioNecesidad.Valor)
               : _;
             self.DetalleServicioNecesidad.Total
               ? (self.servicio_valor = self.DetalleServicioNecesidad.Total)
@@ -321,7 +321,7 @@ angular
           r.Fuentes === null ? (r.Fuentes = []) : _;
           r.Apropiacion = r.Apropiacion || r.InfoRubro;
           if (r.Productos) {
-            r.Productos.forEach( function (p) {
+            r.Productos.forEach(function (p) {
               if (p.InfoProducto) {
                 p = _.merge(p, p.InfoProducto); // mezclar la info de productos de plan cuentas con la de necesidades
               }
@@ -331,8 +331,8 @@ angular
 
         self.documentos = trNecesidad.MarcoLegalNecesidad
           ? trNecesidad.MarcoLegalNecesidad.map(function (d) {
-              return d.MarcoLegalId;
-            })
+            return d.MarcoLegalId;
+          })
           : []; //id de marcos legales para seleccionar
         self.dependencia_solicitante = trNecesidad.DependenciaNecesidad;
         self.dependencia_destino = trNecesidad.DependenciaNecesidadDestino;
@@ -520,14 +520,14 @@ angular
           self.jefe_solicitante = null;
           self.dependencia_solicitante
             ? necesidadService
-                .getJefeDependencia(self.dependencia_solicitante)
-                .then(function (JD) {
-                  self.jefe_solicitante = JD.Persona;
-                  self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId =
-                    JD.JefeDependencia.Id;
-                  // self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id; OLD
-                })
-                .catch(function (err) {})
+              .getJefeDependencia(self.dependencia_solicitante)
+              .then(function (JD) {
+                self.jefe_solicitante = JD.Persona;
+                self.Necesidad.DependenciaNecesidadId.JefeDepSolicitanteId =
+                  JD.JefeDependencia.Id;
+                // self.dependencia_solicitante.JefeDependenciaSolicitante = JD.JefeDependencia.Id; OLD
+              })
+              .catch(function (err) { })
             : _;
         },
         true
@@ -539,13 +539,13 @@ angular
           self.jefe_destino = null;
           self.dependencia_destino
             ? necesidadService
-                .getJefeDependencia(self.dependencia_destino)
-                .then(function (JD) {
-                  self.jefe_destino = JD.Persona;
-                  self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId =
-                    JD.JefeDependencia.Id;
-                })
-                .catch(function (err) {})
+              .getJefeDependencia(self.dependencia_destino)
+              .then(function (JD) {
+                self.jefe_destino = JD.Persona;
+                self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId =
+                  JD.JefeDependencia.Id;
+              })
+              .catch(function (err) { })
             : _;
         },
         true
@@ -557,13 +557,13 @@ angular
           self.supervisor = null;
           self.dependencia_supervisor
             ? necesidadService
-                .getJefeDependencia(self.dependencia_supervisor)
-                .then(function (JD) {
-                  self.supervisor = JD.Persona;
-                  self.Necesidad.DependenciaNecesidadId.SupervisorId =
-                    JD.JefeDependencia.Id;
-                })
-                .catch(function (err) {})
+              .getJefeDependencia(self.dependencia_supervisor)
+              .then(function (JD) {
+                self.supervisor = JD.Persona;
+                self.Necesidad.DependenciaNecesidadId.SupervisorId =
+                  JD.JefeDependencia.Id;
+              })
+              .catch(function (err) { })
             : _;
         },
         true
@@ -575,13 +575,13 @@ angular
           self.ordenador_gasto = null;
           self.rol_ordenador_gasto
             ? necesidadService
-                .getJefeDependencia(self.rol_ordenador_gasto)
-                .then(function (JD) {
-                  self.ordenador_gasto = JD.Persona;
-                  self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId =
-                    parseInt(JD.JefeDependencia.Id, 10);
-                })
-                .catch(function (err) {})
+              .getJefeDependencia(self.rol_ordenador_gasto)
+              .then(function (JD) {
+                self.ordenador_gasto = JD.Persona;
+                self.Necesidad.DependenciaNecesidadId.OrdenadorGastoId =
+                  parseInt(JD.JefeDependencia.Id, 10);
+              })
+              .catch(function (err) { })
             : _;
         },
         true
@@ -731,18 +731,18 @@ angular
           // trae nucleo con dependiendo del area
           self.nucleoarea
             ? parametrosRequest
-                .get(
-                  "parametro",
-                  $.param({
-                    query:
-                      "TipoParametroId:4,Activo:true,ParametroPadreId.Id:" +
-                      self.nucleoarea,
-                    limit: -1,
-                  })
-                )
-                .then(function (response) {
-                  self.nucleo_conocimiento_data = response.data.Data;
+              .get(
+                "parametro",
+                $.param({
+                  query:
+                    "TipoParametroId:4,Activo:true,ParametroPadreId.Id:" +
+                    self.nucleoarea,
+                  limit: -1,
                 })
+              )
+              .then(function (response) {
+                self.nucleo_conocimiento_data = response.data.Data;
+              })
             : _;
         },
         true
@@ -757,7 +757,7 @@ angular
           // reset financiacion si se cambia de tipo finaciacion o unidad ejecutora
           if (self.elaborando_necesidad === true) {
             self.Necesidad.AreaFuncional &&
-            self.Necesidad.TipoFinanciacionNecesidadId
+              self.Necesidad.TipoFinanciacionNecesidadId
               ? (self.Rubros = [])
               : _;
           }
@@ -780,7 +780,7 @@ angular
                 ).plan_adquisiciones_idexud;
                 // Carga los planes de adquisicion desde Plan de adquisiciones y que correspondan
                 // al plan de adquisición activo para el área seleccionada.
-                const QUERY = '/'+plan_adquisiciones;
+                const QUERY = '/' + plan_adquisiciones;
                 planAdquisicionRequest
                   .get('Plan_adquisiciones_mongo' + QUERY)
                   .then(function (res) {
@@ -789,6 +789,8 @@ angular
                       self.planes_anuales.push(res.data);
                       $scope.solicitudNecesidad.vigencia = res.data.vigencia;
                       self.Necesidad.Vigencia = res.data.vigencia.toString();
+                      self.Necesidad.PlanAnualAdquisicionesId = res.data.id;
+                      console.log(self.Necesidad.PlanAnualAdquisicionesId);
                       $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
@@ -800,7 +802,7 @@ angular
                 const plan_adquisiciones = JSON.parse(
                   res.data[0].Valor
                 ).plan_adquisiciones_general;
-                const QUERY = '/'+plan_adquisiciones;
+                const QUERY = '/' + plan_adquisiciones;
                 // Carga los planes de adquisicion desde Plan de adquisiciones y que correspondan
                 // al plan de adquisición activo para el área seleccionada.
                 planAdquisicionRequest
@@ -811,6 +813,8 @@ angular
                       self.planes_anuales.push(res.data);
                       $scope.solicitudNecesidad.vigencia = res.data.vigencia;
                       self.Necesidad.Vigencia = res.data.vigencia.toString();
+                      self.Necesidad.PlanAnualAdquisicionesId = res.data.id;
+                      console.log(self.Necesidad.PlanAnualAdquisicionesId);
                       $scope.solicitudNecesidad.planadquisicion = $scope.solicitudNecesidad.planes_anuales[0];
                     }
                   });
@@ -1014,10 +1018,10 @@ angular
           swal(
             "Apropiación ya agregada",
             "El rubro: <b>" +
-              Fap.RubroId +
-              ": " +
-              Fap.Apropiacion.Nombre +
-              "</b> ya ha sido agregado",
+            Fap.RubroId +
+            ": " +
+            Fap.Apropiacion.Nombre +
+            "</b> ya ha sido agregado",
             "warning"
           );
           // Por el contrario, si el tamaño del arreglo que devuelve filter es menor a 0
@@ -1050,10 +1054,10 @@ angular
           return e.CatalogoId === self.producto_catalogo.CatalogoId;
         }).length > 0 || !self.producto_catalogo.CatalogoId
           ? swal({
-              type: "error",
-              title: "El producto ya fue agregado",
-              showConfirmButton: true,
-            })
+            type: "error",
+            title: "El producto ya fue agregado",
+            showConfirmButton: true,
+          })
           : self.ProductosCatalogoNecesidad.push(self.producto_catalogo);
         self.cerrarModalProducto();
         self.producto_catalogo = {};
@@ -1292,7 +1296,7 @@ angular
             self.Necesidad.TipoContratoNecesidadId &&
             (self.Necesidad.TipoContratoNecesidadId.Id === 1 ||
               self.Necesidad.TipoContratoNecesidadId.Id ===
-                4) /* tipo compra o compra y servicio */
+              4) /* tipo compra o compra y servicio */
           ) {
             self.MostrarTotalEspc = true;
           } else {
@@ -1498,7 +1502,7 @@ angular
         if (
           self.IdNecesidad &&
           self.TrNecesidad.Necesidad.EstadoNecesidadId.Id !==
-            necesidadService.EstadoNecesidadType.Guardada.Id
+          necesidadService.EstadoNecesidadType.Guardada.Id
         ) {
           if (
             self.TrNecesidad.Necesidad.EstadoNecesidadId.Id ===
@@ -1507,12 +1511,13 @@ angular
             swal(
               "Error",
               "La necesidad no se puede editar, estado de la necesidad: (" +
-                self.TrNecesidad.Necesidad.EstadoNecesidadId.Nombre +
-                ")",
+              self.TrNecesidad.Necesidad.EstadoNecesidadId.Nombre +
+              ")",
               "warning"
             );
             return;
           }
+          console.log("self.TrNecesidad 1: ", self.TrNecesidad)
           self.TrNecesidad.Necesidad.EstadoNecesidadId =
             necesidadService.EstadoNecesidadType.Modificada;
           planCuentasMidRequest
@@ -1533,15 +1538,16 @@ angular
             if (self.dependencia_data !== undefined) {
               especificaciones_valido = true; // no validate
             }
+            console.log("self.TrNecesidad 2: ", self.TrNecesidad)
             self.ValidarFinanciacion(especificaciones_valido) || !completado
               ? planCuentasMidRequest
-                  .post("necesidad/post_full_necesidad/", self.TrNecesidad)
-                  .then(function (r) {
-                    NecesidadHandle(r);
-                  })
-                  .catch(function (e) {
-                    console.info(e);
-                  })
+                .post("necesidad/post_full_necesidad/", self.TrNecesidad)
+                .then(function (r) {
+                  NecesidadHandle(r);
+                })
+                .catch(function (e) {
+                  console.info(e);
+                })
               : _;
             return;
           } else {
@@ -1559,7 +1565,7 @@ angular
               case 4:
                 especificaciones_valido =
                   self.Necesidad.Valor ===
-                    self.valorTotalEspecificaciones + self.servicio_valor &&
+                  self.valorTotalEspecificaciones + self.servicio_valor &&
                   self.DetalleServicioNecesidad.TipoServicioId;
                 break;
               case 5:
@@ -1568,7 +1574,7 @@ angular
                   self.DetalleServicioNecesidad.TipoServicioId;
                 break;
             }
-
+            console.log("self.TrNecesidad 3: ", self.TrNecesidad)
             if (especificaciones_valido) {
               planCuentasMidRequest
                 .post("necesidad/post_full_necesidad/", self.TrNecesidad)
@@ -1580,7 +1586,7 @@ angular
                 });
             } else {
               switch (
-                self.Necesidad.TipoContratoNecesidadId.Id // alertas dependiendo de tipo contrato
+              self.Necesidad.TipoContratoNecesidadId.Id // alertas dependiendo de tipo contrato
               ) {
                 case 1:
                   swal(necesidadService.AlertaErrorEspecificaciones.Compra);
@@ -1617,9 +1623,9 @@ angular
             //CASE FUNCIONAMIENTO
             ap.Fuentes.length === 0
               ? swal(
-                  necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo)
-                    .agregarFuente
-                )
+                necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo)
+                  .agregarFuente
+              )
               : _;
             fin_valid =
               fin_valid &&
@@ -1629,9 +1635,9 @@ angular
           }
           ap.MontoFuentes > ap.Apropiacion.ValorActual
             ? swal(
-                necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo)
-                  .fuentesMayorQueRubro
-              )
+              necesidadService.getAlertaFinanciacion(ap.Apropiacion.Codigo)
+                .fuentesMayorQueRubro
+            )
             : _;
         });
         if (!fin_valid && !valido) {
