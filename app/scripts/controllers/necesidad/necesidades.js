@@ -160,7 +160,7 @@ angular.module('contractualClienteApp')
                                 })
                             }
                             //servicio
-                            if(nec.DetalleServicioNecesidad.TipoServicioId) {
+                            if(nec.DetalleServicioNecesidad && nec.DetalleServicioNecesidad.TipoServicioId) {
                                 nec.DetalleServicioNecesidad.ValorTotal=0;
                                 nec.DetalleServicioNecesidad.valorIvaUnd=0;
                                 nec.DetalleServicioNecesidad.TipoServicioNombre="";
