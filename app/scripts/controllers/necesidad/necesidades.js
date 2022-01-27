@@ -174,13 +174,13 @@ angular.module('contractualClienteApp')
                             }
 
                             //cps
-                            if (nec.DetallePrestacionServicioNecesidad.PerfilId) {
+                            if (nec.DetallePrestacionServicioNecesidad && nec.DetallePrestacionServicioNecesidad.PerfilId) {
                                 nec.DetallePrestacionServicioNecesidad.PerfilNombre="";
                                 nec.DetallePrestacionServicioNecesidad.PerfilNombre=self.perfil_data.filter(function(p){
                                     return p.Id===nec.DetallePrestacionServicioNecesidad.PerfilId;
                                 })[0].ValorParametro;
                             }
-                            if (nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
+                            if (nec.DetallePrestacionServicioNecesidad && nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
                                 nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre="";
                                 nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea="";
                                 parametrosRequest.get('parametro', $.param({
