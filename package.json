@@ -49,10 +49,6 @@
     "build": "grunt build"
   },
   "dependencies": {
-    "angular-cookies": "^1.7.8",
-    "jslint": "^0.12.1",
-    "md-steppers": "^0.4.1",
-    "natives": "^1.1.6",
     "@bower_components/AngularJS-OAuth2": "JamesRandall/AngularJS-OAuth2#^1.2.1",
     "@bower_components/angular": "angular/bower-angular#>=1.4.0 1.7.x",
     "@bower_components/angular-animate": "angular/bower-angular-animate#^1.7.8",
@@ -94,6 +90,11 @@
     "@bower_components/pdfmakeoas": "udistrital/pdfmakeoas#0.0.2",
     "@bower_components/select2": "ivaynberg/select2#~3.4.5",
     "@bower_components/sweetalert2": "sweetalert2/sweetalert2#^6.4.4",
-    "@bower_components/vis": "almende/vis#^4.20.0"
-  }
+    "@bower_components/vis": "almende/vis#^4.20.0",
+    "angular-cookies": "^1.7.8",
+    "jslint": "^0.12.1",
+    "md-steppers": "^0.4.1",
+    "natives": "^1.1.6"
+  },
+  "version": "0.0.0"
 }
