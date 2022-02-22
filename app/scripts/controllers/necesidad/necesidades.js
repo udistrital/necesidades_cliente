@@ -71,22 +71,12 @@ angular.module('contractualClienteApp')
             enableVerticalScrollbar: 0,
             useExternalPagination: true,
             columnDefs: [{
-                field: 'ConsecutivoSolicitud',
+                field: 'Consecutivo',
                 displayName: $translate.instant('NUMERO_SOLICITUD_COMPACTO'),
                 type: 'number',
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.ConsecutivoSolicitud;
-                },
-                width: '10%'
-            },
-            {
-                field: 'ConsecutivoNecesidad',
-                displayName: $translate.instant('NUMERO_NECESIDAD_COMPACTO'),
-                type: 'number',
-                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-                cellTooltip: function (row) {
-                    return row.entity.ConsecutivoNecesidad;
+                    return row.entity.Consecutivo;
                 },
                 width: '10%'
             },
@@ -238,10 +228,9 @@ angular.module('contractualClienteApp')
             var req = necesidadesCrudRequest.get('necesidad', $.param({
                 limit: self.gridOptions.paginationPageSize,
                 offset: offset,
-                sortby: "ConsecutivoSolicitud",
+                sortby: "Consecutivo",
                 order: "desc"
             }, true));
-
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
         };
@@ -270,8 +259,8 @@ angular.module('contractualClienteApp')
                 if (l.data !== undefined) {
                     swal(
                        {
-                            title: 'Se ha creado la Solicitud de necesidad N° ' + self.necesidad.Necesidad.ConsecutivoSolicitud + ' exitosamente. ',
-                            text: 'El borrador de la solicitud se ha aprobado y se ha generado la Solicitud de Necesidad N°' + self.necesidad.Necesidad.ConsecutivoSolicitud ,
+                            title: 'Se ha creado la Solicitud de necesidad N° ' + self.necesidad.Necesidad.Consecutivo + ' exitosamente. ',
+                            text: 'El borrador de la solicitud se ha aprobado y se ha generado la Solicitud de Necesidad N°' + self.necesidad.Necesidad.Consecutivo ,
                             type: "success",
                             width: 600,
                             showCloseButton: true,
@@ -312,7 +301,6 @@ angular.module('contractualClienteApp')
             necesidadCopia.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
             necesidadCopia.ModalidadSeleccionId = self.modalidadSel;
             necesidadCopia.TipoContratoId = self.TipoContrato.Id;
-            necesidadCopia.ConsecutivoNecesidad = self.necesidad.Necesidad.Id;
 
             necesidadesCrudRequest.put('necesidad', necesidadCopia.Id, necesidadCopia).then(function (l) {
               console.log(l.headers());
@@ -320,11 +308,10 @@ angular.module('contractualClienteApp')
                     self.necesidad.Necesidad.EstadoNecesidadId = necesidadCopia.EstadoNecesidadId;
                     self.necesidad.Necesidad.ModalidadSeleccionId = necesidadCopia.ModalidadSeleccionId;
                     self.necesidad.Necesidad.TipoContratoId = necesidadCopia.TipoContratoId;
-                    self.necesidad.Necesidad.ConsecutivoNecesidad = necesidadCopia.ConsecutivoNecesidad;
                     swal(
                         {
-                          title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
-                          text: 'La solicitud de necesidad '+self.necesidad.Necesidad.ConsecutivoSolicitud+' ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.ConsecutivoNecesidad ,
+                          title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.Consecutivo +' exitosamente. ',
+                          text: 'La solicitud de necesidad '+self.necesidad.Necesidad.Consecutivo+' ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.Consecutivo ,
                           type: "success",
                           width: 600,
                           showCloseButton: true,
@@ -391,7 +378,7 @@ angular.module('contractualClienteApp')
                 if (response.status === 200 || response.status === 201) {
                     swal(
                         {
-                             title: 'Se ha rechazado la Solicitud de Necesidad N° '+self.necesidad.Necesidad.ConsecutivoSolicitud,
+                             title: 'Se ha rechazado la Solicitud de Necesidad N° '+self.necesidad.Necesidad.Consecutivo,
                              text: 'La solicitud de necesidad ha sido rechazada',
                              type: "success",
                              width: 600,
