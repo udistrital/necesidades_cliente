@@ -259,8 +259,8 @@ angular.module('contractualClienteApp')
                 if (l.data !== undefined) {
                     swal(
                        {
-                            title: 'Se ha creado la Solicitud de necesidad N° ' + self.necesidad.Necesidad.Consecutivo + ' exitosamente. ',
-                            text: 'El borrador de la solicitud se ha aprobado y se ha generado la Solicitud de Necesidad N°' + self.necesidad.Necesidad.Consecutivo ,
+                            title: 'Se ha creado la Solicitud de necesidad N° ' + self.necesidad.Necesidad.Id + ' exitosamente. ',
+                            text: 'El borrador de la solicitud se ha aprobado y se ha generado la Solicitud de Necesidad N°' + self.necesidad.Necesidad.Id ,
                             type: "success",
                             width: 600,
                             showCloseButton: true,
@@ -310,8 +310,8 @@ angular.module('contractualClienteApp')
                     self.necesidad.Necesidad.TipoContratoId = necesidadCopia.TipoContratoId;
                     swal(
                         {
-                          title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.Consecutivo +' exitosamente. ',
-                          text: 'La solicitud de necesidad '+self.necesidad.Necesidad.Consecutivo+' ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.Consecutivo ,
+                          title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.Id +' exitosamente. ',
+                          text: 'La solicitud de necesidad ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.Id ,
                           type: "success",
                           width: 600,
                           showCloseButton: true,
@@ -378,7 +378,7 @@ angular.module('contractualClienteApp')
                 if (response.status === 200 || response.status === 201) {
                     swal(
                         {
-                             title: 'Se ha rechazado la Solicitud de Necesidad N° '+self.necesidad.Necesidad.Consecutivo,
+                             title: 'Se ha rechazado la Solicitud de Necesidad N° '+self.necesidad.Necesidad.Id,
                              text: 'La solicitud de necesidad ha sido rechazada',
                              type: "success",
                              width: 600,
