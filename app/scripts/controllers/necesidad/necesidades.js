@@ -62,8 +62,8 @@ angular.module('contractualClienteApp')
         });
 
         self.gridOptions = {
-            paginationPageSizes: [10, 15, 20],
-            paginationPageSize: 10,
+            paginationPageSizes: [50, 100, 150],
+            paginationPageSize: 50,
             enableRowSelection: true,
             enableRowHeaderSelection: false,
             enableFiltering: true,
@@ -78,7 +78,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Consecutivo;
                 },
-                width: '10%'
+                width: '15%'
             },
             {
                 field: 'Vigencia',
@@ -88,7 +88,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '10%'
+                width: '15%'
             },
             {
                 field: 'EstadoNecesidadId.Nombre',
@@ -97,7 +97,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.EstadoNecesidadId.Nombre + ".\n" + row.entity.EstadoNecesidadId.Descripcion;
                 },
-                width: '30%'
+                width: '25%'
             },
             {
                 field: 'TipoNecesidadId.Nombre',
@@ -228,7 +228,7 @@ angular.module('contractualClienteApp')
             var req = necesidadesCrudRequest.get('necesidad', $.param({
                 limit: self.gridOptions.paginationPageSize,
                 offset: offset,
-                sortby: "Consecutivo",
+                sortby: "Id",
                 order: "desc"
             }, true));
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
