@@ -2,63 +2,63 @@
 # yarn lockfile v1
 
 
-"@bower_components/AngularJS-OAuth2@JamesRandall/AngularJS-OAuth2#^1.2.1":
+"@bower_components/AngularJS-OAuth2@github:JamesRandall/AngularJS-OAuth2#^1.2.1":
   version "1.2.3"
   resolved "https://codeload.github.com/JamesRandall/AngularJS-OAuth2/tar.gz/38f3ef1a7dc4066a7743b6df768e55c4938bf2c2"
   dependencies:
     angular-md5 "^0.1.10"
 
-"@bower_components/angular-animate@angular/bower-angular-animate#^1.7.8":
+"@bower_components/angular-animate@github:angular/bower-angular-animate#^1.7.8":
   version "1.8.2"
   resolved "https://codeload.github.com/angular/bower-angular-animate/tar.gz/9ad6bb07b8f364654552afe7cfd028efc4fce30d"
 
-"@bower_components/angular-aria@angular/bower-angular-aria#^1.7.2":
+"@bower_components/angular-aria@github:angular/bower-angular-aria#^1.7.2":
   version "1.8.2"
   resolved "https://codeload.github.com/angular/bower-angular-aria/tar.gz/f5d80bb8aa540fb03102efee8951f4d26939bfc9"
 
-"@bower_components/angular-bootstrap-fileinput@geraldhumphries/angular-bootstrap-fileinput#^0.1.0":
+"@bower_components/angular-bootstrap-fileinput@github:geraldhumphries/angular-bootstrap-fileinput#^0.1.0":
   version "0.0.0"
   resolved "https://codeload.github.com/geraldhumphries/angular-bootstrap-fileinput/tar.gz/f0185caa24ea23072257358a365dc8f2a887acff"
 
-"@bower_components/angular-cookies@angular/bower-angular-cookies#^1.7.8":
+"@bower_components/angular-cookies@github:angular/bower-angular-cookies#^1.7.8":
   version "1.8.2"
   resolved "https://codeload.github.com/angular/bower-angular-cookies/tar.gz/f40feabc73f8e07aa1a29bf2bae7eb0af3d27b87"
 
-"@bower_components/angular-file-model@ghostbar/angular-file-model#^0.3.1":
+"@bower_components/angular-file-model@github:ghostbar/angular-file-model#^0.3.1":
   version "0.3.1"
   resolved "https://codeload.github.com/ghostbar/angular-file-model/tar.gz/abbbd3f4ad2568b13a215ecd03fe885e05459ce5"
 
-"@bower_components/angular-input-masks@assisrafael/bower-angular-input-masks#*":
+"@bower_components/angular-input-masks@github:assisrafael/bower-angular-input-masks#*":
   version "0.0.0"
   resolved "https://codeload.github.com/assisrafael/bower-angular-input-masks/tar.gz/3ed8075fcd5e0faeda93c2844d5be6a092260520"
 
-"@bower_components/angular-loading-bar@chieffancypants/angular-loading-bar#*":
+"@bower_components/angular-loading-bar@github:chieffancypants/angular-loading-bar#*":
   version "0.9.0"
   resolved "https://codeload.github.com/chieffancypants/angular-loading-bar/tar.gz/d734873e52ded18fa27d67f52272ae43267dfd63"
 
-"@bower_components/angular-material@angular/bower-material#1.1":
+"@bower_components/angular-material@github:angular/bower-material#1.1":
   version "1.1.26"
   resolved "https://codeload.github.com/angular/bower-material/tar.gz/df1bacec41ea69d9c9ad082005a3fbfae049d70b"
 
-"@bower_components/angular-md5@gdi2290/angular-md5#>=0.1.7":
+"@bower_components/angular-md5@github:gdi2290/angular-md5#>=0.1.7":
   version "0.1.10"
   resolved "https://codeload.github.com/gdi2290/angular-md5/tar.gz/f0c5d61f92a807b4d3a0b2be98890d8948e03fe7"
 
-"@bower_components/angular-messages@angular/bower-angular-messages#^1.7.2":
+"@bower_components/angular-messages@github:angular/bower-angular-messages#^1.7.2":
   version "1.8.2"
   resolved "https://codeload.github.com/angular/bower-angular-messages/tar.gz/bfa4be6f48dfac366a901eeaf758d85c432b8407"
 
-"@bower_components/angular-mocks@angular/bower-angular-mocks#^1.7.8":
+"@bower_components/angular-mocks@github:angular/bower-angular-mocks#^1.7.8":
   version "1.8.2"
   resolved "https://codeload.github.com/angular/bower-angular-mocks/tar.gz/4fb184bd861dff402f2b57273efa25cb26e4e297"
 
-"@bower_components/angular-moment@urish/angular-moment#*":
+"@bower_components/angular-moment@github:urish/angular-moment#*":
   version "1.3.0"
   resolved "https://codeload.github.com/urish/angular-moment/tar.gz/b23448e2fb09f12cb2f54f38913fdce932700c4f"
   dependencies:
     moment ">=2.8.0 <3.0.0"
 
-"@bower_components/angular-nvd3@krispo/angular-nvd3#^1.0.9":
+"@bower_components/angular-nvd3@github:krispo/angular-nvd3#^1.0.9":
   version "1.0.9"
   resolved "https://codeload.github.com/krispo/angular-nvd3/tar.gz/19e6d97d2db1f92e84a18e3980c2c4e3f6329ae8"
   dependencies:
@@ -66,109 +66,109 @@
     d3 "^3.3"
     nvd3 "^1.7.1"
 
-"@bower_components/angular-resource@angular/bower-angular-resource#^1.7.8":
+"@bower_components/angular-resource@github:angular/bower-angular-resource#^1.7.8":
   version "1.8.2"
   resolved "https://codeload.github.com/angular/bower-angular-resource/tar.gz/553634b02c4399751514df4d52185e24f86d7d8d"
 
-"@bower_components/angular-route@angular/bower-angular-route#^1.7.8":
+"@bower_components/angular-route@github:angular/bower-angular-route#^1.7.8":
   version "1.8.2"
   resolved "https://codeload.github.com/angular/bower-angular-route/tar.gz/3a5fb9220173a4884be80479daf287617e0e6ac4"
 
-"@bower_components/angular-touch@angular/bower-angular-touch#^1.7.8":
+"@bower_components/angular-touch@github:angular/bower-angular-touch#^1.7.8":
   version "1.8.2"
   resolved "https://codeload.github.com/angular/bower-angular-touch/tar.gz/e2c78b229b5d2c831a99ef29478353428dd95243"
 
-"@bower_components/angular-translate@PascalPrecht/bower-angular-translate#*":
+"@bower_components/angular-translate@github:PascalPrecht/bower-angular-translate#*":
   version "0.0.0"
   resolved "https://codeload.github.com/PascalPrecht/bower-angular-translate/tar.gz/3ca4fb373ee4d1a7c44d28ebcf4a492e092119b5"
 
-"@bower_components/angular-tree-control@wix/angular-tree-control#0.2":
+"@bower_components/angular-tree-control@github:wix/angular-tree-control#0.2":
   version "0.2.28"
   resolved "https://codeload.github.com/wix/angular-tree-control/tar.gz/b345e2ad525ea749f4fd189aaae72cd352a555eb"
 
-"@bower_components/angular-ui-grid@angular-ui/bower-ui-grid#4.6":
+"@bower_components/angular-ui-grid@github:angular-ui/bower-ui-grid#4.6":
   version "4.6.6"
   resolved "https://codeload.github.com/angular-ui/bower-ui-grid/tar.gz/eb5aa8929235efc5eb29921ccc2d99d5659bf0cf"
   dependencies:
     angular ">=1.4.0 1.7.x"
 
-"@bower_components/angular-websocket@gdi2290/angular-websocket#*":
+"@bower_components/angular-websocket@github:gdi2290/angular-websocket#*":
   version "2.0.0"
   resolved "https://codeload.github.com/gdi2290/angular-websocket/tar.gz/f3b33c1a88a8e334d2cc23dad7afbd79cece044e"
   dependencies:
     angular "*"
     ws "^1.0.0"
 
-"@bower_components/angular@angular/bower-angular#>=1.4.0 1.7.x":
+"@bower_components/angular@github:angular/bower-angular#>=1.4.0 1.7.x":
   version "1.7.9"
   resolved "https://codeload.github.com/angular/bower-angular/tar.gz/84a5b810f33f82a552cee361268b77181691ce65"
 
-"@bower_components/bootstrap-fileinput@kartik-v/bootstrap-fileinput#^4.0.0":
+"@bower_components/bootstrap-fileinput@github:kartik-v/bootstrap-fileinput#^4.0.0":
   version "4.5.3"
   resolved "https://codeload.github.com/kartik-v/bootstrap-fileinput/tar.gz/64e083b0414d294d99329fa94194f24345fc334a"
   dependencies:
     bootstrap ">= 3.0.0"
     jquery ">= 1.9.0"
 
-"@bower_components/bootstrap-select@snapappointments/bootstrap-select#^1.12.2":
+"@bower_components/bootstrap-select@github:snapappointments/bootstrap-select#^1.12.2":
   version "1.13.18"
   resolved "https://codeload.github.com/snapappointments/bootstrap-select/tar.gz/6c4c75f61e69ca54d5ab557a2b90ffdccf1c63cd"
 
-"@bower_components/bootstrap@twbs/bootstrap#^3.2.0":
+"@bower_components/bootstrap@github:twbs/bootstrap#^3.2.0":
   version "3.4.1"
   resolved "https://codeload.github.com/twbs/bootstrap/tar.gz/68b0d231a13201eb14acd3dc84e51543d16e5f7e"
 
-"@bower_components/chart.js@chartjs/Chart.js#^2.6.0":
+"@bower_components/chart.js@github:chartjs/Chart.js#^2.6.0":
   version "2.9.4"
   resolved "https://codeload.github.com/chartjs/Chart.js/tar.gz/9bd4cf82fda9f50a5fb50b72843e06ab88124278"
   dependencies:
     chartjs-color "^2.1.0"
     moment "^2.10.2"
 
-"@bower_components/colombia-holidays@sytabaresa/colombia-holidays#^0.0.6":
+"@bower_components/colombia-holidays@github:sytabaresa/colombia-holidays#^0.0.6":
   version "0.0.1"
   resolved "https://codeload.github.com/sytabaresa/colombia-holidays/tar.gz/4a708b223d56ce8bec9db820340123a7605703be"
 
-"@bower_components/d3@mbostock-bower/d3-bower#^3.3.13":
+"@bower_components/d3@github:mbostock-bower/d3-bower#^3.3.13":
   version "0.0.0"
   resolved "https://codeload.github.com/mbostock-bower/d3-bower/tar.gz/7a826d211d5067867debf9ce24a9987e0cb02b6e"
 
-"@bower_components/font-awesome-animation@l-lin/font-awesome-animation#^0.1.0":
+"@bower_components/font-awesome-animation@github:l-lin/font-awesome-animation#^0.1.0":
   version "0.1.0"
   resolved "https://codeload.github.com/l-lin/font-awesome-animation/tar.gz/4d8fb9b7ff3d4f17fd09ae00edae5af9d1541ae1"
 
-"@bower_components/font-awesome@FortAwesome/Font-Awesome#^4.7.0":
+"@bower_components/font-awesome@github:FortAwesome/Font-Awesome#^4.7.0":
   version "4.7.0"
   resolved "https://codeload.github.com/FortAwesome/Font-Awesome/tar.gz/a8386aae19e200ddb0f6845b5feeee5eb7013687"
 
-"@bower_components/jquery@jquery/jquery-dist#>= 1.7.1":
+"@bower_components/jquery@github:jquery/jquery-dist#>= 1.7.1":
   version "3.6.0"
   resolved "https://codeload.github.com/jquery/jquery-dist/tar.gz/e786e3d9707ffd9b0dd330ca135b66344dcef85a"
 
-"@bower_components/lodash@lodash/lodash#^4.17.15":
+"@bower_components/lodash@github:lodash/lodash#^4.17.15":
   version "4.17.21"
   resolved "https://codeload.github.com/lodash/lodash/tar.gz/f299b52f39486275a9e6483b60a410e06520c538"
 
-"@bower_components/md-steppers@ipiz/md-steppers#^0.4.1":
+"@bower_components/md-steppers@github:ipiz/md-steppers#^0.4.1":
   version "0.4.1"
   resolved "https://codeload.github.com/ipiz/md-steppers/tar.gz/b4a2d46c6900382619906a9ec9f91c23809e8b05"
   dependencies:
     angular "^1.4.8"
     angular-material "^1.0.9"
 
-"@bower_components/moment@moment/moment#>=2.19.3 <3.0.0":
+"@bower_components/moment@github:moment/moment#>=2.19.3 <3.0.0":
   version "2.29.1"
   resolved "https://codeload.github.com/moment/moment/tar.gz/b7ec8e2ec068e03de4f832f28362675bb9e02261"
 
-"@bower_components/ng-knob@RadMie/ng-knob#^0.1.3":
+"@bower_components/ng-knob@github:RadMie/ng-knob#^0.1.3":
   version "0.1.3"
   resolved "https://codeload.github.com/RadMie/ng-knob/tar.gz/fa096d0cb8886ea55078d91e8a3a91e269f0e901"
 
-"@bower_components/ngstorage@gsklee/ngStorage#^0.3.11":
+"@bower_components/ngstorage@github:gsklee/ngStorage#^0.3.11":
   version "0.3.11"
   resolved "https://codeload.github.com/gsklee/ngStorage/tar.gz/253b718a0b35b044fba25c78b1b2020d672c4017"
 
-"@bower_components/nuxeo@nuxeo/nuxeo-js-client#^3.5.0":
+"@bower_components/nuxeo@github:nuxeo/nuxeo-js-client#^3.5.0":
   version "3.18.0"
   resolved "https://codeload.github.com/nuxeo/nuxeo-js-client/tar.gz/c82e0b7cea4edf22bc6308a277a3ac466aa2acfa"
   dependencies:
@@ -183,11 +183,11 @@
     random-js "^1.0.8"
     whatwg-fetch "^2.0.2"
 
-"@bower_components/nvd3@novus/nvd3#^1.7.1":
+"@bower_components/nvd3@github:novus/nvd3#^1.7.1":
   version "1.8.6"
   resolved "https://codeload.github.com/novus/nvd3/tar.gz/d273ea52d91b482d044f8cef1e921256f2bfddcd"
 
-"@bower_components/pdfmakeoas@udistrital/pdfmakeoas#0.0.2":
+"@bower_components/pdfmakeoas@github:udistrital/pdfmakeoas#0.0.2":
   version "0.1.36"
   resolved "https://codeload.github.com/udistrital/pdfmakeoas/tar.gz/ce31053da4705d484c0a7adff1697a112466b47e"
   dependencies:
@@ -195,15 +195,15 @@
     linebreak "^0.3.0"
     pdfkit "^0.8.3"
 
-"@bower_components/select2@ivaynberg/select2#~3.4.5":
+"@bower_components/select2@github:ivaynberg/select2#~3.4.5":
   version "3.4.8"
   resolved "https://codeload.github.com/ivaynberg/select2/tar.gz/b5f3b2839c48c53f9641d6bb1bccafc5260c7620"
 
-"@bower_components/sweetalert2@sweetalert2/sweetalert2#^6.4.4":
+"@bower_components/sweetalert2@github:sweetalert2/sweetalert2#^6.4.4":
   version "6.11.5"
   resolved "https://codeload.github.com/sweetalert2/sweetalert2/tar.gz/a72affd8f0fb3d4fb89c75d1973c50ef961941cc"
 
-"@bower_components/vis@almende/vis#^4.20.0":
+"@bower_components/vis@github:almende/vis#^4.20.0":
   version "4.21.0"
   resolved "https://codeload.github.com/almende/vis/tar.gz/001716727826e2ba6cc0df7070733013936dda9a"
   dependencies:
@@ -2996,16 +2996,6 @@ find-versions@^1.0.0:
     meow "^3.5.0"
     semver-regex "^1.0.0"
 
-findup-sync@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/findup-sync/-/findup-sync-2.0.0.tgz#9326b1488c22d1a6088650a86901b2d9a90a2cbc"
-  integrity sha1-kyaxSIwi0aYIhlCoaQGy2akKLLw=
-  dependencies:
-    detect-file "^1.0.0"
-    is-glob "^3.1.0"
-    micromatch "^3.0.4"
-    resolve-dir "^1.0.1"
-
 findup-sync@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/findup-sync/-/findup-sync-4.0.0.tgz#956c9cdde804052b881b428512905c4a5f2cdef0"
@@ -3023,7 +3013,7 @@ findup-sync@~0.3.0:
   dependencies:
     glob "~5.0.0"
 
-fined@^1.0.1, fined@^1.2.0:
+fined@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/fined/-/fined-1.2.0.tgz#d00beccf1aa2b475d16d423b0238b713a2c4a37b"
   integrity sha512-ZYDqPLGxDkDhDZBjZBb+oD1+j0rA4E0pXY50eplAAOPg2N/gUBSSk5IM1/QhPfyVo19lJ+CvXpqfvk+b2p/8Ng==
@@ -3039,7 +3029,7 @@ first-chunk-stream@^1.0.0:
   resolved "https://registry.yarnpkg.com/first-chunk-stream/-/first-chunk-stream-1.0.0.tgz#59bfb50cd905f60d7c394cd3d9acaab4e6ad934e"
   integrity sha1-Wb+1DNkF9g18OUzT2ayqtOatk04=
 
-flagged-respawn@^1.0.0, flagged-respawn@^1.0.1:
+flagged-respawn@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/flagged-respawn/-/flagged-respawn-1.0.1.tgz#e7de6f1279ddd9ca9aac8a5971d618606b3aab41"
   integrity sha512-lNaHNVymajmk0OJMBn8fVUAU1BtDeKIqKoVhk4xAALB57aALg6b4W0MfJ/cUE0g9YBXy5XhSlPIpYIJ7HaY/3Q==
@@ -3491,7 +3481,7 @@ grunt-angular-templates@^0.5.7:
   dependencies:
     html-minifier "~0.6.3"
 
-grunt-cli@^1.3.1:
+grunt-cli@^1.3.1, grunt-cli@~1.4.2:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/grunt-cli/-/grunt-cli-1.4.3.tgz#22c9f1a3d2780bf9b0d206e832e40f8f499175ff"
   integrity sha512-9Dtx/AhVeB4LYzsViCjUQkd0Kw0McN2gYpdmGYKtE2a5Yt7v1Q+HYZVWhqXc/kGnxlMtqKDxSwotiGeFmkrCoQ==
@@ -3501,17 +3491,6 @@ grunt-cli@^1.3.1:
     liftup "~3.0.1"
     nopt "~4.0.1"
     v8flags "~3.2.0"
-
-grunt-cli@~1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/grunt-cli/-/grunt-cli-1.3.2.tgz#60f12d12c1b5aae94ae3469c6b5fe24e960014e8"
-  integrity sha512-8OHDiZZkcptxVXtMfDxJvmN7MVJNE8L/yIcPb4HB7TlyFD1kDvjHrb62uhySsU14wJx9ORMnTuhRMQ40lH/orQ==
-  dependencies:
-    grunt-known-options "~1.1.0"
-    interpret "~1.1.0"
-    liftoff "~2.5.0"
-    nopt "~4.0.1"
-    v8flags "~3.1.1"
 
 grunt-concurrent@^1.0.0:
   version "1.0.1"
@@ -3647,11 +3626,6 @@ grunt-karma@^4.0.2:
   dependencies:
     lodash "^4.17.10"
 
-grunt-known-options@~1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/grunt-known-options/-/grunt-known-options-1.1.1.tgz#6cc088107bd0219dc5d3e57d91923f469059804d"
-  integrity sha512-cHwsLqoighpu7TuYj5RonnEuxGVFnztcUqTqp5rXFGYL4OuPFofwC4Ycg7n9fYwvK6F5WbYgeVOwph9Crs2fsQ==
-
 grunt-known-options@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/grunt-known-options/-/grunt-known-options-2.0.0.tgz#cac641e897f9a0a680b8c9839803d35f3325103c"
@@ -3675,7 +3649,7 @@ grunt-legacy-log@~3.0.0:
     hooker "~0.2.3"
     lodash "~4.17.19"
 
-grunt-legacy-util@~2.0.0:
+grunt-legacy-util@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/grunt-legacy-util/-/grunt-legacy-util-2.0.1.tgz#0f929d13a2faf9988c9917c82bff609e2d9ba255"
   integrity sha512-2bQiD4fzXqX8rhNdXkAywCadeqiPiay0oQny77wA2F3WF4grPJXCvAcyoWUJV+po/b15glGkxuSiQCK299UC2w==
@@ -3747,20 +3721,20 @@ grunt-wiredep@^2.0.0:
   dependencies:
     wiredep "^2.1.0"
 
-grunt@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/grunt/-/grunt-1.3.0.tgz#55db6ccd80c6fb53722e496f680620a2e681f809"
-  integrity sha512-6ILlMXv11/4cxuhSMfSU+SfvbxrPuqZrAtLN64+tZpQ3DAKfSQPQHRbTjSbdtxfyQhGZPtN0bDZJ/LdCM5WXXA==
+grunt@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/grunt/-/grunt-1.4.1.tgz#7d1e17db1f9c8108777f7273d6b9359755576f50"
+  integrity sha512-ZXIYXTsAVrA7sM+jZxjQdrBOAg7DyMUplOMhTaspMRExei+fD0BTwdWXnn0W5SXqhb/Q/nlkzXclSi3IH55PIA==
   dependencies:
     dateformat "~3.0.3"
     eventemitter2 "~0.4.13"
     exit "~0.1.2"
     findup-sync "~0.3.0"
     glob "~7.1.6"
-    grunt-cli "~1.3.2"
-    grunt-known-options "~1.1.0"
+    grunt-cli "~1.4.2"
+    grunt-known-options "~2.0.0"
     grunt-legacy-log "~3.0.0"
-    grunt-legacy-util "~2.0.0"
+    grunt-legacy-util "~2.0.1"
     iconv-lite "~0.4.13"
     js-yaml "~3.14.0"
     minimatch "~3.0.4"
@@ -4354,7 +4328,7 @@ is-callable@^1.1.4, is-callable@^1.2.4:
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.4.tgz#47301d58dd0259407865547853df6d61fe471945"
   integrity sha512-nsuwtxZfMX67Oryl9LCQ+upnC0Z0BgpwntpS89m1H/TLF0zNfzfLMV/9Wa/6MZsj0acpEjAO0KF1xT6ZdLl95w==
 
-is-core-module@^2.2.0, is-core-module@^2.8.0:
+is-core-module@^2.2.0:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.8.0.tgz#0321336c3d0925e497fd97f5d95cb114a5ccd548"
   integrity sha512-vd15qHsaqrRL7dtH6QNuy0ndJmRDrS9HAM1CAiSifNUFv4x1a0CCVsj18hJ1mShxIG6T2i1sO78MkP56r0nYRw==
@@ -5040,20 +5014,6 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-liftoff@~2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/liftoff/-/liftoff-2.5.0.tgz#2009291bb31cea861bbf10a7c15a28caf75c31ec"
-  integrity sha1-IAkpG7Mc6oYbvxCnwVooyvdcMew=
-  dependencies:
-    extend "^3.0.0"
-    findup-sync "^2.0.0"
-    fined "^1.0.1"
-    flagged-respawn "^1.0.0"
-    is-plain-object "^2.0.4"
-    object.map "^1.0.0"
-    rechoir "^0.6.2"
-    resolve "^1.1.7"
-
 liftup@~3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/liftup/-/liftup-3.0.1.tgz#1cb81aff0f368464ed3a5f1a7286372d6b1a60ce"
@@ -5542,7 +5502,7 @@ micromatch@^2.1.5, micromatch@^2.3.7:
     parse-glob "^3.0.4"
     regex-cache "^0.4.2"
 
-micromatch@^3.0.4, micromatch@^3.1.10:
+micromatch@^3.1.10:
   version "3.1.10"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-3.1.10.tgz#70859bc95c9840952f359a068a3fc49f9ecfac23"
   integrity sha512-MWikgl9n9M3w+bpsY3He8L+w9eF9338xRl8IAO5viDizwSzziFEyUzo2xrrloB64ADbTf8uA8vRqqttDTOmccg==
@@ -6063,7 +6023,7 @@ object.defaults@^1.1.0:
     for-own "^1.0.0"
     isobject "^3.0.0"
 
-object.map@^1.0.0, object.map@^1.0.1:
+object.map@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/object.map/-/object.map-1.0.1.tgz#cf83e59dc8fcc0ad5f4250e1f78b3b81bd801d37"
   integrity sha1-z4Plncj8wK1fQlDh94s7gb2AHTc=
@@ -6384,7 +6344,7 @@ path-is-absolute@^1.0.0:
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
   integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
 
-path-parse@^1.0.6, path-parse@^1.0.7:
+path-parse@^1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
   integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
@@ -6861,13 +6821,6 @@ readline2@~0.1.0:
     mute-stream "0.0.4"
     strip-ansi "^2.0.1"
 
-rechoir@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/rechoir/-/rechoir-0.6.2.tgz#85204b54dba82d5742e28c96756ef43af50e3384"
-  integrity sha1-hSBLVNuoLVdC4oyWdW70OvUOM4Q=
-  dependencies:
-    resolve "^1.1.6"
-
 rechoir@^0.7.0:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/rechoir/-/rechoir-0.7.1.tgz#9478a96a1ca135b5e88fc027f03ee92d6c645686"
@@ -7088,15 +7041,6 @@ resolve@^1.1.5, resolve@^1.10.0, resolve@^1.19.0, resolve@^1.9.0:
   dependencies:
     is-core-module "^2.2.0"
     path-parse "^1.0.6"
-
-resolve@^1.1.6, resolve@^1.1.7:
-  version "1.21.0"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.21.0.tgz#b51adc97f3472e6a5cf4444d34bc9d6b9037591f"
-  integrity sha512-3wCbTpk5WJlyE4mSOtDLhqQmGFi0/TD9VPwmiolnk8U0wRgMEktqCXd3vy5buTO3tljvalNvKrjHEfrd2WpEKA==
-  dependencies:
-    is-core-module "^2.8.0"
-    path-parse "^1.0.7"
-    supports-preserve-symlinks-flag "^1.0.0"
 
 response-time@~2.3.1:
   version "2.3.2"
@@ -7879,11 +7823,6 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-supports-preserve-symlinks-flag@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
-  integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
-
 svgo@^0.5.0:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/svgo/-/svgo-0.5.6.tgz#9501c533cf84f74a79be1bb3f3494d912bbed119"
@@ -8500,13 +8439,6 @@ uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
-
-v8flags@~3.1.1:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/v8flags/-/v8flags-3.1.3.tgz#fc9dc23521ca20c5433f81cc4eb9b3033bb105d8"
-  integrity sha512-amh9CCg3ZxkzQ48Mhcb8iX7xpAfYJgePHxWMQCBWECpOSqJUXgY26ncA61UTV0BkPqfhcy6mzwCIoP4ygxpW8w==
-  dependencies:
-    homedir-polyfill "^1.0.1"
 
 v8flags@~3.2.0:
   version "3.2.0"
