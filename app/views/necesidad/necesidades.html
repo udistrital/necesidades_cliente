@@ -1,10 +1,10 @@
 <style>
-  #listaNec{
-    border: 0;
-    width: 100%;
-    height: 60vh;
-  }
-  </style>
+#listaNec{
+  border: 0;
+  width: 100%;
+  height: 60vh;
+}
+</style>
 <div class="panel panel-primary panel-body">
   <h2 class="page-header text-center">{{ 'GESTION_NECESIDADES' | translate }}</h2>
   <div class="panel-body">
@@ -14,7 +14,7 @@
             <h4 class="intro-text"> {{ 'LISTA_NECESIDADES' | translate }} </h4>
           </div>
           <div class="panel-body">
-              <div ui-grid="necesidades.gridOptions" ui-grid-selection ui-grid-pagination class="grid" id="listaNec"></div>
+              <div ui-grid="necesidades.gridOptions" ui-grid-selection ui-grid-pagination class="grid" class="listaNec"></div>
           </div>
         </div>
       </div>

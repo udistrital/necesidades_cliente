@@ -96,8 +96,8 @@
     "md-steppers": "^0.4.1",
     "natives": "^1.1.6"
   },
-  "version": "1.22.17",
-  "description": "En este repositorio se encuentra el cliente del modulo de resoluciones.",
+  "version": "0.4.1",
+  "description": "En este repositorio se encuentra el cliente del subsistema de Necesidades.",
   "main": "Gruntfile.js",
   "directories": {
     "test": "test"
@@ -106,7 +106,7 @@
     "type": "git",
     "url": "git+https://github.com/udistrital/necesidades_cliente.git"
   },
-  "author": "",
+  "author": "OAS Oficina Asesora de Sistemas, UDFJC",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/udistrital/necesidades_cliente/issues"
