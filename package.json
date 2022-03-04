@@ -96,7 +96,7 @@
     "md-steppers": "^0.4.1",
     "natives": "^1.1.6"
   },
-  "version": "0.4.1",
+  "version": "1.0.0",
   "description": "En este repositorio se encuentra el cliente del subsistema de Necesidades.",
   "main": "Gruntfile.js",
   "directories": {
