@@ -5,13 +5,13 @@
       <div>
         <h3 class="titleNecesidad">
           <span ng-if="[2,7,5,9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
-              {{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}
+              {{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.Consecutivo}}
           </span>
           <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==3">
-            Solicitud {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}
+            Solicitud {{d_visualizarNecesidad.v_necesidad.Consecutivo}}
           </span>
           <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==8">
-            Borrador {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}
+            Borrador {{d_visualizarNecesidad.v_necesidad.Consecutivo}}
           </span>
           <span>{{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>
           <span class="titleNecesidad pull-right ">Estado: {{d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Nombre}}</span>
@@ -32,9 +32,9 @@
       <cite class=""> {{d_visualizarNecesidad.v_necesidad.FechaSolicitud | date:'dd-MMM-yyyy'}}</cite><br>
       <cite
         ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7"
-        class=""> {{d_visualizarNecesidad.v_necesidad.ConsecutivoNecesidad}}</cite><br>
+        class=""> {{d_visualizarNecesidad.v_necesidad.Consecutivo}}</cite><br>
       <cite ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==7" class="">
-        {{d_visualizarNecesidad.v_necesidad.ConsecutivoSolicitud}}</cite> <br>
+        {{d_visualizarNecesidad.v_necesidad.Consecutivo}}</cite> <br>
     </div>
     <div class="text-info pull-right">
       <cite class="">{{"VIGENCIA" | translate}}: </cite><br>

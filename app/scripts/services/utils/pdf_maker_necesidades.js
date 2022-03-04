@@ -90,7 +90,7 @@ angular.module('contractualClienteApp')
                                     alignment: 'center',
                                     columns: [
                                       { text: "Vigencia " + trNecesidad.Necesidad.Vigencia, style: "title1" },
-                                      { text: "No. Solicitud "+ trNecesidad.Necesidad.ConsecutivoSolicitud, style: "title1" }
+                                      { text: "No. Solicitud "+ trNecesidad.Necesidad.Consecutivo, style: "title1" }
                                     ],
                                     columnGap: 10
                                   }

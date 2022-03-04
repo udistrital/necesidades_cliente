@@ -1482,7 +1482,7 @@ angular
           swal({
             title:
               "Se ha creado el borrador de Necesidad N°" +
-              response.data.Necesidad.ConsecutivoSolicitud,
+              response.data.Necesidad.Id,
             text: "A continuación encontrará el resumen de los datos ingresados.",
             type: "success",
             width: 800,
