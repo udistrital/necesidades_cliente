@@ -84,12 +84,18 @@ angular
             try {
               $scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-metas_asociadas"].forEach(function (item) {
                 const metaSchema = {
-                  Id: item.MetaId.Id,
+                  Id: item.MetaId.Numero,
                   Nombre: item.MetaId.Nombre,
                 };
-                if (self.metas.length > 0) {
+                var bandera = 1;
+                if (self.metas.length > 0 && bandera !== 1) {
                   self.metas.forEach(function (uniqueMeta) {
                     if (uniqueMeta.Id !== metaSchema.Id) {
+                      bandera = 1;
+                    } else {
+                      bandera = 0;
+                    }
+                    if(bandera === 1){
                       self.metas.push(metaSchema);
                     }
                   });
@@ -251,10 +257,15 @@ angular
                         ValorAsignado: fuente.ValorAsignado,
                         Nombre: fuente.Nombre
                       }
-
-                      if (fuentes.length > 0) {
+                      var bandera = 1;
+                      if (fuentes.length > 0 && bandera !== 1) {
                         fuentes.forEach(function (uniqueFuente) {
                           if (uniqueFuente.Id !== fuenteSchema.FuenteId) {
+                            bandera = 1;
+                          } else {
+                            bandera = 0;
+                          }
+                          if(bandera === 1){
                             fuentes.push(fuenteSchema);
                           }
                         });
@@ -283,16 +294,16 @@ angular
         self.loadActividades = function () {
           self.gridOptions.data = [];
           try {
-            var contador = 0;
             $scope.apropiacion.Apropiacion.datos.forEach(function (itemactividad) {
               itemactividad["registro_plan_adquisiciones-actividad"].forEach(function (item){
                 var actcont = 0;
+                var contador = 0;
                 item.FuentesFinanciamiento.forEach(function (fuente){
-                  fuente.ValorAsignado = $scope.movimiento[contador].Saldo;
+                  $scope.movimiento[contador].Saldo = fuente.ValorAsignado;
                   contador=contador+1;
                   actcont=actcont+fuente.ValorAsignado;
                 })
-                if (item.actividad.MetaId.Id == $scope.d_metasActividades.meta) {
+                if (item.actividad.Numero == $scope.d_metasActividades.meta) {
                   const actividadSchema = {
                     actividad_id: item.actividad.Id.toString(),
                     actividad: item.actividad.Nombre,
