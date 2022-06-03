@@ -71,6 +71,15 @@ angular.module('contractualClienteApp')
             enableVerticalScrollbar: 0,
             useExternalPagination: true,
             columnDefs: [{
+                field: 'Id',
+                displayName: $translate.instant('NUMERO_NECESIDAD_COMPACTO'),
+                type: 'number',
+                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+                cellTooltip: function (row) {
+                    return row.entity.Id;
+                },
+                width: '15%'
+            },{
                 field: 'Consecutivo',
                 displayName: $translate.instant('NUMERO_SOLICITUD_COMPACTO'),
                 type: 'number',
@@ -203,7 +212,7 @@ angular.module('contractualClienteApp')
                             self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
                             self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
                             self.verBotonAprobarCDPNecesidad = necesidadService.EstadoNecesidadType.CDPExpedido.Id === necesidad.EstadoNecesidadId.Id && self.buttons.AprobarCDP;
-                            self.verBotonCrearPDFNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.CrearPDF;
+                            self.verBotonCrearPDFNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.CrearPDF || self.buttons.AprobarCDP || self.buttons.SolicitarCDP;
                             $("#myModal").modal();
                         }
                     });
