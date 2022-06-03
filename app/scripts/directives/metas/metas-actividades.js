@@ -295,15 +295,21 @@ angular
           self.gridOptions.data = [];
           try {
             $scope.apropiacion.Apropiacion.datos.forEach(function (itemactividad) {
+              $scope.movimiento.forEach(function(mov){
+                mov.datos = JSON.parse(mov.Detalle);
+              })
               itemactividad["registro_plan_adquisiciones-actividad"].forEach(function (item){
                 var actcont = 0;
-                var contador = 0;
-                item.FuentesFinanciamiento.forEach(function (fuente){
-                  $scope.movimiento[contador].Saldo = fuente.ValorAsignado;
-                  contador=contador+1;
-                  actcont=actcont+fuente.ValorAsignado;
-                })
-                if (item.actividad.Numero == $scope.d_metasActividades.meta) {
+                let movi = $scope.movimiento.find(mov => mov.datos.ActividadId === item.actividad.Id);
+                if(movi){
+                  item.FuentesFinanciamiento.forEach(function (fuente){
+                    if(fuente.FuenteFinanciamiento === movi.datos.FuenteFinanciamientoId){
+                      actcont=actcont+movi.Saldo;
+                      fuente.ValorAsignado=movi.Saldo;
+                    }
+                  })
+                }
+                if (item.actividad.Numero === parseInt($scope.d_metasActividades.meta)) {
                   const actividadSchema = {
                     actividad_id: item.actividad.Id.toString(),
                     actividad: item.actividad.Nombre,
