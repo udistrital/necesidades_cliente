@@ -363,7 +363,7 @@ angular
       $scope.$on('pasomovimiento', function (event, args) {
         if (self.movimiento && self.movimiento.length) {
           args.forEach(function (mov){
-            self.movimiento.push(mov)
+            self.movimiento.push(mov);
           });
         } else {
           self.movimiento = args;
