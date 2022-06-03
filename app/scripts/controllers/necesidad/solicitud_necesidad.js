@@ -362,7 +362,9 @@ angular
       //Receptor de Movimiento
       $scope.$on('pasomovimiento', function (event, args) {
         if (self.movimiento && self.movimiento.length) {
-          args.forEach(mov => self.movimiento.push(mov));
+          args.forEach(function (mov){
+            self.movimiento.push(mov)
+          });
         } else {
           self.movimiento = args;
         }
