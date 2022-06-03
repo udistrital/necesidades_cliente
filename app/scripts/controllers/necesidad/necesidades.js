@@ -71,6 +71,15 @@ angular.module('contractualClienteApp')
             enableVerticalScrollbar: 0,
             useExternalPagination: true,
             columnDefs: [{
+                field: 'Id',
+                displayName: $translate.instant('NUMERO_NECESIDAD_COMPACTO'),
+                type: 'number',
+                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+                cellTooltip: function (row) {
+                    return row.entity.Id;
+                },
+                width: '15%'
+            },{
                 field: 'Consecutivo',
                 displayName: $translate.instant('NUMERO_SOLICITUD_COMPACTO'),
                 type: 'number',
