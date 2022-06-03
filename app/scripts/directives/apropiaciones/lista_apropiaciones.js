@@ -173,12 +173,14 @@ angular
                   }
                 })
                 jsonCompleto = JSON.stringify(arreglo);
-                movimientosCrudRequest.post("movimiento_detalle/postUltimoMovDetalle/",
-                  jsonCompleto).then(function(respuestamov){
+                // TODO: Implementar mecanismo retry, hasta un maximo de 3 intentos
+                movimientosCrudRequest
+                .post("movimiento_detalle/postUltimoMovDetalle/",jsonCompleto)
+                .then(function(respuestamov){
                   if(respuestamov.data){
                     $scope.movimiento = respuestamov.data;
                     respuestamov.data.forEach(function(movimiento){
-                      saldo = saldo + movimiento.Saldo;
+                      saldo += movimiento.Saldo;
                     })
                     info.RubroInfo.ValorActual = saldo;
                     self.gridOptions.data.push(info.RubroInfo);
