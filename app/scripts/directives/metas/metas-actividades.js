@@ -301,7 +301,7 @@ angular
               itemactividad["registro_plan_adquisiciones-actividad"].forEach(function (item){
                 var actcont = 0;
                 var movi = $scope.movimiento.find(function(mov){
-                  mov.datos.ActividadId === item.actividad.Id;
+                  return mov.datos.ActividadId === item.actividad.Id;
                 });
                 if(movi != undefined){
                   item.FuentesFinanciamiento.forEach(function (fuente){
