@@ -7,7 +7,7 @@
           <span ng-if="[2,7,5,9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
               {{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.Consecutivo}}
           </span>
-          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==3 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==8">
+          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id === 1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id === 3 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id === 8">
             Solicitud {{d_visualizarNecesidad.v_necesidad.Id}}
           </span>
           <span>{{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>

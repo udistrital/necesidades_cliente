@@ -303,12 +303,12 @@ angular
                 var movi = $scope.movimiento.filter(function(mov){
                   return mov.datos.ActividadId === item.actividad.Id;
                 });
-                if(movi.length != 0 ){
+                if(movi && movi.length){
                   item.FuentesFinanciamiento.forEach(function (fuente){
                     movi.forEach(function (movimientoFuentes){
                       if(fuente.FuenteFinanciamiento === movimientoFuentes.datos.FuenteFinanciamientoId){
-                        actcont+=movimientoFuentes.Saldo;
-                        fuente.ValorAsignado=movimientoFuentes.Saldo;
+                        actcont += movimientoFuentes.Saldo;
+                        fuente.ValorAsignado = movimientoFuentes.Saldo;
                       }
                     });
                   });
