@@ -49,7 +49,6 @@ angular.module('contractualClienteApp')
                     ]
                 };
                 self.loadData = function (elemento) {
-                    //administrativaRequest.get('catalogo_elemento',$.param({
                         catalogoRequest.get('elemento', $.param({
                         query: "Descripcion__contains:"+elemento,
                         fields: 'Id,Descripcion',

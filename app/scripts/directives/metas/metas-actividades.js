@@ -8,7 +8,7 @@
  */
 angular
   .module("contractualClienteApp")
-  .directive("metasActividades", function (metasRequest, $translate) {
+  .directive("metasActividades", function ($translate) {
     return {
       restrict: "E",
       scope: {

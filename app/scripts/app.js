@@ -47,7 +47,6 @@ angular
         'planAdquisicionService',
         'metasService',
         'catalogoService',
-        'coreService',
         'coreAmazonService',
         'parametrosGobiernoService',
         'parametrosService',

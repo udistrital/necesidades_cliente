@@ -11,7 +11,7 @@ angular.module('contractualClienteApp')
     .factory("disponibilidad", function() {
         return {};
     })
-    .controller('CdpCdpConsultaCtrl', function($location,$filter, $window, $scope, $translate, disponibilidad, financieraRequest, financieraMidRequest, agoraRequest, gridApiService) {
+    .controller('CdpCdpConsultaCtrl', function($location,$filter, $scope, $translate, financieraRequest, financieraMidRequest, agoraRequest, gridApiService) {
         var self = this;
         self.offset = 0;
         self.cargando = false;
@@ -216,7 +216,7 @@ angular.module('contractualClienteApp')
                 angular.forEach(self.gridOptions_rubros.data, function(data) {
                     if ($scope.apropiaciones.indexOf(data.Apropiacion.Id) === -1) {
                       $scope.apropiaciones.push(data.Apropiacion.Id);
-                    } 
+                    }
 
                     var rp = {
                         Disponibilidad: data.Disponibilidad, // se construye rp auxiliar para obtener el saldo del CDP para la apropiacion seleccionada

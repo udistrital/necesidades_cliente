@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('contractualClienteApp')
-    .controller('menuCtrl', function ($location, $window, $q, requestRequest, $scope, token_service, notificacion, $translate, $route, $mdSidenav, configuracionRequest, $rootScope, $http) {
+    .controller('menuCtrl', function ($location, $window, requestRequest, $scope, token_service, notificacion, $translate, $mdSidenav, configuracionRequest, $rootScope, $http) {
         var self = this;
         $scope.token_service = token_service;
         $scope.$on('$routeChangeStart', function (scope, next, current) {
