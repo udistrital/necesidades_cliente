@@ -15,6 +15,9 @@
         </h3>
       </div>
       <div class="col-md-7">
+        <!-- TODO: Que lo que se le pase al ng-show venga
+          no mas de una variable, actualizada desde el js, para
+          evitar tener tanta lógica en la plantilla/html -->
         <span class="titleNecesidad" ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7">
           {{"MODALIDAD_SELECCION" | translate}}:{{d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Nombre}}
         </span>
