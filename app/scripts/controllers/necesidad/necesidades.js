@@ -72,7 +72,7 @@ angular.module('contractualClienteApp')
             useExternalPagination: true,
             columnDefs: [{
                 field: 'Id',
-                displayName: $translate.instant('NUMERO_NECESIDAD_COMPACTO'),
+                displayName: $translate.instant('NUMERO_SOLICITUD_COMPACTO'),
                 type: 'number',
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
@@ -81,7 +81,7 @@ angular.module('contractualClienteApp')
                 width: '15%'
             },{
                 field: 'Consecutivo',
-                displayName: $translate.instant('NUMERO_SOLICITUD_COMPACTO'),
+                displayName: $translate.instant('NUMERO_NECESIDAD_COMPACTO'),
                 type: 'number',
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {

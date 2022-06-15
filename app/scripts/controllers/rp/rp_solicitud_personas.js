@@ -11,7 +11,7 @@ angular.module('contractualClienteApp')
     .factory("contrato", function() {
         return {};
     })
-    .controller('RpSolicitudPersonasCtrl', function($window, $filter, gridOptionsService, requestRequest, administrativaRequest, $scope, contrato, resolucion, financieraRequest, financieraMidRequest, amazonAdministrativaRequest, adminMidRequest, $translate, disponibilidad, resolucionRequest) {
+    .controller('RpSolicitudPersonasCtrl', function($window, gridOptionsService, $scope, contrato, resolucion, financieraRequest, financieraMidRequest, amazonAdministrativaRequest, adminMidRequest, $translate, disponibilidad, resolucionRequest) {
         var self = this;
         self.offset = 0;
         self.filter = '';
@@ -506,7 +506,7 @@ angular.module('contractualClienteApp')
 
         self.generar_txt_cdp = function(numContrato, vigenciaContrato, vinculacion_docente) {
 
-            
+
             amazonAdministrativaRequest.get('proveedor_contrato_persona/' + numContrato.String + "/" + vigenciaContrato.Int64 , "").then(function(response) {
                 if (response.data !== null) {
                     self.contrato.push(response.data[0]);

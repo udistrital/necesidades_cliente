@@ -8,7 +8,7 @@
  */
 angular
   .module("contractualClienteApp")
-  .directive("metasActividades", function (metasRequest, $translate) {
+  .directive("metasActividades", function ($translate) {
     return {
       restrict: "E",
       scope: {
@@ -300,16 +300,18 @@ angular
               })
               itemactividad["registro_plan_adquisiciones-actividad"].forEach(function (item){
                 var actcont = 0;
-                var movi = $scope.movimiento.find(function(mov){
+                var movi = $scope.movimiento.filter(function(mov){
                   return mov.datos.ActividadId === item.actividad.Id;
                 });
-                if(movi != undefined){
+                if(movi && movi.length){
                   item.FuentesFinanciamiento.forEach(function (fuente){
-                    if(fuente.FuenteFinanciamiento === movi.datos.FuenteFinanciamientoId){
-                      actcont=actcont+movi.Saldo;
-                      fuente.ValorAsignado=movi.Saldo;
-                    }
-                  })
+                    movi.forEach(function (movimientoFuentes){
+                      if(fuente.FuenteFinanciamiento === movimientoFuentes.datos.FuenteFinanciamientoId){
+                        actcont += movimientoFuentes.Saldo;
+                        fuente.ValorAsignado = movimientoFuentes.Saldo;
+                      }
+                    });
+                  });
                 }
                 if (item.actividad.Numero === parseInt($scope.d_metasActividades.meta)) {
                   const actividadSchema = {

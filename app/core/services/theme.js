@@ -24,7 +24,7 @@ angular.module('themeService', [])
  * Permite gestionar workflow de notificaciones
  */
 
-.factory('behaviorTheme', function( CONF, configuracionRequest) {
+.factory('behaviorTheme', function() {
 
         var methods = {
             sidebar: {
@@ -53,7 +53,7 @@ angular.module('themeService', [])
             },
 
             toogleOpenSideBar: function (){
-                
+
                 var textoMenuLateral = document.getElementsByClassName("menulateral-text");
                 if (!methods.sidebar.open){
                     for(var i =0, il = textoMenuLateral.length;i<il;i++){
@@ -66,7 +66,7 @@ angular.module('themeService', [])
                     methods.sidebar.containerLogoCollapsedClase = 'inline-block';
                     methods.sidebar.containerLogoClase = 'none';
                     methods.sidebar.open=true;
-         
+
                 }
             },
             toogleCloseSideBar: function (){
@@ -82,8 +82,8 @@ angular.module('themeService', [])
                     methods.sidebar.containerLogoCollapsedClase = 'none';
                     methods.sidebar.containerLogoClase = 'inline-block';
                     methods.sidebar.open=false;
-                }  
-                
+                }
+
             },
             toogleSidebar: function () {
                 var textoMenuLateral = document.getElementsByClassName("menulateral-text");
@@ -111,7 +111,7 @@ angular.module('themeService', [])
                 }
             },
 
-            closeAllMenu: function(menu) {           
+            closeAllMenu: function(menu) {
                 methods.menu = menu.map(function(n) {
                     var node = {};
                     node = {
@@ -130,7 +130,7 @@ angular.module('themeService', [])
                         }
                         return node;
                     } else {
-                        
+
                         return node;
                     }
                 });

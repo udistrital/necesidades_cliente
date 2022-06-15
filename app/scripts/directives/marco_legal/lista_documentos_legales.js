@@ -7,7 +7,7 @@
  * # marcoLegal/listaDocumentosLegales
  */
 angular.module('contractualClienteApp')
-  .directive('listaDocumentosLegales', function (administrativaRequest, $translate, necesidadesCrudRequest) {
+  .directive('listaDocumentosLegales', function ($translate, necesidadesCrudRequest) {
     return {
       restrict: 'E',
       scope: {
@@ -83,7 +83,7 @@ angular.module('contractualClienteApp')
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }
             });
-          },2000)   
+          },2000)
         });
 
         $scope.$watch('[d_listaDocumentosLegales.gridOptions.paginationPageSize, d_listaDocumentosLegales.gridOptions.data]', function () {

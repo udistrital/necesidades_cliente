@@ -7,17 +7,17 @@
           <span ng-if="[2,7,5,9,10].includes(d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id)">
               {{'NECESIDAD' | translate}} {{d_visualizarNecesidad.v_necesidad.Consecutivo}}
           </span>
-          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==3">
+          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id === 1 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id === 3 || d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id === 8">
             Solicitud {{d_visualizarNecesidad.v_necesidad.Id}}
-          </span>
-          <span ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Id==8">
-            Borrador {{d_visualizarNecesidad.v_necesidad.Id}}
           </span>
           <span>{{"DE" | translate}} {{d_visualizarNecesidad.v_necesidad.Vigencia}}</span>
           <span class="titleNecesidad pull-right ">Estado: {{d_visualizarNecesidad.v_necesidad.EstadoNecesidadId.Nombre}}</span>
         </h3>
       </div>
       <div class="col-md-7">
+        <!-- TODO: Que lo que se le pase al ng-show venga
+          no mas de una variable, actualizada desde el js, para
+          evitar tener tanta lógica en la plantilla/html -->
         <span class="titleNecesidad" ng-show="d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==2 || d_visualizarNecesidad.v_necesidad.EstadoNecesidad.Id==7">
           {{"MODALIDAD_SELECCION" | translate}}:{{d_visualizarNecesidad.v_necesidad.ModalidadSeleccion.Nombre}}
         </span>
@@ -150,7 +150,7 @@
                   <!-- FuentesActividad -->
                   <h5 class="text-info">{{"FUENTES" | translate}}</h5>
                   <ul ng-repeat="f in act.FuentesActividad" style="list-style: none;">
-                    <li>
+                    <li ng-if="f.MontoParcial > 0">
                       <p><strong>Código:</strong>
                         {{f.FuenteId}}<br>
                         {{ f.InfoFuente.Nombre }}<br>

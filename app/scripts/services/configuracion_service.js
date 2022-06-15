@@ -23,7 +23,7 @@ angular.module('configuracionService', [])
  * Factory que permite gestionar los servicios para construir y gestion los elementos que se muestran por el cliente a traves del menú
  */
 
-.factory('configuracionRequest', function($http, $q, CONF, token_service) {
+.factory('configuracionRequest', function($http, CONF, token_service) {
     // Service logic
     // ...
     var path = CONF.GENERAL.CONFIGURACION_SERVICE;
