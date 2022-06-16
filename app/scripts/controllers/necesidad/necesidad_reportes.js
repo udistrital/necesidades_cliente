@@ -8,7 +8,7 @@
 * Controller of the clienteApp
 */
 angular.module('contractualClienteApp')
-  .controller('NecesidadReportesCtrl', function (necesidadService, adminMidRequest, resolucion, administrativaRequest, $scope, $window, $mdDialog, $translate) {
+  .controller('NecesidadReportesCtrl', function (necesidadService, $translate) {
     var self = this;
     self.nombreReporte = "";
     self.resolucionId = 0;
