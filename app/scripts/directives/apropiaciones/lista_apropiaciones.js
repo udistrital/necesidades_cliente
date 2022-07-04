@@ -148,7 +148,7 @@ angular
                   if($scope.tipofinanciacion.Id === 1){
                     rubroMov = rubro.RubroId;
                     rubro["registro_plan_adquisiciones-actividad"].forEach(function(actividad){
-                      actividadIdMov = actividad.actividad.Id;
+                      actividadIdMov = actividad.RegistroActividadId;
                       actividad.FuentesFinanciamiento.forEach(function(fuente){
                         fuenteIdMov = fuente.FuenteFinanciamiento;
                         Cuen_Pre = JSON.stringify({
