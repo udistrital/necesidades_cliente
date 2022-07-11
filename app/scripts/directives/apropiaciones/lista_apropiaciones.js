@@ -148,13 +148,14 @@ angular
                   if($scope.tipofinanciacion.Id === 1){
                     rubroMov = rubro.RubroId;
                     rubro["registro_plan_adquisiciones-actividad"].forEach(function(actividad){
-                      actividadIdMov = actividad.actividad.Id;
+                      actividadIdMov = actividad.RegistroActividadId;
                       actividad.FuentesFinanciamiento.forEach(function(fuente){
                         fuenteIdMov = fuente.FuenteFinanciamiento;
                         Cuen_Pre = JSON.stringify({
                           RubroId:rubroMov,
-                          ActividadId:actividadIdMov.toString(),
-                          FuenteFinanciamientoId:fuenteIdMov
+                          ActividadId:actividadIdMov,
+                          FuenteFinanciamientoId:fuenteIdMov,
+                          PlanAdquisicionesId:$scope.planadquisicion.id
                         });
                         Movimiento = {};
                         Movimiento.Cuen_Pre = Cuen_Pre;
@@ -166,7 +167,8 @@ angular
                     fuenteIdMov = rubro.FuenteFinanciamientoId;
                     Cuen_Pre = JSON.stringify({
                       RubroId:rubroMov,
-                      FuenteFinanciamientoId:fuenteIdMov
+                      FuenteFinanciamientoId:fuenteIdMov,
+                      PlanAdquisicionesId:$scope.planadquisicion.id
                     });
                     Movimiento.Cuen_Pre = Cuen_Pre;
                     arreglo.push(Movimiento);
