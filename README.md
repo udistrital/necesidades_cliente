@@ -5,74 +5,110 @@ En este repositorio se encuentra el cliente del modulo de resoluciones.
 ## Especificaciones Técnicas
 
 ### Tecnologías Implementadas y Versiones
-* [ngxAdmin](https://github.com/akveo/ngx-admin)
-* [Angular 8.0](https://angular.io/)
-* [Bootstrap 4](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
-* [Nebular 4](https://akveo.github.io/nebular/4.6.0/)
+
+* [Angular JS](https://angularjs.org/)
+* [Bootstrap 3](https://getbootstrap.com/docs/3.3/)
+* [Angular JS generator](https://github.com/fabianLeon/oas)
+* [Node.js ~~en la versión estable~~](https://nodejs.org/en/)
+* [yarn](https://classic.yarnpkg.com/lang/en/docs/install/)
 
 ### Variables de Entorno
+
 ```shell
 # En Pipeline
-SLACK_AND_WEBHOOK: WEBHOOK de Slack Grupo ci-covid-serverles
 AWS_ACCESS_KEY_ID: llave de acceso ID Usuario AWS
 AWS_SECRET_ACCESS_KEY: Secreto de Usuario AWS
 ```
+
 ### Ejecución del Proyecto
 
 Clonar el proyecto del repositorio de git
+
 ```bash
 # clone the project
 git clone https://github.com/udistrital/necesidades-cliente.git
 # enter the project directory
 cd necesidades-cliente
 ```
+
 Iniciar el servidor en local
+
 ```bash
 # install dependency
-npx npm install
-or
-npm install
+yarn
+
 # start server
-npx ng serve
-# Whenever you want to change the port just run
-npx ng dev --port = 9528
+yarn run serve
 ```
 
+El cliente se depliega en el 9000; : [Modulo de necesidades](http://0.0.0.0:9000/#/necesidades).
+
+**TO-DO: Configurar yarn o grunt para lint!**
+
+<!--
 Linter
+
 ```bash
 # Angular linter
-npm run lint
+yarn run lint
 # run linter and auto fix
-npm run lint:fix
+yarn run lint:fix
 # run linter on styles
-npm run lint:styles
+yarn run lint:styles
 # run lint UI
-npm run lint:ci
+yarn run lint:ci
+```
+-->
+
+Para crear el build de la aplicación:
+
+```bash
+yarn run build
 ```
 
 ### Ejecución Dockerfile
+
 ```bash
 # Does not apply
 ```
+
 ### Ejecución docker-compose
+
 ```bash
-# Does not apply
+docker-compose up
 ```
+
 ### Ejecución Pruebas
 
+La pruebas se relizan con [karma](https://karma-runner.github.io/latest/index.html), ejecutar el comando:
+
+```bash
+yarn run test:legacy
+```
+
+Alternativamente:
+
+```bash
+yarn run test
+```
+
+**TO-DO: Revisar si vale la pena pasar a [Jest.js](https://jestjs.io/)**
+<!--
 Pruebas unitarias powered by Jest
+
 ```bash
 # run unit test
-npm run test
+yarn test
 # Runt linter + unit test
-npm run test:ui
+yarn run test:ui
 ```
+-->
 
 ## Estado CI
 
-| Develop | Relese 0.0.1 | Master |
+| Develop | Release 1.0.0 | Master |
 | -- | -- | -- |
-| [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/develop)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/release/0.0.1)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) |
+| [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/develop)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg?ref=refs/heads/release/1.0.0)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/necesidades_cliente/status.svg)](https://hubci.portaloas.udistrital.edu.co/udistrital/necesidades_cliente) |
 
 ## Licencia
 
@@ -82,4 +118,4 @@ necesidades-cliente is free software: you can redistribute it and/or modify it u
 
 necesidades-cliente is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with necesidades-cliente. If not, see https://www.gnu.org/licenses/.
+You should have received a copy of the GNU General Public License along with necesidades-cliente. If not, see [LICENSE](LICENSE).

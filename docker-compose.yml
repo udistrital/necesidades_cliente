@@ -5,12 +5,12 @@ services:
     build:
       context: ./genoas_build
     image: ${SERVICE_NAME}
-    container_name: ${SERVICE_NAME} 
+    container_name: ${SERVICE_NAME}
     env_file:
       - .env
-    command: sh -c 'npm dedupe;npm install; bower install; grunt serve'
+    command: sh -c 'yarn; yarn run serve'
     ports:
-      - '${PORT}:${PORT}'
-      - '35729:35729'
+      - "${PORT}:${PORT}"
+      - "35729:35729"
     volumes:
       - ./:/app

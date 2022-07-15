@@ -1,8 +1,8 @@
-/node_modules
-/dist
-/.tmp
-/.sass-cache
-/bower_components
+node_modules
+dist
+*.tmp
+*.log
+.sass-cache
 .DS_Store
-.sonar/report-task.txt
-.sonar/.sonar_lock
+.sonar
+package-lock.json

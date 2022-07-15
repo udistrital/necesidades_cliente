@@ -37,6 +37,8 @@ angular.module('notificacionService', [])
         var user = "";
 
         var queryNotification = function () {
+          //Se desactiva ya que se va a usar otro sistema aun no disponible (evitar conflictos en el cliente)
+          if(false){
             configuracionRequest.get('notificacion_estado_usuario?query=Usuario:' + payload.sub + ',Activo:true&sortby=notificacion&order=asc&limit=-1', '')
                 .then(function (response) {
                     if (response !== null) {
@@ -61,7 +63,9 @@ angular.module('notificacionService', [])
                         methods.update_novistos();
                     }
                 });
+          }
         };
+
         if (token_service.live_token()) {
 
             payload = token_service.getPayload();

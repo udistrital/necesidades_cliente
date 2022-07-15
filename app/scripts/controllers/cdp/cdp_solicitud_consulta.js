@@ -12,7 +12,7 @@ angular.module('contractualClienteApp')
 .factory("solicitud_disponibilidad",function(){
         return {};
   })
-  .controller('CdpCdpSolicitudConsultaCtrl', function ($scope,$filter,administrativaRequest,solicitud_disponibilidad,financieraRequest,financieraMidRequest, $translate) {
+  .controller('CdpCdpSolicitudConsultaCtrl', function ($scope,$filter,administrativaRequest,financieraRequest,financieraMidRequest, $translate) {
     var self = this;
     self.alerta = "";
     self.cargando = false;

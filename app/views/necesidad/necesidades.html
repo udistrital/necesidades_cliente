@@ -1,17 +1,23 @@
+<style>
+.listaNec{
+  border: 0;
+  width: 100%;
+  height: 60vh;
+}
+</style>
 <div class="panel panel-primary panel-body">
   <h2 class="page-header text-center">{{ 'GESTION_NECESIDADES' | translate }}</h2>
   <div class="panel-body">
     <div class="row">
-        <div class="panel panel-default">
+        <div class="panel panel-default" >
           <div class="panel-heading">
             <h4 class="intro-text"> {{ 'LISTA_NECESIDADES' | translate }} </h4>
           </div>
           <div class="panel-body">
-              <div ui-grid="necesidades.gridOptions" ui-grid-selection ui-grid-pagination class="grid"></div>
-          </div>          
+              <div ui-grid="necesidades.gridOptions" ui-grid-selection ui-grid-pagination class="grid listaNec"></div>
+          </div>
         </div>
       </div>
-
   </div>
 </div>
 
@@ -20,7 +26,12 @@
   <!-- Modal content-->
   <div class="modal-content col-md-10 col-md-offset-1" style="margin-top: 5%">
     <div class="modal-body" ng-if="necesidades.g_necesidad!=undefined">
-      <visualizar-necesidad necesidad="necesidades.necesidad" vigencia="necesidades.vigencia" numero="necesidades.numero_el" estado="necesidades.g_necesidad.EstadoNecesidadId" modalidadSel="necesidades.modalidadSel" tipoContrato="necesidades.tipoContrato">
+      <visualizar-necesidad
+        necesidad="necesidades.necesidad"
+        numero="necesidades.numero_el"
+        estado="necesidades.g_necesidad.EstadoNecesidadId"
+        modalidadSel="necesidades.modalidadSel"
+        tipoContrato="necesidades.tipoContrato">
       </visualizar-necesidad>
       <div class="panel panel-default" ng-show="necesidades.necesidad.Necesidad.EstadoNecesidadId.Id===1">
           <div class="panel-body">
@@ -33,41 +44,48 @@
                     <option value="">{{"SELECCIONAR" | translate}} {{"MODALIDAD_SELECCION" | translate}}</option>
                   </select>
                 </div>
-          
-                
+
+
                 <div class="row">
                   <h3 class="text-info">{{"CLASE_CONTRATACION" | translate}}</h3>
-                  <select ng-show="true" class="form-control" 
+                  <select ng-show="true" class="form-control"
                     ng-options="tc as tc.Id+'-'+tc.TipoContrato for tc in necesidades.tipo_contrato_data track by tc.Id" ng-model="necesidades.TipoContrato"
                     required>
                     <option value="">{{"SELECCIONAR" | translate}} {{"TIPO_CONTRATO_NECESIDAD" | translate}}</option>
                   </select>
                 </div>
           </div>
-          
+
       </div>
 
- 
+
     </div>
 
 
     <div class="modal-footer text-center">
-        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_solicitud()" ng-show="necesidades.verBotonAprobarSolicitud">{{"SOLICITAR"
-            | translate}}</button>
-      <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_necesidad()" ng-show="necesidades.verBotonAprobarNecesidad">{{"APROBAR"
-        | translate}}</button>
-      <button class="btn btn-warning" type="button" name="button" ng-click="necesidades.rechazar_necesidad()" ng-show="necesidades.verBotonRechazarNecesidad">{{"RECHAZAR"
-        | translate}}</button>
-      <button class="btn btn-success btn-outline" type="button" name="button" ng-show="necesidades.verBotonEditarNecesidad"
-        ng-click="necesidades.editar_necesidad()">{{"EDITAR_NECESIDAD" | translate}}</button>
-      <button class="btn btn-success btn-outline" type="button" name="button" ng-click="necesidades.solicitar_cdp()"
-        ng-show="necesidades.verBotonSolicidadCDPNecesidad">{{"SOLICITAR_CDP" | translate}}</button>
-      <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_cdp()"
-        ng-show="necesidades.verBotonAprobarCDPNecesidad">{{"APROBAR_CDP" | translate}}</button>
+        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_solicitud()"
+          ng-show="necesidades.verBotonAprobarSolicitud">{{"SOLICITAR"| translate}}</button>
+
+        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_necesidad()"
+          ng-show="necesidades.verBotonAprobarNecesidad">{{"APROBAR"| translate}}</button>
+
+        <button class="btn btn-warning" type="button" name="button" ng-click="necesidades.rechazar_necesidad()"
+        ng-show="necesidades.verBotonRechazarNecesidad">{{"RECHAZAR"| translate}}</button>
+
+        <button class="btn btn-success btn-outline" type="button" name="button" ng-click="necesidades.editar_necesidad()"
+          ng-show="necesidades.verBotonEditarNecesidad">{{"EDITAR_NECESIDAD" | translate}}</button>
+
+        <button class="btn btn-success btn-outline" type="button" name="button" ng-click="necesidades.solicitar_cdp()"
+          ng-show="necesidades.verBotonSolicidadCDPNecesidad">{{"SOLICITAR_CDP" | translate}}</button>
+
+        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.aprobar_cdp()"
+          ng-show="necesidades.verBotonAprobarCDPNecesidad">{{"APROBAR_CDP" | translate}}</button>
+
+        <button class="btn btn-success" type="button" name="button" ng-click="necesidades.crear_pdf_necesidad()"
+          ng-show="necesidades.verBotonCrearPDFNecesidad">{{"CREAR_PDF" | translate}}</button>
 
     </div>
 
   </div>
 
 </div>
-

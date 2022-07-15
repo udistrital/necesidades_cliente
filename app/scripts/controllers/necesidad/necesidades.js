@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, administrativaRequest, planCuentasMidRequest, agoraRequest, parametrosGobiernoRequest, parametrosRequest,catalogoRequest,  planCuentasRequest, rolesService, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, planCuentasMidRequest, agoraRequest, parametrosRequest,catalogoRequest, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -19,12 +19,13 @@ angular.module('contractualClienteApp')
             EditarNecesidad: true,
             SolicitarCDP: true,
             AprobarCDP: true,
+            CrearPDF: true
         };
 
         self.modalidadSel = {};
         self.TipoContrato = {};
         // self.unidadE = "";
-        // self.unidadE = self.unidad_ejecutora_data.filter(function(a){
+        // self.unidadE = self.area_funcional_data.filter(function(a){
         //     if(a.Id === row.entity.UnidadEjecutora){
         //         return a.Nombre;
         //     }
@@ -35,10 +36,12 @@ angular.module('contractualClienteApp')
                     self.buttons = data;
                 }); */
 
-        self.unidad_ejecutora_data = [{ Id: 1, Nombre: 'Rector' }, { Id: 2, Nombre: 'Convenios' }];
+        self.area_funcional_data = [{ Id: 1, Nombre: 'Rector' },
+                                    { Id: 2, Nombre: 'Convenios' },
+                                    { Id: 3, Nombre: 'IDEXUD' }];
 
         self.buscarUE = function (idUE) {
-            self.unidad_ejecutora_data.filter(function (e) {
+            self.area_funcional_data.filter(function (e) {
                 if (idUE === e.Id) {
                     return e.Nombre;
                 } else {
@@ -59,8 +62,8 @@ angular.module('contractualClienteApp')
         });
 
         self.gridOptions = {
-            paginationPageSizes: [10, 15, 20],
-            paginationPageSize: 10,
+            paginationPageSizes: [50, 100, 150],
+            paginationPageSize: 50,
             enableRowSelection: true,
             enableRowHeaderSelection: false,
             enableFiltering: true,
@@ -68,33 +71,21 @@ angular.module('contractualClienteApp')
             enableVerticalScrollbar: 0,
             useExternalPagination: true,
             columnDefs: [{
-                field: 'ConsecutivoSolicitud',
+                field: 'Id',
                 displayName: $translate.instant('NUMERO_SOLICITUD_COMPACTO'),
                 type: 'number',
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.ConsecutivoSolicitud;
+                    return row.entity.Id;
                 },
-                width: '10%'
-            },
-            {
-                field: 'ConsecutivoNecesidad',
+                width: '15%'
+            },{
+                field: 'Consecutivo',
                 displayName: $translate.instant('NUMERO_NECESIDAD_COMPACTO'),
                 type: 'number',
                 headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
                 cellTooltip: function (row) {
-                    return row.entity.ConsecutivoNecesidad;
-                },
-                width: '15%'
-            },
-            {
-                field: 'Id',
-                displayName: $translate.instant('NECESIDAD_NO'),
-                type: 'number',
-                visible: false,
-                headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-                cellTooltip: function (row) {
-                    return row.entity.Id;
+                    return row.entity.Consecutivo;
                 },
                 width: '15%'
             },
@@ -106,7 +97,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '10%'
+                width: '15%'
             },
             {
                 field: 'EstadoNecesidadId.Nombre',
@@ -124,7 +115,7 @@ angular.module('contractualClienteApp')
                 cellTooltip: function (row) {
                     return row.entity.Vigencia;
                 },
-                width: '25%'
+                width: '30%'
             },
             {
                 field: 'ver',
@@ -168,7 +159,7 @@ angular.module('contractualClienteApp')
                                 })
                             }
                             //servicio
-                            if(nec.DetalleServicioNecesidad.TipoServicioId) {
+                            if(nec.DetalleServicioNecesidad && nec.DetalleServicioNecesidad.TipoServicioId) {
                                 nec.DetalleServicioNecesidad.ValorTotal=0;
                                 nec.DetalleServicioNecesidad.valorIvaUnd=0;
                                 nec.DetalleServicioNecesidad.TipoServicioNombre="";
@@ -180,15 +171,15 @@ angular.module('contractualClienteApp')
                                     })[0].DESCRIPCION;
                                 });
                             }
-                      
+
                             //cps
-                            if (nec.DetallePrestacionServicioNecesidad.PerfilId) {
+                            if (nec.DetallePrestacionServicioNecesidad && nec.DetallePrestacionServicioNecesidad.PerfilId) {
                                 nec.DetallePrestacionServicioNecesidad.PerfilNombre="";
                                 nec.DetallePrestacionServicioNecesidad.PerfilNombre=self.perfil_data.filter(function(p){
                                     return p.Id===nec.DetallePrestacionServicioNecesidad.PerfilId;
                                 })[0].ValorParametro;
                             }
-                            if (nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
+                            if (nec.DetallePrestacionServicioNecesidad && nec.DetallePrestacionServicioNecesidad.NucleoConocimientoId) {
                                 nec.DetallePrestacionServicioNecesidad.NucleoConocimientoNombre="";
                                 nec.DetallePrestacionServicioNecesidad.NucleoConocimientoArea="";
                                 parametrosRequest.get('parametro', $.param({
@@ -207,21 +198,21 @@ angular.module('contractualClienteApp')
                             self.numero_el = necesidad.NumeroElaboracion;
                             self.vigencia = necesidad.Vigencia;
                             self.modalidadSel = necesidad.ModalidadSeleccion;
-            
+
                             //para mostrar informacion de rechazo
-            
-            
+
+
                             // validaciones para los botones: (estado) && (permisos rol)
                             var aproOrRech = [necesidadService.EstadoNecesidadType.Solicitada.Id, necesidadService.EstadoNecesidadType.Modificada.Id,]
                                 .includes(necesidad.EstadoNecesidadId.Id);
-            
+
                             self.verBotonAprobarSolicitud = necesidadService.EstadoNecesidadType.Guardada.Id===necesidad.EstadoNecesidadId.Id&&necesidad.JustificacionRechazo!==1; // Cuando este Guardada (Borrador)
                             self.verBotonAprobarNecesidad = aproOrRech && self.buttons.AprobarNecesidad;
                             self.verBotonRechazarNecesidad = aproOrRech && self.buttons.RechazarNecesidad;
                             self.verBotonEditarNecesidad = necesidadService.EstadoNecesidadType.Rechazada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Guardada.Id === necesidad.EstadoNecesidadId.Id ||  necesidadService.EstadoNecesidadType.Modificada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.EditarNecesidad;
                             self.verBotonSolicidadCDPNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.SolicitarCDP;
                             self.verBotonAprobarCDPNecesidad = necesidadService.EstadoNecesidadType.CDPExpedido.Id === necesidad.EstadoNecesidadId.Id && self.buttons.AprobarCDP;
-            
+                            self.verBotonCrearPDFNecesidad = necesidadService.EstadoNecesidadType.Aprobada.Id === necesidad.EstadoNecesidadId.Id && self.buttons.CrearPDF || self.buttons.AprobarCDP || self.buttons.SolicitarCDP;
                             $("#myModal").modal();
                         }
                     });
@@ -246,10 +237,9 @@ angular.module('contractualClienteApp')
             var req = necesidadesCrudRequest.get('necesidad', $.param({
                 limit: self.gridOptions.paginationPageSize,
                 offset: offset,
-                sortby: "ConsecutivoSolicitud",
+                sortby: "Id",
                 order: "desc"
             }, true));
-
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
         };
@@ -278,8 +268,8 @@ angular.module('contractualClienteApp')
                 if (l.data !== undefined) {
                     swal(
                        {
-                            title: 'Se ha creado la Solicitud de necesidad N° ' + self.necesidad.Necesidad.ConsecutivoSolicitud + ' exitosamente. ',
-                            text: 'El borrador de la solicitud se ha aprobado y se ha generado la Solicitud de Necesidad N°' + self.necesidad.Necesidad.ConsecutivoSolicitud ,
+                            title: 'Se ha creado la Solicitud de necesidad N° ' + self.necesidad.Necesidad.Id + ' exitosamente. ',
+                            text: 'El borrador de la solicitud se ha aprobado y se ha generado la Solicitud de Necesidad N°' + self.necesidad.Necesidad.Id ,
                             type: "success",
                             width: 600,
                             showCloseButton: true,
@@ -297,7 +287,7 @@ angular.module('contractualClienteApp')
                 }
             });
         };
-        
+
 
 
         self.aprobar_necesidad = function () {
@@ -314,25 +304,43 @@ angular.module('contractualClienteApp')
                 )
                 return
             }
-            self.necesidad.Necesidad.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
-            self.necesidad.Necesidad.ModalidadSeleccionId = self.modalidadSel;
-            self.necesidad.Necesidad.TipoContratoId = self.TipoContrato.Id;
-            self.necesidad.Necesidad.ConsecutivoNecesidad=self.necesidad.Necesidad.Id+16;
 
-            necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (l) {
-                if (l.data !== undefined) {
+            const necesidadCopia=JSON.parse(JSON.stringify(self.necesidad.Necesidad));
+
+            necesidadCopia.EstadoNecesidadId = necesidadService.EstadoNecesidadType.Aprobada;
+            necesidadCopia.ModalidadSeleccionId = self.modalidadSel;
+            necesidadCopia.TipoContratoId = self.TipoContrato.Id;
+
+            necesidadesCrudRequest.put('necesidad', necesidadCopia.Id, necesidadCopia).then(function (l) {
+              console.log(l.headers());
+                if (l.data !== undefined && l.data.Id !== 0 && l.status === 200) {
+                    self.necesidad.Necesidad.EstadoNecesidadId = necesidadCopia.EstadoNecesidadId;
+                    self.necesidad.Necesidad.ModalidadSeleccionId = necesidadCopia.ModalidadSeleccionId;
+                    self.necesidad.Necesidad.TipoContratoId = necesidadCopia.TipoContratoId;
                     swal(
                         {
-                             title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.ConsecutivoNecesidad +' exitosamente. ',
-                             text: 'La solicitud de necesidad '+self.necesidad.Necesidad.ConsecutivoSolicitud+' ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.ConsecutivoNecesidad ,
-                             type: "success",
-                             width: 600,
-                             showCloseButton: true,
-                             confirmButtonText: $translate.instant("CERRAR")
-                         }
-                     );
-                     self.cargarDatosNecesidades(self.offset, self.query);
-                     $("#myModal").modal("hide");
+                          title: 'Se ha creado la Necesidad N° '+self.necesidad.Necesidad.Id +' exitosamente. ',
+                          text: 'La solicitud de necesidad ha sido aprobada y se ha generado la Necesidad N°' + self.necesidad.Necesidad.Id ,
+                          type: "success",
+                          width: 600,
+                          showCloseButton: true,
+                          confirmButtonText: $translate.instant("CERRAR")
+                        }
+                    );
+                    self.cargarDatosNecesidades(self.offset, self.query);
+                    $("#myModal").modal("hide");
+                } else if(l.status === 409){
+                  swal(
+                    {
+                      title: 'No hay monto disponible en el Rubro '+self.necesidad.Rubros[0].RubroId,
+                      text: 'Se recomienda cambiar el rubro con un mayor monto que cubra el valor de la necesidad',
+                      type: "error",
+                      width: 600,
+                      showCloseButton: true,
+                      confirmButtonText: $translate.instant("CERRAR")
+                    }
+                  );
+                  $("#myModal").modal("hide");
                 } else {
                     swal(
                         $translate.instant("ERROR"),
@@ -379,7 +387,7 @@ angular.module('contractualClienteApp')
                 if (response.status === 200 || response.status === 201) {
                     swal(
                         {
-                             title: 'Se ha rechazado la Solicitud de Necesidad N° '+self.necesidad.Necesidad.ConsecutivoSolicitud,
+                             title: 'Se ha rechazado la Solicitud de Necesidad N° '+self.necesidad.Necesidad.Id,
                              text: 'La solicitud de necesidad ha sido rechazada',
                              type: "success",
                              width: 600,
@@ -427,6 +435,14 @@ angular.module('contractualClienteApp')
             });
         };
 
+        self.crear_pdf_necesidad = function () {
+            var idNecesidad = self.g_necesidad.Id;
+            $("#myModal").modal("hide");
+            $('#myModal').on('hidden.bs.modal', function () {
+                $window.location.href = '#/necesidad/necesidad-pdf/' + idNecesidad;
+            });
+        };
+
         self.solicitar_cdp = function () {
             planCuentasMidRequest.post("cdp/solicitarCDP", self.necesidad.Necesidad).then(
                 function (response) {
@@ -437,7 +453,7 @@ angular.module('contractualClienteApp')
                         necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {
                             if (resp_nececesidad.status === 200 || resp_nececesidad.status === 201) {
                                 swal(
-                    
+
                                     {
                                         title: 'Se ha creado la solicitud de CDP N° '+consec_cdp,
                                         text: $translate.instant("CDP_SOLICITADO"),
@@ -471,11 +487,11 @@ angular.module('contractualClienteApp')
         };
 
         self.aprobar_cdp = function () {
-            
+
             var actualizar_cdp = {
                 _id: self.necesidad.documento_cdp._id,
                 vigencia: self.necesidad.documento_cdp.Vigencia,
-                area_funcional: self.necesidad.documento_cdp.CentroGestor, 
+                area_funcional: self.necesidad.documento_cdp.CentroGestor,
             }
             planCuentasMidRequest.post("cdp/aprobar_cdp",actualizar_cdp ).then(
                 function (response) {
@@ -486,7 +502,7 @@ angular.module('contractualClienteApp')
                         necesidadesCrudRequest.put('necesidad', self.necesidad.Necesidad.Id, self.necesidad.Necesidad).then(function (resp_nececesidad) {
                             if (resp_nececesidad.status === 200 || resp_nececesidad.status === 201) {
                                 swal(
-                    
+
                                     {
                                         title: 'Se ha aprobado el CDP N° '+self.necesidad.documento_cdp.Consecutivo,
                                         text: $translate.instant("CDP_APROBADO"),

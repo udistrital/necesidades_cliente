@@ -1,8 +1,14 @@
 kind: pipeline
 name: oas_cliente_ci
 
+trigger:
+  event:
+    exclude:
+      - tag
+
 steps:
 - name: check_readme
+  failure: ignore
   image: jjvargass/qa_develoment:latest
   commands:
   - python /app/check_readme.py
@@ -10,11 +16,13 @@ steps:
     branch:
     - develop
     - feature/*
+    - hotfix/*
     - release/*
     event:
     - push
 
 - name: check_branch
+  failure: ignore
   image: jjvargass/qa_develoment:latest
   commands:
   - python /app/check_branch.py -H ${DRONE_GIT_HTTP_URL}
@@ -22,36 +30,49 @@ steps:
     branch:
     - develop
     - feature/*
+    - hotfix/*
     - release/*
     event:
     - push
 
+# SCRIPT NO OBJETIVO:
+# No tiene en cuenta un intervalo de commits sino un intervalo de
+# fechas, y adicionalmente está contando mal los commit multilinea.
+# Step ignorado, aunque deberá ajustarse la imágen docker
 - name: check_commits
+  failure: ignore
   image: jjvargass/qa_develoment:latest
   commands:
-  - python /app/check_commits.py
+    - python /app/check_commits.py
   when:
     branch:
-    - develop
-    - feature/*
-    - release/*
+      - develop
+      - feature/*
+      - hotfix/*
+      - release/*
     event:
-    - push
+      - push
 
-# - name: prueba-unitarias
-#   image: node:12.6.0
-#   commands:
-#   - npm i
-#   - npm run test
-#   when:
-#     branch:
-#     - unitest
-#
+- name: prueba-unitarias
+  failure: ignore
+  image: node:10
+  commands:
+    - yarn
+    - yarn run test
+  when:
+    branch:
+      - develop
+      - feature/*
+      - hotfix/*
+      - master
+      - release/*
+      - unitest
+
 # - name:  pruebas-linter
 #   image: node:12.6.0
 #   commands:
-#   - npm i
-#   - npm run lint
+#   - yarn
+#   - yarn run lint
 #   when:
 #     branch:
 #     - unitest
@@ -67,6 +88,8 @@ steps:
     branch:
     - develop
     - feature/*
+    - hotfix/*
+    - master
     - release/*
     event:
     - push
@@ -74,14 +97,15 @@ steps:
 - name: build_release
   image: node:10.7.0
   commands:
-   - npm install -g grunt-cli bower
-   - npm install natives
-   - npm install
-   - bower install --allow-root
+   - yarn
    - cp -f app/scripts/environment/environment_test.js app/scripts/environment/environment.js
-   - grunt build
+   - yarn run build
   when:
     branch:
+    - develop
+    - dependabot/**
+    - feature/*
+    - hotfix/*
     - release/*
     event:
     - push
@@ -89,15 +113,13 @@ steps:
 - name: build_master
   image: node:10.7.0
   commands:
-   - npm install -g grunt-cli bower
-   - npm install natives
-   - npm install
-   - bower install --allow-root
+   - yarn
    - cp -f app/scripts/environment/environment_prod.js app/scripts/environment/environment.js
-   - grunt build
+   - yarn run build
   when:
     branch:
     - master
+    - hotfix/*
     event:
     - push
 

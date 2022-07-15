@@ -44,9 +44,9 @@ angular
         'financieraService',
         'planCuentasService',
         'planCuentasMidService',
+        'planAdquisicionService',
         'metasService',
         'catalogoService',
-        'coreService',
         'coreAmazonService',
         'parametrosGobiernoService',
         'parametrosService',
@@ -59,7 +59,6 @@ angular
         'necesidadesCrudService',
         'amazonAdministrativaService',
         'academicaService',
-        'contratoService',
         'gridOptionsService',
         'configuracionService',
         'requestService',
@@ -69,6 +68,9 @@ angular
         'ngMaterial',
         'md-steppers',
         'implicitToken',
+        'terceroCrudService',
+        'terceroMidService',
+        'movimientosCrudService',
         'core'
     ])
     .run(function (amMoment) {

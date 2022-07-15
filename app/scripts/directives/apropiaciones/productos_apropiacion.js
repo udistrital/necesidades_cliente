@@ -14,6 +14,7 @@ angular.module('contractualClienteApp')
         rubro: '=',
         productoapropiacion: '=',
         initProductoapropiacion: '=?',
+        apropiacion: "=",
       },
       templateUrl: 'views/directives/apropiaciones/productos_apropiacion.html',
       controller: function ($scope, $translate) {
@@ -30,11 +31,30 @@ angular.module('contractualClienteApp')
           enableVerticalScrollbar: 0,
           enableSelectAll: true,
           columnDefs: [{
+            field: 'Codigo',
+            displayName: $translate.instant('CODIGO'),
+            width: "15%",
+            headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+            cellTooltip: function (row) {
+              return row.entity.Codigo;
+            }
+          },
+          {
             field: 'Nombre',
-            displayName: $translate.instant('PRODUCTOS'),
+            displayName: $translate.instant('NOMBRE'),
+            width: "75%",
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             cellTooltip: function (row) {
               return row.entity.Nombre;
+            }
+          },
+          {
+            field: 'PorcentajeDistribucion',
+            displayName: '% Dist.',
+            width: "15%",
+            headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
+            cellTooltip: function (row) {
+              return row.entity.PorcentajeDistribucion;
             }
           }
           ]
@@ -44,29 +64,46 @@ angular.module('contractualClienteApp')
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function () {
             $scope.productoapropiacion = self.gridApi.selection.getSelectedRows();
-            $scope.productoapropiacion.forEach(function(p){
-              p.ProductoId=p._id
-              p.MontoParcial=0
+            $scope.productoapropiacion.forEach(function (p) {
+              p.ProductoId = p._id
+              p.MontoParcial = 0
             })
           });
         };
 
 
-        var idProductos=[];
-        var productosData=[];
-        for(var id in $scope.rubro.Productos){
+        var idProductos = [];
+        var productosData = [];
+        for (var id in $scope.rubro.Productos) {
           idProductos.push(id);
         }
 
-        Promise.all(idProductos.map(function(id){
-          return planCuentasRequest.get('producto/'+id).then(function(response){
-            (response.data.Body !== null) ? productosData.push(response.data.Body) : console.info('no encontre producto: '+id);
+        Promise.all($scope.apropiacion.Apropiacion.datos[0]["registro_funcionamiento-productos_asociados"]).then(function (productos) {
+          productos.map(function (item) {
+
+            const productoSchema = {
+              Nombre: item.ProductoData.Nombre,
+              Codigo: item.ProductoData.Codigo,
+              PorcentajeDistribucion: item.PorcentajeDistribucion,
+              _id: item.ProductoAsociadoId,
+            }
+
+            if (productosData.length > 0) {
+              if(!productosData.some(function(uniqueProducto) {
+                return productoSchema._id === uniqueProducto._id;
+              })){
+                productosData.push(productoSchema);
+              }
+            } else {
+              productosData.push(productoSchema);
+            }
           })
-        })).then(function (t) {
+
+          self.gridOptions.data = [];
           self.gridOptions.data = productosData;
           var gridOptData = self.gridOptions.data;
           gridOptData[0] !== undefined ? self.gridApi.grid.modifyRows(gridOptData) : _;
-          
+
 
           $scope.$watch('initProductoApropiacion', function () {
             self.productoapropiacion = [];
@@ -76,7 +113,7 @@ angular.module('contractualClienteApp')
                 $scope.productoapropiacion.push(tmp[0]); //enriquecer productos
                 self.gridApi.selection.selectRow(tmp[0]); //seleccionar las filas
               }
-            }): _;
+            }) : _;
           });
         });
 

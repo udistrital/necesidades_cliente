@@ -33,7 +33,7 @@ angular.module('contractualClienteApp')
             visible: false
           },
           {
-            field: 'Id',
+            field: 'CodigoAbreviacion',
             displayName: $translate.instant('CODIGO'),
             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
             width: '20%',

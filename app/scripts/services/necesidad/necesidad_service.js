@@ -8,7 +8,7 @@
  * Service in the contractualClienteApp.
  */
 angular.module('contractualClienteApp')
-  .service('necesidadService', function ($translate, administrativaRequest, planCuentasRequest, necesidadesCrudRequest, planCuentasMidRequest, metasRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
+  .service('necesidadService', function ($translate, administrativaRequest, necesidadesCrudRequest, planCuentasMidRequest, coreAmazonRequest, agoraRequest, oikosRequest, financieraRequest) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self = this;
     self.EstadoNecesidadType = {};
@@ -181,8 +181,6 @@ angular.module('contractualClienteApp')
       });
     };
 
-
-
     self.groupBy = function (list, keyGetter) {
       var map = new Map();
       list.forEach(function (item) {
@@ -275,7 +273,7 @@ angular.module('contractualClienteApp')
     //funcion que reemplaza initnecesidad usando plan cuentas mid
     self.getFullNecesidad = function (idNecesidad) {
       if (idNecesidad) {
-        return planCuentasMidRequest.get('necesidad/getfullnecesidad/' + idNecesidad)
+        return planCuentasMidRequest.get('necesidad/getfullnecesidad/' + idNecesidad);
       }
       else {
         // localStorage.setItem("necesidad",JSON.stringify(self.Necesidad));
@@ -289,7 +287,6 @@ angular.module('contractualClienteApp')
               JefeDepSolicitanteId: undefined,
               SupervisorId: undefined
             },
-            Vigencia: 2019 + "",
             Valor: 0,
             DiasDuracion: 0,
 
