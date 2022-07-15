@@ -249,7 +249,7 @@ angular
           try {
             $scope.apropiacion.Apropiacion.datos.forEach(function (actividad) {
               actividad["registro_plan_adquisiciones-actividad"].forEach(function (act){
-                if (Number(actividadid) === act.RegistroActividadId) {
+                if (Number(actividadid) === act.actividad.Id) {
                   if (act.FuentesFinanciamiento.length > 0) {
                     act.FuentesFinanciamiento.map(function (fuente) {
                       const fuenteSchema = {
@@ -301,7 +301,7 @@ angular
               itemactividad["registro_plan_adquisiciones-actividad"].forEach(function (item){
                 var actcont = 0;
                 var movi = $scope.movimiento.filter(function(mov){
-                  return mov.datos.ActividadId === item.RegistroActividadId;
+                  return mov.datos.ActividadId === item.actividad.Id;
                 });
                 if(movi && movi.length){
                   item.FuentesFinanciamiento.forEach(function (fuente){
@@ -313,9 +313,9 @@ angular
                     });
                   });
                 }
-                if (item.actividad.Numero === parseInt($scope.d_metasActividades.meta)) {
+                if (item.actividad.MetaId.Numero === parseInt($scope.d_metasActividades.meta)) {
                   const actividadSchema = {
-                    actividad_id: item.RegistroActividadId.toString(),
+                    actividad_id: item.actividad.Id.toString(),
                     actividad: item.actividad.Nombre,
                     valor_actividad: actcont,
                   };
