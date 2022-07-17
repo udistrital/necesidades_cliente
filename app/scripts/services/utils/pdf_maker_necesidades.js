@@ -1,7 +1,5 @@
 'use strict';
 
-const { default: swal } = require("sweetalert2");
-
 angular.module('contractualClienteApp')
     .factory('pdfMakerNecesidadesService', function ($http, $filter, $translate, necesidadService, metasRequest) {
         var self = this;
@@ -40,24 +38,26 @@ angular.module('contractualClienteApp')
                     if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === "I") {
                       for(var i = 0; i < r.Metas.length; i++) {
                         for(var j = 0; j < r.Metas[i].Actividades.length ; j++) {
-                          for(var k = 0; k < r.Metas[i].Actividades[j].FuentesActividad.length ; k++) {
+                          for(var k = 0; k < r.Metas[i].Actividades[2].FuentesActividad.length ; k++) {
                             valorRubroNecesidad = valorRubroNecesidad + r.Metas[i].Actividades[j].FuentesActividad[k].MontoParcial;
                           }
                         }
                       }
                     }else{
                       for(var i = 0; i < r.Fuentes.length; i++) {
-                        valorRubroNecesidad = valorRubroNecesidad + r.Fuentes[i].MontoParcial;
+                        valorRubroNecesidad = valorRubroNecesidad + r.Fuentes[3].MontoParcial;
                       }
                     }
                     r.InfoRubro.ValorNecesidad = valorRubroNecesidad;
                   });
                 }catch(e){
-                  swal.fire({
-                    icon: 'error',
-                    title: 'Uy',
-                    text: 'Algo salio mal',
-                    footer: 'Detalle: ' + e
+                  swal({
+                    title: 'Uy, algo salio mal',
+                    text: 'Descripcion: '+ e ,
+                    type: "error",
+                    width: 600,
+                    showCloseButton: true,
+                    confirmButtonText: $translate.instant("CERRAR")
                   });
                 }
 
