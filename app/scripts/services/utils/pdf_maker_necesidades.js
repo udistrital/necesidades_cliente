@@ -32,23 +32,27 @@ angular.module('contractualClienteApp')
                   })
                 });
 
-                trNecesidad.Rubros.map(function(r){
-                  var valorRubroNecesidad = 0;
-                  if(r.Metas && r.Metas.length){
-                    for(var i=0; i < r.Metas.length;i++){
-                      for(var j=0; j < r.Metas[i].Actividades.length ;j++){
-                        for(var k=0; k < r.Metas[i].Actividades[j].FuentesActividad.length ;k++){
-                          valorRubroNecesidad = valorRubroNecesidad + r.Metas[i].Actividades[j].FuentesActividad[k].MontoParcial;
+                try{
+                  trNecesidad.Rubros.map(function(r){
+                    var valorRubroNecesidad = 0;
+                    if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion == "I"){
+                      for(var i=0; i < r.Metas.length;i++){
+                        for(var j=0; j < r.Metas[i].Actividades.length ;j++){
+                          for(var k=0; k < r.Metas[i].Actividades[j].FuentesActividad.length ;k++){
+                            valorRubroNecesidad = valorRubroNecesidad + r.Metas[i].Actividades[j].FuentesActividad[k].MontoParcial;
+                          }
                         }
                       }
+                    }else{
+                      for(var i=0; i < r.Fuentes.length;i++){
+                        valorRubroNecesidad = valorRubroNecesidad + r.Fuentes[i].MontoParcial;
+                      }
                     }
-                  }else{
-                    for(var i=0; i < r.Fuentes.length;i++){
-                      valorRubroNecesidad = valorRubroNecesidad + r.Fuentes[i].MontoParcial;
-                    }
-                  }
-                  r.InfoRubro.ValorNecesidad = valorRubroNecesidad;
-                });
+                    r.InfoRubro.ValorNecesidad = valorRubroNecesidad;
+                  });
+                }catch(e){
+                  console.error(e);
+                }
 
                 $http.get("scripts/models/imagen.json").then(function (response) {
                     imagen = response.data;
@@ -227,7 +231,7 @@ angular.module('contractualClienteApp')
                                         // [//generar desde aqui curl http://10.20.0.254/financiera_api/v1/apropiacion/?query=Id:44529
                                         [
                                           Array.prototype.concat.apply([], apropiacionesData.map(function (apg, i) {
-                                            if(apg && apg.Metas && apg.Metas.length){
+                                            if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion == "I"){
                                               return [{
                                                 margin: [0, 0, 0, 5],
                                                 columnGap: 10,
@@ -250,7 +254,7 @@ angular.module('contractualClienteApp')
                                                   ]
                                                 }
                                               ]).concat(
-                                                apg.Metas.map(function (m, i) {
+                                                apg.Metas.map(function (m) {
                                                   return [{
                                                     columnGap: 10,
                                                     columns: [
@@ -260,20 +264,20 @@ angular.module('contractualClienteApp')
                                                       { text: m.Nombre },
                                                       { text: "" },
                                                     ]
-                                                  },
+                                                  }].concat([
                                                     {
                                                       margin: [0, 5, 0, 5],
                                                       alignment: "center",
                                                       columnGap: 10,
                                                       columns: [
                                                         { text: "", width: "5%" },
-                                                        { text: "Actividade".toUpperCase() },
+                                                        { text: "Actividad".toUpperCase() },
                                                         { text: "", width: "6%" },
                                                         { text: "Descripción".toUpperCase() },
                                                         { text: "" },
                                                       ]
                                                     }
-                                                  ].concat(
+                                                  ]).concat(
                                                     m.Actividades.map(function (Actividad) {
                                                       return [{
                                                         columnGap: 10,
@@ -338,6 +342,12 @@ angular.module('contractualClienteApp')
                                                         { text: "", width: "6%" },
                                                         { text: p.InfoProducto.Descripcion },
                                                         { text: "" },
+                                                      ]
+                                                    }
+                                                  }else{
+                                                    return {
+                                                      columnGap: 10,
+                                                      columns: [
                                                       ]
                                                     }
                                                   }
