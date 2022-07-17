@@ -1,5 +1,7 @@
 'use strict';
 
+const { default: swal } = require("sweetalert2");
+
 angular.module('contractualClienteApp')
     .factory('pdfMakerNecesidadesService', function ($http, $filter, $translate, necesidadService, metasRequest) {
         var self = this;
@@ -33,25 +35,30 @@ angular.module('contractualClienteApp')
                 });
 
                 try{
-                  trNecesidad.Rubros.map(function(r){
+                  trNecesidad.Rubros.map(function(r) {
                     var valorRubroNecesidad = 0;
-                    if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion == "I"){
-                      for(var i=0; i < r.Metas.length;i++){
-                        for(var j=0; j < r.Metas[i].Actividades.length ;j++){
-                          for(var k=0; k < r.Metas[i].Actividades[j].FuentesActividad.length ;k++){
+                    if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === "I") {
+                      for(var i = 0; i < r.Metas.length; i++) {
+                        for(var j = 0; j < r.Metas[i].Actividades.length ; j++) {
+                          for(var k = 0; k < r.Metas[i].Actividades[j].FuentesActividad.length ; k++) {
                             valorRubroNecesidad = valorRubroNecesidad + r.Metas[i].Actividades[j].FuentesActividad[k].MontoParcial;
                           }
                         }
                       }
                     }else{
-                      for(var i=0; i < r.Fuentes.length;i++){
+                      for(var i = 0; i < r.Fuentes.length; i++) {
                         valorRubroNecesidad = valorRubroNecesidad + r.Fuentes[i].MontoParcial;
                       }
                     }
                     r.InfoRubro.ValorNecesidad = valorRubroNecesidad;
                   });
                 }catch(e){
-                  console.error(e);
+                  swal.fire({
+                    icon: 'error',
+                    title: 'Uy',
+                    text: 'Algo salio mal',
+                    footer: 'Detalle: ' + e
+                  });
                 }
 
                 $http.get("scripts/models/imagen.json").then(function (response) {
@@ -231,7 +238,7 @@ angular.module('contractualClienteApp')
                                         // [//generar desde aqui curl http://10.20.0.254/financiera_api/v1/apropiacion/?query=Id:44529
                                         [
                                           Array.prototype.concat.apply([], apropiacionesData.map(function (apg, i) {
-                                            if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion == "I"){
+                                            if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === "I") {
                                               return [{
                                                 margin: [0, 0, 0, 5],
                                                 columnGap: 10,
@@ -344,7 +351,7 @@ angular.module('contractualClienteApp')
                                                         { text: "" },
                                                       ]
                                                     }
-                                                  }else{
+                                                  } else {
                                                     return {
                                                       columnGap: 10,
                                                       columns: [
