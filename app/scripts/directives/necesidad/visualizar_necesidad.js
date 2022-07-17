@@ -155,6 +155,22 @@ angular.module('contractualClienteApp')
                     }
                 }
 
+                function get_consecutivocdp(id_necesidad) {
+                    planCuentasRequest.get('solicitudesCDP', $.param({
+                        query: 'necesidad:' + id_necesidad
+                    })).then(function (response_solicitud_cdp) {
+                      try {
+                        if (response_solicitud_cdp.data !== null && response_solicitud_cdp.status === 200) {
+                          const cdp = response_solicitud_cdp.data.Body[0];
+                          self.v_necesidad.solidcitud_cdp_consecutivo = cdp.consecutivo;
+                        }
+                      } catch (error) {
+                        log.error(error);
+                      }
+
+                    });
+                }
+
 
                 self.cargar_necesidad = function () {
                     self.marco_legal = $scope.necesidad.MarcoLegalNecesidad;
@@ -171,6 +187,11 @@ angular.module('contractualClienteApp')
                     necesidadService.getJefeDependencia($scope.necesidad.Necesidad.DependenciaNecesidadId.OrdenadorGastoId, true).then(function (response) {
                         self.ordenador_gasto = response.Persona;
                     });
+                    // consecutivocdp
+                    if (self.v_necesidad.EstadoNecesidadId.Id==7) {
+                      get_consecutivocdp($scope.necesidad.Necesidad.Id);
+                    }
+
 
                     if ($scope.necesidad.Necesidad.TipoContratoId && $scope.necesidad.Necesidad.TipoContratoId !== 0) {
                         agoraRequest.get('tipo_contrato/' + $scope.necesidad.Necesidad.TipoContratoId).then(function (response) {
