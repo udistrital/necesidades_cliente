@@ -161,7 +161,7 @@ angular.module('contractualClienteApp')
                     })).then(function (response_solicitud_cdp) {
                       try {
                         if (response_solicitud_cdp.data !== null && response_solicitud_cdp.status === 200) {
-                          let cdp = response_solicitud_cdp.data.Body[0];
+                          const cdp = response_solicitud_cdp.data.Body[0];
                           self.v_necesidad.solidcitud_cdp_consecutivo = cdp.consecutivo;
                         }
                       } catch (error) {
