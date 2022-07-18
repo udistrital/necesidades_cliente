@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('contractualClienteApp')
-    .factory('pdfMakerNecesidadesService', function ($http, $filter, $translate, necesidadService) {
+    .factory('pdfMakerNecesidadesService', function ($http, $filter, $translate, necesidadService, metasRequest) {
         var self = this;
 
         self.docDefinition = function (trNecesidad) {
@@ -16,6 +16,50 @@ angular.module('contractualClienteApp')
                 var apropiacionesData = [];
                 var perfil_data = [];
                 var TiposServicios;
+
+                trNecesidad.Rubros.map(function(r){
+                  r.Metas.map(function(res){
+                    metasRequest.get("Meta/"+res.MetaId).then(function(resp){
+                      res.Nombre = resp.data.Nombre;
+                    })
+                    res.Actividades.map(function(resa){
+
+                      metasRequest.get("Actividad/"+resa.ActividadId).then(function(resp){
+
+                        resa.Nombre = resp.data.Nombre;
+                      })
+                    })
+                  })
+                });
+
+                try{
+                  trNecesidad.Rubros.map(function(r) {
+                    var valorRubroNecesidad = 0;
+                    if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === "I") {
+                      for(var i = 0; i < r.Metas.length; i++) {
+                        for(var j = 0; j < r.Metas[i].Actividades.length ; j++) {
+                          for(var k = 0; k < r.Metas[i].Actividades[2].FuentesActividad.length ; k++) {
+                            valorRubroNecesidad = valorRubroNecesidad + r.Metas[i].Actividades[j].FuentesActividad[k].MontoParcial;
+                          }
+                        }
+                      }
+                    }else{
+                      for(var i = 0; i < r.Fuentes.length; i++) {
+                        valorRubroNecesidad = valorRubroNecesidad + r.Fuentes[3].MontoParcial;
+                      }
+                    }
+                    r.InfoRubro.ValorNecesidad = valorRubroNecesidad;
+                  });
+                }catch(e){
+                  swal({
+                    title: 'Uy, algo salio mal',
+                    text: 'Descripcion: '+ e ,
+                    type: "error",
+                    width: 600,
+                    showCloseButton: true,
+                    confirmButtonText: $translate.instant("CERRAR")
+                  });
+                }
 
                 $http.get("scripts/models/imagen.json").then(function (response) {
                     imagen = response.data;
@@ -60,12 +104,12 @@ angular.module('contractualClienteApp')
                         header: function (currentPage, pageCount) {
                           return {
                             style: ['header', "p"],
-                            margin: [0, 0, 0, 15],
+                            margin: [50, 15, 50, 100],
                             table: {
                               // headers are automatically repeated if the table spans over multiple pages
                               // you can declare how many rows should be treated as headers
                               headerRows: 1,
-                              widths: ['10%', '*', '40%'],
+                              widths: ['12%', '*', '40%'],
                               body: [
                                 [
                                   {
@@ -194,66 +238,164 @@ angular.module('contractualClienteApp')
                                         // [//generar desde aqui curl http://10.20.0.254/financiera_api/v1/apropiacion/?query=Id:44529
                                         [
                                           Array.prototype.concat.apply([], apropiacionesData.map(function (apg, i) {
-                                            return [{
-                                              margin: [0, 0, 0, 5],
-                                              columnGap: 10,
-                                              columns: [
-                                                { text: apg.InfoRubro.Codigo, width: "auto" },
-                                                { text: apg.InfoRubro.Nombre.toUpperCase(), width: "*" },
-                                                { text: $filter('currency')(apg.InfoRubro.ValorActual, '$'), width: "auto" }
-                                              ]
-                                            }].concat([
-                                              {
-                                                alignment: "center",
+                                            if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === "I") {
+                                              return [{
+                                                margin: [0, 0, 0, 5],
                                                 columnGap: 10,
                                                 columns: [
-                                                  { text: "", width: "15%" },
-                                                  { text: "Centro de Costo".toUpperCase() },
-                                                  { text: "", width: "6%" },
-                                                  { text: "Actividad".toUpperCase() },
-                                                  { text: "" },
+                                                  { text: apg.InfoRubro.Codigo, width: "auto" },
+                                                  { text: apg.InfoRubro.Nombre.toUpperCase(), width: "*" },
+                                                  { text: $filter('currency')(apg.InfoRubro.ValorNecesidad, '$'), width: "auto" }
                                                 ]
-                                              }
-                                            ]).concat(
-                                              apg.Fuentes.map(function (f, i) {
-                                                return {
+                                              }].concat([
+                                                {
+                                                  margin: [0, 5, 0, 5],
+                                                  alignment: "center",
                                                   columnGap: 10,
                                                   columns: [
-                                                    { text: i + 1, width: "15%" },
-                                                    { text: dependenciaDestino.Nombre.toUpperCase() },
-                                                    { text: f.InfoFuente.Codigo, width: "6%" },
-                                                    { text: f.InfoFuente.Nombre },
-                                                    { text: $filter('currency')(f.MontoParcial, '$'), width: "auto" },
-                                                  ]
-                                                }
-                                              })
-                                            ).concat([
-                                              {
-                                                margin: [0, 5, 0, 5],
-                                                alignment: "center",
-                                                columnGap: 10,
-                                                columns: [
-                                                  { text: "", width: "15%" },
-                                                  { text: "Producto".toUpperCase() },
-                                                  { text: "", width: "6%" },
-                                                  { text: "Descripción".toUpperCase() },
-                                                  { text: "" },
-                                                ]
-                                              }
-                                            ]).concat(
-                                              apg.Productos != null ? apg.Productos.map(function (p) {
-                                                return {
-                                                  columnGap: 10,
-                                                  columns: [
-                                                    { text: "", width: "15%" },
-                                                    { text: p.InfoProducto.Nombre.toUpperCase() },
+                                                    { text: "", width: "5%" },
+                                                    { text: "Meta".toUpperCase() },
                                                     { text: "", width: "6%" },
-                                                    { text: p.InfoProducto.Descripcion },
+                                                    { text: "Descripción".toUpperCase() },
                                                     { text: "" },
                                                   ]
                                                 }
-                                              }) : ""
-                                            );
+                                              ]).concat(
+                                                apg.Metas.map(function (m) {
+                                                  return [{
+                                                    columnGap: 10,
+                                                    columns: [
+                                                      { text: "", width: "6%" },
+                                                      { text: m.MetaId,  width: "15%" },
+                                                      { text: "", width: "6%" },
+                                                      { text: m.Nombre },
+                                                      { text: "" },
+                                                    ]
+                                                  }].concat([
+                                                    {
+                                                      margin: [0, 5, 0, 5],
+                                                      alignment: "center",
+                                                      columnGap: 10,
+                                                      columns: [
+                                                        { text: "", width: "5%" },
+                                                        { text: "Actividad".toUpperCase() },
+                                                        { text: "", width: "6%" },
+                                                        { text: "Descripción".toUpperCase() },
+                                                        { text: "" },
+                                                      ]
+                                                    }
+                                                  ]).concat(
+                                                    m.Actividades.map(function (Actividad) {
+                                                      return [{
+                                                        columnGap: 10,
+                                                        columns: [
+                                                          { text: "", width: "5%" },
+                                                          { text: Actividad.ActividadId,  width: "15%"},
+                                                          { text: "", width: "6%" },
+                                                          { text: Actividad.Nombre },
+                                                          { text: "" },
+                                                        ]
+                                                      }].concat([
+                                                        {
+                                                          margin: [0, 5, 0, 5],
+                                                          alignment: "center",
+                                                          columnGap: 10,
+                                                          columns: [
+                                                            { text: "", width: "5%" },
+                                                            { text: "Fuente".toUpperCase() },
+                                                            { text: "", width: "6%" },
+                                                            { text: "Descripción".toUpperCase() },
+                                                            { text: "" },
+                                                          ]
+                                                        }
+                                                      ]).concat(
+                                                        Actividad.FuentesActividad.map(function (f)  {
+                                                          return {
+                                                            columnGap: 10,
+                                                            columns: [
+                                                              { text: "", width: "5%" },
+                                                              { text: f.InfoFuente.Codigo,  width: "15%"},
+                                                              { text: "", width: "6%" },
+                                                              { text: f.InfoFuente.Nombre },
+                                                              { text: $filter('currency')(f.MontoParcial, '$'), width: "auto" },
+                                                            ]
+                                                          }
+                                                        })
+                                                      )
+                                                   })
+                                                  )
+                                                })
+                                              ).concat([
+                                                {
+                                                  margin: [0, 5, 0, 5],
+                                                  alignment: "center",
+                                                  columnGap: 10,
+                                                  columns: [
+                                                    { text: "", width: "5%" },
+                                                    { text: "Producto".toUpperCase() },
+                                                    { text: "", width: "6%" },
+                                                    { text: "Descripción".toUpperCase() },
+                                                    { text: "" },
+                                                  ]
+                                                }
+                                              ]).concat(
+                                                apg.Productos != null ? apg.Productos.map(function (p) {
+                                                  if(p.InfoProducto){
+                                                    return {
+                                                      columnGap: 10,
+                                                      columns: [
+                                                        { text: "", width: "5%" },
+                                                        { text: p.InfoProducto.Nombre.toUpperCase() ,  width: "35%"},
+                                                        { text: "", width: "6%" },
+                                                        { text: p.InfoProducto.Descripcion },
+                                                        { text: "" },
+                                                      ]
+                                                    }
+                                                  } else {
+                                                    return {
+                                                      columnGap: 10,
+                                                      columns: [
+                                                      ]
+                                                    }
+                                                  }
+                                                }) : ""
+                                              );
+                                            } else {
+                                              return [{
+                                                margin: [0, 0, 0, 5],
+                                                columnGap: 10,
+                                                columns: [
+                                                  { text: apg.InfoRubro.Codigo, width: "auto" },
+                                                  { text: apg.InfoRubro.Nombre.toUpperCase(), width: "*" },
+                                                  { text: $filter('currency')(apg.InfoRubro.ValorNecesidad, '$'), width: "auto" }
+                                                ]
+                                              }].concat([
+                                                {
+                                                  alignment: "center",
+                                                  columnGap: 10,
+                                                  columns: [
+                                                    { text: "", width: "5%" },
+                                                    { text: "Fuente".toUpperCase() },
+                                                    { text: "", width: "6%" },
+                                                    { text: "Descripción".toUpperCase() },
+                                                    { text: "" },
+                                                  ]
+                                                }
+                                              ]).concat(
+                                                apg.Fuentes.map(function (f, i) {
+                                                  return {
+                                                    columnGap: 10,
+                                                    columns: [
+                                                      { text: "", width: "5%" },
+                                                      { text: f.InfoFuente.Codigo, width: "15%" },
+                                                      { text: "", width: "6%" },
+                                                      { text: f.InfoFuente.Nombre },
+                                                      { text: $filter('currency')(f.MontoParcial, '$'), width: "auto" },
+                                                    ]
+                                                  }
+                                                })
+                                              );
+                                            }
                                           }))
                                         ],
                                         [{ style: "title1", text: "Marco Legal".toUpperCase() }],
@@ -320,14 +462,13 @@ angular.module('contractualClienteApp')
                             bold: true,
                           }
                         },
-                        pageMargins: [50, 100, 60, 60],
+                        pageMargins: [50, 100, 50, 60],
                         // a string or { width: number, height: number }
                         pageSize: 'letter',
 
                         // by default we use portrait, you can change it to landscape if you wish
                         pageOrientation: 'portrait',
                     });
-
                 });
             });
         };
