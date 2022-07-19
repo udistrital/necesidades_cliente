@@ -38,7 +38,7 @@ angular.module('contractualClienteApp')
                     if(trNecesidad.Necesidad.TipoFinanciacionNecesidadId.CodigoAbreviacion === "I") {
                       for(var i = 0; i < r.Metas.length; i++) {
                         for(var j = 0; j < r.Metas[i].Actividades.length ; j++) {
-                          for(var k = 0; k < r.Metas[i].Actividades[2].FuentesActividad.length ; k++) {
+                          for(var k = 0; k < r.Metas[i].Actividades[j].FuentesActividad.length ; k++) {
                             valorRubroNecesidad = valorRubroNecesidad + r.Metas[i].Actividades[j].FuentesActividad[k].MontoParcial;
                           }
                         }
