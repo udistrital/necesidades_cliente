@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-    .controller('NecesidadesCtrl', function ($scope, planCuentasMidRequest, agoraRequest, parametrosRequest,catalogoRequest, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest) {
+    .controller('NecesidadesCtrl', function ($scope, planCuentasMidRequest, agoraRequest, parametrosRequest,catalogoRequest, necesidadService, $translate, $window,$http, $mdDialog, gridApiService, necesidadesCrudRequest, terceroMidRequest) {
         var self = this;
         self.offset = 0;
         self.rechazada = false;
@@ -232,19 +232,41 @@ angular.module('contractualClienteApp')
         self.cargarDatosNecesidades = function (offset, query) {
             if (query === undefined) { query = []; }
             query = typeof (query) === "string" ? [query] : query;
-            query.push("EstadoNecesidad.Nombre__not_in:Borrador");
-
-            var req = necesidadesCrudRequest.get('necesidad', $.param({
-                limit: self.gridOptions.paginationPageSize,
-                offset: offset,
-                sortby: "Id",
-                order: "desc"
+            //query.push("EstadoNecesidad.Nombre__not_in:Borrador");
+            var req;
+            req = necesidadesCrudRequest.get('necesidad', $.param({
+              query: query,
+              limit: self.gridOptions.paginationPageSize,
+              offset: offset,
+              sortby: "Id",
+              order: "desc"
             }, true));
             req.then(gridApiService.paginationFunc(self.gridOptions, offset));
             return req;
         };
 
-        self.cargarDatosNecesidades(self.offset, self.query);
+        terceroMidRequest
+        .get("propiedad/dependencia/" + window.localStorage.getItem("idTercero"))
+          .then(function (Dependencias) {
+            //trae lista dependencias
+            if (Dependencias.data !== null) {
+              self.dependencia_soli_data = Dependencias.data;
+            } else {
+              swal({
+                title: "Sin dependencias",
+                type: "error",
+                text: "No tiene dependencias relacionadas",
+                showCloseButton: true,
+                confirmButtonText: $translate.instant("CERRAR"),
+              });
+            }
+            const deps = self.dependencia_soli_data.map(function(dep){
+              return dep.Id;
+            }).join("|");
+            debugger
+            self.query = "DependenciaNecesidadId__DependenciaSolicitante__in:" + deps,
+            self.cargarDatosNecesidades(self.offset, self.query);
+          });
 
         self.transformIvaData = function(data) { // Transformar datos de IVA
             if (data) {
