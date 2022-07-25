@@ -552,7 +552,7 @@ angular
                 self.jefe_destino = JD.Persona;
                 self.Necesidad.DependenciaNecesidadId.JefeDepDestinoId =
                   JD.JefeDependencia.Id;
-                self.Necesidad.DependenciaNecesidadId.DependenciaSolicitante =
+                self.Necesidad.DependenciaNecesidadId.DependenciaDestino =
                   self.dependencia_destino;
               })
               .catch(function (err) { })
